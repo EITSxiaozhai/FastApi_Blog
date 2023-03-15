@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div>
+    <div class="px-3 py-2 text-bg-dark" style=" position:relative;
+ top:-29px;">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/"
+                   class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+                    <svg class="bi me-2" width="40" height="20px" role="img" aria-label="引导程序">
+                        <use xlink:href="#bootstrap"></use>
+                    </svg>
+                </a>
+
+                <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                    <li>
+                        <a href="#" class="nav-link text-secondary">
+                            <svg class="bi d-block mx-auto mb-1" width="24" height="24">
+                                <use xlink:href="#home"></use>
+                            </svg>
+                            <font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                                家
+                            </font></font></a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white">
+                            <svg class="bi d-block mx-auto mb-1" width="24" height="24">
+                                <use xlink:href="#speedometer2"></use>
+                            </svg>
+                            <font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                                仪表板
+                            </font></font></a>
+                    </li>
+                    <li>
+                        <a href="/myblog/bloglist/" class="nav-link text-white">
+                            <svg class="bi d-block mx-auto mb-1" width="24" height="24">
+                                <use xlink:href="#table"></use>
+                            </svg>
+                            <font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                                文章发布
+                            </font></font></a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white">
+                            <svg class="bi d-block mx-auto mb-1" width="24" height="24">
+                                <use xlink:href="#grid"></use>
+                            </svg>
+                            <font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                                产品
+                            </font></font></a>
+                    </li>
+                    <li>
+                        <a href="#" class="nav-link text-white">
+                            <svg class="bi d-block mx-auto mb-1" width="24" height="24">
+                                <use xlink:href="#people-circle"></use>
+                            </svg>
+                            <font style="vertical-align: inherit;"><font style="vertical-align: inherit;">
+                                总用户管理
+                            </font></font></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="px-3 py-2 border-bottom mb-3" style=" position:relative;
+ top:-25px;">
+        <div class="container d-flex flex-wrap justify-content-center">
+
+            <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" role="search">
+                <input type="search" class="form-control" placeholder="搜索..." aria-label="搜索">
+            </form>
+                <div style="margin-right: 20px;margin-top: 8px">欢迎你,用户:</div>
+                        <div class="text-end col-2">
+                {% if request.session.username %}
+                <select class="form-select btn btn-primary dropdown-toggle"   aria-label="Default select example">
+                    <option selected>   {{ request.session.username }}</option>
+                    <option value="1">个人中心</option>
+                    <option value="2">TEST</option>
+                    <option class="alert alert-danger" role="alert" value="3">退出登录</option>
+{% else %}
+                <p style="  display:inline-block;
+ position:relative;font-size: 10px;
+ top:6px;">对不起，我们遇到了点问题，请重新登录</p>
+{% endif %}
+                </select>
+
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% block content  %}
+<div class="container row ">
+    <div class="embed-responsive embed-responsive-21by9 col-md-9">
+        <iframe src='http://127.0.0.1:8000/app/free/' style="width: 913px;height: 540px;min-width: 540px"
+                allowfullscreen></iframe>
+    </div>
+    <div class="col-md-3">
+        <div class="table-responsive" style="width: 500px; height: 500px">
+
+              <table class="table">
+                <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>电量</th>
+                    <th>昨日消耗</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for x in timesdata %}
+                <tr>
+                    <td>{{ x.dataNum }}</td>
+                    <td>{{ x.electricityNum }}</td>
+                    <td>{{ x.Power_consumption }}</td>
+                </tr>
+            {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+</body>
+</html>

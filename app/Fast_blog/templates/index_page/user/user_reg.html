@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <title>Home</title>
+    <!-- Meta tag Keywords -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8"/>
+    <meta name="keywords"
+          content="Hotair Login Form Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design"/>
+    <!-- //Meta tag Keywords -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700;900&display=swap"
+          rel="stylesheet">
+    <!--/Style-CSS -->
+    <link rel="stylesheet" href="{% static  '/css/style.css' %}" type="text/css" media="all"/>
+    <!--//Style-CSS -->
+
+    <link rel="stylesheet" href="{% static  'css/font-awesome.min.css' %}" type="text/css" media="all">
+
+</head>
+
+<body>
+
+<!-- form section start -->
+<section class="w3l-hotair-form">
+    <h1>个人注册</h1>
+    <div class="container">
+        <!-- /form -->
+        <div class="workinghny-form-grid">
+            <div class="main-hotair">
+                <div class="alert-close">
+                    <span class="fa fa-close"></span>
+                </div>
+
+                <div class="content-wthree">
+                    <h2>欢迎注册</h2>
+                    <p>你的账户</p>
+                    <form action="#" method="post">
+                        {% csrf_token %}
+                        <input type="text" class="text" name="Rname" placeholder="账户昵称">
+                        <input type="text" class="text" name="name" placeholder="用户名" required="" onblur="func1(this)">
+                        <p id="error" color='red'></p>
+                        <input type="password" class="password" name="password" placeholder="用户密码" required="" id="pwd1" onkeyup="checkpassword()">
+                        <input type="password" class="password" name="password" placeholder="确认密码" required="" id="pwd2" onkeyup="checkpassword()">
+                        <p id="tishi"></p>
+                        <input type="email" class="text" name="email" placeholder="用户邮箱" required="">
+                        <button class="btn" type="submit" id="submit">注册</button>
+                    </form>
+                    <p class="account">已经拥有账户? <a href="/blog/login/">登录</a></p>
+                </div>
+                <div class="w3l_form align-self">
+                    <div class="left_grid_info">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //form -->
+    </div>
+    <!-- copyright-->
+    <!-- //copyright-->
+</section>
+<!-- //form section start -->
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script>
+    $(document).ready(function (c) {
+        $('.alert-close').on('click', function (c) {
+            $('.main-hotair').fadeOut('slow', function (c) {
+                $('.main-hotair').remove();
+            });
+        });
+    });
+
+        function func1(self) {
+        var username=self.value;
+        var xmlhttp=createXMLHttpRequest();
+        xmlhttp.open("POST","ajax_register/",true);
+        xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xmlhttp.send("username="+username);
+        xmlhttp.onreadystatechange=function () {
+            if(xmlhttp.readyState===4 && xmlhttp.status===200){
+                var s=xmlhttp.responseText
+                document.getElementById("error").innerHTML=""
+                if (s=="1"){
+                    document.getElementById("error").innerHTML="用户名已经注册!"
+                }
+            }
+
+        }
+    }
+        function createXMLHttpRequest() {
+            var xmlHttp;
+            try{
+                xmlHttp = new XMLHttpRequest();
+            } catch (e) {
+                try {
+                    // 适用于IE6
+                    xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");
+                }catch (e) {
+                    try {
+                        // 适用于IE5.5，以及IE更早版本
+                        xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");
+                    }catch (e) {
+
+                    }
+                }
+
+            }
+
+            return xmlHttp;
+        }
+
+    function checkpassword() {
+        var password = document.getElementById("pwd1").value;
+        var repassword = document.getElementById("pwd2").value;
+
+        if(password == repassword)
+        {
+            document.getElementById("tishi").innerHTML="<br><font color='green' style='margin-top: 1px'>两次密码输入一致</font>";
+            document.getElementById("submit").disabled = false;
+
+        }
+        else
+        {
+            document.getElementById("tishi").innerHTML="<br><font color='red' style='margin-top: 1px'>两次输入密码不一致!</font>";
+            document.getElementById("submit").disabled = true;
+        }
+        if(!password && !repassword){
+            document.getElementById("tishi").innerHTML=""
+        }
+    }
+
+</script>
+
+</body>
+
+</html>

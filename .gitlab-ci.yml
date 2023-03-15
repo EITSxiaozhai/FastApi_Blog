@@ -1,26 +1,52 @@
-# You can override the included template(s) by including variable overrides
-# SAST customization: https://docs.gitlab.com/ee/user/application_security/sast/#customizing-the-sast-settings
-# Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/#customizing-settings
-# Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
-# Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-# Note that environment variables can be set in several places
-# See https://docs.gitlab.com/ee/ci/variables/#cicd-variable-precedence
 stages:
-- build
-- test
-- deploy
-- review
-- dast
-- staging
-- canary
-- production
-- incremental rollout 10%
-- incremental rollout 25%
-- incremental rollout 50%
-- incremental rollout 100%
-- performance
-- cleanup
-sast:
+  - build
+  - test
+  - deploy
+  - clean
+
+image_build:
+  stage: build
+  script:
+    - echo "Stage build, Dockerfile:"
+    - cat Dockerfile
+    - docker build -t fastapi:$CI_PIPELINE_ID .
+
+# code_test:
+#   stage: test
+#   script:
+#     - cd app
+#     - cat main.py
+
+deploy_test:
   stage: test
-include:
-- template: Auto-DevOps.gitlab-ci.yml
+  script:
+    - docker run -d -p 80 --name myfastapi-test-$CI_PIPELINE_ID fastapi:$CI_PIPELINE_ID
+    - sleep 10 && curl $(ip add show  eno1 | grep "inet " | sed -e 's/.* inet //g' | sed -e 's/ .*//g'):$(docker port myfastapi-test-$CI_PIPELINE_ID | grep 0.0.0 | grep "8999/tcp" |  sed -e 's/.*://g')
+    - docker stop myfastapi-test-$CI_PIPELINE_ID
+    - docker rm myfastapi-test-$CI_PIPELINE_ID
+
+container_deploy1:
+    stage: deploy
+    script:
+      - x=$(docker ps -f "publish=49200" | awk '{print $1}'| sed -n '2p')
+      - docker stop $x && docker rm $x
+      - docker run -d -p 49200:80 --name myfastapi-w1-$CI_PIPELINE_ID fastapi:$CI_PIPELINE_ID
+      - docker ps
+
+
+#container_deploy2:
+#    stage: deploy
+#    script:
+#      - docker run -d -p 10089 --name $CI_JOB_NAME-$CI_PIPELINE_ID fastapi:$CI_PIPELINE_ID
+#      - docker ps
+
+
+# clean_containers:
+#     stage: clean
+#     script:
+#       - docker stop $CI_JOB_NAME-$CI_PIPELINE_ID
+#       - docker rm $CI_JOB_NAME-$CI_PIPELINE_ID
+      
+
+# Create a new stage called "clean_containers" to run the docker stop and docker rm commands after all the stages. Can
+# you see how this is useful? what changes does this make to your pipeline?
