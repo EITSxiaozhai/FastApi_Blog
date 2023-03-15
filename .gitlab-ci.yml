@@ -1,0 +1,52 @@
+stages:
+  - build
+  - test
+  - deploy
+  - clean
+
+image_build:
+  stage: build
+  script:
+    - echo "Stage build, Dockerfile:"
+    - cat Dockerfile
+    - docker build -t fastapi:$CI_PIPELINE_ID .
+
+# code_test:
+#   stage: test
+#   script:
+#     - cd app
+#     - cat main.py
+
+deploy_test:
+  stage: test
+  script:
+    - docker run -d -p 80 --name myfastapi-test-$CI_PIPELINE_ID fastapi:$CI_PIPELINE_ID
+    - sleep 10 && curl $(ip add show  eno1 | grep "inet " | sed -e 's/.* inet //g' | sed -e 's/ .*//g'):$(docker port myfastapi-test-$CI_PIPELINE_ID | grep 0.0.0 | grep "8999/tcp" |  sed -e 's/.*://g')
+    - docker stop myfastapi-test-$CI_PIPELINE_ID
+    - docker rm myfastapi-test-$CI_PIPELINE_ID
+
+container_deploy1:
+    stage: deploy
+    script:
+      - x=$(docker ps -f "publish=49200" | awk '{print $1}'| sed -n '2p')
+      - docker stop $x && docker rm $x
+      - docker run -d -p 49200:80 --name myfastapi-w1-$CI_PIPELINE_ID fastapi:$CI_PIPELINE_ID
+      - docker ps
+
+
+#container_deploy2:
+#    stage: deploy
+#    script:
+#      - docker run -d -p 10089 --name $CI_JOB_NAME-$CI_PIPELINE_ID fastapi:$CI_PIPELINE_ID
+#      - docker ps
+
+
+# clean_containers:
+#     stage: clean
+#     script:
+#       - docker stop $CI_JOB_NAME-$CI_PIPELINE_ID
+#       - docker rm $CI_JOB_NAME-$CI_PIPELINE_ID
+      
+
+# Create a new stage called "clean_containers" to run the docker stop and docker rm commands after all the stages. Can
+# you see how this is useful? what changes does this make to your pipeline?

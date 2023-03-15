@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<script src="{% static 'js/jquery-3.2.1.min.js' %}" crossorigin="anonymous"></script>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<input type="text" id="test1">请输入第一个数字
+<input type="text" id="test2">请输入第二个数字
+<input type="text" id="test3">
+<a>结果为:</a> <input type="button" id="start">
+</body>
+
+<script>
+    $('#start').click(function ()
+    {
+        $.ajax({
+            dataType:'json',
+            url:'',
+            type:'post',
+            data:{'test1':$('#test1').val(),'test2':$('#test2').val()},
+            success:function (args){
+                $('#test3').val(args.msg)
+            }
+
+        })
+
+    })
+
+</script>
+
+</html>
