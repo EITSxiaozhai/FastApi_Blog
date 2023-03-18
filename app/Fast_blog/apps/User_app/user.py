@@ -49,7 +49,7 @@ async def user_get(inputusername:str = None):
     try:
         alluser = session.query(models.user).filter_by(username=inputusername).all()
         for item in alluser:
-            print(item.username)
+            print(item.UserEmail)
     except Exception as ex:
         print("出现如下异常%s" % ex)
         print("数据库信息回滚")
