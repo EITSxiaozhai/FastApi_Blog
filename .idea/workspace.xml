@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="93d4690b-557e-4eab-a1bf-15f3c134b6b6" name="Changes" comment="增加用户查询">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/User_app/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,7 +124,9 @@
       <workItem from="1678862563536" duration="1037000" />
       <workItem from="1678866178187" duration="203000" />
       <workItem from="1679094757785" duration="417000" />
-      <workItem from="1679095190012" duration="12075000" />
+      <workItem from="1679095190012" duration="13373000" />
+      <workItem from="1679133520975" duration="808000" />
+      <workItem from="1679136345472" duration="55000" />
     </task>
     <task id="LOCAL-00001" summary="初次提交">
       <created>1678798971317</created>
@@ -161,7 +163,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679116379790</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="增加用户查询">
+      <created>1679118567418</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1679118567418</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
