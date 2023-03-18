@@ -1,10 +1,11 @@
+import asyncio
 import datetime
 
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
-import  sys
-from app.Fast_blog.database.database import Base
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, MetaData
+from sqlalchemy.orm import registry
 from  sqlalchemy_utils import EmailType,ChoiceType
-sys.path.append('../')
+from app.Fast_blog.database.database import Base
+
 
 class user(Base):
     choices = [

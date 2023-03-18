@@ -1,14 +1,14 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
 
-from app.Fast_blog.database.database import engine
 from typing import Optional
-from app.Fast_blog.model import models
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter
-models.Base.metadata.create_all(engine)
+from app.Fast_blog.database.database import engine
+
+
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
 session = SessionLocal()
 
