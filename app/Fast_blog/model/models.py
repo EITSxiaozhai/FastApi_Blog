@@ -8,9 +8,9 @@ sys.path.append('../')
 
 class user(Base):
     choices = [
-        ('1', 'woman'),
-        ('2', 'man'),
-        ('3', 'NULL')
+        ('0', 'woman'),
+        ('1', 'man'),
+        ('2', 'NULL')
     ]
     __tablename__ = "usertable"
     __table_args__ = {'extend_existing': True}
