@@ -29,10 +29,11 @@ def UUID_crt(UuidApi):
 @UserApp.get("/")
 async def query():
     async with db_session() as session:
-        sql = select(models.user).where(models.user.UserEmail == 1)
+        sql = select(models.user).where(models.user.gender == 1)
         print(sql) # 这里可以打印出sql
         result = await session.execute(sql)
         # 第一条数据
         data = result.scalars().first()
         # 所有数据
         # data = result.scalars().all()
+    return ("查询成功")
