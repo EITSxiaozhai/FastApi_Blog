@@ -7,10 +7,11 @@ from Fast_blog.model import models
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-
+from app.Fast_blog.database.database import engine
 from Fast_blog.apps import User_app
 from Fast_blog.apps import Blog_app
-models.Base.metadata.create_all(engine)
+
+
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
 session = SessionLocal()
 
