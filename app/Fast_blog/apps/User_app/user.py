@@ -49,15 +49,15 @@ async def query(inputname:str,inpassword:str,inEmail:EmailStr,ingender:bool):
     async with db_session() as session:
             try:
                 UserQurey = await GetUser(inputusername=inputname)
-                print(UserQurey['username'])
+                print(UserQurey)
                 if UserQurey != None :
-                    return ({"用户已经存在,存在值为:":GetUser(inputusername=inputname)})
+                    return ({"用户已经存在,存在值为:":UserQurey['username']})
                 elif UserQurey == None:
                     x = models.User(username=inputname,userpassword=inpassword,UserEmail=inEmail,gender=ingender,UserUuid=str((UUID_crt(inputname))))
                     session.add(x)
                     await session.commit()
                     print("用户添加成功")
-                    return ({"用户添加成功,你的用户名为:":GetUser(inputusername=inputname)})
+                    return ({"用户添加成功,你的用户名为:":inputname})
             except Exception as e:
                 print(e)
 
