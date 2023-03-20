@@ -16,7 +16,7 @@ class User(Base):
     __tablename__ = "usertable"
     __table_args__ = {'extend_existing': True}
     UserId = Column(Integer,primary_key = True,index = True)
-    username = Column(String(255))
+    username = Column(String(255),unique=True)
     userpassword = Column(String(255))
     gender = Column(ChoiceType(choices))
     creation_time = Column(DateTime,default = datetime.datetime.now)

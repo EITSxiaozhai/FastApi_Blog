@@ -28,24 +28,38 @@ templates = Jinja2Templates(directory="./Fast_blog/templates")
 UserApp.mount("/static", StaticFiles(directory="./Fast_blog/static"), name="static")
 
 
-async def UUID_crt(UuidApi):
+def UUID_crt(UuidApi):
     UuidGenerator = uuid.uuid5(uuid.NAMESPACE_DNS,UuidApi)
     return UuidGenerator
 
+
+@UserApp.get("/getuser")
+async def GetUser(inputusername:str):
+    async with db_session() as session:
+        try:
+            stmt = select(models.User).filter_by(username=inputusername)
+            result = await session.execute(stmt)
+            for row in result.scalars():
+                x = row.__dict__['username']
+                return ({"Username:":x})
+        except Exception as e:
+            print(e)
 @UserApp.get("/")
 async def query(inputname:str,inpassword:str,inEmail:EmailStr,ingender:bool):
     async with db_session() as session:
             try:
-                if session.get(models.User.username, inputname):
+                UserQurey = await GetUser(inputusername=inputname)
+                print(UserQurey['username'])
+                if UserQurey != None :
+                    return ({"用户已经存在,存在值为:":GetUser(inputusername=inputname)})
+                elif UserQurey == None:
                     x = models.User(username=inputname,userpassword=inpassword,UserEmail=inEmail,gender=ingender,UserUuid=str((UUID_crt(inputname))))
                     session.add(x)
                     await session.commit()
                     print("用户添加成功")
-                else:
-                    print("用户名重复,禁止添加")
+                    return ({"用户添加成功,你的用户名为:":GetUser(inputusername=inputname)})
             except Exception as e:
                 print(e)
-    return ("查询成功")
 
 
 
@@ -58,15 +72,6 @@ async def AllUser():
         x = reult.scalars()
         for i in x:
             print(i.__dict__['username'],i.__dict__['UserUuid'])
-
     return ("查询全部用户")
 
 
-@UserApp.get("/getuser")
-async def GetUser(inputusername:str):
-    async with db_session() as session:
-        stmt = select(models.User).filter_by(username=inputusername)
-        result = await session.execute(stmt)
-        for row in result.scalars():
-            print(row.__dict__['UserUuid'])
-    return 0
