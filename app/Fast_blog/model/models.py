@@ -7,7 +7,7 @@ from  sqlalchemy_utils import EmailType,ChoiceType
 from app.Fast_blog.database.database import Base
 
 
-class user(Base):
+class User(Base):
     choices = [
         ('0', 'woman'),
         ('1', 'man'),
