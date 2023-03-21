@@ -2,13 +2,17 @@
 # author: YAO XU time:
 
 from typing import Optional
+from fastapi import FastAPI, Request
+
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter
-from app.Fast_blog.database.database import engine
-
-
+from uvicorn.middleware.debug import HTMLResponse
+from sqlalchemy import select
+from app.Fast_blog.database.database import engine, db_session
+from app.Fast_blog.model import models
+from app.Fast_blog.schemas import schemas
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
 session = SessionLocal()
 
@@ -20,5 +24,32 @@ BlogApp.mount("/static", StaticFiles(directory="./Fast_blog/static"), name="stat
 
 
 @BlogApp.get('/')
-def index(limit: int = 10, publisheds: int = None, sort: Optional[str] = None, content: Optional[str] = None):
-    return {'data': f'我是博客首页，显示{limit}篇内容，并且发布状态为{publisheds}，排序顺序是根据{sort}字段'}
+async def index(request:Request):
+    return templates.TemplateResponse(name="/index_page/blog_html/index.html",context={"request":request})
+
+
+@BlogApp.get('/about')
+async def index(request:Request):
+    return templates.TemplateResponse(name="/index_page/blog_html/about.html",context={"request":request})
+
+
+@BlogApp.get('/contact')
+async def index(request:Request):
+    return templates.TemplateResponse(name="/index_page/blog_html/contact.html",context={"request":request})
+
+
+
+
+##博客添加信息
+@BlogApp.post('/blogadd')
+async def BlogAdd(Addtitle:str,Addcontent:str,Addauthor:str,):
+    async with db_session() as session:
+        try:
+            x = models.Blog(title=Addtitle,content=Addcontent,author=Addauthor)
+            session.add(x)
+            await session.commit()
+            print('文章已经添加到对应数据库')
+        except Exception as e:
+            print("我们遇到了下面的问题")
+            print(e)
+        return 0

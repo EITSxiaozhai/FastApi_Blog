@@ -2,9 +2,12 @@ import asyncio
 import datetime
 
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, MetaData
-from sqlalchemy.orm import registry
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import registry, sessionmaker
 from  sqlalchemy_utils import EmailType,ChoiceType
-from app.Fast_blog.database.database import Base
+from app.Fast_blog.database.database import Base, engine
+
+
 
 
 class User(Base):
@@ -24,11 +27,12 @@ class User(Base):
     UserUuid = Column(String(255))
     UserEmail = Column(EmailType(255))
 
+
 class Blog(Base):
     __tablename__ = "blogtable"
     __table_args__ = {'extend_existing': True}
+    BlogId = Column(Integer,primary_key=True,index=True)
     title = Column(String(255))
     content = Column(String(255))
     author = Column(String(255))
-    BlogId = Column(String(255),primary_key=True,index=True)
-    BlogUuid = Column(String(32))
+    x = Column(String(255))
