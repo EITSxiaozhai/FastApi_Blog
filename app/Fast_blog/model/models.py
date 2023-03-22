@@ -6,10 +6,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import registry, sessionmaker
 from  sqlalchemy_utils import EmailType,ChoiceType
 from app.Fast_blog.database.database import Base, engine
+from dataclasses import dataclass
 
 
-
-
+@dataclass
 class User(Base):
     choices = [
         ('0', 'woman'),
@@ -27,7 +27,7 @@ class User(Base):
     UserUuid = Column(String(255))
     UserEmail = Column(EmailType(255))
 
-
+@dataclass
 class Blog(Base):
     __tablename__ = "blogtable"
     __table_args__ = {'extend_existing': True}
