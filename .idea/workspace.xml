@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="93d4690b-557e-4eab-a1bf-15f3c134b6b6" name="Changes" comment="添加前端页面-数据库迁移准备">
+    <list default="true" id="93d4690b-557e-4eab-a1bf-15f3c134b6b6" name="Changes" comment="添加博客API">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/env.py" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/env.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/model/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/blog.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/blog.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +130,7 @@
       <workItem from="1679390623318" duration="6348000" />
       <workItem from="1679398934767" duration="7033000" />
       <workItem from="1679407274773" duration="3579000" />
-      <workItem from="1679452766445" duration="2135000" />
+      <workItem from="1679452766445" duration="24854000" />
     </task>
     <task id="LOCAL-00001" summary="初次提交">
       <created>1678798971317</created>
@@ -210,7 +209,21 @@
       <option name="project" value="LOCAL" />
       <updated>1679410295491</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="修改数据库迁移模型代码">
+      <created>1679455067365</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1679455067365</updated>
+    </task>
+    <task id="LOCAL-00013" summary="添加博客API">
+      <created>1679473351108</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1679473351108</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,7 +250,9 @@
     <MESSAGE value="异步判断BUG修复" />
     <MESSAGE value="添加数据库迁移模块" />
     <MESSAGE value="添加前端页面-数据库迁移准备" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加前端页面-数据库迁移准备" />
+    <MESSAGE value="修改数据库迁移模型代码" />
+    <MESSAGE value="添加博客API" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加博客API" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1679220089230" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
