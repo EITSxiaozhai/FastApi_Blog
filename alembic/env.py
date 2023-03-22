@@ -1,6 +1,7 @@
 from logging.config import fileConfig
 from urllib import parse
 
+import sqlalchemy_utils
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
@@ -24,7 +25,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-from app.Fast_blog.database.database import Base
+from app.Fast_blog.model.models import Base
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -57,6 +58,22 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
+
+
+def render_item(type_, obj, autogen_context):
+    """
+    Apply custom rendering for selected items.
+    """
+    if type_ == 'type' and isinstance(obj, sqlalchemy_utils.types.choice.ChoiceType):
+        # add import for this type
+        autogen_context.imports.add("import sqlalchemy_utils")
+        return "sqlalchemy_utils.types.choice.ChoiceType(choices=" + str(obj.choices) + ")"
+
+    # default rendering for other objects
+    return False
+
+
+
 def run_migrations_online() -> None:
     """Run migrations in 'online' mode.
 
@@ -72,7 +89,10 @@ def run_migrations_online() -> None:
 
     with connectable.connect() as connection:
         context.configure(
-            connection=connection, target_metadata=target_metadata
+            connection=connection,
+            target_metadata=target_metadata,
+            compare_type=True,
+            render_item=render_item
         )
 
         with context.begin_transaction():

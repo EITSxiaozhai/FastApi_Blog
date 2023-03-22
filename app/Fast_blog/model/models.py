@@ -35,4 +35,3 @@ class Blog(Base):
     title = Column(String(255))
     content = Column(String(255))
     author = Column(String(255))
-    x = Column(String(255))
