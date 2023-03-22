@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="93d4690b-557e-4eab-a1bf-15f3c134b6b6" name="Changes" comment="添加前端页面-数据库迁移准备">
-      <change beforePath="$PROJECT_DIR$/.idea/fast-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fast-api.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/alembic/env.py" beforeDir="false" afterPath="$PROJECT_DIR$/alembic/env.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/database/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/database/database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/model/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -132,7 +130,8 @@
       <workItem from="1679371632774" duration="601000" />
       <workItem from="1679390623318" duration="6348000" />
       <workItem from="1679398934767" duration="7033000" />
-      <workItem from="1679407274773" duration="2913000" />
+      <workItem from="1679407274773" duration="3579000" />
+      <workItem from="1679452766445" duration="2135000" />
     </task>
     <task id="LOCAL-00001" summary="初次提交">
       <created>1678798971317</created>
@@ -204,7 +203,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679405256029</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="添加前端页面-数据库迁移准备">
+      <created>1679410295491</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1679410295491</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -229,6 +235,7 @@
     <MESSAGE value="异步查询以及显示全部数据" />
     <MESSAGE value="异步判断初步,还有BUG" />
     <MESSAGE value="异步判断BUG修复" />
+    <MESSAGE value="添加数据库迁移模块" />
     <MESSAGE value="添加前端页面-数据库迁移准备" />
     <option name="LAST_COMMIT_MESSAGE" value="添加前端页面-数据库迁移准备" />
   </component>
