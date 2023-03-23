@@ -26,6 +26,8 @@ class User(Base):
     Last_Login_Time = Column(DateTime,default= datetime.datetime.now)
     UserUuid = Column(String(255))
     UserEmail = Column(EmailType(255))
+    def to_dict(self):
+        return dict(UserId=self.UserId,username=self.username,userpassword=self.userpassword,gender=self.gender,UserEmail=self.UserEmail,UserUuid=self.UserUuid)
 
 @dataclass
 class Blog(Base):
@@ -35,3 +37,5 @@ class Blog(Base):
     title = Column(String(255))
     content = Column(String(255))
     author = Column(String(255))
+    def to_dict(self):
+        return dict(BlogId=self.BlogId,title=self.title,content=self.content,author=self.author)
