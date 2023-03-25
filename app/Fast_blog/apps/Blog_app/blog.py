@@ -1,22 +1,17 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
-import dataclasses
-import json
-from typing import Optional
-from fastapi import FastAPI, Request
-from dataclasses import dataclass
 
-from flask import jsonify
+
+from fastapi import FastAPI, Request
+
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter
-from uvicorn.middleware.debug import HTMLResponse
 from sqlalchemy import select, text
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import Blog
-from app.Fast_blog.schemas import schemas
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
 session = SessionLocal()
 
