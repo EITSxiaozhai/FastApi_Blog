@@ -1,12 +1,12 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
-import asyncio
+
 import uuid
-from cgitb import text
+
 
 from pydantic import EmailStr
 from sqlalchemy import select
-from sqlalchemy_utils import EmailType
+
 
 from app.Fast_blog.database.database import engine
 from sqlalchemy.orm import sessionmaker

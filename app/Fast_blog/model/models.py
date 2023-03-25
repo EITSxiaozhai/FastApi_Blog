@@ -2,8 +2,6 @@ import asyncio
 import datetime
 
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, MetaData
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import registry, sessionmaker
 from  sqlalchemy_utils import EmailType,ChoiceType
 from app.Fast_blog.database.database import Base, engine
 from dataclasses import dataclass

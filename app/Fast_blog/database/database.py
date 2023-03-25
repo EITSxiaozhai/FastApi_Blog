@@ -2,8 +2,7 @@ from urllib import  parse
 import  sys
 from asyncio import current_task
 
-import alembic
-from sqlalchemy import MetaData
+
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
