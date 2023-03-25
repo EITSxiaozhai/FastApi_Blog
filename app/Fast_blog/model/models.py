@@ -47,7 +47,7 @@ class PowerMeters(Base):
     __tablename__ = "powertable"
     __table_args__ = {'extend_existing': True}
     PowerId = Column(Integer, primary_key=True, index=True)
-    DataNum = Column(DateTime,default= datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
+    DataNum = Column(DateTime,default= datetime.datetime.now().strftime("%Y-%m-%d"))
     electricityNum = Column(String(255))
     PowerConsumption = Column(String(255))
     AveragePower = Column(Integer)
