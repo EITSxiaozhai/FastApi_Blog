@@ -97,7 +97,11 @@ async def BlogIndex():
             data = results.scalars().all()
             data = [item.to_dict() for item in data]
             print(data)
+            return ({"data":data})
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
         return 0
+
+
+

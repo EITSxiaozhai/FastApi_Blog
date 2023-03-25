@@ -10,14 +10,15 @@ from fastapi.templating import Jinja2Templates
 from app.Fast_blog.database.database import engine
 from Fast_blog.apps import User_app
 from Fast_blog.apps import Blog_app
-
+from Fast_blog.apps import Power_Crawl
 
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
 session = SessionLocal()
 
 app = FastAPI()
-app.include_router(User_app.UserApp,prefix='/user')
-app.include_router(Blog_app.BlogApp,prefix='/blog')
+app.include_router(User_app.UserApp,prefix='/user', tags=["用户"])
+app.include_router(Blog_app.BlogApp,prefix='/blog',tags=["博客"])
+app.include_router(Power_Crawl.PowerApp,prefix='/power', tags=["电力爬虫"])
 
 
 templates = Jinja2Templates(directory="./Fast_blog/templates")
