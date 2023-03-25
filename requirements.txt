@@ -7,4 +7,5 @@ pydantic~=1.10.4
 sqlalchemy_utils~=0.40.0
 asyncmy ~= 0.2.7
 alembic ~= 1.10.0
-beautifulsoup4 ~= 4.12.0
+beautifulsoup4~=4.11.2
+requests~=2.22.0
