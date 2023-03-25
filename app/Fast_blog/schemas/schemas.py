@@ -3,6 +3,8 @@ from  typing import Optional
 import  sys
 sys.path.append('../')
 
+
+
 class Blog(BaseModel):
     title:str
     content:str
