@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加电力爬取判断" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改需求文件">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -130,7 +133,7 @@
       <workItem from="1679452766445" duration="24933000" />
       <workItem from="1679580129667" duration="1320000" />
       <workItem from="1679667411634" duration="83000" />
-      <workItem from="1679729730467" duration="15378000" />
+      <workItem from="1679729730467" duration="16316000" />
     </task>
     <task id="LOCAL-00001" summary="初次提交">
       <created>1678798971317</created>
@@ -272,7 +275,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679748145894</updated>
     </task>
-    <option name="localTasksCounter" value="21" />
+    <task id="LOCAL-00021" summary="修改需求文件">
+      <created>1679748995579</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1679748995579</updated>
+    </task>
+    <option name="localTasksCounter" value="22" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -304,7 +314,8 @@
     <MESSAGE value="添加博客API" />
     <MESSAGE value="添加博客API,添加电力爬取" />
     <MESSAGE value="添加电力爬取判断" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加电力爬取判断" />
+    <MESSAGE value="修改需求文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改需求文件" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1679220089230" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
