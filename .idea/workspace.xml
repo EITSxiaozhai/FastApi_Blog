@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改需求文件">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -133,7 +134,7 @@
       <workItem from="1679452766445" duration="24933000" />
       <workItem from="1679580129667" duration="1320000" />
       <workItem from="1679667411634" duration="83000" />
-      <workItem from="1679729730467" duration="16316000" />
+      <workItem from="1679729730467" duration="16648000" />
     </task>
     <task id="LOCAL-00001" summary="初次提交">
       <created>1678798971317</created>
@@ -282,7 +283,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679748995579</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="修改需求文件">
+      <created>1679749985877</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1679749985877</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
