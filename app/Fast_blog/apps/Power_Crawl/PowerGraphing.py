@@ -16,6 +16,27 @@ PowerApp = APIRouter()
 
 
 
+
+
+##嵌套测试
+@PowerApp.get('/find')
+async def query_power():
+    async with engine.begin() as conn:
+        async with AsyncSession(engine, expire_on_commit=False) as session:
+            #查询昨日信息数据
+            today = datetime.date.today()
+            yesterday = today - datetime.timedelta(days=1)
+            stmt = select(PowerMeters).filter(PowerMeters.DataNum == yesterday)
+            AvgStmt = select(func.avg(PowerMeters.PowerConsumption))
+            result = await session.execute(stmt)
+            AvgResult = await  session.execute(AvgStmt)
+            users = result.scalars().all()
+            for TodayInfo in users:
+                electricityNumToday = TodayInfo.electricityNum
+                PowerConsumptionToday = TodayInfo.PowerConsumption
+                return ({"electricityNumToday":electricityNumToday,"PowerConsumptionToday":PowerConsumptionToday,"AveragePower":AvgResult.scalars().first()})
+
+
 @PowerApp.get('/')
 # 电力数据爬取入库
 async def LetView():
@@ -31,6 +52,8 @@ async def LetView():
             #进行数据库查询检测是否有当前日期
             stmt = select(PowerMeters).filter_by(DataNum = today)
             result = await session.execute(stmt)
+            TodayList = await query_power()
+            print(TodayList)
             # for i in result.scalars().all():
             #      print(i.__dict__['electricityNum'])
             #判断并输出到前端页面
@@ -39,7 +62,7 @@ async def LetView():
                 return ({"数据存在日期:":today})
             elif result.scalars().all() is not None:
                 print("当前日期数据未存在")
-                Let =  models.PowerMeters(DataNum=datetime.datetime.now().strftime("%Y-%m-%d"),electricityNum=end,PowerConsumption='NONE',AveragePower="NONE")
+                Let =  models.PowerMeters(DataNum=datetime.datetime.now().strftime("%Y-%m-%d"),electricityNum=end,PowerConsumption=float(end) - float(TodayList['electricityNumToday']),AveragePower=TodayList['AveragePower'])
                 session.add(Let)
                 await session.commit()
                 return ({"今天数据已经添加到数据库:":end})
@@ -90,17 +113,4 @@ async def LetTest():
 #             print(e)
 
 
-##嵌套测试
-@PowerApp.get('/find')
-async def query_power():
-    async with engine.begin() as conn:
-        async with AsyncSession(engine, expire_on_commit=False) as session:
-            #查询昨日信息数据
-            today = datetime.date.today()
-            yesterday = today - datetime.timedelta(days=1)
-            stmt = select(PowerMeters).filter(PowerMeters.DataNum == yesterday)
-            result = await session.execute(stmt)
-            users = result.scalars().all()
-            for TodayInfo in users:
-                print(TodayInfo.electricityNum)
 
