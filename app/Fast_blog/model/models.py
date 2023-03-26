@@ -48,6 +48,6 @@ class PowerMeters(Base):
     DataNum = Column(DateTime,default= datetime.datetime.now().strftime("%Y-%m-%d"))
     electricityNum = Column(String(255))
     PowerConsumption = Column(String(255))
-    AveragePower = Column(Integer)
+    AveragePower = Column(String(255))
     def to_dict(self):
         return dict(DataNum=self.DataNum,electricityNum=self.electricityNum,PowerConsumption=self.PowerConsumption,AveragePower=self.AveragePower)

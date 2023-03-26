@@ -5,6 +5,9 @@ from fastapi import APIRouter
 import bs4
 import requests
 import datetime
+
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.Fast_blog.database.database import engine
 from app.Fast_blog.database.database import db_session
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import PowerMeters
@@ -25,22 +28,21 @@ async def LetView():
             soup = bs4.BeautifulSoup(res.text, 'html.parser')
             x = soup.find_all("label")
             end = x[1].string
-
-
             #进行数据库查询检测是否有当前日期
             stmt = select(PowerMeters).filter_by(DataNum = today)
             result = await session.execute(stmt)
-            for i in result.scalars().all():
-                print(i.__dict__['DataNum'])
-
+            # for i in result.scalars().all():
+            #      print(i.__dict__['electricityNum'])
             #判断并输出到前端页面
-            if result.scalars().all() is not None:
+            if result.scalars().all():
                 print("当前日期数据已经存在")
-                return ({"数据存在日期:":i.__dict__['DataNum']})
-            else:
+                return ({"数据存在日期:":today})
+            elif result.scalars().all() is not None:
                 print("当前日期数据未存在")
-
-
+                Let =  models.PowerMeters(DataNum=datetime.datetime.now().strftime("%Y-%m-%d"),electricityNum=end,PowerConsumption='NONE',AveragePower="NONE")
+                session.add(Let)
+                await session.commit()
+                return ({"今天数据已经添加到数据库:":end})
         except Exception as e:
             print(e)
 
@@ -51,14 +53,14 @@ async def LetView():
 async def LetTest():
     async with db_session() as session:
         try:
-            today = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+            today = datetime.datetime.now().strftime("%Y-%m-%d")
             res = requests.post(
                 url='http://www.wap.cnyiot.com/(S(mjfpk2lgscja02m00mcj3otd))/nat/pay.aspx?mid=19500357280&chInfo=ch_share__chsub_CopyLink&apshareid=7cad8ac6-7aed-4391-b02f-23a9d11fbe37')
             # rex = requests.post(url='http://www.wap.cnyiot.com/(S(jd2c1lijcm5pmagoyoyqr2yk))/nat/pay.aspx?Method=getpayfee')
             soup = bs4.BeautifulSoup(res.text, 'html.parser')
             x = soup.find_all("label")
             end = x[1].string
-            sql = select(models.PowerMeters).where(models.User.gender is not None)
+            sql = select(models.PowerMeters).where(models.PowerMeters.PowerId is not None)
             results = await session.execute(sql)
             data = results.scalars().all()
             data = [item.to_dict() for item in data]
@@ -67,3 +69,38 @@ async def LetTest():
         except Exception as e:
             print(e)
             return ({"ERROR:":e})
+
+
+
+
+# @PowerApp.get('/orm')
+# # 电力数据爬取入库
+# async def LetViewOrm():
+#     async with AsyncSession(engine) as session:
+#         try:
+#             today = datetime.datetime.now().strftime("%Y-%m-%d")
+#             res = requests.post(
+#                 url='http://www.wap.cnyiot.com/(S(mjfpk2lgscja02m00mcj3otd))/nat/pay.aspx?mid=19500357280&chInfo=ch_share__chsub_CopyLink&apshareid=7cad8ac6-7aed-4391-b02f-23a9d11fbe37')
+#             # rex = requests.post(url='http://www.wap.cnyiot.com/(S(jd2c1lijcm5pmagoyoyqr2yk))/nat/pay.aspx?Method=getpayfee')
+#             soup = bs4.BeautifulSoup(res.text, 'html.parser')
+#             x = soup.find_all("label")
+#             end = x[1].string
+#
+#         except Exception as e:
+#             print(e)
+
+
+##嵌套测试
+@PowerApp.get('/find')
+async def query_power():
+    async with engine.begin() as conn:
+        async with AsyncSession(engine, expire_on_commit=False) as session:
+            #查询昨日信息数据
+            today = datetime.date.today()
+            yesterday = today - datetime.timedelta(days=1)
+            stmt = select(PowerMeters).filter(PowerMeters.DataNum == yesterday)
+            result = await session.execute(stmt)
+            users = result.scalars().all()
+            for TodayInfo in users:
+                print(TodayInfo.electricityNum)
+
