@@ -1,6 +1,16 @@
 ## FastAPI练习测试
 
-
+---
+## 启动Celery的主服务
+``` python
+ celery -A main.celery_app worker --loglevel=INFO -P eventlet
+ ```
+---
+## 启动Celery的调度器进行自动执行
+``` python
+ celery -A main.celery_app beat --loglevel=INFO
+ ```
+---
 075a5056de19451dae9aff7a815dc1da  
 
 ---

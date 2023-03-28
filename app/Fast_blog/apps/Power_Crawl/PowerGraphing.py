@@ -1,17 +1,20 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
-import DateTime
 from fastapi import APIRouter
 import bs4
 import requests
 import datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.Fast_blog.BackList.backlist import celery_app
 from app.Fast_blog.database.database import engine
 from app.Fast_blog.database.database import db_session
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import PowerMeters
-from sqlalchemy import exists, select, func
+from sqlalchemy import exists, select, func, cast, Date
+from app.Fast_blog.BackList import celery_app
+
 PowerApp = APIRouter()
 
 
@@ -26,19 +29,27 @@ async def query_power():
             #查询昨日信息数据
             today = datetime.date.today()
             yesterday = today - datetime.timedelta(days=1)
-            stmt = select(PowerMeters).filter(PowerMeters.DataNum == yesterday)
+            ##查询昨日日期数据使用cast方法转换,并使用strfitme进行格式化转换
+            stmt = select(PowerMeters).filter(cast(PowerMeters.DataNum, Date) != yesterday.strftime("%Y-%m-%d"+"T"+"%H:%M:%S"))
             AvgStmt = select(func.avg(PowerMeters.PowerConsumption))
             result = await session.execute(stmt)
             AvgResult = await  session.execute(AvgStmt)
             users = result.scalars().all()
             for TodayInfo in users:
+                dataNum = TodayInfo.DataNum
                 electricityNumToday = TodayInfo.electricityNum
                 PowerConsumptionToday = TodayInfo.PowerConsumption
-                return ({"electricityNumToday":electricityNumToday,"PowerConsumptionToday":PowerConsumptionToday,"AveragePower":AvgResult.scalars().first()})
+                return ({"electricityNumToday":electricityNumToday,"PowerConsumptionToday":PowerConsumptionToday,"AveragePower":AvgResult.scalars().first(),"dataNum":dataNum})
 
 
-@PowerApp.get('/')
+
+
+
+
+
+@celery_app.task()
 # 电力数据爬取入库
+@PowerApp.get('/')
 async def LetView():
     async with db_session() as session:
         try:
@@ -48,21 +59,24 @@ async def LetView():
             # rex = requests.post(url='http://www.wap.cnyiot.com/(S(jd2c1lijcm5pmagoyoyqr2yk))/nat/pay.aspx?Method=getpayfee')
             soup = bs4.BeautifulSoup(res.text, 'html.parser')
             x = soup.find_all("label")
-            end = x[1].string
+            if len(x) >= 2:
+                end = x[1].string
+                print(end)
+            else:
+                print("日期未找到")
+            # 处理找不到第二个元素的情况
             #进行数据库查询检测是否有当前日期
             stmt = select(PowerMeters).filter_by(DataNum = today)
             result = await session.execute(stmt)
             TodayList = await query_power()
             print(TodayList)
-            # for i in result.scalars().all():
-            #      print(i.__dict__['electricityNum'])
-            #判断并输出到前端页面
             if result.scalars().all():
                 print("当前日期数据已经存在")
                 return ({"数据存在日期:":today})
             elif result.scalars().all() is not None:
                 print("当前日期数据未存在")
-                Let =  models.PowerMeters(DataNum=datetime.datetime.now().strftime("%Y-%m-%d"),electricityNum=end,PowerConsumption=float(end) - float(TodayList['electricityNumToday']),AveragePower=TodayList['AveragePower'])
+                PowerInt = (round(float(end) - float(TodayList['electricityNumToday']),2))
+                Let =  models.PowerMeters(DataNum=datetime.datetime.now().strftime("%Y-%m-%d"),electricityNum=end,PowerConsumption=round(PowerInt,2),AveragePower=TodayList['AveragePower'])
                 session.add(Let)
                 await session.commit()
                 return ({"今天数据已经添加到数据库:":end})
