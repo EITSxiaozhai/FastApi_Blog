@@ -9,3 +9,5 @@ asyncmy ~= 0.2.7
 alembic ~= 1.10.0
 beautifulsoup4~=4.11.2
 requests~=2.22.0
+celery~=5.2.7
+eventlet ~= 0.33.1
