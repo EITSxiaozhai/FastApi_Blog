@@ -35,17 +35,9 @@ app.mount("/static", StaticFiles(directory="./Fast_blog/static"), name="static")
 
 
 
-# 定义测试 BackList 任务
-@celery_app.task()
-def add(x, y):
-     print(x + y)
-     return x + y
-
-
 @app.get("/")
 async def root():
     response_data = {"message": "hahahah"}
-    LetView.delay()
     return JSONResponse(content=response_data)
 
 
