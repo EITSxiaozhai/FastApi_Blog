@@ -30,17 +30,15 @@ async def query_power():
             today = datetime.date.today()
             yesterday = today - datetime.timedelta(days=1)
             ##查询昨日日期数据使用cast方法转换,并使用strfitme进行格式化转换
-            stmt = select(PowerMeters).filter(cast(PowerMeters.DataNum, Date) != yesterday.strftime("%Y-%m-%d"+"T"+"%H:%M:%S"))
+            stmt = select(PowerMeters).filter(cast(PowerMeters.DataNum, Date) == yesterday.strftime("%Y-%m-%d"+"T"+"%H:%M:%S"))
             AvgStmt = select(func.avg(PowerMeters.PowerConsumption))
             result = await session.execute(stmt)
             AvgResult = await  session.execute(AvgStmt)
             users = result.scalars().all()
             for TodayInfo in users:
-                dataNum = TodayInfo.DataNum
                 electricityNumToday = TodayInfo.electricityNum
                 PowerConsumptionToday = TodayInfo.PowerConsumption
-                return ({"electricityNumToday":electricityNumToday,"PowerConsumptionToday":PowerConsumptionToday,"AveragePower":AvgResult.scalars().first(),"dataNum":dataNum})
-
+                return ({"electricityNumToday":electricityNumToday,"PowerConsumptionToday":round(float(PowerConsumptionToday),2),"AveragePower":round(AvgResult.scalars().first(),2)})
 
 
 
@@ -75,8 +73,7 @@ async def LetView():
                 return ({"数据存在日期:":today})
             elif result.scalars().all() is not None:
                 print("当前日期数据未存在")
-                PowerInt = (round(float(end) - float(TodayList['electricityNumToday']),2))
-                Let =  models.PowerMeters(DataNum=datetime.datetime.now().strftime("%Y-%m-%d"),electricityNum=end,PowerConsumption=round(PowerInt,2),AveragePower=TodayList['AveragePower'])
+                Let =  models.PowerMeters(DataNum=datetime.datetime.now().strftime("%Y-%m-%d"),electricityNum=end,PowerConsumption=round(float(TodayList['electricityNumToday']) - float(end),2),AveragePower=round(TodayList['AveragePower'],2))
                 session.add(Let)
                 await session.commit()
                 return ({"今天数据已经添加到数据库:":end})

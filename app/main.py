@@ -1,5 +1,6 @@
 import asyncio
 
+import anyio
 from celery import Celery
 from celery.schedules import crontab
 from  fastapi import  FastAPI,Path,Request
@@ -35,17 +36,16 @@ app.mount("/static", StaticFiles(directory="./Fast_blog/static"), name="static")
 
 
 
-# 定义测试 BackList 任务
-@celery_app.task()
-def add(x, y):
-     print(x + y)
-     return x + y
-
-
 @app.get("/")
 async def root():
-    response_data = {"message": "hahahah"}
-    LetView.delay()
-    return JSONResponse(content=response_data)
+     response_data = {"message": "hahahah"}
+     return JSONResponse(content=response_data)
 
+
+
+@app.get("/test")
+@celery_app.task(acks_late=True)
+def add_to_db_task():
+    LetView.delay()
+    return {"status": True}
 
