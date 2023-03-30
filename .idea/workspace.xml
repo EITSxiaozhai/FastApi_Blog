@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加Celery分离,准备进行反序列化设计">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/BackList/backlist.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/BackList/backlist.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Power_Crawl/PowerGraphing.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Power_Crawl/PowerGraphing.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
     </list>
@@ -165,7 +164,8 @@
       <workItem from="1679815934436" duration="13000" />
       <workItem from="1679815993132" duration="21407000" />
       <workItem from="1679995827591" duration="12529000" />
-      <workItem from="1680077707271" duration="3964000" />
+      <workItem from="1680077707271" duration="4554000" />
+      <workItem from="1680171736999" duration="5253000" />
     </task>
     <task id="LOCAL-00001" summary="初次提交">
       <created>1678798971317</created>
@@ -363,7 +363,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680009337840</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="添加Celery分离,准备进行反序列化设计">
+      <created>1680081786855</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1680081786855</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

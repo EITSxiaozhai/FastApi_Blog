@@ -44,6 +44,7 @@ async def query_power():
 
 
 
+
 @celery_app.task()
 # 电力数据爬取入库
 @PowerApp.get('/')

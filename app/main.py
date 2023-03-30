@@ -1,5 +1,6 @@
 import asyncio
 
+import anyio
 from celery import Celery
 from celery.schedules import crontab
 from  fastapi import  FastAPI,Path,Request
@@ -37,7 +38,14 @@ app.mount("/static", StaticFiles(directory="./Fast_blog/static"), name="static")
 
 @app.get("/")
 async def root():
-    response_data = {"message": "hahahah"}
-    return JSONResponse(content=response_data)
+     response_data = {"message": "hahahah"}
+     return JSONResponse(content=response_data)
 
+
+
+@app.get("/test")
+@celery_app.task(acks_late=True)
+def add_to_db_task():
+    LetView.delay()
+    return {"status": True}
 
