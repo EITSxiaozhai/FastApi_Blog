@@ -45,7 +45,5 @@ async def root():
 
 @app.get("/test")
 @celery_app.task(acks_late=True)
-def add_to_db_task():
-    LetView.delay()
-    return {"status": True}
-
+def some_task_t():
+    return asyncio.run(LetView())
