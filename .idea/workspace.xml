@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加Celery分离,准备进行反序列化设计">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改需求文件">
+      <change afterPath="$PROJECT_DIR$/app/fastapt-project/src/router/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/fastapt-project/src/views/HomePage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/BackList/backlist.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/BackList/backlist.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/templates/index_page/blog_html/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/templates/index_page/blog_html/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -19,6 +19,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="Vue Single File Component" />
       </list>
     </option>
   </component>
@@ -81,6 +82,11 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\fast-api\app\fastapt-project\src\views" />
+    </key>
+  </component>
   <component name="RunManager" selected="Python.main">
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="fast-api" />
@@ -169,7 +175,9 @@
       <workItem from="1680171736999" duration="6667000" />
       <workItem from="1680180424449" duration="1655000" />
       <workItem from="1680186416421" duration="1502000" />
-      <workItem from="1680188112067" duration="1057000" />
+      <workItem from="1680188112067" duration="1115000" />
+      <workItem from="1680238090418" duration="4401000" />
+      <workItem from="1680263519787" duration="10070000" />
     </task>
     <task id="LOCAL-00001" summary="初次提交">
       <created>1678798971317</created>
@@ -381,7 +389,21 @@
       <option name="project" value="LOCAL" />
       <updated>1680179216337</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="添加Celery分离,准备进行反序列化设计">
+      <created>1680189198918</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1680189198918</updated>
+    </task>
+    <task id="LOCAL-00032" summary="修改需求文件">
+      <created>1680238265711</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1680238265711</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -413,12 +435,12 @@
     <MESSAGE value="添加博客API" />
     <MESSAGE value="添加博客API,添加电力爬取" />
     <MESSAGE value="添加电力爬取判断" />
-    <MESSAGE value="修改需求文件" />
     <MESSAGE value="添加查找昨日数据" />
     <MESSAGE value="自动添加并计算昨日数据" />
     <MESSAGE value="更新对应日期判断,增加判断严格性" />
     <MESSAGE value="添加Celery分离,准备进行反序列化设计" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加Celery分离,准备进行反序列化设计" />
+    <MESSAGE value="修改需求文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改需求文件" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1679995937290" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

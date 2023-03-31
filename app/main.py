@@ -2,6 +2,7 @@ import asyncio
 
 import anyio
 from celery import Celery
+from celery.result import AsyncResult
 from celery.schedules import crontab
 from  fastapi import  FastAPI,Path,Request
 from starlette.responses import JSONResponse
@@ -19,6 +20,8 @@ from Fast_blog.apps import User_app
 from Fast_blog.apps import Blog_app
 from Fast_blog.apps import Power_Crawl
 from Fast_blog.apps.Power_Crawl import LetView
+from fastapi.middleware.cors import CORSMiddleware
+
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
 session = SessionLocal()
 
@@ -35,6 +38,14 @@ templates = Jinja2Templates(directory="./Fast_blog/templates")
 app.mount("/static", StaticFiles(directory="./Fast_blog/static"), name="static")
 
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.get("/")
 async def root():
@@ -46,4 +57,5 @@ async def root():
 @app.get("/test")
 @celery_app.task(acks_late=True)
 def some_task_t():
-    return asyncio.run(LetView())
+      LetView.delay()
+      return 0
