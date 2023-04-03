@@ -12,7 +12,7 @@ from app.Fast_blog.database.database import engine
 from app.Fast_blog.database.database import db_session
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import PowerMeters
-from sqlalchemy import exists, select, func, cast, Date
+from sqlalchemy import exists, select, func, cast, Date, desc
 from app.Fast_blog.BackList import celery_app
 
 PowerApp = APIRouter()
@@ -30,7 +30,7 @@ async def query_power():
             today = datetime.date.today()
             yesterday = today - datetime.timedelta(days=1)
             ##查询昨日日期数据使用cast方法转换,并使用strfitme进行格式化转换
-            stmt = select(PowerMeters).filter(cast(PowerMeters.DataNum, Date) == yesterday.strftime("%Y-%m-%d"+"T"+"%H:%M:%S"))
+            stmt = select(PowerMeters).order_by(desc(PowerMeters.DataNum)).limit(1)
             AvgStmt = select(func.avg(PowerMeters.PowerConsumption))
             result = await session.execute(stmt)
             AvgResult = await  session.execute(AvgStmt)
