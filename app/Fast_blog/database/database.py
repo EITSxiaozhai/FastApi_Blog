@@ -12,7 +12,7 @@ sys.path.append('../')
 
 password = parse.quote("@XU15964352xu")
 ##使用utf8进行中文输入
-Sql_URL = "mysql+asyncmy://django:"+ password + "@mysql.exploit-db.xyz/Fastapi_blog" + "?charset=utf8mb4"
+Sql_URL = "mysql+asyncmy://django:"+ password + "@mysql.exploit-db.xyz:63775/fastapi_blog" + "?charset=utf8mb4"
 ##创建异步连接
 engine = create_async_engine(Sql_URL)
 
