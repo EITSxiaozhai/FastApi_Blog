@@ -7,13 +7,13 @@ import datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.Fast_blog.BackList.backlist import celery_app
+from app.Fast_blog.BackList import celery_app
 from app.Fast_blog.database.database import engine
 from app.Fast_blog.database.database import db_session
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import PowerMeters
 from sqlalchemy import exists, select, func, cast, Date, desc
-from app.Fast_blog.BackList import celery_app
+
 
 PowerApp = APIRouter()
 
@@ -44,8 +44,7 @@ async def query_power():
 
 
 
-
-@celery_app.task()
+@celery_app.task
 # 电力数据爬取入库
 @PowerApp.get('/')
 async def LetView():

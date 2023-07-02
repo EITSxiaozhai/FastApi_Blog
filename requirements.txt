@@ -1,4 +1,4 @@
-mysqlclient~=2.0.2
+mysqlclient~= 2.1.1
 DateTime~=5.0
 uvicorn~=0.18.3
 fastapi~=0.89.1

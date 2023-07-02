@@ -2,4 +2,4 @@
 # author: YAO XU time:
 
 
-from  .backlist import  celery_app,CELERY_BEAT_SCHEDULE
+from  .backlist import  celery_app
