@@ -1,5 +1,6 @@
 FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
 COPY /requirements.txt /
+RUN echo "nameserver 8.8.8.8" | sudo tee -a /etc/resolv.conf
 RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 RUN pip install --no-cache-dir --upgrade -r /requirements.txt
 COPY ./app  /app
