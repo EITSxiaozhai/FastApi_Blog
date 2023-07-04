@@ -4,10 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="完成Celery后端">
-      <change afterPath="$PROJECT_DIR$/app/Fast_blog/BackList/celerybeat-schedule.py" afterDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="完成后台任务自动定时执行">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/BackList/backlist.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/BackList/backlist.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/.vscode/extensions.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/App.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/assets/base.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/assets/logo.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/assets/main.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/components/icons/IconCommunity.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/components/icons/IconDocumentation.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/components/icons/IconEcosystem.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/components/icons/IconSupport.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/components/icons/IconTooling.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/main.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/route/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/views/Home.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/views/Index.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/vite.config.js" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -223,7 +242,8 @@
       <workItem from="1684151403721" duration="12000" />
       <workItem from="1688291447796" duration="10318000" />
       <workItem from="1688380579367" duration="53000" />
-      <workItem from="1688381455444" duration="3364000" />
+      <workItem from="1688381455444" duration="4045000" />
+      <workItem from="1688446640197" duration="2033000" />
     </task>
     <task id="LOCAL-00001" summary="初次提交">
       <created>1678798971317</created>
@@ -470,7 +490,14 @@
       <option name="project" value="LOCAL" />
       <updated>1688302140339</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="完成后台任务自动定时执行">
+      <created>1688387577224</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1688387577224</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -509,7 +536,8 @@
     <MESSAGE value="修改需求文件" />
     <MESSAGE value="创建Vue前后端分离" />
     <MESSAGE value="完成Celery后端" />
-    <option name="LAST_COMMIT_MESSAGE" value="完成Celery后端" />
+    <MESSAGE value="完成后台任务自动定时执行" />
+    <option name="LAST_COMMIT_MESSAGE" value="完成后台任务自动定时执行" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$user.coverage" NAME="user Coverage Results" MODIFIED="1679322055192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/apps/User_app" />
