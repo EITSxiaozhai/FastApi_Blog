@@ -1,75 +1,85 @@
+<script setup>
+import { RouterLink, RouterView } from 'vue-router'
+import HelloWorld from './components/HelloWorld.vue'
+</script>
+
 <template>
-  <lay-layout className="example">
-    <lay-header>{{ boo }}</lay-header>
-    <lay-body>
-      <lay-layout>
-        <lay-side>{{ str }}</lay-side>
-        <lay-body>
-          {{ b}}
-          <lay-button @click="handle"> 点击按钮</lay-button>
-        </lay-body>
-      </lay-layout>
-    </lay-body>
-    <lay-footer>{{ a }}</lay-footer>
-  </lay-layout>
+  <header>
+    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+
+    <div class="wrapper">
+      <HelloWorld msg="You did it!" />
+
+      <nav>
+        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/about">About</RouterLink>
+      </nav>
+    </div>
+  </header>
+
+  <RouterView />
 </template>
 
-<script>
-import {ref} from 'vue';
-
-export default {
-  setup() {
-    let a = ref(1);
-    let b = ref(2);
-    let str = ref("abc");
-    let boo = ref(true);
-    const handle = () => {
-      console.log("handle2")
-      a.value++;
-      b.value++;
-      str.value += '--';
-      boo.value = !boo.value;
-    }
-    return {
-      a,
-      b,
-      handle,
-      str,
-      boo,
-    }
-  }
+<style scoped>
+header {
+  line-height: 1.5;
+  max-height: 100vh;
 }
-</script>
-<style>
 
+.logo {
+  display: block;
+  margin: 0 auto 2rem;
+}
 
-
-.example .layui-footer,
-.example .layui-header {
-  line-height: 60px;
+nav {
+  width: 100%;
+  font-size: 12px;
   text-align: center;
-  background: #87ca9a;
-  color: white;
+  margin-top: 2rem;
 }
 
-.example .layui-side {
-  display: flex;
-  height: 100%;
-  background: #77c38c;
-  align-items: center;
-  justify-content: center;
-  color: white;
+nav a.router-link-exact-active {
+  color: var(--color-text);
 }
 
+nav a.router-link-exact-active:hover {
+  background-color: transparent;
+}
 
+nav a {
+  display: inline-block;
+  padding: 0 1rem;
+  border-left: 1px solid var(--color-border);
+}
 
+nav a:first-of-type {
+  border: 0;
+}
 
-.example .layui-body {
-  display: flex;
-  background: #b6effb;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  color: black;
+@media (min-width: 1024px) {
+  header {
+    display: flex;
+    place-items: center;
+    padding-right: calc(var(--section-gap) / 2);
+  }
+
+  .logo {
+    margin: 0 2rem 0 0;
+  }
+
+  header .wrapper {
+    display: flex;
+    place-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  nav {
+    text-align: left;
+    margin-left: -1rem;
+    font-size: 1rem;
+
+    padding: 1rem 0;
+    margin-top: 1rem;
+  }
 }
 </style>
