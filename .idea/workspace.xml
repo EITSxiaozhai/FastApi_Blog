@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="完成后台任务自动定时执行">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="Vue 前端请求后端完成,导入饿了吗UI">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/blog.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/blog.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/views/AboutView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/views/AboutView.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -225,7 +226,7 @@
       <workItem from="1688381455444" duration="4045000" />
       <workItem from="1688446640197" duration="2449000" />
       <workItem from="1688449945854" duration="276000" />
-      <workItem from="1688481262966" duration="2393000" />
+      <workItem from="1688481262966" duration="5513000" />
     </task>
     <task id="LOCAL-00001" summary="初次提交">
       <created>1678798971317</created>
@@ -486,7 +487,14 @@
       <option name="project" value="LOCAL" />
       <updated>1688449667829</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Vue 前端请求后端完成,导入饿了吗UI">
+      <created>1688483864227</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1688483864227</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -526,7 +534,8 @@
     <MESSAGE value="创建Vue前后端分离" />
     <MESSAGE value="完成Celery后端" />
     <MESSAGE value="完成后台任务自动定时执行" />
-    <option name="LAST_COMMIT_MESSAGE" value="完成后台任务自动定时执行" />
+    <MESSAGE value="Vue 前端请求后端完成,导入饿了吗UI" />
+    <option name="LAST_COMMIT_MESSAGE" value="Vue 前端请求后端完成,导入饿了吗UI" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$user.coverage" NAME="user Coverage Results" MODIFIED="1679322055192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/apps/User_app" />
