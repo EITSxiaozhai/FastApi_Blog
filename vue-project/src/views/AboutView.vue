@@ -1,12 +1,13 @@
 <template>
-  <div class="about">
+  <div class="about" style="height: 9px">
     <div v-for="blog in data" :key="blog.BlogId">
-      <el-divider />
-        <h2>{{ blog.title }}</h2>
-        <span>{{ blog.content }}</span>
-        <p>作者: {{ blog.author }}</p>
+      <el-divider/>
+      <h2>{{ blog.title }}</h2>
+      <span>{{ blog.content }}</span>
+      <p>作者: {{ blog.author }}</p>
     </div>
   </div>
+
 </template>
 
 
@@ -25,18 +26,16 @@ export default {
   methods: {
     getData() {
       axios.get('http://127.0.0.1:8000/blog/BlogIndex')
-        .then(response => {
-          this.data = response.data;
-        })
-        .catch(error => {
-          console.error(error);
-        });
+          .then(response => {
+            this.data = response.data;
+          })
+          .catch(error => {
+            console.error(error);
+          });
     },
   },
 };
 </script>
-
-
 
 
 <style>
