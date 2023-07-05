@@ -37,12 +37,11 @@ import HelloWorld from './components/HelloWorld.vue'
       </el-sub-menu>
     </el-menu>
   </header>
-  <div class="wrapper">
-  </div>
   <RouterView/>
 </template>
 
 <style>
+
 header {
   position: fixed;
   top: 0;
@@ -51,4 +50,5 @@ header {
   z-index: 9999;
   background-color: #ffffff; /* 可根据需要设置背景颜色 */
 }
+
 </style>

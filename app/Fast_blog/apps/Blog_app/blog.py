@@ -7,11 +7,12 @@ from fastapi import FastAPI, Request
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi import APIRouter
+from fastapi import APIRouter,UploadFile
 from sqlalchemy import select, text
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import Blog
+import shutil
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
 session = SessionLocal()
 
@@ -48,10 +49,14 @@ async def BlogContact(request:Request):
 
 ##博客添加信息
 @BlogApp.post('/blogadd')
-async def BlogAdd(Addtitle:str,Addcontent:str,Addauthor:str,):
+async def BlogAdd(Addtitle:str,Addcontent:str,Addauthor:str,file: UploadFile):
     async with db_session() as session:
         try:
-            x = models.Blog(title=Addtitle,content=Addcontent,author=Addauthor)
+            # 将文件保存到磁盘
+            file_path = f"D:\\项目备份\\fast-api\\app\\Fast_blog\\static\\uploadimages\\{file.filename}"
+            with open(file_path, "wb") as f:
+                shutil.copyfileobj(file.file, f)
+            x = models.Blog(title=Addtitle,content=Addcontent,author=Addauthor,BlogIntroductionPicture=f"http://127.0.0.1:8000/static/uploadimages/{file.filename}")
             session.add(x)
             await session.commit()
             print('文章已经添加到对应数据库')
@@ -80,6 +85,7 @@ async def BlogAdd(Addtitle:str,Addcontent:str,Addauthor:str,):
 #             print("我们遇到了下面的问题")
 #             print(e)
 #         return 0
+
 
 
 

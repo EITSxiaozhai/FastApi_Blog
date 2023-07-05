@@ -1,7 +1,7 @@
 import asyncio
 import datetime
 
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, MetaData
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, MetaData,LargeBinary
 from  sqlalchemy_utils import EmailType,ChoiceType
 from app.Fast_blog.database.database import Base, engine
 from dataclasses import dataclass
@@ -34,10 +34,11 @@ class Blog(Base):
 
     BlogId = Column(Integer,primary_key=True,index=True)
     title = Column(String(255))
-    content = Column(String(255))
+    content = Column(LargeBinary)
+    BlogIntroductionPicture = Column(String(255))
     author = Column(String(255))
     def to_dict(self):
-        return dict(BlogId=self.BlogId,title=self.title,content=self.content,author=self.author)
+        return dict(BlogId=self.BlogId,title=self.title,content=self.content,author=self.author,BlogIntroductionPicture=self.BlogIntroductionPicture)
 
 
 @dataclass
