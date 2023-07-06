@@ -38,7 +38,7 @@ class Blog(Base):
     BlogIntroductionPicture = Column(String(255))
     author = Column(String(255))
     def to_dict(self):
-        return dict(BlogId=self.BlogId,title=self.title,content=self.content,author=self.author,BlogIntroductionPicture=self.BlogIntroductionPicture)
+        return dict(BlogId=self.BlogId,title=self.title,content=self.content,author=self.author,BlogIntroductionPicture= self.BlogIntroductionPicture)
 
 
 @dataclass

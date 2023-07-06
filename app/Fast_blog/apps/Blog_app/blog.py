@@ -59,11 +59,12 @@ async def BlogAdd(Addtitle:str,Addcontent:str,Addauthor:str,file: UploadFile):
             x = models.Blog(title=Addtitle,content=Addcontent,author=Addauthor,BlogIntroductionPicture=f"http://127.0.0.1:8000/static/uploadimages/{file.filename}")
             session.add(x)
             await session.commit()
-            print('文章已经添加到对应数据库')
+            return ('文章已经添加到对应数据库')
         except Exception as e:
-            print("我们遇到了下面的问题")
-            print(e)
-        return 0
+            print("我们遇到了下面的问题",{"error":e})
+
+
+
 
 
 

@@ -12,6 +12,7 @@
     "axios": "^1.4.0",
     "element-plus": "^2.3.7",
     "vue": "^3.3.4",
+    "vue-particles": "^1.0.9",
     "vue-router": "^4.2.2"
   },
   "devDependencies": {
