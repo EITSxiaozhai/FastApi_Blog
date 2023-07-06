@@ -56,12 +56,21 @@ async def BlogAdd(Addtitle:str,Addcontent:str,Addauthor:str,file: UploadFile):
             file_path = f"D:\\项目备份\\fast-api\\app\\Fast_blog\\static\\uploadimages\\{file.filename}"
             with open(file_path, "wb") as f:
                 shutil.copyfileobj(file.file, f)
-            x = models.Blog(title=Addtitle,content=Addcontent,author=Addauthor,BlogIntroductionPicture=f"http://127.0.0.1:8000/static/uploadimages/{file.filename}")
-            session.add(x)
+            # 构建参数值字典
+            params = {
+                "title": Addtitle,
+                "content": Addcontent,
+                "BlogIntroductionPicture": f"http://127.0.0.1:8000/static/uploadimages/{file.filename}",
+                "author": Addauthor
+            }
+            # 执行插入操作
+            insert_statement = text("INSERT INTO blogtable (title, content, `BlogIntroductionPicture`, author) "
+                                    "VALUES (:title, :content, :BlogIntroductionPicture, :author)").params(**params)
+            await session.execute(insert_statement)
             await session.commit()
             return ('文章已经添加到对应数据库')
         except Exception as e:
-            print("我们遇到了下面的问题",{"error":e})
+            print("我们遇到了下面的问题",{"data":e})
 
 
 
