@@ -104,7 +104,7 @@ async def BlogAdd(Addtitle:str,Addcontent:str,Addauthor:str,file: UploadFile):
 async def BlogIndex():
     async with db_session() as session:
         try:
-            results = await session.execute(select(Blog).limit(3))
+            results = await session.execute(select(Blog).limit(4))
             data = results.scalars().all()
             data = [item.to_dict() for item in data]
             print(data)
