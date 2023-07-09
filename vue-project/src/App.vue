@@ -1,6 +1,7 @@
 <script setup>
 import {RouterLink, RouterView} from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
+import { particles } from '../public/JS/backjs'
 </script>
 
 <template>
@@ -8,25 +9,19 @@ import HelloWorld from './components/HelloWorld.vue'
   <el-container id="top-mains">
     <el-header>
       <el-menu
-          :default-active="activeIndex"
           class="el-menu-demo"
           mode="horizontal"
-          @select="handleSelect"
-
       >
-        <el-menu-item index="1">Exp1oit Blog</el-menu-item>
-        <el-sub-menu index="2">
-          <template #title>导航</template>
-          <el-menu-item index="2-1">个人介绍</el-menu-item>
-          <el-menu-item index="2-2">GIT主页</el-menu-item>
-          <el-menu-item index="2-3">个人NAS</el-menu-item>
-          <el-sub-menu index="2-4">
-            <template #title>子菜单项目</template>
-            <el-menu-item index="2-4-1">item one</el-menu-item>
-            <el-menu-item index="2-4-2">item two</el-menu-item>
-            <el-menu-item index="2-4-3">item three</el-menu-item>
+        <h1 style="padding-left: 20px;font-size: 20px">
+          Exp1oit Blog</h1>
+
+          <el-sub-menu index="2-4" id="login">
+            <template #title>登录</template>
+            <el-menu-item index="2-4-1">
+              <a href="" style="text-decoration:none">注册</a>
+            </el-menu-item>
           </el-sub-menu>
-        </el-sub-menu>
+
       </el-menu>
     </el-header>
   </el-container>
@@ -43,20 +38,20 @@ import HelloWorld from './components/HelloWorld.vue'
             <h1>Exp1oit</h1>
             <h1>一个混运维想转开发的小菜鸡</h1>
           </div>
-          <el-divider />
+          <el-divider/>
           <h1>本站技术栈</h1>
-            <el-timeline>
-    <el-timeline-item>
-      Fastapi
-    </el-timeline-item>
-                  <el-timeline-item>
-      Celery
-    </el-timeline-item>
-                  <el-timeline-item>
-      Vue3
-    </el-timeline-item>
-  </el-timeline>
-          <el-divider />
+          <el-timeline>
+            <el-timeline-item>
+              Fastapi
+            </el-timeline-item>
+            <el-timeline-item>
+              Celery
+            </el-timeline-item>
+            <el-timeline-item>
+              Vue3
+            </el-timeline-item>
+          </el-timeline>
+          <el-divider/>
         </el-card>
       </el-row>
     </el-aside>
@@ -96,10 +91,10 @@ import HelloWorld from './components/HelloWorld.vue'
             </el-card>
 
           </el-space>
-          <el-divider />
+          <el-divider/>
           <el-carousel iindicator-position="none">
             <el-carousel-item v-for="blog in data">
-              <h3 text="2xl" justify="center">{{ item }}</h3>
+              <h3 text="2xl" justify="center"></h3>
               <img id="blog-img" :src="blog.BlogIntroductionPicture" alt="">
             </el-carousel-item>
           </el-carousel>
@@ -107,14 +102,25 @@ import HelloWorld from './components/HelloWorld.vue'
       </el-container>
     </el-container>
   </el-container>
-  <el-footer style="box-shadow:0px 0px 26px 0px #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);">
-    <el-row style="display: flex; align-items: center;">
+  <div id = "footer">
+      <el-footer
+      style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);">
+    <el-row>
       <el-col :span="6">
         <el-statistic title="共计访问人数" :value="268500"/>
       </el-col>
     </el-row>
+
   </el-footer>
-  <div><el-backtop :right="100" :bottom="100" /></div>
+  </div>
+
+
+
+  <div>
+    <el-backtop :right="100" :bottom="100"/>
+  </div>
+
+
 </template>
 
 
@@ -170,6 +176,11 @@ export default {
   z-index: 999;
 }
 
+#login {
+  margin-left: auto;
+}
+
+
 #left-my-card {
   margin-left: 50px;
 }
@@ -183,29 +194,38 @@ export default {
 
 
 
-#top-mains .el-header ul{
- background-color:#c6e2ff;
-   border-top-left-radius:20px;
- border-top-right-radius:20px;
- border-bottom-left-radius:20px;
- border-bottom-right-radius:20px;
-  box-shadow:-2px 0px 19px 1px #d1edc4;
-  margin-top: 10px;
-}
+
+
 
 body {
-    background-image: linear-gradient(to right, #74ebd5 0%, #9face6 100%);
+  //background-image: linear-gradient(to right, #74ebd5 0%, #9face6 100%);
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+  'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 }
 
 
-#left-my .el-container .el-container > .el-card{
- width:364px;
+#left-my .el-container .el-container > .el-card {
+  width: 364px;
 }
 
 #main-boxcard {
-    border-radius: 30px; /* 设置圆角半径 */
-  }
+  border-radius: 30px; /* 设置圆角半径 */
+}
 
+
+.el-header {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.el-menu-demo {
+  width: 100%;
+}
+
+#footer {
+  padding-left: 0;
+  padding-right: 0;
+}
 
 </style>
 

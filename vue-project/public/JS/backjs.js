@@ -1,4 +1,4 @@
-export const particles =
+export const particles=
 {
   "autoPlay": true,
   "background": {
@@ -34,7 +34,7 @@ export const particles =
     "detectsOn": "window",
     "events": {
       "onClick": {
-        "enable": false,
+        "enable": true,
         "mode": "push"
       },
       "onDiv": {
@@ -44,11 +44,11 @@ export const particles =
         "type": "circle"
       },
       "onHover": {
-        "enable": false,
-        "mode": "repulse",
+        "enable": true,
+        "mode": "grab",
         "parallax": {
-          "enable": false,
-          "force": 2,
+          "enable": true,
+          "force": 60,
           "smooth": 10
         }
       },
@@ -274,15 +274,15 @@ export const particles =
         "options": []
       },
       "outModes": {
-        "default": "destroy",
-        "bottom": "destroy",
-        "left": "destroy",
-        "right": "destroy",
-        "top": "destroy"
+        "default": "out",
+        "bottom": "out",
+        "left": "out",
+        "right": "out",
+        "top": "out"
       },
       "random": false,
       "size": false,
-      "speed": 5,
+      "speed": 2,
       "spin": {
         "acceleration": 0,
         "enable": false
@@ -303,17 +303,20 @@ export const particles =
         "height": 1080
       },
       "limit": 0,
-      "value": 0
+      "value": 100
     },
     "opacity": {
       "random": {
-        "enable": false,
+        "enable": true,
         "minimumValue": 0.1
       },
-      "value": 1,
+      "value": {
+        "min": 0.1,
+        "max": 0.5
+      },
       "animation": {
         "count": 0,
-        "enable": false,
+        "enable": true,
         "speed": 3,
         "decay": 0,
         "delay": 0,
@@ -345,23 +348,23 @@ export const particles =
     },
     "size": {
       "random": {
-        "enable": false,
+        "enable": true,
         "minimumValue": 1
       },
       "value": {
         "min": 0.1,
-        "max": 20
+        "max": 10
       },
       "animation": {
         "count": 0,
         "enable": true,
-        "speed": 5,
+        "speed": 20,
         "decay": 0,
         "delay": 0,
-        "sync": true,
+        "sync": false,
         "mode": "auto",
-        "startValue": "min",
-        "destroy": "max",
+        "startValue": "random",
+        "destroy": "none",
         "minimumValue": 0.1
       }
     },
@@ -512,7 +515,7 @@ export const particles =
       },
       "consent": false,
       "distance": 150,
-      "enable": false,
+      "enable": true,
       "frequency": 1,
       "opacity": 0.4,
       "shadow": {
@@ -549,30 +552,6 @@ export const particles =
   "style": [],
   "themes": [],
   "zLayers": 100,
-  "emitters": {
-    "autoPlay": true,
-    "fill": true,
-    "life": {
-      "wait": false
-    },
-    "rate": {
-      "quantity": 2,
-      "delay": 0.1
-    },
-    "shape": "square",
-    "startCount": 0,
-    "size": {
-      "mode": "percent",
-      "height": 0,
-      "width": 100
-    },
-    "direction": "top",
-    "particles": [],
-    "position": {
-      "x": 50,
-      "y": 100
-    }
-  },
   "motion": {
     "disable": false,
     "reduce": {
