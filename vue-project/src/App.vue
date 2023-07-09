@@ -279,8 +279,6 @@ export default {
 
 <style>
 
-
-
 #left-my .el-container .el-container > .el-card {
   height: 92%;
   transform: translatex(25px) translatey(50px);
