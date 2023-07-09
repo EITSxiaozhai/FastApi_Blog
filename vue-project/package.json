@@ -9,12 +9,15 @@
     "test:unit": "vitest"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
     "axios": "^1.4.0",
     "element-plus": "^2.3.7",
     "particles.vue3": "^2.10.1",
+    "tsparticles": "^2.10.1",
+    "tsparticles-engine": "^2.10.1",
     "vue": "^3.3.4",
-    "vue-particles": "^1.0.9",
-    "vue-router": "^4.2.2"
+    "vue-router": "^4.2.2",
+    "vue3-particles": "^2.10.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",

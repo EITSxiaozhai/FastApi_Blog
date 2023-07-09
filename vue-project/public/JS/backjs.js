@@ -3,12 +3,12 @@ export const particles =
   "autoPlay": true,
   "background": {
     "color": {
-      "value": "#0d47a1"
+      "value": "#043564"
     },
-    "image": "",
-    "position": "50% 50%",
+    "image": "url('https://vincentgarreau.com/particles.js/assets/img/kbLd9vb_new.gif')",
+    "position": "0 50%",
     "repeat": "no-repeat",
-    "size": "cover",
+    "size": "60%",
     "opacity": 1
   },
   "backgroundMask": {
@@ -34,8 +34,8 @@ export const particles =
     "detectsOn": "window",
     "events": {
       "onClick": {
-        "enable": false,
-        "mode": "push"
+        "enable": true,
+        "mode": "repulse"
       },
       "onDiv": {
         "selectors": [],
@@ -45,7 +45,7 @@ export const particles =
       },
       "onHover": {
         "enable": false,
-        "mode": "repulse",
+        "mode": "grab",
         "parallax": {
           "enable": false,
           "force": 2,
@@ -73,7 +73,7 @@ export const particles =
         "distance": 400,
         "duration": 2,
         "mix": false,
-        "opacity": 0.8,
+        "opacity": 8,
         "size": 40,
         "divs": {
           "distance": 200,
@@ -90,7 +90,7 @@ export const particles =
         "radius": 60
       },
       "grab": {
-        "distance": 400,
+        "distance": 200,
         "links": {
           "blink": false,
           "consent": false,
@@ -252,7 +252,7 @@ export const particles =
       },
       "decay": 0,
       "distance": [],
-      "direction": "none",
+      "direction": "left",
       "drift": 0,
       "enable": true,
       "gravity": {
@@ -274,20 +274,20 @@ export const particles =
         "options": []
       },
       "outModes": {
-        "default": "destroy",
-        "bottom": "destroy",
-        "left": "destroy",
-        "right": "destroy",
-        "top": "destroy"
+        "default": "out",
+        "bottom": "out",
+        "left": "out",
+        "right": "out",
+        "top": "out"
       },
       "random": false,
       "size": false,
-      "speed": 5,
+      "speed": 6,
       "spin": {
         "acceleration": 0,
         "enable": false
       },
-      "straight": false,
+      "straight": true,
       "trail": {
         "enable": false,
         "length": 10,
@@ -298,23 +298,23 @@ export const particles =
     },
     "number": {
       "density": {
-        "enable": true,
+        "enable": false,
         "width": 1920,
         "height": 1080
       },
       "limit": 0,
-      "value": 0
+      "value": 100
     },
     "opacity": {
       "random": {
         "enable": false,
         "minimumValue": 0.1
       },
-      "value": 1,
+      "value": 0.5,
       "animation": {
         "count": 0,
         "enable": false,
-        "speed": 3,
+        "speed": 1,
         "decay": 0,
         "delay": 0,
         "sync": false,
@@ -340,28 +340,32 @@ export const particles =
       "loadShape": [],
       "close": true,
       "fill": true,
-      "options": [],
-      "type": "circle"
+      "options": {
+        "star": {
+          "sides": 5
+        }
+      },
+      "type": "star"
     },
     "size": {
       "random": {
-        "enable": false,
+        "enable": true,
         "minimumValue": 1
       },
       "value": {
-        "min": 0.1,
-        "max": 20
+        "min": 1,
+        "max": 4
       },
       "animation": {
         "count": 0,
-        "enable": true,
-        "speed": 5,
+        "enable": false,
+        "speed": 40,
         "decay": 0,
         "delay": 0,
-        "sync": true,
+        "sync": false,
         "mode": "auto",
-        "startValue": "min",
-        "destroy": "max",
+        "startValue": "random",
+        "destroy": "none",
         "minimumValue": 0.1
       }
     },
@@ -549,30 +553,6 @@ export const particles =
   "style": [],
   "themes": [],
   "zLayers": 100,
-  "emitters": {
-    "autoPlay": true,
-    "fill": true,
-    "life": {
-      "wait": false
-    },
-    "rate": {
-      "quantity": 2,
-      "delay": 0.1
-    },
-    "shape": "square",
-    "startCount": 0,
-    "size": {
-      "mode": "percent",
-      "height": 0,
-      "width": 100
-    },
-    "direction": "top",
-    "particles": [],
-    "position": {
-      "x": 50,
-      "y": 100
-    }
-  },
   "motion": {
     "disable": false,
     "reduce": {
