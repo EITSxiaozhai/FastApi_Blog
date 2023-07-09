@@ -1,6 +1,6 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
-
+import datetime
 
 from fastapi import FastAPI, Request
 
@@ -61,11 +61,12 @@ async def BlogAdd(Addtitle:str,Addcontent:str,Addauthor:str,file: UploadFile):
                 "title": Addtitle,
                 "content": Addcontent,
                 "BlogIntroductionPicture": f"http://127.0.0.1:8000/static/uploadimages/{file.filename}",
-                "author": Addauthor
+                "author": Addauthor,
+                "created_at":datetime.datetime.now()
             }
             # 执行插入操作
-            insert_statement = text("INSERT INTO blogtable (title, content, `BlogIntroductionPicture`, author) "
-                                    "VALUES (:title, :content, :BlogIntroductionPicture, :author)").params(**params)
+            insert_statement = text("INSERT INTO blogtable (title, content, `BlogIntroductionPicture`, author,created_at) "
+                                    "VALUES (:title, :content, :BlogIntroductionPicture, :author,:created_at)").params(**params)
             await session.execute(insert_statement)
             await session.commit()
             return ('文章已经添加到对应数据库')
@@ -104,7 +105,7 @@ async def BlogAdd(Addtitle:str,Addcontent:str,Addauthor:str,file: UploadFile):
 async def BlogIndex():
     async with db_session() as session:
         try:
-            results = await session.execute(select(Blog).limit(4))
+            results = await session.execute(select(Blog).limit(100))
             data = results.scalars().all()
             data = [item.to_dict() for item in data]
             print(data)
