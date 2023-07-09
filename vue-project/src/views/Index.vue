@@ -1,41 +1,52 @@
 <script setup>
-
-import  { useRouter } from 'vue-router'
-import { reactive} from "vue";
+import { useRouter } from 'vue-router';
+import { reactive, ref } from 'vue';
 import axios from 'axios';
-import {loadFull} from "tsparticles";
+import { loadFull } from 'tsparticles';
 
-const particlesInit = async engine => {
+const particlesInit = async (engine) => {
   await loadFull(engine);
 };
 
-const particlesLoaded = async container => {
+const particlesLoaded = async (container) => {
   console.log("Particles container loaded", container);
 };
 
-
-const  router = useRouter()
+const router = useRouter();
 const data = reactive({
-  data:[]
-})
-   function getData() {
-      axios.get('http://127.0.0.1:8000/blog/BlogIndex')
-          .then(response => {
-            data.data= response.data;
-            console.log(data.data)
-          })
-          .catch(error => {
-            console.error(error);
-          });
-    }
-    getData()
-const jumpFn = (id) =>{
-  console.log(id)
-  router.push(`/blog/${id}`)
+  data: []
+});
+
+const loading = ref(false);
+const loadedCards = ref(4); // 初始加载的卡片数量
+
+function getData() {
+  axios.get('http://127.0.0.1:8000/blog/BlogIndex')
+    .then(response => {
+      data.data = response.data;
+      console.log(data.data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
 }
 
+getData();
 
+const jumpFn = (id) => {
+  console.log(id);
+  router.push(`/blog/${id}`);
+};
+
+const loadMoreCards = () => {
+  loading.value = true;
+  setTimeout(() => {
+    loadedCards.value += 3; // 每次加载3张卡片
+    loading.value = false;
+  }, 1000); // 模拟异步加载延迟
+};
 </script>
+
 <template>
 
    <!--  背景开始-->
@@ -148,6 +159,7 @@ const jumpFn = (id) =>{
               size="large"
               placeholder="搜索你感兴趣的文章"
               :prefix-icon="Search"
+
           />
         </div>
 
@@ -201,15 +213,17 @@ const jumpFn = (id) =>{
           <div class="common-layout">
             <el-container>
               <el-main>
-                <div v-for="blog in data.data" :key="blog.BlogId">
+                <div v-for="(blog, index) in data.data.slice(0, loadedCards)" :key="blog.BlogId">
 <!--                  <router-link :to="`/blog/${blog.BlogId}`">-->
-                  <el-card shadow="hover" id="main-boxcard" class="box-card" style="margin-top: 10px" @click="jumpFn(blog.BlogId)">
-                    <h1 style="font-size: 30px;" >{{ blog.title }}</h1>
-                    <h1>{{ blog.content }}</h1>
-                    <el-container id="blog-img-container">
-                      <img id="blog-img" :src="blog.BlogIntroductionPicture" alt="">
+                  <el-card v-loading="loading" shadow="hover" id="main-boxcard" class="box-card" style="margin-top: 10px;" @click="jumpFn(blog.BlogId)">
+                    <div><h1 style="font-size: 25px;height: 20%" >{{ blog.title }} </h1>
+                                          <el-container id="blog-img-container">
+<!--                      <img id="blog-img" :src="blog.BlogIntroductionPicture" alt="">-->
                     </el-container>
-                    <h1>作者: {{ blog.author }}</h1>
+                    </div>
+                    <h1>{{ blog.content }} </h1>
+                    <el-divider />
+                    {{ blog.author}} {{ blog.created_at }}
                                 <!-- 卡片内容 -->
                   </el-card>
 <!--                  </router-link>-->
@@ -218,6 +232,12 @@ const jumpFn = (id) =>{
             </el-container>
           </div>
         </div>
+    <div class="bt_container">
+      <el-button type="primary" @click="loadMoreCards" v-if="!loading">查看更多</el-button>
+      <el-button type="primary" disabled v-else>
+        <i class="el-icon-loading"></i> 加载中...
+      </el-button>
+    </div>
       </el-main>
       <!--    文章介绍卡片-->
 
@@ -267,6 +287,12 @@ const jumpFn = (id) =>{
 </template>
 
 <style>
+
+.bt_container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 #left-my .el-container .el-container > .el-card {
   height: 92%;
@@ -354,6 +380,10 @@ body {
 .el-card .el-card__body a {
   color: black;
   text-decoration: none;
+}
+
+#app div .index #left-my .el-container #maincare .about .common-layout .el-container .el-main{
+ width: 100vh !important;
 }
 
 </style>
