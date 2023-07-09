@@ -10,6 +10,7 @@
       <change beforePath="$PROJECT_DIR$/vue-project/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-project/public/JS/backjs.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/public/JS/backjs.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-project/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -239,7 +240,8 @@
       <workItem from="1688553484879" duration="795000" />
       <workItem from="1688631334662" duration="9245000" />
       <workItem from="1688812829238" duration="12779000" />
-      <workItem from="1688872177960" duration="6016000" />
+      <workItem from="1688872177960" duration="6029000" />
+      <workItem from="1688886021121" duration="4530000" />
     </task>
     <task id="LOCAL-00001" summary="初次提交">
       <created>1678798971317</created>
@@ -549,7 +551,14 @@
       <option name="project" value="LOCAL" />
       <updated>1688825894521</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="优化前端布局-添加博客首页">
+      <created>1688884281340</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1688884281340</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

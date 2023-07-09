@@ -1,14 +1,14 @@
-export const particles=
+export const particles =
 {
   "autoPlay": true,
   "background": {
     "color": {
-      "value": "#0d47a1"
+      "value": "#043564"
     },
-    "image": "",
-    "position": "50% 50%",
+    "image": "url('https://vincentgarreau.com/particles.js/assets/img/kbLd9vb_new.gif')",
+    "position": "0 50%",
     "repeat": "no-repeat",
-    "size": "cover",
+    "size": "60%",
     "opacity": 1
   },
   "backgroundMask": {
@@ -35,7 +35,7 @@ export const particles=
     "events": {
       "onClick": {
         "enable": true,
-        "mode": "push"
+        "mode": "repulse"
       },
       "onDiv": {
         "selectors": [],
@@ -44,11 +44,11 @@ export const particles=
         "type": "circle"
       },
       "onHover": {
-        "enable": true,
+        "enable": false,
         "mode": "grab",
         "parallax": {
-          "enable": true,
-          "force": 60,
+          "enable": false,
+          "force": 2,
           "smooth": 10
         }
       },
@@ -73,7 +73,7 @@ export const particles=
         "distance": 400,
         "duration": 2,
         "mix": false,
-        "opacity": 0.8,
+        "opacity": 8,
         "size": 40,
         "divs": {
           "distance": 200,
@@ -90,7 +90,7 @@ export const particles=
         "radius": 60
       },
       "grab": {
-        "distance": 400,
+        "distance": 200,
         "links": {
           "blink": false,
           "consent": false,
@@ -252,7 +252,7 @@ export const particles=
       },
       "decay": 0,
       "distance": [],
-      "direction": "none",
+      "direction": "left",
       "drift": 0,
       "enable": true,
       "gravity": {
@@ -282,12 +282,12 @@ export const particles=
       },
       "random": false,
       "size": false,
-      "speed": 2,
+      "speed": 6,
       "spin": {
         "acceleration": 0,
         "enable": false
       },
-      "straight": false,
+      "straight": true,
       "trail": {
         "enable": false,
         "length": 10,
@@ -298,7 +298,7 @@ export const particles=
     },
     "number": {
       "density": {
-        "enable": true,
+        "enable": false,
         "width": 1920,
         "height": 1080
       },
@@ -307,17 +307,14 @@ export const particles=
     },
     "opacity": {
       "random": {
-        "enable": true,
+        "enable": false,
         "minimumValue": 0.1
       },
-      "value": {
-        "min": 0.1,
-        "max": 0.5
-      },
+      "value": 0.5,
       "animation": {
         "count": 0,
-        "enable": true,
-        "speed": 3,
+        "enable": false,
+        "speed": 1,
         "decay": 0,
         "delay": 0,
         "sync": false,
@@ -343,8 +340,12 @@ export const particles=
       "loadShape": [],
       "close": true,
       "fill": true,
-      "options": [],
-      "type": "circle"
+      "options": {
+        "star": {
+          "sides": 5
+        }
+      },
+      "type": "star"
     },
     "size": {
       "random": {
@@ -352,13 +353,13 @@ export const particles=
         "minimumValue": 1
       },
       "value": {
-        "min": 0.1,
-        "max": 10
+        "min": 1,
+        "max": 4
       },
       "animation": {
         "count": 0,
-        "enable": true,
-        "speed": 20,
+        "enable": false,
+        "speed": 40,
         "decay": 0,
         "delay": 0,
         "sync": false,
@@ -515,7 +516,7 @@ export const particles=
       },
       "consent": false,
       "distance": 150,
-      "enable": true,
+      "enable": false,
       "frequency": 1,
       "opacity": 0.4,
       "shadow": {

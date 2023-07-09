@@ -1,11 +1,105 @@
 <script setup>
 import {RouterLink, RouterView} from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
-import { particles } from '../public/JS/backjs'
+
 </script>
 
 <template>
+<!--  背景开始-->
+    <div id="app" style="opacity: 0.7;">
+        <vue-particles
+            id="tsparticles"
+            :particlesInit="particlesInit"
+            :particlesLoaded="particlesLoaded"
+            url="http://foo.bar/particles.json"
+        />
 
+        <vue-particles
+            id="tsparticles"
+            :particlesInit="particlesInit"
+            :particlesLoaded="particlesLoaded"
+            :options="{
+                    background: {
+                        color: {
+                            value: '#95d475'
+                        }
+                    },
+                    fpsLimit: 120,
+                    interactivity: {
+                        events: {
+                            onClick: {
+                                enable: true,
+                                mode: 'push'
+                            },
+                            onHover: {
+                                enable: true,
+                                mode: 'repulse'
+                            },
+                            resize: true
+                        },
+                        modes: {
+                            bubble: {
+                                distance: 400,
+                                duration: 2,
+                                opacity: 0.8,
+                                size: 40
+                            },
+                            push: {
+                                quantity: 4
+                            },
+                            repulse: {
+                                distance: 200,
+                                duration: 0.4
+                            }
+                        }
+                    },
+                    particles: {
+                        color: {
+                            value: '#ffffff'
+                        },
+                        links: {
+                            color: '#ffffff',
+                            distance: 150,
+                            enable: true,
+                            opacity: 0.5,
+                            width: 1
+                        },
+                        collisions: {
+                            enable: true
+                        },
+                        move: {
+                            direction: 'none',
+                            enable: true,
+                            outMode: 'bounce',
+                            random: false,
+                            speed: 2,
+                            straight: false
+                        },
+                        number: {
+                            density: {
+                                enable: true,
+                                area: 800
+                            },
+                            value: 80
+                        },
+                        opacity: {
+                            value: 0.5
+                        },
+                        shape: {
+                            type: 'circle'
+                        },
+                        size: {
+                            random: true,
+                            value: 5
+                        }
+                    },
+                    detectRetina: true
+                }"
+        />
+    </div>
+<!--  //生成的背景-->
+
+<!--网站导航栏-->
   <el-container id="top-mains">
     <el-header>
       <el-menu
@@ -25,7 +119,10 @@ import { particles } from '../public/JS/backjs'
       </el-menu>
     </el-header>
   </el-container>
+<!--网站导航栏-->
 
+
+<!--个人介绍卡片-->
   <el-container id="left-my">
     <el-aside id="left-my-card" style="padding-top: 5%">
       <el-row>
@@ -55,8 +152,10 @@ import { particles } from '../public/JS/backjs'
         </el-card>
       </el-row>
     </el-aside>
+<!--个人介绍卡片-->
 
-    <el-container style="margin-top: 1%;height: 10%">
+<!--    文章介绍卡片-->
+    <el-container style="margin-top: 1%;height: 10%;z-index:9;">
       <el-main id="maincare">
         <div class="about">
           <div class="common-layout">
@@ -76,9 +175,10 @@ import { particles } from '../public/JS/backjs'
             </el-container>
           </div>
         </div>
-
       </el-main>
+<!--    文章介绍卡片-->
 
+<!--      右侧介绍卡片-->
       <el-container>
         <el-card>
           <el-space direction="vertical" style="margin-right: 10%">
@@ -102,6 +202,9 @@ import { particles } from '../public/JS/backjs'
       </el-container>
     </el-container>
   </el-container>
+  <!--      右侧介绍卡片-->
+
+<!--  页面脚底卡片-->
   <div id = "footer">
       <el-footer
       style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);">
@@ -113,7 +216,7 @@ import { particles } from '../public/JS/backjs'
 
   </el-footer>
   </div>
-
+<!--  页面脚底卡片-->
 
 
   <div>
@@ -126,7 +229,16 @@ import { particles } from '../public/JS/backjs'
 
 <script>
 import axios from 'axios';
-import VueParticles from 'vue-particles';
+
+import { loadFull } from "tsparticles";
+
+const particlesInit = async engine => {
+    await loadFull(engine);
+};
+
+const particlesLoaded = async container => {
+    console.log("Particles container loaded", container);
+};
 
 
 export default {
@@ -149,14 +261,12 @@ export default {
           });
     },
   },
-  components: {
-    VueParticles,
-  },
 };
 </script>
 
 
 <style>
+
 #left-my .el-container .el-container > .el-card {
   height: 92%;
   transform: translatex(25px) translatey(50px);
@@ -168,6 +278,7 @@ export default {
 }
 
 #top-mains {
+  opacity: 0.8;
   position: fixed;
   height: 6rem;
   width: 100%;
@@ -182,11 +293,13 @@ export default {
 
 
 #left-my-card {
+
   margin-left: 50px;
 }
 
 
 #left-my .el-space--vertical {
+
   position: relative;
   top: 7%;
   transform: translatex(0px) translatey(0px);
@@ -223,8 +336,18 @@ body {
 }
 
 #footer {
+  opacity: 0.8;
+  position:relative;
   padding-left: 0;
   padding-right: 0;
+}
+
+#app {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: -999; /* 设置一个较低的层叠顺序，以确保它在其他内容的下方 */
 }
 
 </style>
