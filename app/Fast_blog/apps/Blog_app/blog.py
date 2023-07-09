@@ -116,3 +116,17 @@ async def BlogIndex():
 
 
 
+@BlogApp.post("/Blogid")
+##博客首页API
+async def Blogid(blog_id: int):
+    async with db_session() as session:
+        try:
+            results = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
+            data = results.scalars().all()
+            data = [item.to_dict() for item in data]
+            print(data)
+            return data
+        except Exception as e:
+            print("我们遇到了下面的问题")
+            print(e)
+        return []
