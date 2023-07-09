@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="优化前端布局-添加博客首页">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加首页背景动态特效">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/public/JS/backjs.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/public/JS/backjs.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-project/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/main.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -241,7 +237,7 @@
       <workItem from="1688631334662" duration="9245000" />
       <workItem from="1688812829238" duration="12779000" />
       <workItem from="1688872177960" duration="6029000" />
-      <workItem from="1688886021121" duration="4530000" />
+      <workItem from="1688886021121" duration="5776000" />
     </task>
     <task id="LOCAL-00001" summary="初次提交">
       <created>1678798971317</created>
@@ -558,7 +554,14 @@
       <option name="project" value="LOCAL" />
       <updated>1688884281340</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="添加首页背景动态特效">
+      <created>1688890691647</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1688890691648</updated>
+    </task>
+    <option name="localTasksCounter" value="47" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -576,7 +579,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改数据库提交" />
     <MESSAGE value="增加用户查询" />
     <MESSAGE value="修改异步数据库" />
     <MESSAGE value="异步查询以及显示全部数据" />
@@ -601,7 +603,8 @@
     <MESSAGE value="修改基础点击布局" />
     <MESSAGE value="完成基础布局以及前后端分离,添加前后端分离读取图片" />
     <MESSAGE value="优化前端布局-添加博客首页" />
-    <option name="LAST_COMMIT_MESSAGE" value="优化前端布局-添加博客首页" />
+    <MESSAGE value="添加首页背景动态特效" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加首页背景动态特效" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$user.coverage" NAME="user Coverage Results" MODIFIED="1679322055192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/apps/User_app" />

@@ -5,20 +5,20 @@ import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
-<!--  背景开始-->
-    <div id="app" style="opacity: 0.7;">
-        <vue-particles
-            id="tsparticles"
-            :particlesInit="particlesInit"
-            :particlesLoaded="particlesLoaded"
-            url="http://foo.bar/particles.json"
-        />
+  <!--  背景开始-->
+  <div id="app" style="opacity: 0.7;">
+    <vue-particles
+        id="tsparticles"
+        :particlesInit="particlesInit"
+        :particlesLoaded="particlesLoaded"
+        url="http://foo.bar/particles.json"
+    />
 
-        <vue-particles
-            id="tsparticles"
-            :particlesInit="particlesInit"
-            :particlesLoaded="particlesLoaded"
-            :options="{
+    <vue-particles
+        id="tsparticles"
+        :particlesInit="particlesInit"
+        :particlesLoaded="particlesLoaded"
+        :options="{
                     background: {
                         color: {
                             value: '#95d475'
@@ -95,11 +95,11 @@ import HelloWorld from './components/HelloWorld.vue'
                     },
                     detectRetina: true
                 }"
-        />
-    </div>
-<!--  //生成的背景-->
+    />
+  </div>
+  <!--  //生成的背景-->
 
-<!--网站导航栏-->
+  <!--网站导航栏-->
   <el-container id="top-mains">
     <el-header>
       <el-menu
@@ -108,21 +108,30 @@ import HelloWorld from './components/HelloWorld.vue'
       >
         <h1 style="padding-left: 20px;font-size: 20px">
           Exp1oit Blog</h1>
+        <div id="Search_input" class="search-container">
+          <el-input
+              v-model="input1"
+              class="w-50 m-2"
+              size="large"
+              placeholder="搜索你感兴趣的文章"
+              :prefix-icon="Search"
+          />
+        </div>
 
-          <el-sub-menu index="2-4" id="login">
-            <template #title>登录</template>
-            <el-menu-item index="2-4-1">
-              <a href="" style="text-decoration:none">注册</a>
-            </el-menu-item>
-          </el-sub-menu>
+        <el-sub-menu index="2-4" id="login">
+          <template #title>登录</template>
+          <el-menu-item index="2-4-1">
+            <a href="" style="text-decoration:none">注册</a>
+          </el-menu-item>
+        </el-sub-menu>
 
       </el-menu>
     </el-header>
   </el-container>
-<!--网站导航栏-->
+  <!--网站导航栏-->
 
 
-<!--个人介绍卡片-->
+  <!--个人介绍卡片-->
   <el-container id="left-my">
     <el-aside id="left-my-card" style="padding-top: 5%">
       <el-row>
@@ -152,9 +161,9 @@ import HelloWorld from './components/HelloWorld.vue'
         </el-card>
       </el-row>
     </el-aside>
-<!--个人介绍卡片-->
+    <!--个人介绍卡片-->
 
-<!--    文章介绍卡片-->
+    <!--    文章介绍卡片-->
     <el-container style="margin-top: 1%;height: 10%;z-index:9;">
       <el-main id="maincare">
         <div class="about">
@@ -163,12 +172,15 @@ import HelloWorld from './components/HelloWorld.vue'
               <el-main>
                 <div v-for="blog in data" :key="blog.BlogId">
                   <el-card shadow="hover" id="main-boxcard" class="box-card" style="margin-top: 10px">
+                    <router-link :to="HelloWorld">
                     <h1 style="font-size: 30px;">{{ blog.title }}</h1>
                     <h1>{{ blog.content }}</h1>
                     <el-container id="blog-img-container">
                       <img id="blog-img" :src="blog.BlogIntroductionPicture" alt="">
                     </el-container>
                     <h1>作者: {{ blog.author }}</h1>
+                                <!-- 卡片内容 -->
+                    </router-link>
                   </el-card>
                 </div>
               </el-main>
@@ -176,21 +188,22 @@ import HelloWorld from './components/HelloWorld.vue'
           </div>
         </div>
       </el-main>
-<!--    文章介绍卡片-->
+      <!--    文章介绍卡片-->
 
-<!--      右侧介绍卡片-->
+      <!--      右侧介绍卡片-->
       <el-container>
         <el-card>
-          <el-space direction="vertical" style="margin-right: 10%">
-            <el-card v-for="i in 2" :key="i" class="box-card" style="width: auto">
+          <el-space direction="vertical" style="margin-right: 10%;width: 100%">
+            <el-card v-for="i in 2" :key="i" class="box-card">
               <template #header>
                 <div class="card-header">
                   <span>最多阅读文章</span>
                 </div>
               </template>
+              <div v-for="o in 4" :key="o" class="text item">{{ '这个文章的测试标题为hahahahha ' + o }}</div>
             </el-card>
-
           </el-space>
+
           <el-divider/>
           <el-carousel iindicator-position="none">
             <el-carousel-item v-for="blog in data">
@@ -204,19 +217,18 @@ import HelloWorld from './components/HelloWorld.vue'
   </el-container>
   <!--      右侧介绍卡片-->
 
-<!--  页面脚底卡片-->
-  <div id = "footer">
-      <el-footer
-      style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);">
-    <el-row>
-      <el-col :span="6">
-        <el-statistic title="共计访问人数" :value="268500"/>
-      </el-col>
-    </el-row>
-
-  </el-footer>
+  <!--  页面脚底卡片-->
+  <div id="footer">
+    <el-footer
+        style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);">
+      <el-row class="search-container">
+        <el-col :span="6">
+          <el-statistic title="共计访问人数" :value="268500"/>
+        </el-col>
+      </el-row>
+    </el-footer>
   </div>
-<!--  页面脚底卡片-->
+  <!--  页面脚底卡片-->
 
 
   <div>
@@ -230,14 +242,14 @@ import HelloWorld from './components/HelloWorld.vue'
 <script>
 import axios from 'axios';
 
-import { loadFull } from "tsparticles";
+import {loadFull} from "tsparticles";
 
 const particlesInit = async engine => {
-    await loadFull(engine);
+  await loadFull(engine);
 };
 
 const particlesLoaded = async container => {
-    console.log("Particles container loaded", container);
+  console.log("Particles container loaded", container);
 };
 
 
@@ -267,6 +279,8 @@ export default {
 
 <style>
 
+
+
 #left-my .el-container .el-container > .el-card {
   height: 92%;
   transform: translatex(25px) translatey(50px);
@@ -293,27 +307,20 @@ export default {
 
 
 #left-my-card {
-
   margin-left: 50px;
 }
 
 
 #left-my .el-space--vertical {
-
   position: relative;
   top: 7%;
   transform: translatex(0px) translatey(0px);
 }
 
 
-
-
-
-
 body {
-  //background-image: linear-gradient(to right, #74ebd5 0%, #9face6 100%);
-  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
-  'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+//background-image: linear-gradient(to right, #74ebd5 0%, #9face6 100%); font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 }
 
 
@@ -337,7 +344,7 @@ body {
 
 #footer {
   opacity: 0.8;
-  position:relative;
+  position: relative;
   padding-left: 0;
   padding-right: 0;
 }
@@ -348,6 +355,18 @@ body {
   left: 0;
   right: 0;
   z-index: -999; /* 设置一个较低的层叠顺序，以确保它在其他内容的下方 */
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 40px;
+}
+
+.el-card .el-card__body a {
+  color: black;
+  text-decoration: none;
 }
 
 </style>
