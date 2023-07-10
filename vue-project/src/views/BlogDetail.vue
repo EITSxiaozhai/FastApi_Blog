@@ -58,18 +58,33 @@ const blogId = router.currentRoute.value.params.blogId;
 
 <el-container style="margin-top: 50px">
   <el-main>
+    <el-row :gutter="20">
 
+      <el-col :span="6"><div class="grid-content ep-bg-purple" />
+      <el-card>sss</el-card>
+    </el-col>
+    <el-col :span="14"><div class="grid-content ep-bg-purple" />
   <el-card class="box-card">
     <template #header>
       <div class="card-header">
-        <span>Card name</span>
-        <el-button class="button" text>Operation button</el-button>
+        <span><h1>博客标题</h1></span>
       </div>
     </template>
     <div v-for="o in 100" :key="o" class="text item">{{ 'List item ' + o }}</div>
   </el-card>
+    </el-col>
+    <el-col :span="4"><div class="grid-content ep-bg-purple" />
+      <el-card>sss
+      </el-card>
+    </el-col>
 
+  </el-row>
   </el-main>
+
+
+
+
+
       <el-footer id="footer"
         style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);">
       <el-row class="search-container">
