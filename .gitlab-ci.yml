@@ -24,7 +24,9 @@ Vue3_image_build:
 #     - cd app
 #     - cat main.py
 
-deploy_test:
+
+
+Fastapi_deploy_test:
   stage: test
   script:
     - docker run -d -p 80 --name myfastapi-test-$CI_PIPELINE_ID fastapi:$CI_PIPELINE_ID
@@ -32,12 +34,27 @@ deploy_test:
     - docker stop myfastapi-test-$CI_PIPELINE_ID
     - docker rm myfastapi-test-$CI_PIPELINE_ID
 
-container_deploy1:
+
+Vue_deploy_test:
+  stage: test
+  script:
+    - docker run -d -p 80 --name myvue-test-$CI_PIPELINE_ID vue:$CI_PIPELINE_ID
+
+
+Fastapi_container_deploy1:
     stage: deploy
     script:
       - x=$(docker ps -f "publish=49200" | awk '{print $1}'| sed -n '2p')
       - docker stop $x && docker rm $x
       - docker run -d -p 49200:80 --name myfastapi-w1-$CI_PIPELINE_ID fastapi:$CI_PIPELINE_ID
+      - docker ps
+
+Vue_container_deploy1:
+    stage: deploy
+    script:
+      - x=$(docker ps -f "publish=49300" | awk '{print $1}'| sed -n '2p')
+      - docker stop $x && docker rm $x
+      - docker run -d -p 49300:9999 --name myvue-w1-$CI_PIPELINE_ID vue:$CI_PIPELINE_ID
       - docker ps
 
 
