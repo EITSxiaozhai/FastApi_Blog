@@ -4,13 +4,20 @@ stages:
   - deploy
   - clean
 
-image_build:
+Fastapi_image_build:
   stage: build
   script:
-    - echo "Stage build, Dockerfile:"
+    - echo "FastApi build, Dockerfile:"
     - cat Dockerfile
     - docker build -t fastapi:$CI_PIPELINE_ID .
 
+Vue3_image_build:
+  stage: build
+  script:
+    - echo "Vue build, Dockerfile:"
+    - cat Dockerfile
+    - docker build -t Vue3:$CI_PIPELINE_ID .
+    
 # code_test:
 #   stage: test
 #   script:
