@@ -46,6 +46,22 @@ class Blog(Base):
         return dict(BlogId=self.BlogId,title=self.title,content=self.content,author=self.author,BlogIntroductionPicture= self.BlogIntroductionPicture,created_at=self.created_at)
 
 
+# @dataclass
+# class ArticleCategories(Base):
+#     __tablename__ = "ArticleCategoriestable"
+#     __table_args__ = {'extend_existing': True}
+#     ArticleCategoryName = Column(String(255))
+#     ArticleTagName = Column(String(255))
+#     id = Column(Integer)
+
+# @dataclass
+# class WebsiteStatistics(Base):
+#     __tablename__ = "WebsiteStatisticstable"
+#     __table_args__ = {'extend_existing': True}
+#     dates = Column(DateTime)
+#     VolumeVisits = Column(Integer)
+
+
 @dataclass
 class PowerMeters(Base):
     __tablename__ = "powertable"
