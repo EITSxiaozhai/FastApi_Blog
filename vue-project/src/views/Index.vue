@@ -229,7 +229,7 @@ const loadMoreCards = () => {
             <el-container v-for="(blog, index) in data.data.slice(0, loadedCards)" :key="blog.BlogId">
               <el-main>
 <!--                  <router-link :to="`/blog/${blog.BlogId}`">-->
-                  <el-card v-loading="loading" shadow="hover" id="main-boxcard" class="box-card" style="margin-top: 10px;" @click="jumpFn(blog.BlogId)">
+                  <el-card v-loading="loading" shadow="hover" id="main-boxcard" class="box-card"  @click="jumpFn(blog.BlogId)">
                     <div class="left-img-blog">
                       <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image">
                     </div>
@@ -240,6 +240,7 @@ const loadMoreCards = () => {
 <!--&lt;!&ndash;                      <img id="blog-img" :src="blog.BlogIntroductionPicture" alt="">&ndash;&gt;-->
 <!--                    </el-container>-->
                       <h1>{{ blog.content }} </h1>
+
                       {{ blog.author}} {{ blog.created_at }}
                     </div>
                                 <!-- 卡片内容 -->
@@ -452,7 +453,8 @@ body {
 
 
 #main-boxcard .el-card__body .el-divider--vertical{
- min-height:225px;
+  margin-top: 1px;
+ min-height:250px;
  width:1px;
 }
 
