@@ -12,3 +12,6 @@ requests~=2.22.0
 celery~=5.2.7
 eventlet ~= 0.33.1
 dill ~= 0.3.6
+anyio~=3.6.2
+starlette~=0.22.0
+passlib ~= 1.7.4
