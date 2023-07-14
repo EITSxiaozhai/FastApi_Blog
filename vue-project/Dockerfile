@@ -10,7 +10,7 @@ COPY package.json /
 RUN npm install
 
 COPY . /
-cd /vue-project/
+
 
 # replace this with your application's default port
 EXPOSE 9999
