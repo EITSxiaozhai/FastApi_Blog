@@ -6,8 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改页面">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/views/BlogDetail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/views/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/views/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -244,7 +243,10 @@
       <workItem from="1688973574856" duration="7699000" />
       <workItem from="1689302254040" duration="4847000" />
       <workItem from="1689307247790" duration="6540000" />
-      <workItem from="1689330749524" duration="6079000" />
+      <workItem from="1689330749524" duration="7081000" />
+      <workItem from="1689339340413" duration="44000" />
+      <workItem from="1689339888830" duration="1272000" />
+      <workItem from="1689341722833" duration="186000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -589,7 +591,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <option name="localTasksCounter" value="59" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
