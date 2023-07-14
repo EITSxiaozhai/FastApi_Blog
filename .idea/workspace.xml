@@ -6,7 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="完成详情页面基础布局">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/2f42612e5b5e_test_migration.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/469c7c5b75d5_addtime.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/6ce6aa752930_charelargebinary.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/77870ec384b1_addpic.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/87ff5bc4b336_test_migration.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/923779447bb9_test_migration.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/blog.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/model/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-project/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/views/BlogDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/views/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/views/Index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,24 +77,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/项目备份/fast-api/app/Fast_blog/static/uploadimages&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;http.proxy&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "TODO_SCOPE": "All Places",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "D:/项目备份/fast-api/app/Fast_blog/static/uploadimages",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "http.proxy",
+    "ts.external.directory.path": "D:\\PyCharm 2023.1.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\项目备份\fast-api\app\Fast_blog\static\uploadimages" />
@@ -239,14 +250,9 @@
       <workItem from="1688872177960" duration="6029000" />
       <workItem from="1688886021121" duration="16682000" />
       <workItem from="1688905416413" duration="9312000" />
-      <workItem from="1688973574856" duration="7489000" />
-    </task>
-    <task id="LOCAL-00004" summary="修改数据库提交">
-      <created>1679115392015</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1679115392015</updated>
+      <workItem from="1688973574856" duration="7699000" />
+      <workItem from="1689302254040" duration="4847000" />
+      <workItem from="1689307247790" duration="2526000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -584,7 +590,14 @@
       <option name="project" value="LOCAL" />
       <updated>1688986113919</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="完成详情页面基础布局">
+      <created>1688987026083</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1688987026083</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

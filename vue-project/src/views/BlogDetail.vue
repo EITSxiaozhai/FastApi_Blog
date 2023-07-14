@@ -29,72 +29,70 @@ const blogId = router.currentRoute.value.params.blogId;
 
 <template>
   <div class="common-layout">
-  <el-container id="top-mains">
-    <el-header>
-      <el-menu
-          class="el-menu-demo"
-          mode="horizontal"
-      >
-        <h1 style="padding-left: 20px;font-size: 20px">
-          Exp1oit Blog</h1>
-        <div id="Search_input" class="search-container">
-          <el-input
-              v-model="input1"
-              class="w-50 m-2"
-              size="large"
-              placeholder="搜索你感兴趣的文章"
-              :prefix-icon="Search"
-          />
-        </div>
-        <el-sub-menu index="2-4" id="login">
-          <template #title>登录</template>
-          <el-menu-item index="2-4-1">
-            <a href="" style="text-decoration:none">注册</a>
-          </el-menu-item>
-        </el-sub-menu>
-      </el-menu>
-    </el-header>
-  </el-container>
+    <el-container id="top-mains">
+      <el-header>
+        <el-menu
+            class="el-menu-demo"
+            mode="horizontal"
+        >
+          <h1 style="padding-left: 20px;font-size: 20px">
+            Exp1oit Blog</h1>
+          <div id="Search_input" class="search-container">
+            <el-input
+                v-model="input1"
+                class="w-50 m-2"
+                size="large"
+                placeholder="搜索你感兴趣的文章"
+                :prefix-icon="Search"
+            />
+          </div>
+          <el-sub-menu index="2-4" id="login">
+            <template #title>登录</template>
+            <el-menu-item index="2-4-1">
+              <a href="" style="text-decoration:none">注册</a>
+            </el-menu-item>
+          </el-sub-menu>
+        </el-menu>
+      </el-header>
+    </el-container>
 
-<el-container style="margin-top: 50px">
-  <el-main>
-    <el-row :gutter="20">
+    <el-container style="margin-top: 50px">
+      <el-main>
+        <el-row :gutter="20">
 
-      <el-col :span="6"><div class="grid-content ep-bg-purple" />
-      <el-card>sss</el-card>
-    </el-col>
-    <el-col :span="14"><div class="grid-content ep-bg-purple" />
-  <el-card class="box-card">
-    <template #header>
-      <div class="card-header">
-        <span><h1>博客标题</h1></span>
+          <el-col :span="6">
+            <div class="grid-content ep-bg-purple"/>
+            <el-card>sss</el-card>
+          </el-col>
+          <el-col :span="14">
+            <div class="grid-content ep-bg-purple"/>
+            <el-card class="box-card">
+              <template #header>
+                <div class="card-header">
+                  <span><h1>博客标题</h1></span>
+                </div>
+              </template>
+              <div v-for="o in 100" :key="o" class="text item">{{ 'List item ' + o }}</div>
+            </el-card>
+          </el-col>
+          <el-col :span="4">
+            <div class="grid-content ep-bg-purple"/>
+            <el-card>sss
+            </el-card>
+          </el-col>
+        </el-row>
+              <div id="footer">
+        <el-footer
+            style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%); margin-top: 30px">
+          <el-row class="search-container">
+            <el-col :span="6">
+              <el-statistic title="共计访问人数" :value="268500"/>
+            </el-col>
+          </el-row>
+        </el-footer>
       </div>
-    </template>
-    <div v-for="o in 100" :key="o" class="text item">{{ 'List item ' + o }}</div>
-  </el-card>
-    </el-col>
-    <el-col :span="4"><div class="grid-content ep-bg-purple" />
-      <el-card>sss
-      </el-card>
-    </el-col>
-
-  </el-row>
-  </el-main>
-
-
-
-
-
-      <el-footer id="footer"
-        style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);">
-      <el-row class="search-container">
-        <el-col :span="6">
-          <el-statistic title="共计访问人数" :value="268500"/>
-        </el-col>
-      </el-row>
-    </el-footer>
-</el-container>
-
+      </el-main>
+    </el-container>
   </div>
 
 
@@ -115,12 +113,6 @@ const blogId = router.currentRoute.value.params.blogId;
 }
 
 
-#footer {
-  opacity: 0.8;
-  position: relative;
-  padding-left: 0;
-  padding-right: 0;
-}
 
 </style>
 

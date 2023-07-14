@@ -2,7 +2,8 @@ import asyncio
 import datetime
 
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, MetaData,LargeBinary,DATETIME
-from  sqlalchemy_utils import EmailType,ChoiceType
+from sqlalchemy.orm import relationship
+from sqlalchemy_utils import EmailType, ChoiceType, PasswordType, Choice
 from app.Fast_blog.database.database import Base, engine
 from dataclasses import dataclass
 
@@ -18,14 +19,15 @@ class User(Base):
     __table_args__ = {'extend_existing': True}
     UserId = Column(Integer,primary_key = True,index = True)
     username = Column(String(255),unique=True)
-    userpassword = Column(String(255))
-    gender = Column(ChoiceType(choices))
+    userpassword = Column(PasswordType(schemes=['pbkdf2_sha256']))
+    gender = Column(ChoiceType(choices), default="O")
     creation_time = Column(DateTime,default = datetime.datetime.now)
     Last_Login_Time = Column(DateTime,default= datetime.datetime.now)
     UserUuid = Column(String(255))
     UserEmail = Column(EmailType(255))
     def to_dict(self):
         return dict(UserId=self.UserId,username=self.username,userpassword=self.userpassword,gender=self.gender,UserEmail=self.UserEmail,UserUuid=self.UserUuid)
+
 
 @dataclass
 class Blog(Base):
@@ -36,8 +38,10 @@ class Blog(Base):
     title = Column(String(255))
     content = Column(LargeBinary)
     BlogIntroductionPicture = Column(String(255))
-    author = Column(String(255))
     created_at = Column(DateTime)
+    NumberLikes = Column(Integer)
+    NumberViews = Column(Integer)
+    author = Column(String(255))
     def to_dict(self):
         return dict(BlogId=self.BlogId,title=self.title,content=self.content,author=self.author,BlogIntroductionPicture= self.BlogIntroductionPicture,created_at=self.created_at)
 

@@ -229,6 +229,7 @@ const loadMoreCards = () => {
 <!--                  </router-link>-->
                 </div>
               </el-main>
+              <div><el-backtop :right="100" :bottom="100"/></div>
             </el-container>
           </div>
         </div>
@@ -242,9 +243,10 @@ const loadMoreCards = () => {
       <!--    文章介绍卡片-->
 
       <!--      右侧介绍卡片-->
-      <el-container>
+      <el-container style="display: flex;
+  flex-direction: column; height: 90%;">
         <el-card>
-          <el-space direction="vertical" style="margin-right: 10%;width: 100%">
+          <el-space direction="vertical" style="margin-right: 10%;width: 100%;">
             <el-card v-for="i in 2" :key="i" class="box-card">
               <template #header>
                 <div class="card-header">
@@ -256,6 +258,7 @@ const loadMoreCards = () => {
           </el-space>
 
           <el-divider/>
+
           <el-carousel iindicator-position="none">
             <el-carousel-item v-for="blog in data.data">
               <h3 text="2xl" justify="center"></h3>
@@ -263,7 +266,25 @@ const loadMoreCards = () => {
             </el-carousel-item>
           </el-carousel>
         </el-card>
+
+          <el-card style="margin-top: 20px">
+            文章分类
+          </el-card>
+
+        <el-card style="margin-top: 20px">
+            资源链接
+          </el-card>
+
+        <el-card style="margin-top: 20px">
+            文章标签
+          </el-card>
+
+        <el-card style="margin-top: 20px">
+            网站统计
+          </el-card>
+
       </el-container>
+
     </el-container>
   </el-container>
   <!--      右侧介绍卡片-->
@@ -282,7 +303,7 @@ const loadMoreCards = () => {
   <!--  页面脚底卡片-->
   </div>
 
-  <div><el-backtop :right="100" :bottom="100"/></div>
+
 
 </template>
 
