@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="指定文章页面添加-添加文章页面跳转">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改页面">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/blog.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/blog.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/model/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/views/BlogDetail.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-project/src/views/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/views/Index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -84,6 +83,7 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;http.proxy&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\PyCharm 2023.1.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -240,28 +240,11 @@
       <workItem from="1688812829238" duration="12779000" />
       <workItem from="1688872177960" duration="6029000" />
       <workItem from="1688886021121" duration="16682000" />
-      <workItem from="1688905416413" duration="8326000" />
-    </task>
-    <task id="LOCAL-00002" summary="初次提交">
-      <created>1678801284543</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1678801284543</updated>
-    </task>
-    <task id="LOCAL-00003" summary="初次提交">
-      <created>1678862763179</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1678862763179</updated>
-    </task>
-    <task id="LOCAL-00004" summary="修改数据库提交">
-      <created>1679115392015</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1679115392015</updated>
+      <workItem from="1688905416413" duration="9312000" />
+      <workItem from="1688973574856" duration="7699000" />
+      <workItem from="1689302254040" duration="4847000" />
+      <workItem from="1689307247790" duration="6540000" />
+      <workItem from="1689330749524" duration="6079000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -585,7 +568,28 @@
       <option name="project" value="LOCAL" />
       <updated>1688902780902</updated>
     </task>
-    <option name="localTasksCounter" value="51" />
+    <task id="LOCAL-00051" summary="完成点击加载">
+      <created>1688914237700</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1688914237700</updated>
+    </task>
+    <task id="LOCAL-00052" summary="完成详情页面基础布局">
+      <created>1688986113918</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1688986113919</updated>
+    </task>
+    <task id="LOCAL-00053" summary="完成详情页面基础布局">
+      <created>1688987026083</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1688987026083</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -603,10 +607,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="异步判断初步,还有BUG" />
-    <MESSAGE value="异步判断BUG修复" />
-    <MESSAGE value="添加数据库迁移模块" />
-    <MESSAGE value="添加前端页面-数据库迁移准备" />
     <MESSAGE value="修改数据库迁移模型代码" />
     <MESSAGE value="json格式化输出" />
     <MESSAGE value="添加博客API" />
@@ -628,7 +628,11 @@
     <MESSAGE value="添加卡片跳转到指定文章" />
     <MESSAGE value="指定文章页面添加" />
     <MESSAGE value="指定文章页面添加-添加文章页面跳转" />
-    <option name="LAST_COMMIT_MESSAGE" value="指定文章页面添加-添加文章页面跳转" />
+    <MESSAGE value="完成点击加载" />
+    <MESSAGE value="完成详情页面基础布局" />
+    <MESSAGE value="修改页面-添加用户密码加密" />
+    <MESSAGE value="修改页面" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改页面" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$user.coverage" NAME="user Coverage Results" MODIFIED="1679322055192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/apps/User_app" />
