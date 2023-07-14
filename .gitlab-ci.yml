@@ -16,8 +16,8 @@ Vue3_image_build:
   script:
     - echo "Vue build, Dockerfile:"
     - cat Dockerfile
-    - docker build -t Vue3:$CI_PIPELINE_ID .
-    
+    - docker build -t vue:$CI_PIPELINE_ID .
+
 # code_test:
 #   stage: test
 #   script:
