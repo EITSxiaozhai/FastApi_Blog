@@ -72,7 +72,7 @@ const blogId = router.currentRoute.value.params.blogId;
                   <span><h1>博客标题</h1></span>
                 </div>
               </template>
-              <div v-for="o in 100" :key="o" class="text item">{{ 'List item ' + o }}</div>
+              <div v-for="o in data.data" :key="o">{{o.content }}</div>
             </el-card>
           </el-col>
           <el-col :span="4">

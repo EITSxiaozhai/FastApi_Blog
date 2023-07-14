@@ -65,7 +65,7 @@ const loadMoreCards = () => {
         :options="{
                     background: {
                         color: {
-                            value: '#95d475'
+                            value: '#909399'
                         }
                     },
                     fpsLimit: 120,
@@ -99,10 +99,10 @@ const loadMoreCards = () => {
                     },
                     particles: {
                         color: {
-                            value: '#ffffff'
+                            value: '#c6e2ff'
                         },
                         links: {
-                            color: '#ffffff',
+                            color: '#c6e2ff',
                             distance: 150,
                             enable: true,
                             opacity: 0.5,
@@ -227,7 +227,7 @@ const loadMoreCards = () => {
         <div class="about">
           <div class="common-layout">
             <el-container v-for="(blog, index) in data.data.slice(0, loadedCards)" :key="blog.BlogId">
-              <el-main>
+              <el-main style="margin-top: 10px">
 <!--                  <router-link :to="`/blog/${blog.BlogId}`">-->
                   <el-card v-loading="loading" shadow="hover" id="main-boxcard" class="box-card"  @click="jumpFn(blog.BlogId)">
                     <div class="left-img-blog">
@@ -236,12 +236,10 @@ const loadMoreCards = () => {
                     <el-divider direction="vertical" />
                     <div>
                       <h1 style="font-size: 25px;height: 20%" >{{ blog.title }}</h1>
-<!--                                          <el-container id="blog-img-container">-->
-<!--&lt;!&ndash;                      <img id="blog-img" :src="blog.BlogIntroductionPicture" alt="">&ndash;&gt;-->
-<!--                    </el-container>-->
                       <h1>{{ blog.content }} </h1>
-
+                      <el-container>
                       {{ blog.author}} {{ blog.created_at }}
+                      </el-container>
                     </div>
                                 <!-- 卡片内容 -->
                   </el-card>
