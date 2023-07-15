@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run serve -- --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview",
-    "test:unit": "vitest"
+    "test:unit": "vitest",
+    "serve": "vite"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
