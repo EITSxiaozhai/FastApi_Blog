@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router';
 import { reactive, ref } from 'vue';
 import axios from 'axios';
 import { loadFull } from 'tsparticles';
+import backApi from '../Api/backApi.js';
 
 const particlesInit = async (engine) => {
   await loadFull(engine);
@@ -21,7 +22,7 @@ const loading = ref(false);
 const loadedCards = ref(4); // 初始加载的卡片数量
 
 function getData() {
-  axios.get('http://127.0.0.1:8000/blog/BlogIndex')
+  backApi.get('/BlogIndex')
     .then(response => {
       data.data = response.data;
       console.log(data.data);

@@ -7,10 +7,14 @@
     "build": "vite build",
     "preview": "vite preview",
     "test:unit": "vitest",
-    "serve": "vite"
+    "serve": "vite",
+    "test": "vue-cli-service build --mode test && npm run  serve -s dist",
+    "publish": "vue-cli-service build && vue-cli-service build --mode test"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
+    "@vue/cli": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
     "axios": "^1.4.0",
     "element-plus": "^2.3.7",
     "particles.vue3": "^2.10.1",

@@ -4,9 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改需求模块">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改CI/CD文件">
+      <change afterPath="$PROJECT_DIR$/vue-project/.env.development" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vue-project/.env.production" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/vue-project/.env.test" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-project/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/views/BlogDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/src/views/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/views/Index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,8 +26,8 @@
       <list>
         <option value="Vue Single File Component" />
         <option value="Python Script" />
-        <option value="JavaScript File" />
         <option value="CSS File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -91,6 +99,7 @@
       <recent name="D:\项目备份\fast-api\app\Fast_blog\static\uploadimages" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\项目备份\fast-api\vue-project\src\Api" />
       <recent name="E:\fast-api\vue-project\src" />
       <recent name="E:\fast-api\app\fastapt-project\src\views" />
     </key>
@@ -247,7 +256,9 @@
       <workItem from="1689339340413" duration="44000" />
       <workItem from="1689339888830" duration="1272000" />
       <workItem from="1689341722833" duration="528000" />
-      <workItem from="1689393777908" duration="754000" />
+      <workItem from="1689393777908" duration="2061000" />
+      <workItem from="1689409591879" duration="2783000" />
+      <workItem from="1689412487697" duration="1726000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -592,7 +603,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -610,7 +621,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="json格式化输出" />
     <MESSAGE value="添加博客API" />
     <MESSAGE value="添加博客API,添加电力爬取" />
     <MESSAGE value="添加电力爬取判断" />
@@ -635,7 +645,8 @@
     <MESSAGE value="修改页面-添加用户密码加密" />
     <MESSAGE value="修改页面" />
     <MESSAGE value="修改需求模块" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改需求模块" />
+    <MESSAGE value="修改CI/CD文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改CI/CD文件" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$user.coverage" NAME="user Coverage Results" MODIFIED="1679322055192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/apps/User_app" />
