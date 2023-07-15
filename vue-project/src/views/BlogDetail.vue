@@ -5,6 +5,7 @@ const  route = useRoute()
 import axios from "axios";
 import {useRouter} from "vue-router";
 import {reactive} from "vue";
+import backApi from '../Api/backApi.js';
 
 const  router = useRouter()
 const data = reactive({
@@ -12,7 +13,7 @@ const data = reactive({
 })
        function getData() {
 const blogId = router.currentRoute.value.params.blogId;
-  axios.post(`http://127.0.0.1:8000/blog/Blogid?blog_id=${blogId}`)
+  backApi.post(`/Blogid?blog_id=${blogId}`)
           .then(response => {
             data.data= response.data;
             console.log(data.data)
