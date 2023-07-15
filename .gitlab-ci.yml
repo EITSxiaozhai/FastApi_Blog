@@ -39,7 +39,7 @@ Fastapi_deploy_test:
 Vue_deploy_test:
   stage: test
   script:
-    - docker run -d -p 81 --name myvue-test-$CI_PIPELINE_ID vue:$CI_PIPELINE_ID
+    - docker run -d -p 5173 --name myvue-test-$CI_PIPELINE_ID vue:$CI_PIPELINE_ID
     - docker stop myvue-test-$CI_PIPELINE_ID
     - docker rm myvue-test-$CI_PIPELINE_ID
 
@@ -56,7 +56,7 @@ Vue_container_deploy1:
     script:
       - x=$(docker ps -f "publish=49300" | awk '{print $1}'| sed -n '2p')
       - docker stop $x && docker rm $x
-      - docker run -d -p 49300:81 --name myvue-w1-$CI_PIPELINE_ID vue:$CI_PIPELINE_ID
+      - docker run -d -p 49300:5173 --name myvue-w1-$CI_PIPELINE_ID vue:$CI_PIPELINE_ID
       - docker ps
 
 
