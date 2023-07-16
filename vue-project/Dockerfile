@@ -1,7 +1,7 @@
 # This file is a template, and might need editing before it works on your project.
 FROM node:16.18.1
 
-
+RUN npm cache clean --force
 ARG NODE_ENV
 ENV NODE_ENV $NODE_ENV
 
@@ -11,5 +11,6 @@ RUN npm install
 
 
 # replace this with your application's default port
-CMD [ "npm", "run" , "build"]
-CMD [ "npm", "run" , "serve","-s","dist","--","--host","0.0.0.0"]
+RUN npm run build
+RUN npm run serve -s dist -- --host 0.0.0.0
+#CMD [ "npm", "run" , "serve","-s","dist","--","--host","0.0.0.0"]
