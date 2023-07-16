@@ -9,7 +9,7 @@ COPY package.json /usr/src/app/
 RUN npm install -g npm
 RUN npm install
 
-
+COPY . /usr/src/app/
 # replace this with your application's default port
 RUN npm run build
 RUN npm run serve -s dist -- --host 0.0.0.0
