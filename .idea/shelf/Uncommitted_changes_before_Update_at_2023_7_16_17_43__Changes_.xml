@@ -1,0 +1,19 @@
+<changelist name="Uncommitted_changes_before_Update_at_2023_7_16_17_43_[Changes]" date="1689500598068" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2023_7_16_17_43_[Changes]/shelved.patch" />
+  <option name="DESCRIPTION" value="Uncommitted changes before Update at 2023/7/16 17:43 [Changes]" />
+  <binary>
+    <option name="BEFORE_PATH" value="vue-project/.env.test" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="vue-project/.env.production" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="vue-project/.env.development" />
+    <option name="AFTER_PATH" />
+    <option name="SHELVED_PATH" />
+  </binary>
+</changelist>

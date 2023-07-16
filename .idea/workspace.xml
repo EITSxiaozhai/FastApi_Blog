@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改CI/CD文件">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加后端API接口自动生产环境">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/.env.development" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/.env.production" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/.env.test" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-project/src/Api/backApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/Api/backApi.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -253,7 +255,7 @@
       <workItem from="1689409591879" duration="2783000" />
       <workItem from="1689412487697" duration="2465000" />
       <workItem from="1689415385248" duration="1406000" />
-      <workItem from="1689491095872" duration="3412000" />
+      <workItem from="1689491095872" duration="8048000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -598,7 +600,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -616,7 +618,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="添加博客API" />
     <MESSAGE value="添加博客API,添加电力爬取" />
     <MESSAGE value="添加电力爬取判断" />
     <MESSAGE value="添加查找昨日数据" />
@@ -641,7 +642,8 @@
     <MESSAGE value="修改页面" />
     <MESSAGE value="修改需求模块" />
     <MESSAGE value="修改CI/CD文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改CI/CD文件" />
+    <MESSAGE value="添加后端API接口自动生产环境" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加后端API接口自动生产环境" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$user.coverage" NAME="user Coverage Results" MODIFIED="1679322055192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/apps/User_app" />
