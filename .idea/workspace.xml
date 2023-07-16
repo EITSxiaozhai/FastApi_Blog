@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改基础布局">
-      <change afterPath="$PROJECT_DIR$/vue-project/public/JS/particles.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-project/public/JS/particles.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-project/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-project/src/views/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-project/src/views/Index.vue" afterDir="false" />
     </list>
@@ -257,7 +257,7 @@
       <workItem from="1689415385248" duration="1406000" />
       <workItem from="1689491095872" duration="8048000" />
       <workItem from="1689501144261" duration="4940000" />
-      <workItem from="1689513157474" duration="7071000" />
+      <workItem from="1689513157474" duration="7814000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -602,7 +602,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="65" />
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

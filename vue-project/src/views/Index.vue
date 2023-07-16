@@ -4,7 +4,6 @@ import { reactive, ref } from 'vue';
 import axios from 'axios';
 import { loadFull } from 'tsparticles';
 import backApi from '../Api/backApi.js';
-import {particles} from "../../public/JS/particles";
 const particlesInit = async (engine) => {
   await loadFull(engine);
 };
