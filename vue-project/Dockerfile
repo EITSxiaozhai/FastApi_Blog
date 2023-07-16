@@ -12,5 +12,5 @@ RUN npm install
 
 COPY . /usr/src/app/
 # replace this with your application's default port
-
-CMD ["npm", "run", "build", "&&", "npm", "run" , "serve","-s","dist","--","--host","0.0.0.0"]
+CMD ["npm", "run", "build"]
+CMD ["npm", "run" ,"serve","-s","dist","--","--host","0.0.0.0"]
