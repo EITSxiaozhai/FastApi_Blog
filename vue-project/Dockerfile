@@ -11,6 +11,8 @@ RUN npm install -g npm
 RUN npm install
 
 COPY . /usr/src/app/
+EXPOSE 5173
+EXPOSE 49300
 # replace this with your application's default port
 CMD ["npm", "run", "build"]
 CMD ["npm", "run" ,"serve","-s","dist","--","--host","0.0.0.0"]
