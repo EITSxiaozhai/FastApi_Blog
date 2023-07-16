@@ -4,7 +4,7 @@ import { reactive, ref } from 'vue';
 import axios from 'axios';
 import { loadFull } from 'tsparticles';
 import backApi from '../Api/backApi.js';
-
+import {particles} from "../../public/JS/particles";
 const particlesInit = async (engine) => {
   await loadFull(engine);
 };
@@ -12,6 +12,8 @@ const particlesInit = async (engine) => {
 const particlesLoaded = async (container) => {
   console.log("Particles container loaded", container);
 };
+
+const input1 = ref('');
 
 const router = useRouter();
 const data = reactive({
@@ -46,6 +48,8 @@ const loadMoreCards = () => {
     loading.value = false;
   }, 1000); // 模拟异步加载延迟
 };
+
+
 </script>
 
 <template>
@@ -57,15 +61,15 @@ const loadMoreCards = () => {
           mode="horizontal">
         <h1 style="padding-left: 20px;font-size: 20px">
           Exp1oit Blog</h1>
-        <div id="Search_input" class="search-container">
-          <el-input
-              v-model="input1"
-              class="w-50 m-2"
-              size="large"
-              placeholder="搜索你感兴趣的文章"
-              :prefix-icon="Search"
+        <div>
+                      <el-input
+      v-model="input1"
+      class="w-50 m-2"
+      size="large"
+      placeholder="Please Input"
+      :prefix-icon="Search"
+    />
 
-          />
         </div>
 
         <el-sub-menu index="2-4" id="login">
@@ -131,11 +135,9 @@ const loadMoreCards = () => {
 <!--                  <router-link :to="`/blog/${blog.BlogId}`">-->
                   <el-card v-loading="loading" shadow="hover" id="main-boxcard" class="box-card"  @click="jumpFn(blog.BlogId)">
                     <el-container>
-                      <el-aside>                    <div class="left-img-blog">
+                      <el-aside>
                       <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image">
-                    </div>
                       </el-aside>
-                      <el-divider direction="vertical" />
                       <el-main>                    <div>
                       <h1 style="font-size: 25px;height: 20%" >{{ blog.title }}</h1>
                       <h1>{{ blog.content }} </h1>
@@ -152,7 +154,7 @@ const loadMoreCards = () => {
             </el-container>
           </div>
         </div>
-    <div class="bt_container">
+    <div class="bt_container" style="display: flex; justify-content: center;">
       <el-button type="primary" @click="loadMoreCards" v-if="!loading">查看更多</el-button>
       <el-button type="primary" disabled v-else>
         <i class="el-icon-loading"></i> 加载中...
@@ -215,9 +217,17 @@ const loadMoreCards = () => {
 </template>
 
 <style>
+
+#main-boxcard{
+ border-top-left-radius:0px;
+ border-top-right-radius:50px;
+ border-bottom-left-radius:50px;
+ border-bottom-right-radius:0px;
+}
+
 .about div img {
-  display: inline-block;
-  height: 275px;
+  height: 200px;
+  margin-left: 50px;
 }
 
 #top-mains {
