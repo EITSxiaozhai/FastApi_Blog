@@ -14,4 +14,4 @@ COPY . /usr/src/app
 
 # replace this with your application's default port
 CMD [ "npm", "run" , "build"]
-CMD [ "npm", "run" , "serve","-s","dist","--","--host","192.168.0.150"]
+CMD [ "npm", "run" , "serve"]
