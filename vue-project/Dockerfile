@@ -10,8 +10,9 @@ COPY package.json /usr/src/app/
 RUN npm install -g npm
 RUN npm install
 
+
 COPY . /usr/src/app/
 EXPOSE 5173
+RUN npm run build
 # replace this with your application's default port
-CMD ["npm", "run", "build"]
 CMD ["npm", "run" ,"dev","-s","dist","--","--host","0.0.0.0"]
