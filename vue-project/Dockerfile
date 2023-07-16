@@ -1,7 +1,7 @@
 # This file is a template, and might need editing before it works on your project.
 FROM node:16.18.1
 
-RUN npm cache clean --force
+WORKDIR /usr/src/app
 ARG NODE_ENV
 ENV NODE_ENV $NODE_ENV
 
