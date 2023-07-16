@@ -4,7 +4,6 @@ import { reactive, ref } from 'vue';
 import axios from 'axios';
 import { loadFull } from 'tsparticles';
 import backApi from '../Api/backApi.js';
-
 const particlesInit = async (engine) => {
   await loadFull(engine);
 };
@@ -12,6 +11,8 @@ const particlesInit = async (engine) => {
 const particlesLoaded = async (container) => {
   console.log("Particles container loaded", container);
 };
+
+const input1 = ref('');
 
 const router = useRouter();
 const data = reactive({
@@ -42,126 +43,32 @@ const jumpFn = (id) => {
 const loadMoreCards = () => {
   loading.value = true;
   setTimeout(() => {
-    loadedCards.value += 3; // 每次加载3张卡片
+    loadedCards.value += 2; // 每次加载3张卡片
     loading.value = false;
   }, 1000); // 模拟异步加载延迟
 };
+
+
 </script>
 
 <template>
-
-   <!--  背景开始-->
-  <div id="app" style="opacity: 0.7;">
-    <vue-particles
-        id="tsparticles"
-        :particlesInit="particlesInit"
-        :particlesLoaded="particlesLoaded"
-
-    />
-
-    <vue-particles
-        id="tsparticles"
-        :particlesInit="particlesInit"
-        :particlesLoaded="particlesLoaded"
-        :options="{
-                    background: {
-                        color: {
-                            value: '#909399'
-                        }
-                    },
-                    fpsLimit: 120,
-                    interactivity: {
-                        events: {
-                            onClick: {
-                                enable: true,
-                                mode: 'push'
-                            },
-                            onHover: {
-                                enable: true,
-                                mode: 'repulse'
-                            },
-                            resize: true
-                        },
-                        modes: {
-                            bubble: {
-                                distance: 400,
-                                duration: 2,
-                                opacity: 0.8,
-                                size: 40
-                            },
-                            push: {
-                                quantity: 4
-                            },
-                            repulse: {
-                                distance: 200,
-                                duration: 0.4
-                            }
-                        }
-                    },
-                    particles: {
-                        color: {
-                            value: '#c6e2ff'
-                        },
-                        links: {
-                            color: '#c6e2ff',
-                            distance: 150,
-                            enable: true,
-                            opacity: 0.5,
-                            width: 1
-                        },
-                        collisions: {
-                            enable: true
-                        },
-                        move: {
-                            direction: 'none',
-                            enable: true,
-                            outMode: 'bounce',
-                            random: false,
-                            speed: 2,
-                            straight: false
-                        },
-                        number: {
-                            density: {
-                                enable: true,
-                                area: 800
-                            },
-                            value: 80
-                        },
-                        opacity: {
-                            value: 0.5
-                        },
-                        shape: {
-                            type: 'circle'
-                        },
-                        size: {
-                            random: true,
-                            value: 5
-                        }
-                    },
-                    detectRetina: true
-                }"
-    />
-  </div>
-
   <div class="index">
-      <!--网站导航栏-->
-  <el-container id="top-mains">
-    <el-header>
+  <el-container id="left-my">
+    <el-header id="top-mains">
       <el-menu
           class="el-menu-demo"
-          mode="horizontal"
-      >
+          mode="horizontal">
         <h1 style="padding-left: 20px;font-size: 20px">
           Exp1oit Blog</h1>
-        <div id="Search_input" class="search-container">
-          <el-input
-              v-model="input1"
-              class="w-50 m-2"
-              size="large"
-              placeholder="搜索你感兴趣的文章"
-              :prefix-icon="Search"
+        <div>
+                      <el-input
+      v-model="input1"
+      class="w-50 m-2"
+      size="large"
+      placeholder="Please Input"
+      :prefix-icon="Search"
+    />
 
-          />
         </div>
 
         <el-sub-menu index="2-4" id="login">
@@ -173,11 +80,10 @@ const loadMoreCards = () => {
 
       </el-menu>
     </el-header>
-  </el-container>
-  <!--网站导航栏-->
-  <!--个人介绍卡片-->
-  <el-container id="left-my">
-    <el-aside id="left-my-card" style="padding-top: 5%">
+    <!--个人介绍卡片-->
+    <!--    文章介绍卡片-->
+    <el-container style="margin-top: 1%;height: 10%;z-index:9;">
+      <el-aside id="left-my-card" style="padding-top: 5%">
       <el-row>
         <el-card>
           <img
@@ -220,10 +126,6 @@ const loadMoreCards = () => {
         </el-card>
       </el-row>
     </el-aside>
-    <!--个人介绍卡片-->
-
-    <!--    文章介绍卡片-->
-    <el-container style="margin-top: 1%;height: 10%;z-index:9;">
       <el-main id="maincare">
         <div class="about">
           <div class="common-layout">
@@ -231,17 +133,18 @@ const loadMoreCards = () => {
               <el-main style="margin-top: 10px">
 <!--                  <router-link :to="`/blog/${blog.BlogId}`">-->
                   <el-card v-loading="loading" shadow="hover" id="main-boxcard" class="box-card"  @click="jumpFn(blog.BlogId)">
-                    <div class="left-img-blog">
+                    <el-container>
+                      <el-aside>
                       <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image">
-                    </div>
-                    <el-divider direction="vertical" />
-                    <div>
+                      </el-aside>
+                      <el-main>                    <div>
                       <h1 style="font-size: 25px;height: 20%" >{{ blog.title }}</h1>
                       <h1>{{ blog.content }} </h1>
                       <el-container>
                       {{ blog.author}} {{ blog.created_at }}
                       </el-container>
-                    </div>
+                    </div></el-main>
+                    </el-container>
                                 <!-- 卡片内容 -->
                   </el-card>
 <!--                  </router-link>-->
@@ -250,18 +153,15 @@ const loadMoreCards = () => {
             </el-container>
           </div>
         </div>
-    <div class="bt_container">
+    <div class="bt_container" style="display: flex; justify-content: center;">
       <el-button type="primary" @click="loadMoreCards" v-if="!loading">查看更多</el-button>
       <el-button type="primary" disabled v-else>
         <i class="el-icon-loading"></i> 加载中...
       </el-button>
     </div>
-      </el-main>
-      <!--    文章介绍卡片-->
 
-      <!--      右侧介绍卡片-->
-      <el-container style="display: flex;
-  flex-direction: column; height: 90%;">
+      </el-main>
+      <el-aside id="right-hand-side" style="margin-top: 4%;margin-left: 20px">
         <el-card>
           <el-space direction="vertical" style="margin-right: 10%;width: 100%;">
             <el-card v-for="i in 2" :key="i" class="box-card">
@@ -299,16 +199,10 @@ const loadMoreCards = () => {
         <el-card style="margin-top: 20px">
             网站统计
           </el-card>
-
-      </el-container>
-
+      </el-aside>
     </el-container>
-  </el-container>
-  <!--      右侧介绍卡片-->
-
-  <!--  页面脚底卡片-->
-  <div id="footer">
-    <el-footer
+      <!--    文章介绍卡片-->
+        <el-footer
         style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);">
       <el-row class="search-container">
         <el-col :span="6">
@@ -316,30 +210,23 @@ const loadMoreCards = () => {
         </el-col>
       </el-row>
     </el-footer>
+  </el-container>
   </div>
-  <!--  页面脚底卡片-->
-  </div>
-
-
 
 </template>
 
 <style>
 
-.bt_container{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-#left-my .el-container .el-container > .el-card {
-  height: 92%;
-  transform: translatex(25px) translatey(50px);
+#main-boxcard{
+ border-top-left-radius:0px;
+ border-top-right-radius:50px;
+ border-bottom-left-radius:50px;
+ border-bottom-right-radius:0px;
 }
 
 .about div img {
-  display: inline-block;
-  height: 275px;
+  height: 200px;
+  margin-left: 50px;
 }
 
 #top-mains {
@@ -362,50 +249,18 @@ const loadMoreCards = () => {
 }
 
 
-#left-my .el-space--vertical {
-  position: relative;
-  top: 7%;
-  transform: translatex(0px) translatey(0px);
-}
 
 
 body {
-//background-image: linear-gradient(to right, #74ebd5 0%, #9face6 100%); font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+  //background-image: url('https://www.exploit-db.xyz:15006/apps/files_sharing/publicpreview/PDe6aTNLwZEyBef?file=/&fileId=50076&x=1920&y=1080&a=true');
+ //background-image: linear-gradient(to right, #74ebd5 0%, #9face6 100%); font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-}
-
-
-#left-my .el-container .el-container > .el-card {
-  width: 364px;
-}
-
-#main-boxcard {
-  border-radius: 30px; /* 设置圆角半径 */
 }
 
 
 .el-header {
   padding-left: 0;
   padding-right: 0;
-}
-
-.el-menu-demo {
-  width: 100%;
-}
-
-#footer {
-  opacity: 0.8;
-  position: relative;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-#app {
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: -999; /* 设置一个较低的层叠顺序，以确保它在其他内容的下方 */
 }
 
 .search-container {
@@ -420,41 +275,8 @@ body {
   text-decoration: none;
 }
 
-#app div .index #left-my .el-container #maincare .about .common-layout .el-container .el-main{
- width: 100vh !important;
-}
 
 #svg-icon svg{
   margin-left: 30px;
 }
-
-.about .el-main{
- display:inline-flex;
-}
-
-#main-boxcard .el-card__body .left-img-blog{
- display:inline-flex;
- float:left;
-}
-
-#blog-image{
- width:100% !important;
-}
-
-#app div .index #left-my .el-container #maincare .about .common-layout .el-container .el-main #main-boxcard .el-card__body div{
- display:inline-block !important;
-}
-
-#main-boxcard{
- width:100% !important;
-
-}
-
-
-#main-boxcard .el-card__body .el-divider--vertical{
-  margin-top: 1px;
- min-height:250px;
- width:1px;
-}
-
 </style>
