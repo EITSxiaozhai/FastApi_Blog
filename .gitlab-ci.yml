@@ -56,7 +56,7 @@ Vue_container_deploy1:
     script:
       - x=$(docker ps -f "publish=49300" | awk '{print $1}'| sed -n '2p')
       - docker stop $x && docker rm $x
-      - docker run -d -p 49300:5173  --ip 172.17.0.4  --name myvue-w1-$CI_PIPELINE_ID   vue:$CI_PIPELINE_ID
+      - docker run -d -p 49300:5173    --name myvue-w1-$CI_PIPELINE_ID   vue:$CI_PIPELINE_ID
       - docker ps
 
 #container_deploy2:
