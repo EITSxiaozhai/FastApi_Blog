@@ -144,10 +144,9 @@ const loadMoreCards = () => {
 
 
 
-          <el-col :xs="20" :sm="20" :md="20" :lg="20" :xl="15">
+          <el-col :xs="24" :sm="24" :md="24" :lg="23" :xl="15">
           <el-main id="maincare">
               <div class="about">
-
                   <el-container v-for="(blog, index) in data.data.slice(0, loadedCards)" :key="blog.BlogId">
                     <el-main>
                       <!--                  <router-link :to="`/blog/${blog.BlogId}`">-->
@@ -230,7 +229,7 @@ const loadMoreCards = () => {
 
       <!--    文章介绍卡片-->
       <el-footer
-          style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);">
+          style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%); margin-top: 20px">
         <el-row class="search-container">
           <el-col :span="6">
             <el-statistic title="共计访问人数" :value="268500"/>
