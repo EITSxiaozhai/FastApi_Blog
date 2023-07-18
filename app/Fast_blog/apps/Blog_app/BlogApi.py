@@ -1,18 +1,19 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
 import datetime
+import os
 
-from fastapi import  Request
-
+from fastapi import  Request,Depends
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter,UploadFile
 from sqlalchemy import select, text
+from starlette.background import BackgroundTasks
+
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.model.models import Blog
 import shutil
-
 
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
 session = SessionLocal()
@@ -21,7 +22,8 @@ BlogApp = APIRouter()
 
 templates = Jinja2Templates(directory="./Fast_blog/templates")
 
-BlogApp.mount("/static", StaticFiles(directory="./Fast_blog/static"), name="static")
+static_folder_path = os.path.join(os.getcwd(), "Fast_blog", "static")
+BlogApp.mount("/static", StaticFiles(directory=static_folder_path), name="static")
 
 
 @BlogApp.get('/')
@@ -46,34 +48,39 @@ async def BlogContact(request:Request):
     return templates.TemplateResponse(name="/index_page/blog_html/contact.html",context={"request":request})
 
 
-
-
-##博客添加信息
 @BlogApp.post('/blogadd')
-async def BlogAdd(Addtitle:str,Addcontent:str,Addauthor:str,file: UploadFile):
+async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFile, background_tasks: BackgroundTasks,request: Request,):
     async with db_session() as session:
         try:
             # 将文件保存到磁盘
-            file_path = f"D:\\项目备份\\fast-api\\app\\Fast_blog\\static\\uploadimages\\{file.filename}"
+            file_path = os.path.join(static_folder_path, "uploadimages", file.filename)
             with open(file_path, "wb") as f:
                 shutil.copyfileobj(file.file, f)
+
+            base_url = str(request.base_url)
+            # 构建完整的URL地址
+            image_url = f"{base_url.rstrip('/')}/static/uploadimages/{file.filename}"
+
             # 构建参数值字典
             params = {
                 "title": Addtitle,
                 "content": Addcontent,
-                "BlogIntroductionPicture": f"{file.filename}",
+                "BlogIntroductionPicture": image_url,  # 使用完整的URL地址
                 "author": Addauthor,
-                "created_at":datetime.datetime.now()
+                "created_at": datetime.datetime.now()
             }
+
             # 执行插入操作
-            insert_statement = text("INSERT INTO blogtable (title, content, `BlogIntroductionPicture`, author,created_at) "
-                                    "VALUES (:title, :content, :BlogIntroductionPicture, :author,:created_at)").params(**params)
+            insert_statement = text(
+                "INSERT INTO blogtable (title, content, `BlogIntroductionPicture`, author, created_at) "
+                "VALUES (:title, :content, :BlogIntroductionPicture, :author, :created_at)").params(**params)
             await session.execute(insert_statement)
             await session.commit()
-            return ('文章已经添加到对应数据库')
-        except Exception as e:
-            print("我们遇到了下面的问题",{"data":e})
 
+            return {'message': '文章已经添加到对应数据库', 'image_url': image_url}
+
+        except Exception as e:
+            print("我们遇到了下面的问题", {"data": e})
 
 
 
