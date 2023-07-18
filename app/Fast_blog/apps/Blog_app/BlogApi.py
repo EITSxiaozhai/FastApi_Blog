@@ -61,7 +61,7 @@ async def BlogAdd(Addtitle:str,Addcontent:str,Addauthor:str,file: UploadFile):
             params = {
                 "title": Addtitle,
                 "content": Addcontent,
-                "BlogIntroductionPicture": f"http://127.0.0.1:8000/static/uploadimages/{file.filename}",
+                "BlogIntroductionPicture": f"{file.filename}",
                 "author": Addauthor,
                 "created_at":datetime.datetime.now()
             }

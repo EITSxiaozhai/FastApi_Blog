@@ -32,6 +32,7 @@ function getData() {
       .catch(error => {
         console.error(error);
       });
+
 }
 
 getData();
@@ -48,7 +49,6 @@ const loadMoreCards = () => {
     loading.value = false;
   }, 1000); // 模拟异步加载延迟
 };
-
 
 </script>
 
@@ -155,7 +155,7 @@ const loadMoreCards = () => {
                         <el-container>
                           <el-row :gutter="10">
                           <el-aside>
-                            <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image">
+                            <img :src="getFullImageUrl(blog.BlogIntroductionPicture)" alt="图像描述" id="blog-image">
                           </el-aside>
                           <el-main>
                               <h1 style="font-size: 25px;height: 20%">{{ blog.title }}</h1>
@@ -300,3 +300,21 @@ body {
   margin-left: 30px;
 }
 </style>
+
+
+
+<script>
+export default {
+  computed: {
+    getFullImageUrl() {
+      return (partialUrl) => {
+        const baseURL =
+          process.env.NODE_ENV === "production"
+            ? "http://192.168.0.150:49200"
+            : "http://127.0.0.1:8000";
+        return `${baseURL}/static/uploadimages/${partialUrl}`;
+      };
+    },
+  },
+};
+</script>
