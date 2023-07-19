@@ -15,3 +15,4 @@ dill ~= 0.3.6
 anyio~=3.6.2
 starlette~=0.22.0
 passlib ~= 1.7.4
+python-dotenv ~= 1.0.0
