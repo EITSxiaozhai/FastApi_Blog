@@ -50,7 +50,7 @@ Fastapi_container_deploy1:
       - x=$(docker ps -f "publish=49200" | awk '{print $1}'| sed -n '2p')
       - docker stop $x && docker rm $x
       - export Sql_URL="mysql+asyncmy://$DB_USERNAME:$DB_PASSWORD@$DB_HOSTNAME:$DB_PORT/$DB_NAME?charset=utf8mb4"
-      - docker run -d -p 49200:80 --name myfastapi-w1-$CI_PIPELINE_ID -e "Sql_URL=$Sql_URL" fastapi:$CI_PIPELINE_ID
+      - docker run -d -p 49200:80 --name myfastapi-w1-$CI_PIPELINE_ID -e "DB_USERNAME=$DB_USERNAME" -e "DB_PASSWORD=$DB_PASSWORD" -e "DB_HOSTNAME=$DB_HOSTNAME" -e "DB_PORT=$DB_PORT" -e "DB_NAME=$DB_NAME" fastapi:$CI_PIPELINE_ID
       - docker ps
 
 Vue_container_deploy1:
