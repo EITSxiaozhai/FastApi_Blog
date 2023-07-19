@@ -46,6 +46,7 @@ Vue_deploy_test:
 Fastapi_container_deploy1:
     stage: deploy
     script:
+      - printenv DB_PASSWORD
       - x=$(docker ps -f "publish=49200" | awk '{print $1}'| sed -n '2p')
       - docker stop $x && docker rm $x
       - export Sql_URL="mysql+asyncmy://$DB_USERNAME:$DB_PASSWORD@$DB_HOSTNAME:$DB_PORT/$DB_NAME?charset=utf8mb4"
