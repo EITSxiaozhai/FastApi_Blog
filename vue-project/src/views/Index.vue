@@ -85,13 +85,9 @@ const loadMoreCards = () => {
       <!--    文章介绍卡片-->
 
 
-
-        <el-row :gutter="10">
-          <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="4">
-            <el-aside id="left-my-card" style="padding-top: 5%">
-
-              <el-row>
-                <el-card>
+        <el-row :gutter="10" style="margin-top: 30px">
+          <el-col style="margin-left: 20px" xs="10" :sm="10" :md="15" :lg="4" :xl="1">
+            <el-card>
                   <img
                       src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
                       class="image"
@@ -137,15 +133,12 @@ const loadMoreCards = () => {
                   </el-timeline>
                   <el-divider/>
                 </el-card>
-              </el-row>
-
-            </el-aside>
             </el-col>
 
 
 
 
-          <el-col :xs="24" :sm="24" :md="24" :lg="23" :xl="15">
+          <el-col  :xs="24" :sm="24" :md="24" :lg="14" :xl="11">
           <el-main id="maincare">
               <div class="about">
                   <el-container v-for="(blog, index) in data.data.slice(0, loadedCards)" :key="blog.BlogId">
@@ -186,18 +179,15 @@ const loadMoreCards = () => {
             </el-col>
 
 
-          <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
-            <el-aside id="right-hand-side" style="margin-top: 4%;margin-left: 20px">
-              <el-card>
+          <el-col :xs="24" :sm="24" :md="24" :lg="5" :xl="1">
+            <el-card>
                 <el-space direction="vertical">
-                  <el-card v-for="i in 2" :key="i" class="box-card">
                     <template #header>
                       <div class="card-header">
                         <span>最多阅读文章</span>
                       </div>
                     </template>
                     <div v-for="o in 4" :key="o" class="text item">{{ '这个文章的测试标题为hahahahha ' + o }}</div>
-                  </el-card>
                 </el-space>
                 <el-divider/>
                 <el-carousel iindicator-position="none">
@@ -207,6 +197,7 @@ const loadMoreCards = () => {
                   </el-carousel-item>
                 </el-carousel>
               </el-card>
+
 
               <el-card style="margin-top: 20px">
                 文章分类
@@ -223,9 +214,9 @@ const loadMoreCards = () => {
               <el-card style="margin-top: 20px">
                 网站统计
               </el-card>
-            </el-aside>
-          </el-col>
+                      </el-col>
         </el-row>
+
 
 
       <!--    文章介绍卡片-->
@@ -275,7 +266,11 @@ const loadMoreCards = () => {
 
 
 body {
-//background-image: url('https://www.exploit-db.xyz:15006/apps/files_sharing/publicpreview/PDe6aTNLwZEyBef?file=/&fileId=50076&x=1920&y=1080&a=true'); //background-image: linear-gradient(to right, #74ebd5 0%, #9face6 100%); font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+  background-image: url('https://w.wallhaven.cc/full/zy/wallhaven-zyxvqy.jpg');
+    background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+//background-image: linear-gradient(to right, #74ebd5 0%, #9face6 100%); font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 }
 
 
@@ -296,6 +291,11 @@ body {
   text-decoration: none;
 }
 
+
+#blog-image{
+ display:inline-block;
+ width:232px;
+}
 
 #svg-icon svg {
   margin-left: 30px;

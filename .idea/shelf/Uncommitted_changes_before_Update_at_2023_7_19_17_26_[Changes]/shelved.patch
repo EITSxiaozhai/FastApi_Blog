@@ -1,0 +1,16 @@
+Index: app/.env
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/.env b/app/.env
+new file mode 100644
+--- /dev/null	(date 1689757217787)
++++ b/app/.env	(date 1689757217787)
+@@ -0,0 +1,5 @@
++DB_USERNAME=django
++DB_PASSWORD=@XU15964352xu
++DB_HOSTNAME=mysql.exploit-db.xyz
++DB_PORT=63775
++DB_NAME=fastapi_blog
+\ No newline at end of file
