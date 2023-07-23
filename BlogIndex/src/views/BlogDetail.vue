@@ -29,9 +29,7 @@ const blogId = router.currentRoute.value.params.blogId;
 </script>
 
 <template>
-  <div class="common-layout">
-    <el-container id="top-mains">
-      <el-header>
+      <el-header id="top-mains">
         <el-menu
             class="el-menu-demo"
             mode="horizontal"
@@ -55,12 +53,10 @@ const blogId = router.currentRoute.value.params.blogId;
           </el-sub-menu>
         </el-menu>
       </el-header>
-    </el-container>
 
-    <el-container style="margin-top: 50px">
-      <el-main>
+
+        <el-main style="height: 100vh;margin-top: 2%">
         <el-row :gutter="20">
-
           <el-col :span="6">
             <div class="grid-content ep-bg-purple"/>
             <el-card>sss</el-card>
@@ -82,7 +78,8 @@ const blogId = router.currentRoute.value.params.blogId;
             </el-card>
           </el-col>
         </el-row>
-              <div id="footer">
+      </el-main>
+
         <el-footer
             style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%); margin-top: 30px">
           <el-row class="search-container">
@@ -91,13 +88,6 @@ const blogId = router.currentRoute.value.params.blogId;
             </el-col>
           </el-row>
         </el-footer>
-      </div>
-      </el-main>
-    </el-container>
-  </div>
-
-
-
 </template>
 
 
@@ -113,6 +103,14 @@ const blogId = router.currentRoute.value.params.blogId;
   z-index: 999;
 }
 
+
+body {
+  background-image: url('https://w.wallhaven.cc/full/zy/wallhaven-zyxvqy.jpg');
+    background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+//background-image: linear-gradient(to right, #74ebd5 0%, #9face6 100%); font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+}
 
 
 </style>
