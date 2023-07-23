@@ -29,65 +29,65 @@ const blogId = router.currentRoute.value.params.blogId;
 </script>
 
 <template>
+  <div class="common-layout">
+    <el-container>
       <el-header id="top-mains">
         <el-menu
             class="el-menu-demo"
-            mode="horizontal"
-        >
+            mode="horizontal">
           <h1 style="padding-left: 20px;font-size: 20px">
             Exp1oit Blog</h1>
-          <div id="Search_input" class="search-container">
+          <div>
             <el-input
                 v-model="input1"
                 class="w-50 m-2"
                 size="large"
-                placeholder="搜索你感兴趣的文章"
+                placeholder="Please Input"
                 :prefix-icon="Search"
             />
+
           </div>
+
           <el-sub-menu index="2-4" id="login">
             <template #title>登录</template>
             <el-menu-item index="2-4-1">
               <a href="" style="text-decoration:none">注册</a>
             </el-menu-item>
           </el-sub-menu>
+
         </el-menu>
       </el-header>
 
-
-        <el-main style="height: 100vh;margin-top: 2%">
-        <el-row :gutter="20">
+      <el-container>
+        <el-aside>
+          <el-card>
+            测试侧栏
+          </el-card>
+        </el-aside>
+        <el-container>
+          <el-main>
+  <el-card class="box-card">
+    <template #header>
+      <div class="card-header">
+        <span>Card name</span>
+        <el-button class="button" text>Operation button</el-button>
+      </div>
+    </template>
+    <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
+  </el-card>
+          </el-main>
+        </el-container>
+      </el-container>
+    </el-container>
+    <el-footer
+          style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%); margin-top: 20px">
+        <el-row class="search-container">
           <el-col :span="6">
-            <div class="grid-content ep-bg-purple"/>
-            <el-card>sss</el-card>
-          </el-col>
-          <el-col :span="14">
-            <div class="grid-content ep-bg-purple"/>
-            <el-card class="box-card">
-              <template #header>
-                <div class="card-header">
-                  <span><h1>博客标题</h1></span>
-                </div>
-              </template>
-              <div v-for="o in data.data" :key="o">{{o.content }}</div>
-            </el-card>
-          </el-col>
-          <el-col :span="4">
-            <div class="grid-content ep-bg-purple"/>
-            <el-card>sss
-            </el-card>
+            <el-statistic title="共计访问人数" :value="268500"/>
           </el-col>
         </el-row>
-      </el-main>
-
-        <el-footer
-            style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%); margin-top: 30px">
-          <el-row class="search-container">
-            <el-col :span="6">
-              <el-statistic title="共计访问人数" :value="268500"/>
-            </el-col>
-          </el-row>
-        </el-footer>
+      </el-footer>
+  </div>
 </template>
 
 
