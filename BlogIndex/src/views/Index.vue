@@ -4,6 +4,7 @@ import {reactive, ref} from 'vue';
 import axios from 'axios';
 import {loadFull} from 'tsparticles';
 import backApi from '../Api/backApi.js';
+import 'element-plus/theme-chalk/display.css'
 
 const particlesInit = async (engine) => {
   await loadFull(engine);
@@ -54,7 +55,8 @@ const loadMoreCards = () => {
 </script>
 
 <template>
-    <el-container id="left-my" style="margin-top: 3%">
+
+  <el-container id="left-my" style="margin-top: 3%;">
       <el-header id="top-mains">
         <el-menu
             class="el-menu-demo"
@@ -85,8 +87,8 @@ const loadMoreCards = () => {
       <!--    文章介绍卡片-->
 
 
-        <el-row :gutter="10" style="margin-top: 30px">
-          <el-col style="margin-left: 20px" xs="10" :sm="10" :md="15" :lg="4" :xl="1">
+        <el-row :gutter="10" style="display: flex; justify-content: center;">
+          <el-col style="margin-left: 20px" xs="10" :sm="10" :md="15" :lg="4" :xl="3" class="hidden-lg-and-down" >
             <el-card>
                   <img
                       src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
@@ -138,7 +140,7 @@ const loadMoreCards = () => {
 
 
 
-          <el-col  :xs="24" :sm="24" :md="24" :lg="15" :xl="11">
+          <el-col  :xs="24" :sm="24" :md="24" :lg="20" :xl="17">
           <el-main id="maincare">
               <div class="about">
                   <el-container v-for="(blog, index) in data.data.slice(0, loadedCards)" :key="blog.BlogId">
@@ -153,7 +155,6 @@ const loadMoreCards = () => {
                           </el-aside>
                           <el-main>
                               <h1 style="font-size: 25px;height: 20%">{{ blog.title }}</h1>
-                              <h1>{{ blog.content }} </h1>
                               <el-container>
                                 {{ blog.author }} {{ blog.created_at }}
                               </el-container>
@@ -179,7 +180,7 @@ const loadMoreCards = () => {
             </el-col>
 
 
-          <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="1">
+          <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="3">
             <el-card>
                 <el-space direction="vertical">
                     <template #header>
@@ -232,6 +233,9 @@ const loadMoreCards = () => {
 </template>
 
 <style>
+
+
+
 
 #main-boxcard {
   border-top-left-radius: 0px;
@@ -300,4 +304,5 @@ body {
 #svg-icon svg {
   margin-left: 30px;
 }
+
 </style>

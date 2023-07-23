@@ -4,42 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改不同版本的数据连接">
-      <change beforePath="$PROJECT_DIR$/.gitlab-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.gitlab-ci.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改文件夹名称">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/.vscode/extensions.json" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/.vscode/extensions.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/auto-imports.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/auto-imports.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/components.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/components.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/public/JS/backjs.js" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/public/JS/backjs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/public/backCss.css" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/public/backCss.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/public/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/public/favicon.ico" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/public/images/backgrade.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/public/images/backgrade.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/public/images/swap.png" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/public/images/swap.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/Api/backApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/Api/backApi.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/components/HelloWorld.vue" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/components/HelloWorld.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/components/TheWelcome.vue" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/components/TheWelcome.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/components/WelcomeItem.vue" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/components/WelcomeItem.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/components/__tests__/HelloWorld.spec.js" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/components/__tests__/HelloWorld.spec.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/components/icons/IconCommunity.vue" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/components/icons/IconCommunity.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/components/icons/IconDocumentation.vue" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/components/icons/IconDocumentation.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/components/icons/IconEcosystem.vue" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/components/icons/IconEcosystem.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/components/icons/IconSupport.vue" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/components/icons/IconSupport.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/components/icons/IconTooling.vue" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/components/icons/IconTooling.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/router/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/views/BlogDetail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/src/views/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/views/Index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/vite.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-project/vitest.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/vitest.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BlogIndex/src/views/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/views/Index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,7 +82,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "ts.external.directory.path": "D:\\项目备份\\fast-api\\vue-element-plus-admin\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "D:\\PyCharm 2023.1.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -300,7 +267,7 @@
       <workItem from="1689944118650" duration="154000" />
       <workItem from="1689944280980" duration="1322000" />
       <workItem from="1690103083101" duration="93000" />
-      <workItem from="1690103209528" duration="19000" />
+      <workItem from="1690103209528" duration="1380000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -645,7 +612,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="77" />
+    <option name="localTasksCounter" value="78" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -663,7 +630,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="更新对应日期判断,增加判断严格性" />
     <MESSAGE value="添加Celery分离,准备进行反序列化设计" />
     <MESSAGE value="修改需求文件" />
     <MESSAGE value="创建Vue前后端分离" />
@@ -688,7 +654,8 @@
     <MESSAGE value="基础响应式布局调整" />
     <MESSAGE value="修改图片请求URL" />
     <MESSAGE value="修改不同版本的数据连接" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改不同版本的数据连接" />
+    <MESSAGE value="修改文件夹名称" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改文件夹名称" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$user.coverage" NAME="user Coverage Results" MODIFIED="1679322055192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/apps/User_app" />
