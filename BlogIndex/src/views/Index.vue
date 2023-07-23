@@ -138,7 +138,7 @@ const loadMoreCards = () => {
 
 
 
-          <el-col  :xs="24" :sm="24" :md="24" :lg="14" :xl="11">
+          <el-col  :xs="24" :sm="24" :md="24" :lg="15" :xl="11">
           <el-main id="maincare">
               <div class="about">
                   <el-container v-for="(blog, index) in data.data.slice(0, loadedCards)" :key="blog.BlogId">
@@ -179,7 +179,7 @@ const loadMoreCards = () => {
             </el-col>
 
 
-          <el-col :xs="24" :sm="24" :md="24" :lg="5" :xl="1">
+          <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="1">
             <el-card>
                 <el-space direction="vertical">
                     <template #header>

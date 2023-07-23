@@ -60,7 +60,6 @@ async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFi
             base_url = str(request.base_url)
             # 构建完整的URL地址
             image_url = f"{base_url.rstrip('/')}/static/uploadimages/{file.filename}"
-
             # 构建参数值字典
             params = {
                 "title": Addtitle,
@@ -69,7 +68,6 @@ async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFi
                 "author": Addauthor,
                 "created_at": datetime.datetime.now()
             }
-
             # 执行插入操作
             insert_statement = text(
                 "INSERT INTO blogtable (title, content, `BlogIntroductionPicture`, author, created_at) "
@@ -113,7 +111,7 @@ async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFi
 async def BlogIndex():
     async with db_session() as session:
         try:
-            results = await session.execute(select(Blog).limit(100))
+            results = await session.execute(select(Blog).limit(10))
             data = results.scalars().all()
             data = [item.to_dict() for item in data]
             print(data)

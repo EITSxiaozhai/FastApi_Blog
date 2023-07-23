@@ -15,7 +15,7 @@ Vue3_image_build:
   stage: build
   script:
     - echo "Vue build, Dockerfile:"
-    - cd vue-project
+    - cd BlogIndex
     - cat Dockerfile
     - docker build -t vue:$CI_PIPELINE_ID .
 
