@@ -2,7 +2,7 @@
 # author: YAO XU time:
 import datetime
 import os
-
+import requests
 from fastapi import  Request,Depends
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
@@ -14,6 +14,8 @@ from starlette.background import BackgroundTasks
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.model.models import Blog
 import shutil
+
+from app.Fast_blog.schemas.schemas import UserCredentials
 
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
 session = SessionLocal()
@@ -138,3 +140,17 @@ async def Blogid(blog_id: int):
             print(e)
         return []
 
+
+
+@BlogApp.post("/user/login")
+##博客首页API
+async def UserLogin(credentials: UserCredentials):
+    async with db_session() as session:
+        try:
+            getusername = credentials.username
+            getpassword = credentials.password
+            print(getusername, getpassword)
+        except Exception as e:
+            print("我们遇到了下面的问题")
+            print(e)
+        return 0

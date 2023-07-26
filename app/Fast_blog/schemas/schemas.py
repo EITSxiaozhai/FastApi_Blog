@@ -3,6 +3,10 @@ from  typing import Optional
 import  sys
 sys.path.append('../')
 
+class UserCredentials(BaseModel):
+    username: str
+    password: str
+
 
 
 class Blog(BaseModel):

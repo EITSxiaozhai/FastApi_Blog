@@ -32,7 +32,7 @@ app = FastAPI()
 
 
 app.include_router(User_app.UserApp,prefix='/user', tags=["用户"])
-app.include_router(Blog_app.BlogApp,prefix='/blog',tags=["博客"])
+app.include_router(Blog_app.BlogApp,prefix='/api',tags=["博客"])
 app.include_router(Power_Crawl.PowerApp,prefix='/power', tags=["电力爬虫"])
 
 
