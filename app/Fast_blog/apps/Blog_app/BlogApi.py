@@ -2,6 +2,7 @@
 # author: YAO XU time:
 import datetime
 import os
+import jwt
 import requests
 from fastapi import  Request,Depends
 from sqlalchemy.orm import sessionmaker
@@ -143,13 +144,30 @@ async def Blogid(blog_id: int):
 
 
 @BlogApp.post("/user/login")
-##博客首页API
+##博客登录
 async def UserLogin(credentials: UserCredentials):
     async with db_session() as session:
         try:
-            getusername = credentials.username
-            getpassword = credentials.password
-            print(getusername, getpassword)
+            return {"code": 20000,"data": {"token": "admin-token", "msg": "登录成功", "state": "true"}}
+            # 如果用户未经过身份验证或凭据无效
+        except Exception as e:
+            print("我们遇到了下面的问题")
+            print(e)
+        return 0
+
+@BlogApp.get("/user/info")
+##博客登录
+async def Userinfo():
+    async with db_session() as session:
+        try:
+            return {"code": 20000,"data":
+                {
+                "roles": ["admin"],
+		        "introduction": "I am a super administrator",
+		        "avatar": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
+		        "name": "Super Admin"
+                }
+                    }
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)

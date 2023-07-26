@@ -4,18 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加Vue-admin">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2023_7_19_17_26_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2023_7_19_17_26__Changes_.xml" beforeDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="分离MOCK-添加用户登录">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-element-admin-master/.env.development" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/.env.development" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/mock/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/mock/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/api/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/api/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/utils/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/utils/request.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/vue.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/vue.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -283,6 +277,7 @@
       <workItem from="1690342194705" duration="168000" />
       <workItem from="1690342504704" duration="1929000" />
       <workItem from="1690365354320" duration="4008000" />
+      <workItem from="1690379114416" duration="584000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
