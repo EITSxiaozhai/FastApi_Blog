@@ -11,7 +11,9 @@ from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter,UploadFile
 from sqlalchemy import select, text
 from starlette.background import BackgroundTasks
-
+import jwt
+import datetime
+from fastapi import Depends
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.model.models import Blog
 import shutil
@@ -126,6 +128,8 @@ async def BlogIndex():
 
 
 
+
+
 @BlogApp.post("/Blogid")
 ##博客首页API
 async def Blogid(blog_id: int):
@@ -142,21 +146,63 @@ async def Blogid(blog_id: int):
         return []
 
 
+SECRET_KEY = "eGFREkvK5zawfnNJ3DR5"
+ALGORITHM = "HS256"
+
+def create_jwt_token(data: dict) -> str:
+    """
+    Function to create JWT token using provided data.
+    """
+    token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+    return token
+
 
 @BlogApp.post("/user/login")
 ##博客登录
 async def UserLogin(credentials: UserCredentials):
     async with db_session() as session:
         try:
-            return {"code": 20000,"data": {"token": "admin-token", "msg": "登录成功", "state": "true"}}
-            # 如果用户未经过身份验证或凭据无效
+            getusername = credentials.username
+            getpassword = credentials.password
+
+            # Assuming your user authentication logic is here
+            # ... (Authenticate user and check credentials)
+            # TODO: 在这里实现用户身份验证逻辑
+            # 例如，您可能会检查数据库中的用户名和密码，
+            # 并根据验证结果设置 'authenticated' 变量。
+            authenticated = True  # 将其替换为您实际的身份验证逻辑
+            # If the user is authenticated, generate a JWT token
+            if authenticated:
+                # Data to be stored in the token (can include additional claims as needed)
+                token_data = {
+                    "username": getusername,
+                    "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+                }
+
+                # Generate the JWT token
+                token = create_jwt_token(token_data)
+
+                # Return the token along with other data in the response
+                return {
+                    "code": 20000,
+                    "data": {
+                        "token": token,
+                        "msg": "登录成功",
+                        "state": "true"
+                    }
+                }
+
+            # If the user is not authenticated or invalid credentials
+            return {"code": 40001, "message": "Invalid credentials"}
+
+        # 如果用户未经过身份验证或凭据无效
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
         return 0
 
 @BlogApp.get("/user/info")
-##博客登录
+##博客Admin token 转移
 async def Userinfo():
     async with db_session() as session:
         try:
@@ -168,6 +214,36 @@ async def Userinfo():
 		        "name": "Super Admin"
                 }
                     }
+        except Exception as e:
+            print("我们遇到了下面的问题")
+            print(e)
+        return 0
+
+
+@BlogApp.get("/transaction/list")
+##博客Admin 动态权限生成菜单
+async def Userinfo():
+    async with db_session() as session:
+        try:
+            return {"code": 20000,"data":
+                {
+                "roles": ["admin"],
+		        "introduction": "I am a super administrator",
+		        "avatar": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
+		        "name": "Super Admin"
+                }
+                    }
+        except Exception as e:
+            print("我们遇到了下面的问题")
+            print(e)
+        return 0
+
+@BlogApp.post("/user/logout")
+##博客Admin 动态权限生成菜单
+async def UserloginOut():
+    async with db_session() as session:
+        try:
+            return {"data":"success"}
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
