@@ -238,7 +238,7 @@ async def Userinfo():
             print(e)
         return 0
 
-@BlogApp.post("/user/logout")
+@BlogApp.get("/user/logout")
 ##博客Admin 动态权限生成菜单
 async def UserloginOut():
     async with db_session() as session:
