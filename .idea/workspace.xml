@@ -7,8 +7,7 @@
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加用户退出">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/api/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/api/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/store/modules/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/model/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -277,7 +276,8 @@
       <workItem from="1690342504704" duration="1929000" />
       <workItem from="1690365354320" duration="4008000" />
       <workItem from="1690379114416" duration="1345000" />
-      <workItem from="1690453161790" duration="4120000" />
+      <workItem from="1690453161790" duration="4363000" />
+      <workItem from="1690530073367" duration="759000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -622,7 +622,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="85" />
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -15,7 +15,7 @@ import jwt
 import datetime
 from fastapi import Depends
 from app.Fast_blog.database.database import engine, db_session
-from app.Fast_blog.model.models import Blog
+from app.Fast_blog.model.models import Blog, User
 import shutil
 
 from app.Fast_blog.schemas.schemas import UserCredentials
@@ -29,29 +29,6 @@ templates = Jinja2Templates(directory="./Fast_blog/templates")
 
 static_folder_path = os.path.join(os.getcwd(), "Fast_blog", "static")
 BlogApp.mount("/static", StaticFiles(directory=static_folder_path), name="static")
-
-
-@BlogApp.get('/')
-async def index(request:Request):
-    async with db_session() as session:
-        try:
-            return templates.TemplateResponse(name="/index_page/blog_html/index.html", context={"request": request})
-        except Exception as e:
-            print("我们遇到了下面的问题")
-            print(e)
-        return 0
-
-
-
-@BlogApp.get('/about')
-async def BlogAbout(request:Request):
-    return templates.TemplateResponse(name="/index_page/blog_html/about.html",context={"request":request})
-
-
-@BlogApp.get('/contact')
-async def BlogContact(request:Request):
-    return templates.TemplateResponse(name="/index_page/blog_html/contact.html",context={"request":request})
-
 
 @BlogApp.post('/blogadd')
 async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFile, background_tasks: BackgroundTasks,request: Request,):
@@ -146,6 +123,7 @@ async def Blogid(blog_id: int):
         return []
 
 
+
 SECRET_KEY = "eGFREkvK5zawfnNJ3DR5"
 ALGORITHM = "HS256"
 
@@ -157,6 +135,9 @@ def create_jwt_token(data: dict) -> str:
     return token
 
 
+
+
+
 @BlogApp.post("/user/login")
 ##博客登录
 async def UserLogin(credentials: UserCredentials):
@@ -165,32 +146,36 @@ async def UserLogin(credentials: UserCredentials):
             getusername = credentials.username
             getpassword = credentials.password
 
-            # Assuming your user authentication logic is here
-            # ... (Authenticate user and check credentials)
-            # TODO: 在这里实现用户身份验证逻辑
-            # 例如，您可能会检查数据库中的用户名和密码，
-            # 并根据验证结果设置 'authenticated' 变量。
-            authenticated = True  # 将其替换为您实际的身份验证逻辑
-            # If the user is authenticated, generate a JWT token
-            if authenticated:
-                # Data to be stored in the token (can include additional claims as needed)
-                token_data = {
-                    "username": getusername,
-                    "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-                }
-
-                # Generate the JWT token
-                token = create_jwt_token(token_data)
-
-                # Return the token along with other data in the response
-                return {
-                    "code": 20000,
-                    "data": {
-                        "token": token,
-                        "msg": "登录成功",
-                        "state": "true"
+            results = await session.execute(select(User).filter(User.username == getusername))
+            user = results.scalar_one_or_none()
+            if user is None:
+                # 用户名不存在
+                return "Username or Password does not exist"
+            elif user.userpassword != getpassword:
+                # 密码不匹配
+                return "Username or Password does not exist"
+            else:
+                authenticated = True  # 将其替换为您实际的身份验证逻辑
+                # If the user is authenticated, generate a JWT token
+                if authenticated:
+                    # Data to be stored in the token (can include additional claims as needed)
+                    token_data = {
+                        "username": getusername,
+                        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
                     }
-                }
+
+                    # Generate the JWT token
+                    token = create_jwt_token(token_data)
+
+                    # Return the token along with other data in the response
+                    return {
+                        "code": 20000,
+                        "data": {
+                            "token": token,
+                            "msg": "登录成功",
+                            "state": "true"
+                        }
+                    }
 
             # If the user is not authenticated or invalid credentials
             return {"code": 40001, "message": "Invalid credentials"}
@@ -239,7 +224,7 @@ async def Userinfo():
         return 0
 
 @BlogApp.get("/user/logout")
-##博客Admin 动态权限生成菜单
+##博客Admin退出系统
 async def UserloginOut():
     async with db_session() as session:
         try:
