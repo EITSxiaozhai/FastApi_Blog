@@ -176,27 +176,27 @@ async def UserLogin(credentials: UserCredentials):
                             "state": "true"
                         }
                     }
-
             # If the user is not authenticated or invalid credentials
             return {"code": 40001, "message": "Invalid credentials"}
-
         # 如果用户未经过身份验证或凭据无效
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
         return 0
 
+
 @BlogApp.get("/user/info")
 ##博客Admin token 转移
 async def Userinfo():
     async with db_session() as session:
         try:
+
             return {"code": 20000,"data":
                 {
                 "roles": ["admin"],
-		        "introduction": "I am a super administrator",
-		        "avatar": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
-		        "name": "Super Admin"
+		        # "introduction": "I am a super administrator",
+		        # "avatar": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
+		        # "name": "Super Admin"
                 }
                     }
         except Exception as e:
@@ -213,9 +213,9 @@ async def Userinfo():
             return {"code": 20000,"data":
                 {
                 "roles": ["admin"],
-		        "introduction": "I am a super administrator",
-		        "avatar": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
-		        "name": "Super Admin"
+		        # "introduction": "I am a super administrator",
+		        # "avatar": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
+		        # "name": "Super Admin"
                 }
                     }
         except Exception as e:

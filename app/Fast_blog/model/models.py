@@ -35,6 +35,11 @@ class AdminUser(Base):
         ('1', 'man'),
         ('2', 'NULL')
     ]
+    Typeofuserchoices = [
+        ('0', 'admin'),
+        ('1', 'editer'),
+        ('2', 'NULL')
+    ]
     __tablename__ = "usertable"
     __table_args__ = {'extend_existing': True}
     UserId = Column(Integer,primary_key = True,index = True)
@@ -45,6 +50,7 @@ class AdminUser(Base):
     Last_Login_Time = Column(DateTime,default= datetime.datetime.now)
     UserUuid = Column(String(255))
     UserEmail = Column(EmailType(255))
+    Typeofuser = Column(ChoiceType(Typeofuserchoices), default="1")
     def to_dict(self):
         return dict(UserId=self.UserId,username=self.username,userpassword=self.userpassword,gender=self.gender,UserEmail=self.UserEmail,UserUuid=self.UserUuid)
 
@@ -65,23 +71,6 @@ class Blog(Base):
     def to_dict(self):
         return dict(BlogId=self.BlogId,title=self.title,content=self.content,author=self.author,BlogIntroductionPicture= self.BlogIntroductionPicture,created_at=self.created_at)
 
-
-
-
-# @dataclass
-# class ArticleCategories(Base):
-#     __tablename__ = "ArticleCategoriestable"
-#     __table_args__ = {'extend_existing': True}
-#     ArticleCategoryName = Column(String(255))
-#     ArticleTagName = Column(String(255))
-#     id = Column(Integer)
-
-# @dataclass
-# class WebsiteStatistics(Base):
-#     __tablename__ = "WebsiteStatisticstable"
-#     __table_args__ = {'extend_existing': True}
-#     dates = Column(DateTime)
-#     VolumeVisits = Column(Integer)
 
 
 @dataclass
