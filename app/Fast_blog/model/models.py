@@ -40,7 +40,7 @@ class AdminUser(Base):
         ('1', 'editer'),
         ('2', 'NULL')
     ]
-    __tablename__ = "usertable"
+    __tablename__ = "Admintable"
     __table_args__ = {'extend_existing': True}
     UserId = Column(Integer,primary_key = True,index = True)
     username = Column(String(255),unique=True)
@@ -51,6 +51,7 @@ class AdminUser(Base):
     UserUuid = Column(String(255))
     UserEmail = Column(EmailType(255))
     Typeofuser = Column(ChoiceType(Typeofuserchoices), default="1")
+
     def to_dict(self):
         return dict(UserId=self.UserId,username=self.username,userpassword=self.userpassword,gender=self.gender,UserEmail=self.UserEmail,UserUuid=self.UserUuid)
 
@@ -68,10 +69,13 @@ class Blog(Base):
     NumberLikes = Column(Integer)
     NumberViews = Column(Integer)
     author = Column(String(255))
+    admin_id = Column(Integer, ForeignKey('Admintable.UserId'))
+    # 建立与Admin表的关联
+    admin = relationship("AdminUser", back_populates="blogtable")
     def to_dict(self):
         return dict(BlogId=self.BlogId,title=self.title,content=self.content,author=self.author,BlogIntroductionPicture= self.BlogIntroductionPicture,created_at=self.created_at)
 
-
+AdminUser.articles = relationship("Blog", back_populates="AdminUser")
 
 @dataclass
 class PowerMeters(Base):
