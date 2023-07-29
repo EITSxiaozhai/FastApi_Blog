@@ -7,7 +7,6 @@ from sqlalchemy_utils import EmailType, ChoiceType, PasswordType, Choice
 from app.Fast_blog.database.database import Base, engine
 from dataclasses import dataclass
 
-
 @dataclass
 class User(Base):
     choices = [
@@ -51,7 +50,6 @@ class AdminUser(Base):
     UserUuid = Column(String(255))
     UserEmail = Column(EmailType(255))
     Typeofuser = Column(ChoiceType(Typeofuserchoices), default="1")
-
     def to_dict(self):
         return dict(UserId=self.UserId,username=self.username,userpassword=self.userpassword,gender=self.gender,UserEmail=self.UserEmail,UserUuid=self.UserUuid)
 
@@ -70,12 +68,12 @@ class Blog(Base):
     NumberViews = Column(Integer)
     author = Column(String(255))
     admin_id = Column(Integer, ForeignKey('Admintable.UserId'))
-    # 建立与Admin表的关联
-    admin = relationship("AdminUser", back_populates="blogtable")
     def to_dict(self):
-        return dict(BlogId=self.BlogId,title=self.title,content=self.content,author=self.author,BlogIntroductionPicture= self.BlogIntroductionPicture,created_at=self.created_at)
+        return dict(BlogId=self.BlogId, title=self.title, content=self.content, author=self.author,
+                    BlogIntroductionPicture=self.BlogIntroductionPicture, created_at=self.created_at)
 
-AdminUser.articles = relationship("Blog", back_populates="AdminUser")
+
+
 
 @dataclass
 class PowerMeters(Base):

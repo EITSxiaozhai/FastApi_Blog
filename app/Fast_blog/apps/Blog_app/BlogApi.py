@@ -15,7 +15,7 @@ import jwt
 import datetime
 from fastapi import Depends
 from app.Fast_blog.database.database import engine, db_session
-from app.Fast_blog.model.models import Blog, User
+from app.Fast_blog.model.models import User
 import shutil
 
 from app.Fast_blog.schemas.schemas import UserCredentials
