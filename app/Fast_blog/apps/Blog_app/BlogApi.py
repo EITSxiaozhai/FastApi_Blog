@@ -1,10 +1,14 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
 import datetime
+import json
 import os
+import uuid
+
 import jwt
 import requests
 from fastapi import  Request,Depends
+from pydantic import EmailStr
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -14,8 +18,11 @@ from starlette.background import BackgroundTasks
 import jwt
 import datetime
 from fastapi import Depends
+from starlette.responses import JSONResponse
+
 from app.Fast_blog.database.database import engine, db_session
-from app.Fast_blog.model.models import User
+from app.Fast_blog.model import models
+from app.Fast_blog.model.models import User, Blog, AdminUser
 import shutil
 
 from app.Fast_blog.schemas.schemas import UserCredentials
@@ -29,6 +36,9 @@ templates = Jinja2Templates(directory="./Fast_blog/templates")
 
 static_folder_path = os.path.join(os.getcwd(), "Fast_blog", "static")
 BlogApp.mount("/static", StaticFiles(directory=static_folder_path), name="static")
+
+
+
 
 @BlogApp.post('/blogadd')
 async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFile, background_tasks: BackgroundTasks,request: Request,):
@@ -190,13 +200,9 @@ async def UserLogin(credentials: UserCredentials):
 async def Userinfo():
     async with db_session() as session:
         try:
-
             return {"code": 20000,"data":
                 {
                 "roles": ["admin"],
-		        # "introduction": "I am a super administrator",
-		        # "avatar": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
-		        # "name": "Super Admin"
                 }
                     }
         except Exception as e:
@@ -213,15 +219,62 @@ async def Userinfo():
             return {"code": 20000,"data":
                 {
                 "roles": ["admin"],
-		        # "introduction": "I am a super administrator",
-		        # "avatar": "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
-		        # "name": "Super Admin"
                 }
                     }
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
         return 0
+
+
+@BlogApp.post("/user/adminlist")
+async def AllAdminUser():
+    async with db_session() as session:
+        try:
+            sql = select(AdminUser)
+            result = await session.execute(sql)
+            data = result.scalars().all()
+            data = [item.to_dict() for item in data]
+            return {"data":data}
+        except Exception as e:
+            print(e)
+            return []
+
+
+def UUID_crt(UuidApi):
+    UuidGenerator = uuid.uuid5(uuid.NAMESPACE_DNS,UuidApi)
+    return UuidGenerator
+
+
+async def GetUser(inputusername:str):
+    async with db_session() as session:
+        try:
+            stmt = select(models.AdminUser).filter_by(username=inputusername)
+            result = await session.execute(stmt)
+            for row in result.scalars():
+                x = row.__dict__['username']
+                return ({"Username:":x})
+        except Exception as e:
+            print(e)
+
+
+@BlogApp.get("/Adminadd")
+async def query(inputname:str,inpassword:str,inEmail:EmailStr,ingender:bool,Typeofuser:bool):
+    async with db_session() as session:
+            try:
+                UserQurey = await GetUser(inputusername=inputname)
+                if UserQurey != None :
+                    return ({"用户已经存在,存在值为:":UserQurey['username']})
+                elif UserQurey == None:
+                    x = models.AdminUser(username=inputname,userpassword=inpassword,UserEmail=inEmail,gender=ingender,Typeofuser=Typeofuser,UserUuid=str((UUID_crt(inputname))))
+                    session.add(x)
+                    await session.commit()
+                    print("用户添加成功")
+                    return ({"用户添加成功,你的用户名为:":inputname})
+            except Exception as e:
+                print(e)
+            return {"重复用户名":UserQurey}
+
 
 @BlogApp.get("/user/logout")
 ##博客Admin退出系统
@@ -233,3 +286,5 @@ async def UserloginOut():
             print("我们遇到了下面的问题")
             print(e)
         return 0
+
+

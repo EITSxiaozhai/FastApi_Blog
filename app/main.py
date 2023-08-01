@@ -42,6 +42,7 @@ templates = Jinja2Templates(directory="./Fast_blog/templates")
 app.mount("/static", StaticFiles(directory="./Fast_blog/static"), name="static")
 
 
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

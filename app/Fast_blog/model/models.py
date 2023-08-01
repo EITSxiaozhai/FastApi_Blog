@@ -51,7 +51,7 @@ class AdminUser(Base):
     UserEmail = Column(EmailType(255))
     Typeofuser = Column(ChoiceType(Typeofuserchoices), default="1")
     def to_dict(self):
-        return dict(UserId=self.UserId,username=self.username,userpassword=self.userpassword,gender=self.gender,UserEmail=self.UserEmail,UserUuid=self.UserUuid)
+        return dict(UserId=self.UserId,username=self.username,gender=self.gender,UserEmail=self.UserEmail,UserUuid=self.UserUuid,Typeofuser=self.Typeofuser)
 
 
 @dataclass
