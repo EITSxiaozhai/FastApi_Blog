@@ -4,14 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="requirements.txt 添加其他包">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加管理用户管理以及添加">
+      <change afterPath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/src/Api/backApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/BlogIndex/src/Api/backApi.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/model/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/user/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/user/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/views/login/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/login/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,8 +26,8 @@
         <option value="Vue Single File Component" />
         <option value="CSS File" />
         <option value="JavaScript File" />
-        <option value="Python Script" />
         <option value="TypeScript File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -98,11 +100,11 @@
       <recent name="D:\项目备份\fast-api\app\Fast_blog\static\uploadimages" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\项目备份\fast-api\app\Fast_blog\apps\AdminApp" />
       <recent name="D:\项目备份\fast-api\vue-project\src\views" />
       <recent name="D:\项目备份\fast-api\vue-project\src\views\index" />
       <recent name="D:\项目备份\fast-api\vue-project\src\Api" />
       <recent name="E:\fast-api\vue-project\src" />
-      <recent name="E:\fast-api\app\fastapt-project\src\views" />
     </key>
   </component>
   <component name="RunManager" selected="Python.backlist">
@@ -288,7 +290,8 @@
       <workItem from="1690618613656" duration="535000" />
       <workItem from="1690686837728" duration="1418000" />
       <workItem from="1690717378932" duration="282000" />
-      <workItem from="1690860786683" duration="4752000" />
+      <workItem from="1690860786683" duration="4975000" />
+      <workItem from="1690972622996" duration="4854000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -633,7 +636,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="93" />
+    <option name="localTasksCounter" value="94" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -681,7 +684,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="指定文章页面添加" />
     <MESSAGE value="指定文章页面添加-添加文章页面跳转" />
     <MESSAGE value="完成点击加载" />
     <MESSAGE value="完成详情页面基础布局" />
@@ -706,7 +708,8 @@
     <MESSAGE value="管理平台页面简化" />
     <MESSAGE value="用户测试管理" />
     <MESSAGE value="requirements.txt 添加其他包" />
-    <option name="LAST_COMMIT_MESSAGE" value="requirements.txt 添加其他包" />
+    <MESSAGE value="添加管理用户管理以及添加" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加管理用户管理以及添加" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$user.coverage" NAME="user Coverage Results" MODIFIED="1679322055192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/apps/User_app" />

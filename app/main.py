@@ -1,26 +1,15 @@
-import asyncio
-
-import anyio
-from celery import Celery
-from celery.result import AsyncResult
-from celery.schedules import crontab
-from  fastapi import  FastAPI,Path,Request
+from  fastapi import  FastAPI
 from starlette.responses import JSONResponse
-
 from  Fast_blog.database.database import engine
-from celery import shared_task
-from Fast_blog.model import models
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from concurrent.futures import Future
-from app.Fast_blog.database.database import engine
+from app.Fast_blog.apps import AdminApp
 from Fast_blog.apps import User_app
 from Fast_blog.apps import Blog_app
 from Fast_blog.apps import Power_Crawl
-from Fast_blog.apps.Power_Crawl import LetView
 from fastapi.middleware.cors import CORSMiddleware
-from Fast_blog.BackList.backlist import add,celery_app
+from Fast_blog.BackList.backlist import add
 
 
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
@@ -31,8 +20,9 @@ session = SessionLocal()
 app = FastAPI()
 
 
-app.include_router(User_app.UserApp,prefix='/user', tags=["用户"])
-app.include_router(Blog_app.BlogApp,prefix='/api',tags=["博客"])
+app.include_router(User_app.UserApp,prefix='/user', tags=["普通用户"])
+app.include_router(Blog_app.BlogApp,prefix='/api',tags=["博客前端页面"])
+app.include_router(AdminApp.AdminApi,prefix='/api',tags=["超级用户"])
 app.include_router(Power_Crawl.PowerApp,prefix='/power', tags=["电力爬虫"])
 
 

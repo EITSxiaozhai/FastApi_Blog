@@ -1,31 +1,18 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
-import datetime
-import json
 import os
-import uuid
-
-import jwt
-import requests
-from fastapi import  Request,Depends
-from pydantic import EmailStr
+from fastapi import  Request
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter,UploadFile
 from sqlalchemy import select, text
 from starlette.background import BackgroundTasks
-import jwt
 import datetime
-from fastapi import Depends
-from starlette.responses import JSONResponse
-
 from app.Fast_blog.database.database import engine, db_session
-from app.Fast_blog.model import models
-from app.Fast_blog.model.models import User, Blog, AdminUser
+from app.Fast_blog.model.models import Blog
 import shutil
 
-from app.Fast_blog.schemas.schemas import UserCredentials
 
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
 session = SessionLocal()
@@ -36,8 +23,6 @@ templates = Jinja2Templates(directory="./Fast_blog/templates")
 
 static_folder_path = os.path.join(os.getcwd(), "Fast_blog", "static")
 BlogApp.mount("/static", StaticFiles(directory=static_folder_path), name="static")
-
-
 
 
 @BlogApp.post('/blogadd')
@@ -134,157 +119,5 @@ async def Blogid(blog_id: int):
 
 
 
-SECRET_KEY = "eGFREkvK5zawfnNJ3DR5"
-ALGORITHM = "HS256"
-
-def create_jwt_token(data: dict) -> str:
-    """
-    Function to create JWT token using provided data.
-    """
-    token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
-    return token
-
-
-
-
-
-@BlogApp.post("/user/login")
-##博客登录
-async def UserLogin(credentials: UserCredentials):
-    async with db_session() as session:
-        try:
-            getusername = credentials.username
-            getpassword = credentials.password
-
-            results = await session.execute(select(User).filter(User.username == getusername))
-            user = results.scalar_one_or_none()
-            if user is None:
-                # 用户名不存在
-                return "Username or Password does not exist"
-            elif user.userpassword != getpassword:
-                # 密码不匹配
-                return "Username or Password does not exist"
-            else:
-                authenticated = True  # 将其替换为您实际的身份验证逻辑
-                # If the user is authenticated, generate a JWT token
-                if authenticated:
-                    # Data to be stored in the token (can include additional claims as needed)
-                    token_data = {
-                        "username": getusername,
-                        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-                    }
-
-                    # Generate the JWT token
-                    token = create_jwt_token(token_data)
-
-                    # Return the token along with other data in the response
-                    return {
-                        "code": 20000,
-                        "data": {
-                            "token": token,
-                            "msg": "登录成功",
-                            "state": "true"
-                        }
-                    }
-            # If the user is not authenticated or invalid credentials
-            return {"code": 40001, "message": "Invalid credentials"}
-        # 如果用户未经过身份验证或凭据无效
-        except Exception as e:
-            print("我们遇到了下面的问题")
-            print(e)
-        return 0
-
-
-@BlogApp.get("/user/info")
-##博客Admin token 转移
-async def Userinfo():
-    async with db_session() as session:
-        try:
-            return {"code": 20000,"data":
-                {
-                "roles": ["admin"],
-                }
-                    }
-        except Exception as e:
-            print("我们遇到了下面的问题")
-            print(e)
-        return 0
-
-
-@BlogApp.get("/transaction/list")
-##博客Admin 动态权限生成菜单
-async def Userinfo():
-    async with db_session() as session:
-        try:
-            return {"code": 20000,"data":
-                {
-                "roles": ["admin"],
-                }
-                    }
-        except Exception as e:
-            print("我们遇到了下面的问题")
-            print(e)
-        return 0
-
-
-@BlogApp.post("/user/adminlist")
-async def AllAdminUser():
-    async with db_session() as session:
-        try:
-            sql = select(AdminUser)
-            result = await session.execute(sql)
-            data = result.scalars().all()
-            data = [item.to_dict() for item in data]
-            return {"data":data}
-        except Exception as e:
-            print(e)
-            return []
-
-
-def UUID_crt(UuidApi):
-    UuidGenerator = uuid.uuid5(uuid.NAMESPACE_DNS,UuidApi)
-    return UuidGenerator
-
-
-async def GetUser(inputusername:str):
-    async with db_session() as session:
-        try:
-            stmt = select(models.AdminUser).filter_by(username=inputusername)
-            result = await session.execute(stmt)
-            for row in result.scalars():
-                x = row.__dict__['username']
-                return ({"Username:":x})
-        except Exception as e:
-            print(e)
-
-
-@BlogApp.get("/Adminadd")
-async def query(inputname:str,inpassword:str,inEmail:EmailStr,ingender:bool,Typeofuser:bool):
-    async with db_session() as session:
-            try:
-                UserQurey = await GetUser(inputusername=inputname)
-                if UserQurey != None :
-                    return ({"用户已经存在,存在值为:":UserQurey['username']})
-                elif UserQurey == None:
-                    x = models.AdminUser(username=inputname,userpassword=inpassword,UserEmail=inEmail,gender=ingender,Typeofuser=Typeofuser,UserUuid=str((UUID_crt(inputname))))
-                    session.add(x)
-                    await session.commit()
-                    print("用户添加成功")
-                    return ({"用户添加成功,你的用户名为:":inputname})
-            except Exception as e:
-                print(e)
-            return {"重复用户名":UserQurey}
-
-
-@BlogApp.get("/user/logout")
-##博客Admin退出系统
-async def UserloginOut():
-    async with db_session() as session:
-        try:
-            return {"data":"success"}
-        except Exception as e:
-            print("我们遇到了下面的问题")
-            print(e)
-        return 0
 
 
