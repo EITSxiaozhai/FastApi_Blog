@@ -33,14 +33,16 @@
         <el-form-item label="用户邮箱" prop="UserEmail">
           <el-input v-model="editFormData.UserEmail" />
         </el-form-item>
-        <el-select v-model="adminData.Typeofuser" placeholder="请选择">
-          <el-option
-            v-for="item in adminData.Typeofuser"
-            :key="item.value"
-            :label="item.code"
-            :value="item.value"
-          />
-        </el-select>
+        <el-form-item label="用户权限" prop="Typeofuser">
+          <el-select v-model="editFormData.Typeofuser" placeholder="请选择">
+            <el-option
+              v-for="item in typeofuserData"
+              :key="item.value"
+              :label="item.code"
+              :value="item.value"
+            />
+          </el-select>
+        </el-form-item>
         <!-- 其他需要修改的字段 -->
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -59,13 +61,16 @@ export default {
   data() {
     return {
       adminData: [], // 初始化一个空数组，用于存储adminlist接口的数据
+      typeofuserData: [],
       editDialogVisible: false, // 添加控制对话框显示与隐藏的变量
       editFormData: {} // 添加一个对象用于存储修改信息的表单数据
+
     }
   },
   created() {
     // 在组件创建时调用adminlist接口
     this.fetchAdminList()
+    this.fetchTypeofuserData()
   },
   methods: {
     async fetchAdminList() {
@@ -80,6 +85,14 @@ export default {
     openEditDialog(row) {
       this.editFormData = { ...row } // 使用对象拷贝复制用户数据，防止直接修改原始数据
       this.editDialogVisible = true
+    },
+    async fetchTypeofuserData() {
+      try {
+        const response = await adminlist() // Call the API to get Typeofuser data
+        this.typeofuserData = response.data // Store the API response in typeofuserData
+      } catch (error) {
+        console.error('API error:', error)
+      }
     },
     // 点击保存按钮处理修改信息的逻辑
     async saveEdit() {

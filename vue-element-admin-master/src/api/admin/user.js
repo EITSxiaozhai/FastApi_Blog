@@ -16,3 +16,10 @@ export function updateUser(data) {
   })
 }
 
+export function getTypeofuserData(data) {
+  return request({
+    url: '/user/getTypeofuserData',
+    method: 'post',
+    data
+  })
+}

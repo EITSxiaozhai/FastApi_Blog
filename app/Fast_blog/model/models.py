@@ -6,6 +6,19 @@ from sqlalchemy.orm import relationship
 from sqlalchemy_utils import EmailType, ChoiceType, PasswordType, Choice
 from app.Fast_blog.database.database import Base, engine
 from dataclasses import dataclass
+@dataclass
+class  UserPrivileges(Base):
+    Typeofuserchoices = [
+        ('0', 'admin'),
+        ('1', 'editer'),
+        ('2', 'NULL')
+    ]
+    __tablename__ = "AdminPrivileges"
+    __table_args__ = {'extend_existing': True}
+    NameId = Column(Integer, primary_key=True, index=True)
+    privilegeName = Column(ChoiceType(Typeofuserchoices), default="1")
+
+
 
 @dataclass
 class User(Base):
@@ -34,24 +47,20 @@ class AdminUser(Base):
         ('1', 'man'),
         ('2', 'NULL')
     ]
-    Typeofuserchoices = [
-        ('0', 'admin'),
-        ('1', 'editer'),
-        ('2', 'NULL')
-    ]
     __tablename__ = "Admintable"
     __table_args__ = {'extend_existing': True}
     UserId = Column(Integer,primary_key = True,index = True)
     username = Column(String(255),unique=True)
     userpassword = Column(PasswordType(schemes=['pbkdf2_sha256']))
-    gender = Column(ChoiceType(choices), default="O")
+    gender = Column(ChoiceType(choices), default="2")
     creation_time = Column(DateTime,default = datetime.datetime.now)
     Last_Login_Time = Column(DateTime,default= datetime.datetime.now)
     UserUuid = Column(String(255))
     UserEmail = Column(EmailType(255))
-    Typeofuser = Column(ChoiceType(Typeofuserchoices), default="1")
+    userPrivileges = Column(Integer, ForeignKey('AdminPrivileges.NameId'))
     def to_dict(self):
         return dict(UserId=self.UserId,username=self.username,gender=self.gender,UserEmail=self.UserEmail,UserUuid=self.UserUuid,Typeofuser=self.Typeofuser)
+
 
 
 @dataclass
@@ -71,6 +80,7 @@ class Blog(Base):
     def to_dict(self):
         return dict(BlogId=self.BlogId, title=self.title, content=self.content, author=self.author,
                     BlogIntroductionPicture=self.BlogIntroductionPicture, created_at=self.created_at)
+
 
 
 

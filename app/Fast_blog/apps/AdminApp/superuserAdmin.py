@@ -174,6 +174,16 @@ async def UpdateUser(request: Request):
             print(e)
         return 0
 
+@AdminApi.post("/user/getTypeofuserData")
+##博客Admin退出系统
+async def UserloginOut():
+    async with db_session() as session:
+        try:
+            return {"code":20000,}
+        except Exception as e:
+            print("我们遇到了下面的问题")
+            print(e)
+        return 0
 
 
 @AdminApi.get("/user/logout")
