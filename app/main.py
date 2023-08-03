@@ -1,3 +1,4 @@
+import uvicorn
 from  fastapi import  FastAPI
 from starlette.responses import JSONResponse
 from  Fast_blog.database.database import engine
@@ -50,5 +51,4 @@ async def root():
      response_data = {"message": "hahahah"}
      add.delay(12,12)
      return JSONResponse(content=response_data)
-
 

@@ -2,7 +2,7 @@ import uuid
 import datetime
 
 import jwt
-from fastapi import APIRouter
+from fastapi import APIRouter,Request
 from pydantic import EmailStr
 from sqlalchemy import select
 
@@ -109,7 +109,7 @@ async def AllAdminUser():
             result = await session.execute(sql)
             data = result.scalars().all()
             data = [item.to_dict() for item in data]
-            return {"code": 20000, "data": data}  # Removed the extra curly
+            return {"code": 20000,"data":data}  # Removed the extra curly
         except Exception as e:
             print(e)
             return []
@@ -148,6 +148,32 @@ async def query(inputname:str,inpassword:str,inEmail:EmailStr,ingender:bool,Type
             except Exception as e:
                 print(e)
             return {"重复用户名":UserQurey}
+
+@AdminApi.post("/user/updateUser")
+async def UpdateUser(request: Request):
+    async with db_session() as session:
+        try:
+            data = await request.json()  # This will extract the JSON data from the request body
+            stmt = select(models.AdminUser).filter_by(
+                username=data["username"])  # Assuming "username" is the primary key
+            result = await session.execute(stmt)
+            user = result.scalar_one_or_none()
+
+            if user:
+                # Update the user's information based on the received data
+                user.UserEmail = data["UserEmail"]
+                user.UserUuid = data["UserUuid"]
+                user.gender = data["gender"]["code"]
+                user.Typeofuser = data["Typeofuser"]["code"]
+                await session.commit()
+                return {"code":20000}
+            else:
+                return {"data": "User not found"}
+        except Exception as e:
+            print("我们遇到了下面的问题")
+            print(e)
+        return 0
+
 
 
 @AdminApi.get("/user/logout")
