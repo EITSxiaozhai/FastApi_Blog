@@ -9,9 +9,9 @@ from dataclasses import dataclass
 @dataclass
 class  UserPrivileges(Base):
     Typeofuserchoices = [
-        ('0', 'admin'),
-        ('1', 'editer'),
-        ('2', 'NULL')
+        ('admin', 'admin'),
+        ('editer', 'editer'),
+        ('NULL', 'NULL')
     ]
     __tablename__ = "AdminPrivileges"
     __table_args__ = {'extend_existing': True}
@@ -58,8 +58,11 @@ class AdminUser(Base):
     UserUuid = Column(String(255))
     UserEmail = Column(EmailType(255))
     userPrivileges = Column(Integer, ForeignKey('AdminPrivileges.NameId'))
+    privileges = relationship("UserPrivileges", foreign_keys=[userPrivileges],lazy="select")
+
     def to_dict(self):
-        return dict(UserId=self.UserId,username=self.username,gender=self.gender,UserEmail=self.UserEmail,UserUuid=self.UserUuid,Typeofuser=self.Typeofuser)
+        return dict(UserId=self.UserId, username=self.username, gender=self.gender, UserEmail=self.UserEmail,
+                    UserUuid=self.UserUuid, userPrivileges=self.userPrivileges)
 
 
 

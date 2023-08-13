@@ -5,10 +5,11 @@ import jwt
 from fastapi import APIRouter,Request
 from pydantic import EmailStr
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 
 from app.Fast_blog.database.database import db_session
 from app.Fast_blog.model import models
-from app.Fast_blog.model.models import AdminUser, User
+from app.Fast_blog.model.models import AdminUser, User, UserPrivileges
 from app.Fast_blog.schemas.schemas import UserCredentials
 
 AdminApi = APIRouter()
@@ -68,37 +69,66 @@ async def UserLogin(credentials: UserCredentials):
             print(e)
         return 0
 
-
 @AdminApi.get("/user/info")
-##博客Admin token 转移
-async def Userinfo():
+async def Userinfo(request: Request):
     async with db_session() as session:
-        try:
-            return {"code": 20000,"data":
-                {
-                "roles": ["admin"],
-                }
+        # Get the token from the request headers
+        token = request.headers.get("Authorization")
+
+        if token:
+            token = token.replace("Bearer", "").strip()
+
+            # Verify and decode the token
+            token_data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+
+            username = token_data.get("username")
+            if username:
+                stmt = select(models.AdminUser).join(models.UserPrivileges).add_columns(
+                    models.UserPrivileges.privilegeName).filter(
+                    models.AdminUser.username == username
+                )
+                result = await db_session.execute(stmt)
+                user, privileges  = result.fetchone()
+                print(privileges)
+
+                if user:
+                    return {"code": 20000, "data":
+                        {
+                            "roles": [f"{privileges}"],
+                        }
                     }
-        except Exception as e:
-            print("我们遇到了下面的问题")
-            print(e)
-        return 0
+
 
 
 @AdminApi.get("/transaction/list")
 ##博客Admin 动态权限生成菜单
-async def Userinfo():
+async def Userinfo(request: Request):
     async with db_session() as session:
-        try:
-            return {"code": 20000,"data":
-                {
-                "roles": ["admin"],
-                }
+        # Get the token from the request headers
+        token = request.headers.get("Authorization")
+
+        if token:
+            token = token.replace("Bearer", "").strip()
+
+            # Verify and decode the token
+            token_data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+
+            username = token_data.get("username")
+            if username:
+                stmt = select(models.AdminUser).join(models.UserPrivileges).add_columns(
+                    models.UserPrivileges.privilegeName).filter(
+                    models.AdminUser.username == username
+                )
+                result = await db_session.execute(stmt)
+                user, privileges  = result.fetchone()
+                print(privileges)
+
+                if user:
+                    return {"code": 20000, "data":
+                        {
+                            "roles": [f"{privileges}"],
+                        }
                     }
-        except Exception as e:
-            print("我们遇到了下面的问题")
-            print(e)
-        return 0
 
 
 @AdminApi.post("/user/adminlist")
@@ -140,7 +170,7 @@ async def query(inputname:str,inpassword:str,inEmail:EmailStr,ingender:bool,Type
                 if UserQurey != None :
                     return ({"用户已经存在,存在值为:":UserQurey['username']})
                 elif UserQurey == None:
-                    x = models.AdminUser(username=inputname,userpassword=inpassword,UserEmail=inEmail,gender=ingender,Typeofuser=Typeofuser,UserUuid=str((UUID_crt(inputname))))
+                    x = models.AdminUser(username=inputname,userpassword=inpassword,UserEmail=inEmail,gender=ingender,userPrivileges=Typeofuser,UserUuid=str((UUID_crt(inputname))))
                     session.add(x)
                     await session.commit()
                     print("用户添加成功")
@@ -164,7 +194,7 @@ async def UpdateUser(request: Request):
                 user.UserEmail = data["UserEmail"]
                 user.UserUuid = data["UserUuid"]
                 user.gender = data["gender"]["code"]
-                user.Typeofuser = data["Typeofuser"]["code"]
+                # user.Typeofuser = data["Typeofuser"]["code"]
                 await session.commit()
                 return {"code":20000}
             else:
@@ -175,15 +205,24 @@ async def UpdateUser(request: Request):
         return 0
 
 @AdminApi.post("/user/getTypeofuserData")
-##博客Admin退出系统
-async def UserloginOut():
+##博客Admin权限管理
+async def UserPrivilegeName(request: Request):
     async with db_session() as session:
         try:
-            return {"code":20000,}
+            data = await request.json()
+            stmt = select(models.AdminUser).filter_by(usename=data['username'])  # Assuming "username" is the primary key
+            stmt = stmt.options(joinedload(AdminUser.userPrivileges))
+            result = await session.execute(stmt)
+            user = result.scalar_one_or_none()
+            if user:
+                privilege = user.userPrivileges.privilegeName
+                return {"code": 20000, "privilegeName": privilege}
+            else:
+                return {"code": 20001, "message": "User not found"}
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
-        return 0
+        return {"code": 20001, "message": "User not found"}
 
 
 @AdminApi.get("/user/logout")
