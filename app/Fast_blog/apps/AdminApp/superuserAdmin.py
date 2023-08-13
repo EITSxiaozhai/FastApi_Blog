@@ -72,31 +72,40 @@ async def UserLogin(credentials: UserCredentials):
 @AdminApi.get("/user/info")
 async def Userinfo(request: Request):
     async with db_session() as session:
-        # Get the token from the request headers
-        token = request.headers.get("Authorization")
+        try:
+            # Get the token from the request headers
+            token = request.headers.get("Authorization")
 
-        if token:
-            token = token.replace("Bearer", "").strip()
+            if token:
+                token = token.replace("Bearer", "").strip()
 
-            # Verify and decode the token
-            token_data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+                # Verify and decode the token
+                token_data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
 
-            username = token_data.get("username")
-            if username:
-                stmt = select(models.AdminUser).join(models.UserPrivileges).add_columns(
-                    models.UserPrivileges.privilegeName).filter(
-                    models.AdminUser.username == username
-                )
-                result = await db_session.execute(stmt)
-                user, privileges  = result.fetchone()
-                print(privileges)
+                username = token_data.get("username")
+                if username:
+                    stmt = select(models.AdminUser).join(models.UserPrivileges).add_columns(
+                        models.UserPrivileges.privilegeName).filter(
+                        models.AdminUser.username == username
+                    )
+                    result = await db_session.execute(stmt)
+                    user, privileges  = result.fetchone()
 
-                if user:
-                    return {"code": 20000, "data":
-                        {
-                            "roles": [f"{privileges}"],
+                    if user:
+                        return {"code": 20000, "data":
+                            {
+                                "roles": [f"{privileges}"],
+                            }
                         }
-                    }
+            return {"code": 20001, "message": "用户未找到"}
+        except jwt.ExpiredSignatureError:
+            return {"code": 40002, "message": "Token已过期"}
+        except jwt.InvalidTokenError:
+            return {"code": 40003, "message": "无效的Token"}
+        except Exception as e:
+            print("博客Admin token 转移我们遇到了下面的问题")
+            print(e)
+            return {"code": 50000, "message": "内部服务器错误"}
 
 
 
@@ -104,32 +113,39 @@ async def Userinfo(request: Request):
 ##博客Admin 动态权限生成菜单
 async def Userinfo(request: Request):
     async with db_session() as session:
-        # Get the token from the request headers
-        token = request.headers.get("Authorization")
+        try:
+            # Get the token from the request headers
+            token = request.headers.get("Authorization")
 
-        if token:
-            token = token.replace("Bearer", "").strip()
+            if token:
+                token = token.replace("Bearer", "").strip()
 
-            # Verify and decode the token
-            token_data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+                # Verify and decode the token
+                token_data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
 
-            username = token_data.get("username")
-            if username:
-                stmt = select(models.AdminUser).join(models.UserPrivileges).add_columns(
-                    models.UserPrivileges.privilegeName).filter(
-                    models.AdminUser.username == username
-                )
-                result = await db_session.execute(stmt)
-                user, privileges  = result.fetchone()
-                print(privileges)
-
-                if user:
-                    return {"code": 20000, "data":
-                        {
-                            "roles": [f"{privileges}"],
+                username = token_data.get("username")
+                if username:
+                    stmt = select(models.AdminUser).join(models.UserPrivileges).add_columns(
+                        models.UserPrivileges.privilegeName).filter(
+                        models.AdminUser.username == username
+                    )
+                    result = await db_session.execute(stmt)
+                    user, privileges  = result.fetchone()
+                    if user:
+                        return {"code": 20000, "data":
+                            {
+                                "roles": [f"{privileges}"],
+                            }
                         }
-                    }
-
+            return {"code": 20001, "message": "用户未找到"}
+        except jwt.ExpiredSignatureError:
+            return {"code": 40002, "message": "Token已过期"}
+        except jwt.InvalidTokenError:
+            return {"code": 40003, "message": "无效的Token"}
+        except Exception as e:
+            print("动态菜单鉴权我们遇到了下面的问题")
+            print(e)
+            return {"code": 50000, "message": "内部服务器错误"}
 
 @AdminApi.post("/user/adminlist")
 async def AllAdminUser():
