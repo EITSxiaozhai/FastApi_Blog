@@ -30,8 +30,8 @@ async def UserLogin(credentials: UserCredentials):
         try:
             getusername = credentials.username
             getpassword = credentials.password
-
-            results = await session.execute(select(User).filter(User.username == getusername))
+            print(getusername)
+            results = await session.execute(select(AdminUser).filter(AdminUser.username == getusername))
             user = results.scalar_one_or_none()
             if user is None:
                 # 用户名不存在
@@ -154,8 +154,19 @@ async def AllAdminUser():
             sql = select(AdminUser)
             result = await session.execute(sql)
             data = result.scalars().all()
-            data = [item.to_dict() for item in data]
-            return {"code": 20000,"data":data}  # Removed the extra curly
+
+            modified_data = []
+            for item in data:
+                user_privilege = await session.scalar(
+                    select(UserPrivileges.privilegeName)
+                    .where(UserPrivileges.NameId == item.userPrivileges)
+                )
+                if user_privilege is not None:
+                    item_dict = item.to_dict()
+                    item_dict["privilegeName"] = user_privilege
+                    modified_data.append(item_dict)
+
+            return {"code": 20000, "data": modified_data}
         except Exception as e:
             print(e)
             return []
@@ -239,6 +250,10 @@ async def UserPrivilegeName(request: Request):
             print("我们遇到了下面的问题")
             print(e)
         return {"code": 20001, "message": "User not found"}
+
+
+
+
 
 
 @AdminApi.get("/user/logout")

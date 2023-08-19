@@ -13,7 +13,7 @@
               </template>
             </el-table-column>
             <el-table-column fixed prop="UserEmail" label="用户邮箱" width="240" />
-            <el-table-column prop="Typeofuser.value" label="用户权限" width="auto" />
+            <el-table-column prop="privilegeName.code" label="用户权限" width="auto" />
             <el-table-column prop="UserUuid" label="用户唯一ID" width="auto" />
             <el-table-column prop="province" label="禁用状态" width="120">
               <el-button type="success" icon="el-icon-check" circle />
