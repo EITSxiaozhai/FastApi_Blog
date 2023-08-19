@@ -1,8 +1,12 @@
 import uuid
 import datetime
+from http.client import HTTPException
+from typing import Annotated
 
+import httpx
 import jwt
-from fastapi import APIRouter,Request
+from fastapi import APIRouter, Request, Depends
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import EmailStr
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
@@ -14,60 +18,72 @@ from app.Fast_blog.schemas.schemas import UserCredentials
 
 AdminApi = APIRouter()
 
+
+
 SECRET_KEY = "d81beb2748aa1322fe038c26dbd263907f5808548f9e428f4d9ce780dd4358a6cc942a1ee8bd49652991bce4989e270c55adeb0c5138ff516de13a07a5bdd5be"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
+
 
 def create_jwt_token(data: dict) -> str:
     token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
     return token
 
+@AdminApi.post("/token")
+async def Token(Incoming:OAuth2PasswordRequestForm = Depends()):
+    async with db_session() as session:
+        getusername = Incoming.username
+        getpassword = Incoming.password
+        print(getusername)
+        results = await session.execute(select(AdminUser).filter(AdminUser.username == getusername))
+        user = results.scalar_one_or_none()
+        if user is None:
+            # 用户名不存在
+            return {"data":"UsernameError"}
+        elif user.userpassword != getpassword:
+            # 密码不匹配
+            return {"data":"UsernameOrPasswordError"}
+        else:
+            token_data = {
+                "username": Incoming.username,
+                "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+            }
+            # Generate the JWT token
+            token = create_jwt_token(token_data)
+            return {"token":token}
+
+
 
 @AdminApi.post("/user/login")
 ##博客登录
-async def UserLogin(credentials: UserCredentials):
+async def UserLogin(x:UserCredentials):
     async with db_session() as session:
         try:
-            getusername = credentials.username
-            getpassword = credentials.password
-            print(getusername)
-            results = await session.execute(select(AdminUser).filter(AdminUser.username == getusername))
-            user = results.scalar_one_or_none()
-            if user is None:
-                # 用户名不存在
-                return "Username or Password does not exist"
-            elif user.userpassword != getpassword:
-                # 密码不匹配
-                return "Username or Password does not exist"
-            else:
-                authenticated = True  # 将其替换为您实际的身份验证逻辑
-                # If the user is authenticated, generate a JWT token
-                if authenticated:
-                    # Data to be stored in the token (can include additional claims as needed)
-                    token_data = {
-                        "username": getusername,
-                        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-                    }
-
-                    # Generate the JWT token
-                    token = create_jwt_token(token_data)
-
-                    # Return the token along with other data in the response
+            async with httpx.AsyncClient() as client:
+                response = await client.post("http://127.0.0.1:8000/api/token", data={"username": x.username, "password": x.password})
+                token_data = response.json()
+                if "token" in token_data:
                     return {
                         "code": 20000,
                         "data": {
-                            "token": token,
+                            "token": token_data["token"],
                             "msg": "登录成功",
                             "state": "true"
                         }
                     }
-            # If the user is not authenticated or invalid credentials
             return {"code": 40001, "message": "Invalid credentials"}
         # 如果用户未经过身份验证或凭据无效
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
-        return 0
+            return {"code": 50000, "message": "内部服务器错误"}
+        except jwt.ExpiredSignatureError:
+            return {"code": 40002, "message": "Token已过期"}
+        except jwt.InvalidTokenError:
+            return {"code": 40003, "message": "无效的Token"}
 
 @AdminApi.get("/user/info")
 async def Userinfo(request: Request):
@@ -147,8 +163,9 @@ async def Userinfo(request: Request):
             print(e)
             return {"code": 50000, "message": "内部服务器错误"}
 
+
 @AdminApi.post("/user/adminlist")
-async def AllAdminUser():
+async def AllAdminUser(token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
             sql = select(AdminUser)
@@ -165,11 +182,13 @@ async def AllAdminUser():
                     item_dict = item.to_dict()
                     item_dict["privilegeName"] = user_privilege
                     modified_data.append(item_dict)
-
             return {"code": 20000, "data": modified_data}
+        except jwt.ExpiredSignatureError:
+            return {"code": 40002, "message": "Token已过期"}
+        except jwt.InvalidTokenError:
+            return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
-            print(e)
-            return []
+            return {"code": 50000, "message": "内部服务器错误"}
 
 
 def UUID_crt(UuidApi):
@@ -177,7 +196,7 @@ def UUID_crt(UuidApi):
     return UuidGenerator
 
 
-async def GetUser(inputusername:str):
+async def GetUser(inputusername:str,token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
             stmt = select(models.AdminUser).filter_by(username=inputusername)
@@ -190,7 +209,7 @@ async def GetUser(inputusername:str):
 
 
 @AdminApi.get("/Adminadd")
-async def query(inputname:str,inpassword:str,inEmail:EmailStr,ingender:bool,Typeofuser:bool):
+async def query(inputname:str,inpassword:str,inEmail:EmailStr,ingender:bool,Typeofuser:bool,token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
             try:
                 UserQurey = await GetUser(inputusername=inputname)
@@ -207,7 +226,7 @@ async def query(inputname:str,inpassword:str,inEmail:EmailStr,ingender:bool,Type
             return {"重复用户名":UserQurey}
 
 @AdminApi.post("/user/updateUser")
-async def UpdateUser(request: Request):
+async def UpdateUser(request: Request,token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
             data = await request.json()  # This will extract the JSON data from the request body
@@ -233,7 +252,7 @@ async def UpdateUser(request: Request):
 
 @AdminApi.post("/user/getTypeofuserData")
 ##博客Admin权限管理
-async def UserPrivilegeName(request: Request):
+async def UserPrivilegeName(request: Request,token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
             data = await request.json()
@@ -250,10 +269,6 @@ async def UserPrivilegeName(request: Request):
             print("我们遇到了下面的问题")
             print(e)
         return {"code": 20001, "message": "User not found"}
-
-
-
-
 
 
 @AdminApi.get("/user/logout")
