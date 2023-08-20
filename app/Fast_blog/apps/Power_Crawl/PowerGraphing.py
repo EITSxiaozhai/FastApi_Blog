@@ -7,9 +7,10 @@ import datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.Fast_blog.BackList import celery_app
+
 from app.Fast_blog.database.database import engine
 from app.Fast_blog.database.database import db_session
+from app.Fast_blog.middleware import celery_app
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import PowerMeters
 from sqlalchemy import exists, select, func, cast, Date, desc
