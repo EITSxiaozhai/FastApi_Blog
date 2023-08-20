@@ -1,3 +1,5 @@
+import datetime
+
 import uvicorn
 from  fastapi import  FastAPI
 from starlette.responses import JSONResponse
@@ -10,8 +12,8 @@ from Fast_blog.apps import User_app
 from Fast_blog.apps import Blog_app
 from Fast_blog.apps import Power_Crawl
 from fastapi.middleware.cors import CORSMiddleware
-from Fast_blog.BackList.backlist import add
 
+from app.Fast_blog.middleware.backlist import TokenManager
 
 SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
 session = SessionLocal()
@@ -49,6 +51,5 @@ app.add_middleware(
 @app.get("/")
 async def root():
      response_data = {"message": "hahahah"}
-     add.delay(12,12)
      return JSONResponse(content=response_data)
 

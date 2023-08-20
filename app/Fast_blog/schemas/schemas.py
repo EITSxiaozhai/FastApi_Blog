@@ -7,7 +7,9 @@ class UserCredentials(BaseModel):
     username: str
     password: str
 
-
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 class Blog(BaseModel):
     title:str

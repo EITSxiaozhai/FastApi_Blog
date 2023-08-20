@@ -1,8 +1,8 @@
 import uuid
 import datetime
-from http.client import HTTPException
-from typing import Annotated
 
+from typing import Annotated
+from fastapi import HTTPException
 import httpx
 import jwt
 from fastapi import APIRouter, Request, Depends
@@ -12,6 +12,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
 from app.Fast_blog.database.database import db_session
+from app.Fast_blog.middleware.backlist import TokenManager
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import AdminUser, User, UserPrivileges
 from app.Fast_blog.schemas.schemas import UserCredentials
@@ -42,18 +43,18 @@ async def Token(Incoming:OAuth2PasswordRequestForm = Depends()):
         user = results.scalar_one_or_none()
         if user is None:
             # 用户名不存在
-            return {"data":"UsernameError"}
+            raise HTTPException(status_code=401, detail="验证未通过")
         elif user.userpassword != getpassword:
             # 密码不匹配
-            return {"data":"UsernameOrPasswordError"}
+            raise HTTPException(status_code=401, detail="验证未通过")
         else:
             token_data = {
                 "username": Incoming.username,
                 "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
             }
-            # Generate the JWT token
-            token = create_jwt_token(token_data)
-            return {"token":  token}
+            token = create_jwt_token(data=token_data)
+
+            return {"access_token": token,"token_type": 'Bearer',"token":token}
 
 
 
@@ -89,11 +90,12 @@ async def UserLogin(x:UserCredentials):
 async def Userinfo(request: Request,token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
+
+            print(token)
             if token:
                 token = token.replace("Bearer", "").strip()
                 # Verify and decode the token
                 token_data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-
                 username = token_data.get("username")
                 if username:
                     stmt = select(models.AdminUser).join(models.UserPrivileges).add_columns(
