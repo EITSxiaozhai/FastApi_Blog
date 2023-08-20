@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加表可以显示权限">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/utils/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/utils/request.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -319,7 +320,7 @@
       <workItem from="1692364889436" duration="41000" />
       <workItem from="1692365011169" duration="348000" />
       <workItem from="1692365457627" duration="80000" />
-      <workItem from="1692437617068" duration="10042000" />
+      <workItem from="1692437617068" duration="13987000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -664,7 +665,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="100" />
+    <option name="localTasksCounter" value="101" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -712,7 +713,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改CI/CD文件" />
     <MESSAGE value="添加后端API接口自动生产环境" />
     <MESSAGE value="修改基础布局" />
     <MESSAGE value="基础响应式布局调整" />
@@ -737,7 +737,8 @@
     <MESSAGE value="用户登录鉴权" />
     <MESSAGE value="添加异常捕获" />
     <MESSAGE value="添加表可以显示权限" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加表可以显示权限" />
+    <MESSAGE value="基于 ```OAuth2PasswordRequestForm``` 的JWT token认证" />
+    <option name="LAST_COMMIT_MESSAGE" value="基于 ```OAuth2PasswordRequestForm``` 的JWT token认证" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$models.coverage" NAME="models Coverage Results" MODIFIED="1679217759819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/model" />

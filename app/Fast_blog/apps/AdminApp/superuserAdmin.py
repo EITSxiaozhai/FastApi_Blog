@@ -53,7 +53,7 @@ async def Token(Incoming:OAuth2PasswordRequestForm = Depends()):
             }
             # Generate the JWT token
             token = create_jwt_token(token_data)
-            return {"token":token}
+            return {"token":  token}
 
 
 
@@ -74,7 +74,7 @@ async def UserLogin(x:UserCredentials):
                             "state": "true"
                         }
                     }
-            return {"code": 40001, "message": "Invalid credentials"}
+            return {"code": 40001, "message": "登录失败。"}
         # 如果用户未经过身份验证或凭据无效
         except Exception as e:
             print("我们遇到了下面的问题")
@@ -86,15 +86,11 @@ async def UserLogin(x:UserCredentials):
             return {"code": 40003, "message": "无效的Token"}
 
 @AdminApi.get("/user/info")
-async def Userinfo(request: Request):
+async def Userinfo(request: Request,token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
-            # Get the token from the request headers
-            token = request.headers.get("Authorization")
-
             if token:
                 token = token.replace("Bearer", "").strip()
-
                 # Verify and decode the token
                 token_data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
 
@@ -127,15 +123,11 @@ async def Userinfo(request: Request):
 
 @AdminApi.get("/transaction/list")
 ##博客Admin 动态权限生成菜单
-async def Userinfo(request: Request):
+async def Userinfo(token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
             # Get the token from the request headers
-            token = request.headers.get("Authorization")
-
             if token:
-                token = token.replace("Bearer", "").strip()
-
                 # Verify and decode the token
                 token_data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
 
@@ -168,21 +160,22 @@ async def Userinfo(request: Request):
 async def AllAdminUser(token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
-            sql = select(AdminUser)
-            result = await session.execute(sql)
-            data = result.scalars().all()
+            if token:
+                sql = select(AdminUser)
+                result = await session.execute(sql)
+                data = result.scalars().all()
 
-            modified_data = []
-            for item in data:
-                user_privilege = await session.scalar(
-                    select(UserPrivileges.privilegeName)
-                    .where(UserPrivileges.NameId == item.userPrivileges)
-                )
-                if user_privilege is not None:
-                    item_dict = item.to_dict()
-                    item_dict["privilegeName"] = user_privilege
-                    modified_data.append(item_dict)
-            return {"code": 20000, "data": modified_data}
+                modified_data = []
+                for item in data:
+                    user_privilege = await session.scalar(
+                        select(UserPrivileges.privilegeName)
+                        .where(UserPrivileges.NameId == item.userPrivileges)
+                    )
+                    if user_privilege is not None:
+                        item_dict = item.to_dict()
+                        item_dict["privilegeName"] = user_privilege
+                        modified_data.append(item_dict)
+                return {"code": 20000, "data": modified_data}
         except jwt.ExpiredSignatureError:
             return {"code": 40002, "message": "Token已过期"}
         except jwt.InvalidTokenError:
