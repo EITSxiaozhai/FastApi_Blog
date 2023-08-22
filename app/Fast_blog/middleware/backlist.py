@@ -16,14 +16,19 @@ redis_host = os.getenv("REDIS_DB_HOSTNAME")
 redis_port = os.getenv("REDIS_DB_PORT")
 redis_db = os.getenv("REDIS_DB_NAME")
 
-SECRET_KEY = "d81beb2748aa1322fe038c26dbd263907f5808548f9e428f4d9ce780dd4358a6cc942a1ee8bd49652991bce4989e270c55adeb0c5138ff516de13a07a5bdd5be"
+mq_password = os.getenv("MQ_USERPASSWORD")
+mq_username = os.getenv("MQ_USERNAME")
+mq_host = os.getenv("MQ_HOSTNAME")
+mq_dbname = os.getenv("MQ_DBNAME")
+mq_port = os.getenv("MQ_DBPORT")
+
 ALGORITHM = "HS256"
 
-celery_app = Celery('tasks', broker='amqp://admin:005q8LzBwPaVA7Mb1AY9@106.14.159.61:5672//fastapi',
-                    backend='redis://:KsicwKTvK062ichw30Av@106.14.159.61:7000/3')
+celery_app = Celery('tasks', broker=f"'amqp://{mq_username}:{mq_password}@{mq_host}:{mq_port}//{mq_dbname}'",
+                    backend=f"'redis://:{db_password}@{redis_host}:{redis_port}/{redis_db}'")
 
 
-#
+
 @celery_app.task(name="middleware/backlist")
 def add(x, y):
     return x + y
