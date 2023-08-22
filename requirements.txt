@@ -18,3 +18,5 @@ passlib ~= 1.7.4
 python-dotenv ~= 1.0.0
 cryptography ~= 40.0.2
 pyjwt ~= 2.6.0
+httpx~=0.24.1
+redis~=4.6.0
