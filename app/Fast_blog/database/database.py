@@ -1,6 +1,6 @@
 import os
-from urllib import  parse
-import  sys
+from urllib import parse
+import sys
 from asyncio import current_task
 
 from dotenv import load_dotenv
@@ -23,9 +23,6 @@ db_password = parse.quote(db_password.encode('utf-8'))
 
 Sql_URL = f"mysql+asyncmy://{db_username}:{db_password}@{db_hostname}:{db_port}/{db_name}?charset=utf8mb4"
 
-# password = parse.quote("@XU15964352xu")
-# ##使用utf8进行中文输入
-# Sql_URL = "mysql+asyncmy://django:"+ password + "@mysql.exploit-db.xyz:63775/fastapi_blog" + "?charset=utf8mb4"
 ##创建异步连接
 engine = create_async_engine(Sql_URL)
 

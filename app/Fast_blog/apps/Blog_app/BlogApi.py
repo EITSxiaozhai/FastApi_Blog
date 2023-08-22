@@ -1,11 +1,11 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
 import os
-from fastapi import  Request
+from fastapi import Request
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi import APIRouter,UploadFile
+from fastapi import APIRouter, UploadFile
 from sqlalchemy import select, text
 from starlette.background import BackgroundTasks
 import datetime
@@ -13,8 +13,7 @@ from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.model.models import Blog
 import shutil
 
-
-SessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
 
 BlogApp = APIRouter()
@@ -26,7 +25,8 @@ BlogApp.mount("/static", StaticFiles(directory=static_folder_path), name="static
 
 
 @BlogApp.post('/blogadd')
-async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFile, background_tasks: BackgroundTasks,request: Request,):
+async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFile, background_tasks: BackgroundTasks,
+                  request: Request, ):
     async with db_session() as session:
         try:
             # 将文件保存到磁盘
@@ -58,9 +58,6 @@ async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFi
             print("我们遇到了下面的问题", {"data": e})
 
 
-
-
-
 ##序列化输出示例代码
 # @BlogApp.get("/BlogIndex")
 # ##博客首页API
@@ -81,8 +78,6 @@ async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFi
 #         return 0
 
 
-
-
 @BlogApp.get("/BlogIndex")
 ##博客首页API
 async def BlogIndex():
@@ -99,9 +94,6 @@ async def BlogIndex():
         return 0
 
 
-
-
-
 @BlogApp.post("/Blogid")
 ##博客首页API
 async def Blogid(blog_id: int):
@@ -116,8 +108,3 @@ async def Blogid(blog_id: int):
             print("我们遇到了下面的问题")
             print(e)
         return []
-
-
-
-
-
