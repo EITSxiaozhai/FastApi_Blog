@@ -18,6 +18,11 @@
             <el-table-column prop="province" label="禁用状态" width="120">
               <el-button type="success" icon="el-icon-check" circle />
             </el-table-column>
+            <el-table-column prop="province" label="其他操作" width="auto">
+              <el-button type="primary" icon="el-icon-edit">编辑用户</el-button>
+              <el-button type="primary" icon="el-icon-delete">删除用户</el-button>
+              <el-button type="primary" icon="el-icon-search">重置密码</el-button>
+            </el-table-column>
           </el-table>
         </ul>
       </div>

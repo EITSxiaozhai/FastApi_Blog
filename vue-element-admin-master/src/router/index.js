@@ -106,7 +106,7 @@ export const asyncRoutes = [
     name: 'Admin',
     meta: {
       title: '系统管理',
-      icon: 'documentation',
+      icon: 'user',
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
@@ -116,6 +116,29 @@ export const asyncRoutes = [
         name: 'User',
         meta: {
           title: '用户管理',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
+      }
+    ]
+  },
+  {
+    path: '/admin/blogpost',
+    component: Layout,
+    redirect: '/admin/blogpost',
+    alwaysShow: true, // will always show the root menu
+    name: 'Admin',
+    meta: {
+      title: '文章管理',
+      icon: 'documentation',
+      roles: ['admin', 'editor'] // you can set roles in root nav
+    },
+    children: [
+      {
+        path: 'blogpost',
+        component: () => import('@/views/admin/BlogPosts/index.vue'),
+        name: 'User',
+        meta: {
+          title: '文章管理',
           roles: ['admin'] // or you can only set roles in sub nav
         }
       }
