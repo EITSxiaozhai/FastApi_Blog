@@ -9,6 +9,7 @@ from fastapi import APIRouter, Request, Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import EmailStr
 from sqlalchemy import select
+from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import joinedload
 
 from app.Fast_blog.database.database import db_session
@@ -53,7 +54,6 @@ async def Token(Incoming:OAuth2PasswordRequestForm = Depends()):
                 "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
             }
             token = create_jwt_token(data=token_data)
-
             return {"access_token": token,"token_type": 'Bearer',"token":token}
 
 
@@ -65,7 +65,7 @@ async def UserLogin(x:UserCredentials):
         try:
             async with httpx.AsyncClient() as client:
                 response = await client.post("http://127.0.0.1:8000/api/token", data={"username": x.username, "password": x.password})
-                token_data = response.json()
+                token_data =  response.json()
                 if "token" in token_data:
                     return {
                         "code": 20000,
@@ -77,10 +77,6 @@ async def UserLogin(x:UserCredentials):
                     }
             return {"code": 40001, "message": "登录失败。"}
         # 如果用户未经过身份验证或凭据无效
-        except Exception as e:
-            print("我们遇到了下面的问题")
-            print(e)
-            return {"code": 50000, "message": "内部服务器错误"}
         except jwt.ExpiredSignatureError:
             return {"code": 40002, "message": "Token已过期"}
         except jwt.InvalidTokenError:
@@ -221,10 +217,11 @@ async def query(inputname:str,inpassword:str,inEmail:EmailStr,ingender:bool,Type
             return {"重复用户名":UserQurey}
 
 @AdminApi.post("/user/updateUser")
-async def UpdateUser(request: Request,token: str = Depends(oauth2_scheme)):
+async def UpdateUser(request: Request, token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
             data = await request.json()  # This will extract the JSON data from the request body
+            print(data)
             stmt = select(models.AdminUser).filter_by(
                 username=data["username"])  # Assuming "username" is the primary key
             result = await session.execute(stmt)
@@ -235,15 +232,33 @@ async def UpdateUser(request: Request,token: str = Depends(oauth2_scheme)):
                 user.UserEmail = data["UserEmail"]
                 user.UserUuid = data["UserUuid"]
                 user.gender = data["gender"]["code"]
-                # user.Typeofuser = data["Typeofuser"]["code"]
+
+                # Map privilege name to privilege value using Typeofuserchoices
+                privilege_name = data["userprivilegesData"]
+                privilege_value = None
+                for choice in models.UserPrivileges.Typeofuserchoices:
+                    if choice[1] == privilege_name:
+                        privilege_value = choice[0]
+                        break
+
+                if privilege_value is not None:
+                    # Query the privilege value by privilege_name
+                    privilege = await session.execute(select(models.UserPrivileges).where(models.UserPrivileges.privilegeName == privilege_name))
+                    privilege = privilege.scalar_one_or_none()
+                    if privilege:
+                        user.userPrivileges = privilege.NameId
+
                 await session.commit()
-                return {"code":20000}
+                return {"code": 20000}
             else:
                 return {"data": "User not found"}
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
-        return 0
+            return {"code": 50000}  # Return an appropriate error code
+
+
+
 
 @AdminApi.post("/user/getTypeofuserData")
 ##博客Admin权限管理
@@ -264,6 +279,19 @@ async def UserPrivilegeName(request: Request,token: str = Depends(oauth2_scheme)
             print("我们遇到了下面的问题")
             print(e)
         return {"code": 20001, "message": "User not found"}
+
+@AdminApi.post("/user/userprivileges")
+async def get_user_privileges():
+    async with db_session() as session:
+        try:
+            # 查询所有不同的权限值
+            privileges = await session.execute(
+                select(UserPrivileges.privilegeName).distinct()
+            )
+            privilege_values = [privilege.code for privilege in privileges.scalars()]
+            return {"code": 20000,"data":privilege_values}
+        except NoResultFound:
+            return []
 
 
 @AdminApi.get("/user/logout")

@@ -34,15 +34,16 @@
           <el-input v-model="editFormData.UserEmail" />
         </el-form-item>
         <el-form-item label="用户权限" prop="Typeofuser">
-          <el-select v-model="editFormData.Typeofuser" placeholder="请选择">
+          <el-select v-model="editFormData.userprivilegesData" placeholder="请选择">
             <el-option
-              v-for="item in typeofuserData"
-              :key="item.value"
-              :label="item.code"
-              :value="item.value"
+              v-for="item in userprivilegesData"
+              :key="item"
+              :label="item"
+              :value="item"
             />
           </el-select>
         </el-form-item>
+
         <!-- 其他需要修改的字段 -->
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -55,7 +56,7 @@
 </template>
 
 <script>
-import { adminlist, updateUser } from '@/api/admin/user.js'
+import { adminlist, updateUser, userprivileges } from '@/api/admin/user.js'
 
 export default {
   data() {
@@ -63,7 +64,8 @@ export default {
       adminData: [], // 初始化一个空数组，用于存储adminlist接口的数据
       typeofuserData: [],
       editDialogVisible: false, // 添加控制对话框显示与隐藏的变量
-      editFormData: {} // 添加一个对象用于存储修改信息的表单数据
+      editFormData: {}, // 添加一个对象用于存储修改信息的表单数据
+      userprivilegesData: []
 
     }
   },
@@ -71,8 +73,17 @@ export default {
     // 在组件创建时调用adminlist接口
     this.fetchAdminList()
     this.fetchTypeofuserData()
+    this.fetchuserprivileges()
   },
   methods: {
+    async fetchuserprivileges() {
+      try {
+        const response = await userprivileges()
+        this.userprivilegesData = response.data
+      } catch (error) {
+        console.error('API error:', error)
+      }
+    },
     async fetchAdminList() {
       try {
         const response = await adminlist() // 调用adminlist接口

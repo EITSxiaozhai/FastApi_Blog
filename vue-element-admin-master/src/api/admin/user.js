@@ -16,9 +16,9 @@ export function updateUser(data) {
   })
 }
 
-export function getTypeofuserData(data) {
+export function userprivileges(data) {
   return request({
-    url: '/user/getTypeofuserData',
+    url: '/user/userprivileges',
     method: 'post',
     data
   })
