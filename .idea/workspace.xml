@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="格式化代码">
-      <change afterPath="$PROJECT_DIR$/alembic/versions/1dbac0b0c955_userprivileges.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/21c7bce50e66_userprivileges.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/37a2e35daa23_userprivileges.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/e6543b83b896_userprivileges.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-    </list>
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="更新需求文件" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -334,6 +328,7 @@
       <workItem from="1692613746915" duration="7021000" />
       <workItem from="1692680134488" duration="5576000" />
       <workItem from="1692710233445" duration="2372000" />
+      <workItem from="1692713213124" duration="308000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -678,7 +673,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="109" />
+    <option name="localTasksCounter" value="110" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -726,7 +721,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改动态响应布局" />
     <MESSAGE value="添加Vue-admin" />
     <MESSAGE value="修改登录功能完成" />
     <MESSAGE value="添加登录Token" />
@@ -751,7 +745,8 @@
     <MESSAGE value="删除临时文件" />
     <MESSAGE value="创建其他菜单。添加修改用户权限功能" />
     <MESSAGE value="格式化代码" />
-    <option name="LAST_COMMIT_MESSAGE" value="格式化代码" />
+    <MESSAGE value="更新需求文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="更新需求文件" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$models.coverage" NAME="models Coverage Results" MODIFIED="1679217759819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/model" />
