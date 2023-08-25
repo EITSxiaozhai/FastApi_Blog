@@ -96,7 +96,7 @@ async def BlogIndex():
 
 @BlogApp.get("/blog/AdminBlogIndex")
 ##博客首页API
-async def BlogIndex(token: str = Depends(oauth2_scheme)):
+async def AdminBlogIndex(token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
             results = await session.execute(select(Blog).limit(10))
@@ -120,6 +120,21 @@ async def Blogid(blog_id: int):
             data = [item.to_dict() for item in data]
             print(data)
             return data
+        except Exception as e:
+            print("我们遇到了下面的问题")
+            print(e)
+        return []
+
+
+@BlogApp.post("/blog/Blogid")
+##博客详情页API
+async def AdminBlogid(blog_id: int,token: str = Depends(oauth2_scheme)):
+    async with db_session() as session:
+        try:
+            results = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
+            data = results.scalars().all()
+            data = [item.to_dict() for item in data]
+            return {"code":20000,"data":data}
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)

@@ -1,32 +1,67 @@
-<!-- PostEdit.vue -->
 <template>
   <div>
-    <h1>Edit Post: {{ post.title }}</h1>
-    <!-- 编辑表单或其他内容 -->
+    <template v-if="post.BlogId">
+      <p>文章ID: {{ post.BlogId }}</p>
+      <el-input v-if="editMode" v-model="post.author" />
+      <p v-else>作者: {{ post.author }}</p>
+      <el-input v-if="editMode" v-model="post.content" type="textarea" :rows="5" />
+      <p>创建时间: {{ post.created_at }}</p>
+      <markdown-editor v-model="post.content" />
+      <h1>博客介绍页面</h1>
+      <el-image :src="post.BlogIntroductionPicture" fit="contain" style="max-height: 300px" />
+    </template>
+    <template v-else>
+      Loading...
+    </template>
+    <template v-if="editMode">
+      <el-button type="success" @click="savePost">Save</el-button>
+      <el-button type="warning" @click="cancelEdit">Cancel</el-button>
+    </template>
+    <template v-else>
+      <el-button type="primary" @click="enterEditMode">Edit</el-button>
+    </template>
   </div>
 </template>
 
 <script>
-import { getBlogDetail } from '@/api/admin/BlogPosts/BlogPosts' // 假设有一个获取详情的 API
+import { BlogDetails } from '@/api/admin/BlogPosts/BlogPosts'
+import MarkdownEditor from '@/components/MarkdownEditor'
 
 export default {
+  components: {
+    // eslint-disable-next-line vue/no-unused-components
+    MarkdownEditor
+  },
   data() {
     return {
-      post: {}
+      post: {},
+      editMode: false
     }
   },
   created() {
-    // 根据路由参数中的id，加载对应的文章详情
-    this.loadPostDetail(this.$route.params.id)
+    this.loadPostDetail(this.$route.query.blog_id)
   },
   methods: {
-    async loadPostDetail(id) {
+    async loadPostDetail(blog_id) {
       try {
-        const response = await getBlogDetail(id) // 使用 API 获取详情数据
-        this.post = response.data
+        const response = await BlogDetails(blog_id)
+        this.post = response.data[0]
       } catch (error) {
         console.error('API error:', error)
       }
+    },
+    enterEditMode() {
+      this.editMode = true
+    },
+    cancelEdit() {
+      // Reset the post object to its original state
+      this.loadPostDetail(this.$route.query.blog_id)
+      this.editMode = false
+    },
+    async savePost() {
+      // Implement the API call to update the post on the server
+      // After successful update, reset the post object and exit edit mode
+      this.editMode = false
     }
   }
 }
