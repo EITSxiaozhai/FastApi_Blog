@@ -144,6 +144,16 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    path: '/Blogid',
+    component: () => import('@/views/admin/BlogPosts/PostEdit.vue'), // 或者你的编辑页面组件路径
+    name: 'PostEdit',
+    meta: {
+      title: '编辑文章'
+      // ...其他 meta 信息...
+    },
+    hidden: true
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

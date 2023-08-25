@@ -1,7 +1,7 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
 import os
-from fastapi import Request
+from fastapi import Request, Depends
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -9,6 +9,8 @@ from fastapi import APIRouter, UploadFile
 from sqlalchemy import select, text
 from starlette.background import BackgroundTasks
 import datetime
+
+from app.Fast_blog.apps.AdminApp.superuserAdmin import oauth2_scheme
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.model.models import Blog
 import shutil
@@ -77,8 +79,7 @@ async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFi
 #             print(e)
 #         return 0
 
-
-@BlogApp.get("/BlogIndex")
+@BlogApp.get("/blog/BlogIndex")
 ##博客首页API
 async def BlogIndex():
     async with db_session() as session:
@@ -93,9 +94,24 @@ async def BlogIndex():
             print(e)
         return 0
 
+@BlogApp.get("/blog/AdminBlogIndex")
+##博客首页API
+async def BlogIndex(token: str = Depends(oauth2_scheme)):
+    async with db_session() as session:
+        try:
+            results = await session.execute(select(Blog).limit(10))
+            data = results.scalars().all()
+            data = [item.to_dict() for item in data]
+            print(data)
+            return {"code": 20000,"data":data}
+        except Exception as e:
+            print("我们遇到了下面的问题")
+            print(e)
+        return 0
+
 
 @BlogApp.post("/Blogid")
-##博客首页API
+##博客详情页API
 async def Blogid(blog_id: int):
     async with db_session() as session:
         try:

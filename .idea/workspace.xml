@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="更新需求文件">
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/BlogPosts/BlogPosts.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/BlogPosts/BlogPosts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,11 +67,11 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
-  &quot;associatedIndex&quot;: -1
+  &quot;associatedIndex&quot;: 7
 }</component>
   <component name="ProjectId" id="2N0REpEsqk9Fpu5go0lHjyhLKeQ" />
   <component name="ProjectViewState">
@@ -99,11 +103,11 @@
       <recent name="D:\项目备份\fast-api\app\Fast_blog\static\uploadimages" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\项目备份\fast-api\vue-element-admin-master\src\views\admin\BlogPosts" />
       <recent name="D:\项目备份\fast-api\app\Fast_blog\apps\AdminApp" />
       <recent name="D:\项目备份\fast-api\vue-project\src\views" />
       <recent name="D:\项目备份\fast-api\vue-project\src\views\index" />
       <recent name="D:\项目备份\fast-api\vue-project\src\Api" />
-      <recent name="E:\fast-api\vue-project\src" />
     </key>
   </component>
   <component name="RunManager" selected="FastAPI.Unnamed">
@@ -331,6 +335,12 @@
       <workItem from="1692680134488" duration="5576000" />
       <workItem from="1692710233445" duration="2372000" />
       <workItem from="1692713213124" duration="3432000" />
+      <workItem from="1692716809407" duration="249000" />
+      <workItem from="1692865251663" duration="6000" />
+      <workItem from="1692865341930" duration="7000" />
+      <workItem from="1692865388871" duration="20000" />
+      <workItem from="1692865622072" duration="20000" />
+      <workItem from="1692956706789" duration="6213000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -675,7 +685,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="113" />
+    <option name="localTasksCounter" value="114" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
