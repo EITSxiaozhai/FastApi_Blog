@@ -25,7 +25,7 @@ const loading = ref(false);
 const loadedCards = ref(4); // 初始加载的卡片数量
 
 function getData() {
-  backApi.get('/BlogIndex')
+  backApi.get('/blog/BlogIndex')
       .then(response => {
         data.data = response.data;
         console.log(data.data);

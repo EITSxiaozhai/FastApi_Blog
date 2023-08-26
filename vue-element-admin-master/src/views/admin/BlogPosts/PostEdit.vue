@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { BlogDetails } from '@/api/admin/BlogPosts/BlogPosts'
+import { BlogDetails, BlogDetailsedit } from '@/api/admin/BlogPosts/BlogPosts'
 import MarkdownEditor from '@/components/MarkdownEditor'
 
 export default {
@@ -79,17 +79,35 @@ export default {
         console.error('API error:', error)
       }
     },
+    async savePost() {
+      // Prepare the data to be sent to the API
+      const postData = {
+        blog_id: this.post.BlogId,
+        title: this.post.title,
+        content: this.post.content
+        // ... include other fields you want to send
+      }
+
+      try {
+        // Send the data to the API using Axios or any other HTTP library
+        const response = await BlogDetailsedit(this.post.BlogId, postData)
+        // Handle the response, update state or perform any other actions
+        console.log('API response:', response.data)
+
+        // Reset the post object to its original state and exit edit mode
+        this.loadPostDetail(this.$route.query.blog_id)
+        this.editMode = false
+      } catch (error) {
+        console.error('API error:', error)
+        // Handle error cases if needed
+      }
+    },
     enterEditMode() {
       this.editMode = true
     },
     cancelEdit() {
       // Reset the post object to its original state
       this.loadPostDetail(this.$route.query.blog_id)
-      this.editMode = false
-    },
-    async savePost() {
-      // Implement the API call to update the post on the server
-      // After successful update, reset the post object and exit edit mode
       this.editMode = false
     }
   }

@@ -1,29 +1,42 @@
 <script setup>
 import {RouterLink, RouterView} from 'vue-router'
 import {useRoute} from "vue-router";
-const  route = useRoute()
+import MarkdownIt from 'markdown-it';
+const route = useRoute()
 import axios from "axios";
 import {useRouter} from "vue-router";
 import {reactive} from "vue";
 import backApi from '../Api/backApi.js';
+import {Discount} from "@element-plus/icons-vue";
 
-const  router = useRouter()
+const router = useRouter()
 const data = reactive({
-  data:[]
+  data: []
 })
-       function getData() {
-const blogId = router.currentRoute.value.params.blogId;
-  backApi.post(`/Blogid?blog_id=${blogId}`)
-          .then(response => {
-            data.data= response.data;
-            console.log(data.data)
-          })
-          .catch(error => {
-            console.error(error);
-          });
-    }
-    getData()
 
+
+
+// 创建Markdown渲染器实例
+const md = new MarkdownIt();
+
+function convertMarkdown(markdownText) {
+  return md.render(markdownText);
+}
+
+
+function getData() {
+  const blogId = router.currentRoute.value.params.blogId;
+  backApi.post(`/user/Blogid?blog_id=${blogId}`)
+      .then(response => {
+        data.data = response.data;
+        console.log(data.data)
+      })
+      .catch(error => {
+        console.error(error);
+      });
+}
+
+getData()
 
 
 </script>
@@ -66,27 +79,29 @@ const blogId = router.currentRoute.value.params.blogId;
         </el-aside>
         <el-container>
           <el-main>
-  <el-card class="box-card">
-    <template #header>
-      <div class="card-header">
-        <span>Card name</span>
-        <el-button class="button" text>Operation button</el-button>
-      </div>
-    </template>
-    <div v-for="o in 4" :key="o" class="text item">{{ 'List item ' + o }}</div>
-  </el-card>
+            <div v-for="(item, index) in data.data" :key="index" class="text item">
+              <el-card class="box-card">
+                <template #header>
+                  <div class="card-header">
+                    <span>{{ item.title }}</span>
+                    <el-button class="button" text>{{ item.author }}</el-button>
+<div v-html="convertMarkdown(item.content)"></div>
+                  </div>
+                </template>
+              </el-card>
+            </div>
           </el-main>
         </el-container>
       </el-container>
     </el-container>
     <el-footer
-          style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%); margin-top: 20px">
-        <el-row class="search-container">
-          <el-col :span="6">
-            <el-statistic title="共计访问人数" :value="268500"/>
-          </el-col>
-        </el-row>
-      </el-footer>
+        style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%); margin-top: 20px">
+      <el-row class="search-container">
+        <el-col :span="6">
+          <el-statistic title="共计访问人数" :value="268500"/>
+        </el-col>
+      </el-row>
+    </el-footer>
   </div>
 </template>
 
@@ -106,7 +121,7 @@ const blogId = router.currentRoute.value.params.blogId;
 
 body {
   background-image: url('https://w.wallhaven.cc/full/zy/wallhaven-zyxvqy.jpg');
-    background-size: cover;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 //background-image: linear-gradient(to right, #74ebd5 0%, #9face6 100%); font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;

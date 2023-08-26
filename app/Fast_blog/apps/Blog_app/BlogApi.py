@@ -1,7 +1,7 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
 import os
-from fastapi import Request, Depends
+from fastapi import Request, Depends, Body
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -110,7 +110,7 @@ async def AdminBlogIndex(token: str = Depends(oauth2_scheme)):
         return 0
 
 
-@BlogApp.post("/Blogid")
+@BlogApp.post("/user/Blogid")
 ##博客详情页API
 async def Blogid(blog_id: int):
     async with db_session() as session:
@@ -139,3 +139,27 @@ async def AdminBlogid(blog_id: int,token: str = Depends(oauth2_scheme)):
             print("我们遇到了下面的问题")
             print(e)
         return []
+
+@BlogApp.post("/blog/Blogedit")
+##博客详情页API
+async def AdminBlogidedit(blog_id: int, request_data: dict = Body(...), token: str = Depends(oauth2_scheme)):
+    async with db_session() as session:
+        try:
+            # 根据 BlogId 查询相应的博客
+            blog = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
+            blog_entry = blog.scalar_one()
+            # 更新博客内容
+            for key, value in request_data.items():
+                if key == 'content':
+                    # 编码字符串为二进制
+                    setattr(blog_entry, key, bytes(value, encoding='utf-8'))
+                else:
+                    setattr(blog_entry, key, value)
+            # 提交事务
+            await session.commit()
+            return {"code": 20000, "message": "更新成功"}
+        except Exception as e:
+            print("遇到了问题")
+            print(e)
+            await session.rollback()  # 发生错误时回滚事务
+            return {"code": 50000, "message": "更新失败"}
