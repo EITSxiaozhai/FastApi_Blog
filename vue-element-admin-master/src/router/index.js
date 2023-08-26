@@ -17,14 +17,14 @@ import Layout from '@/layout'
  * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
  * name:'router-name'             the name is used by <keep-alive> (must set!!!)
  * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
-    noCache: true                if set true, the page will no be cached(default is false)
-    affix: true                  if set true, the tag will affix in the tags-view
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-  }
+ roles: ['admin','editor']    control the page roles (you can set multiple roles)
+ title: 'title'               the name show in sidebar and breadcrumb (recommend set)
+ icon: 'svg-name'/'el-icon-x' the icon show in the sidebar
+ noCache: true                if set true, the page will no be cached(default is false)
+ affix: true                  if set true, the tag will affix in the tags-view
+ breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
+ activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
+ }
  */
 
 /**
@@ -141,19 +141,21 @@ export const asyncRoutes = [
           title: '文章管理',
           roles: ['admin'] // or you can only set roles in sub nav
         }
+      },
+      {
+        path: '/Blogid',
+        component: () => import('@/views/admin/BlogPosts/PostEdit.vue'), // 或者你的编辑页面组件路径
+        name: 'PostEdit',
+        meta: {
+          title: '编辑文章',
+          roles: ['admin']
+          // ...其他 meta 信息...
+        },
+        hidden: true
       }
     ]
   },
-  {
-    path: '/Blogid',
-    component: () => import('@/views/admin/BlogPosts/PostEdit.vue'), // 或者你的编辑页面组件路径
-    name: 'PostEdit',
-    meta: {
-      title: '编辑文章'
-      // ...其他 meta 信息...
-    },
-    hidden: true
-  },
+
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

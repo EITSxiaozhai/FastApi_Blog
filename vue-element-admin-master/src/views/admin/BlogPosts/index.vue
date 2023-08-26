@@ -16,6 +16,9 @@
           </el-table>
         </div>
       </el-card>
+      <div class="child-page-container">
+        <router-view />
+      </div>
     </el-main>
   </el-container>
 

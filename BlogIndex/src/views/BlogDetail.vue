@@ -85,7 +85,7 @@ getData()
                   <div class="card-header">
                     <span>{{ item.title }}</span>
                     <el-button class="button" text>{{ item.author }}</el-button>
-<div v-html="convertMarkdown(item.content)"></div>
+                    <div v-html="convertMarkdown(item.content)"></div>
                   </div>
                 </template>
               </el-card>
