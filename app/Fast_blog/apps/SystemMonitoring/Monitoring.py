@@ -17,7 +17,8 @@ async def websocket_endpoint(websocket: WebSocket):
     while True:
         memory_info = psutil.virtual_memory()
         memory_percent = (memory_info.used / memory_info.total) * 100
+        cpu_info = psutil.cpu_percent()
         current_time = datetime.datetime.now().isoformat()
         print(current_time)
-        await websocket.send_json(f"{current_time},{memory_percent:.0f}")  # 发送保留两位小数的百分比数字
+        await websocket.send_json({"cpu_info": cpu_info, "memory_percent": memory_percent})  # 发送保留两位小数的百分比数字
         await asyncio.sleep(1)
