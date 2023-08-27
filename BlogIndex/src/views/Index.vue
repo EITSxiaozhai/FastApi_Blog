@@ -55,15 +55,19 @@ const loadMoreCards = () => {
 };
 
 
+
+
 </script>
 
 <template>
     <div id="app">
+      <div class="particles-container" style="z-index: -1;">
         <vue-particles
             id="tsparticles"
             :particlesInit="particlesInit"
             :particlesLoaded="particlesLoaded"
             url="http://foo.bar/particles.json"
+
         />
         <vue-particles
             id="tsparticles"
@@ -72,7 +76,7 @@ const loadMoreCards = () => {
             :options="{
                     background: {
                         color: {
-                            value: '#73767a'
+                            value: '#79bbff'
                         }
                     },
                     fpsLimit: 120,
@@ -144,6 +148,7 @@ const loadMoreCards = () => {
                     detectRetina: true
                 }"
         />
+      </div>
     </div>
 
 
@@ -153,7 +158,8 @@ const loadMoreCards = () => {
             class="el-menu-demo"
             mode="horizontal">
           <h1 style="padding-left: 20px;font-size: 20px">
-            Exp1oit Blog</h1>
+            <router-link to="/blog/" style="text-decoration: none;">Exp1oit Blog</router-link>
+          </h1>
           <div>
             <el-input
                 v-model="input1"
@@ -212,7 +218,7 @@ const loadMoreCards = () => {
                   </el-container>
 
                   <el-divider/>
-                  <h1>本站技术栈</h1>
+                  <h1>本站技术以及框架</h1>
                   <el-timeline>
                     <el-timeline-item>
                       Fastapi
@@ -221,7 +227,10 @@ const loadMoreCards = () => {
                       Celery
                     </el-timeline-item>
                     <el-timeline-item>
-                      Vue3
+                      Vue3+Vue2
+                    </el-timeline-item>
+                    <el-timeline-item>
+                    vue-element-admin
                     </el-timeline-item>
                   </el-timeline>
                   <el-divider/>
@@ -312,13 +321,44 @@ const loadMoreCards = () => {
 
 
       <!--    文章介绍卡片-->
-      <el-footer
-          style="box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%); margin-top: 20px">
-        <el-row class="search-container">
-          <el-col :span="6">
-            <el-statistic title="共计访问人数" :value="268500"/>
-          </el-col>
-        </el-row>
+    <el-footer>
+      <div id="footer">
+    <el-row class="footer-content">
+      <el-col :span="6">
+        <h3>关于本站</h3>
+        <p>欢迎来到我的博客，这里分享了各种有趣的技术和知识。</p>
+      </el-col>
+      <el-col :span="6">
+        <h3>联系我们</h3>
+        <p>Email: example@example.com</p>
+        <p>社交媒体: <a href="#">Twitter</a>, <a href="#">Facebook</a></p>
+      </el-col>
+      <el-col :span="6">
+        <h3>文章分类</h3>
+        <ul>
+          <li><a href="#">技术教程</a></li>
+          <li><a href="#">编程技巧</a></li>
+          <li><a href="#">设计与创意</a></li>
+        </ul>
+      </el-col>
+      <el-col :span="6">
+        <h3>友情链接</h3>
+        <ul>
+          <li><a href="#">友情链接1</a></li>
+          <li><a href="#">友情链接2</a></li>
+          <li><a href="#">友情链接3</a></li>
+        </ul>
+      </el-col>
+    </el-row>
+    <el-row class="footer-bottom">
+      <el-col :span="12">
+        <p>&copy; 2023 My Blog. All Rights Reserved.</p>
+      </el-col>
+      <el-col :span="12">
+        <p>建站时间: 2022年1月</p>
+      </el-col>
+    </el-row>
+  </div>
       </el-footer>
     </el-container>
 
@@ -370,6 +410,7 @@ const loadMoreCards = () => {
   justify-content: center;
   align-items: center;
   margin-left: 40px;
+  background-color:#f08888;
 }
 
 .el-card .el-card__body a {
@@ -387,4 +428,54 @@ const loadMoreCards = () => {
   margin-left: 30px;
 }
 
+
+
+#footer {
+    position: absolute;
+  left: 0;
+  right: 0;
+  box-shadow:0 0 26px 0 #767697;background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%); margin-top: 20px;
+  width: 100%; /* 将底部栏宽度设置为100% */
+  z-index: 1; /* 设置一个适当的 z-index 值 */
+
+}
+
+.footer-content {
+  max-width: 100%; /* 将内容区域的最大宽度设置为100% */
+  margin: 0 auto;
+  padding: 0 20px; /* 添加左右内边距，使内容区域不至于过于靠边 */
+}
+
+.footer-content h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.footer-content p, .footer-content ul {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.footer-content a {
+  color: #333;
+  text-decoration: none;
+}
+
+.footer-bottom {
+  max-width: 100%; /* 将内容区域的最大宽度设置为100% */
+  text-align: center;
+  font-size: 12px;
+  color:#95d475;
+  border-top: 3px solid #79bbff;
+  padding-top: 20px;
+}
+
+
+.particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 </style>

@@ -30,7 +30,7 @@
               <div class="grid-content bg-purple-light" />
             </el-col>
           </el-row>
-          <markdown-editor v-model="post.content" />
+          <markdown-editor v-model="post.content" style="height: 1000px" />
           <el-container style="margin-top: 20px;margin-bottom: 20px"><el-avatar shape="square" :size="350" :fit="fit" :src="post.BlogIntroductionPicture" /></el-container>
         </template>
         <template v-else>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onBeforeMount, onMounted, onBeforeUnmount, onUnmounted} from 'vue';
+import {ref, onBeforeMount, onMounted, onBeforeUnmount, onUnmounted} from 'vue';
 import {RouterLink, RouterView} from 'vue-router'
 import {useRoute} from "vue-router";
 import MarkdownIt from 'markdown-it';
@@ -29,7 +29,6 @@ const data = reactive({
 })
 
 
-
 // 创建Markdown渲染器实例
 const md = new MarkdownIt();
 
@@ -49,8 +48,8 @@ const convertMarkdown = (markdownText) => {
       if (lang && code) {
         const highlightedCode = hljs.highlight(lang, code).value;
         renderedContent = renderedContent.replace(
-          codeBlock,
-          `<pre><code class="lang-${lang}">${highlightedCode}</code></pre>`
+            codeBlock,
+            `<pre><code class="lang-${lang}">${highlightedCode}</code></pre>`
         );
       }
     });
@@ -68,7 +67,7 @@ const convertMarkdown = (markdownText) => {
 
       if (level > 0 && title) {
         const anchor = `#anchor-${toc.length}`;
-        toc.push({ level, title, anchor });
+        toc.push({level, title, anchor});
         renderedContent = renderedContent.replace(header, `<h${level} id="anchor-${toc.length}">${title}</h${level}>`);
       }
     });
@@ -115,7 +114,7 @@ const generateTableOfContents = (markdownContent) => {
 
       if (level > 0 && title) {
         const anchor = `#anchor-${index}`;
-        toc.push({ level, title, anchor });
+        toc.push({level, title, anchor});
         markdownContent = markdownContent.replace(header, `<h${level} id="anchor-${index}">${title}</h${level}>`);
       }
     });
@@ -126,7 +125,6 @@ const generateTableOfContents = (markdownContent) => {
 
 
 getData()
-
 
 
 const readingProgress = ref(0);
@@ -161,30 +159,30 @@ onBeforeUnmount(() => {
 
   <div class="common-layout">
     <el-container>
-              <el-header id="top-mains">
-          <el-menu
-              class="el-menu-demo"
-              mode="horizontal">
-            <h1 style="padding-left: 20px;font-size: 20px">
-              Exp1oit Blog</h1>
-            <div>
-              <el-input
-                  v-model="input1"
-                  class="w-50 m-2"
-                  size="large"
-                  placeholder="Please Input"
-                  :prefix-icon="Search"
-              />
-            </div>
-            <el-sub-menu index="2-4" id="login">
-              <template #title>登录</template>
-              <el-menu-item index="2-4-1">
-                <a href="" style="text-decoration:none">注册</a>
-              </el-menu-item>
-            </el-sub-menu>
-          </el-menu>
-                <el-progress :percentage="readingProgress"  :show-text="false"/>
-        </el-header>
+      <el-header id="top-mains">
+        <el-menu
+            class="el-menu-demo"
+            mode="horizontal">
+          <h1 style="padding-left: 20px;font-size: 20px">
+            <router-link to="/blog/" style="text-decoration: none;">Exp1oit Blog</router-link></h1>
+          <div>
+            <el-input
+                v-model="input1"
+                class="w-50 m-2"
+                size="large"
+                placeholder="Please Input"
+                :prefix-icon="Search"
+            />
+          </div>
+          <el-sub-menu index="2-4" id="login">
+            <template #title>登录</template>
+            <el-menu-item index="2-4-1">
+              <a href="" style="text-decoration:none">注册</a>
+            </el-menu-item>
+          </el-sub-menu>
+        </el-menu>
+        <el-progress :percentage="readingProgress" :show-text="false"/>
+      </el-header>
 
       <el-container>
         <el-aside style="padding-top: 60px">
@@ -199,7 +197,7 @@ onBeforeUnmount(() => {
               </ul>
             </div>
           </el-card>
-          </el-aside>
+        </el-aside>
 
         <el-main style="margin-top: 40px">
           <div v-for="(item, index) in data.data" :key="index" class="text item">
@@ -208,7 +206,7 @@ onBeforeUnmount(() => {
                 <div class="card-header">
                   <h1><span>{{ item.title }}</span></h1>
                   <h1>作者:{{ item.author }}</h1>
-                  <el-divider />
+                  <el-divider/>
                   <div v-html="convertMarkdown(item.content)"></div>
                 </div>
               </template>
@@ -226,24 +224,28 @@ onBeforeUnmount(() => {
   opacity: 0.8;
   position: fixed;
   width: 100%;
-  height:60px;
+  height: 60px;
   right: 0;
   top: 0;
   z-index: 2;
 }
+
 .table-of-contents {
   padding: 20px;
   background-color: #f2f2f2;
   border-radius: 4px;
 }
+
 .table-of-contents h2 {
   font-size: 18px;
   margin-bottom: 10px;
 }
+
 .table-of-contents ul {
   list-style: none;
   padding: 0;
 }
+
 .table-of-contents li {
   margin-bottom: 5px;
 }
