@@ -4,12 +4,21 @@
 
 <script>
 import echarts from 'echarts'
+
 require('echarts/theme/macarons') // echarts theme
 import resize from './mixins/resize'
 
 export default {
   mixins: [resize],
   props: {
+    expectedLegend: {
+      type: String,
+      default: 'expected' // 默认值可以根据您的需求进行修改
+    },
+    actualLegend: {
+      type: String,
+      default: 'actual' // 默认值可以根据您的需求进行修改
+    },
     className: {
       type: String,
       default: 'chart'
@@ -64,7 +73,7 @@ export default {
     setOptions({ expectedData, actualData } = {}) {
       this.chart.setOption({
         xAxis: {
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          data: this.chartData.timestampData,
           boundaryGap: false,
           axisTick: {
             show: false
@@ -90,10 +99,10 @@ export default {
           }
         },
         legend: {
-          data: ['expected', 'actual']
+          data: [this.expectedLegend, this.actualLegend]
         },
         series: [{
-          name: 'expected', itemStyle: {
+          name: this.expectedLegend, itemStyle: {
             normal: {
               color: '#FF005A',
               lineStyle: {
@@ -107,9 +116,8 @@ export default {
           data: expectedData,
           animationDuration: 2800,
           animationEasing: 'cubicInOut'
-        },
-        {
-          name: 'actual',
+        }, {
+          name: this.actualLegend,
           smooth: true,
           type: 'line',
           itemStyle: {

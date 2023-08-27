@@ -1,29 +1,9 @@
 <template>
   <div class="dashboard-editor-container">
-    <github-corner class="github-corner" />
-
-    <panel-group @handleSetLineChartData="handleSetLineChartData" />
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData" />
-    </el-row>
-    <h1>{{ lineChartData }}</h1>
-    <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <raddar-chart />
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <pie-chart />
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <bar-chart />
-        </div>
-      </el-col>
+      <h1>基于websocket的实时图形监控</h1>
+      <line-chart :chart-data="lineChartData" :expected-legend="'CPU 利用率'" :actual-legend="'内存利用率'" />
     </el-row>
   </div>
 </template>
@@ -35,7 +15,8 @@ import LineChart from './components/LineChart'
 const lineChartData = {
   newVisitis: {
     expectedData: [],
-    actualData: [] // 添加 actualData 数组
+    actualData: [],
+    timestampData: []
   }
   // 其他数据...
 }
@@ -65,12 +46,14 @@ export default {
         const data = JSON.parse(event.data)
         const parsedTimestamp = data.cpu_info
         const parsedNewData = parseInt(data.memory_percent)
+        const timestampString = data.current_time
 
+        this.lineChartData.timestampData.push(timestampString)
         this.lineChartData.actualData.push(parsedTimestamp)
         this.lineChartData.expectedData.push(parsedNewData)
-
         // 可以考虑保持数组长度，例如只保留最近的 N 个数据
         if (this.lineChartData.expectedData.length > 10) {
+          this.lineChartData.timestampData.shift()
           this.lineChartData.actualData.shift()
           this.lineChartData.expectedData.shift()
         }

@@ -6,6 +6,9 @@ import {loadFull} from 'tsparticles';
 import backApi from '../Api/backApi.js';
 import 'element-plus/theme-chalk/display.css'
 
+import { particles } from '@/components/particles/particles.js'
+import { loadSlim } from "tsparticles-slim";
+
 const particlesInit = async (engine) => {
   await loadFull(engine);
 };
@@ -55,6 +58,94 @@ const loadMoreCards = () => {
 </script>
 
 <template>
+    <div id="app">
+        <vue-particles
+            id="tsparticles"
+            :particlesInit="particlesInit"
+            :particlesLoaded="particlesLoaded"
+            url="http://foo.bar/particles.json"
+        />
+        <vue-particles
+            id="tsparticles"
+            :particlesInit="particlesInit"
+            :particlesLoaded="particlesLoaded"
+            :options="{
+                    background: {
+                        color: {
+                            value: '#73767a'
+                        }
+                    },
+                    fpsLimit: 120,
+                    interactivity: {
+                        events: {
+                            onClick: {
+                                enable: true,
+                                mode: 'push'
+                            },
+                            onHover: {
+                                enable: true,
+                                mode: 'repulse'
+                            },
+                            resize: true
+                        },
+                        modes: {
+                            bubble: {
+                                distance: 400,
+                                duration: 2,
+                                opacity: 0.8,
+                                size: 40
+                            },
+                            push: {
+                                quantity: 4
+                            },
+                            repulse: {
+                                distance: 200,
+                                duration: 0.4
+                            }
+                        }
+                    },
+                    particles: {
+                        color: {
+                            value: '#ffffff'
+                        },
+                        links: {
+                            color: '#ffffff',
+                            distance: 150,
+                            enable: true,
+                            opacity: 0.5,
+                            width: 1
+                        },
+                        move: {
+                            direction: 'none',
+                            enable: true,
+                            outMode: 'bounce',
+                            random: false,
+                            speed: 1,
+                            straight: false
+                        },
+                        number: {
+                            density: {
+                                enable: true,
+                                area: 800
+                            },
+                            value: 80
+                        },
+                        opacity: {
+                            value: 0.5
+                        },
+                        shape: {
+                            type: 'circle'
+                        },
+                        size: {
+                            random: true,
+                            value: 5
+                        }
+                    },
+                    detectRetina: true
+                }"
+        />
+    </div>
+
 
   <el-container id="left-my" style="margin-top: 3%;">
       <el-header id="top-mains">
@@ -230,6 +321,7 @@ const loadMoreCards = () => {
         </el-row>
       </el-footer>
     </el-container>
+
 </template>
 
 <style>
@@ -267,16 +359,6 @@ const loadMoreCards = () => {
 #left-my-card {
   margin-left: 50px;
 }
-
-
-body {
-  background-image: url('https://w.wallhaven.cc/full/zy/wallhaven-zyxvqy.jpg');
-    background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-//background-image: linear-gradient(to right, #74ebd5 0%, #9face6 100%); font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
-}
-
 
 .el-header {
   padding-left: 0;
