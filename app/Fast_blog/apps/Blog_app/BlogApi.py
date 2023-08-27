@@ -84,11 +84,22 @@ async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFi
 async def BlogIndex():
     async with db_session() as session:
         try:
-            results = await session.execute(select(Blog).limit(10))
-            data = results.scalars().all()
-            data = [item.to_dict() for item in data]
-            print(data)
-            return (data)
+            columns = [Blog.BlogId, Blog.title, Blog.created_at, Blog.author,Blog.BlogIntroductionPicture]  # Use a list instead of a tuple
+            stmt = select(*columns).limit(10)  # Use * to unpack the list of columns
+            results = await session.execute(stmt)
+            data = results.fetchall()
+            data_dicts = []
+            for row in data:
+                data_dict = {
+                    "BlogId": row[0],
+                    "title": row[1],
+                    "created_at": row[2],
+                    "author": row[3],
+                    "BlogIntroductionPicture": row[4],
+                }
+                data_dicts.append(data_dict)
+            print(data_dicts)
+            return data_dicts
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)

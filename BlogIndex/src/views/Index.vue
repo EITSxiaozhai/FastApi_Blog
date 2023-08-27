@@ -66,7 +66,7 @@ const loadMoreCards = () => {
             id="tsparticles"
             :particlesInit="particlesInit"
             :particlesLoaded="particlesLoaded"
-            url="http://foo.bar/particles.json"
+
 
         />
         <vue-particles
