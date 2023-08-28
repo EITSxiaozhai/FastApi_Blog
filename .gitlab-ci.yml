@@ -84,7 +84,7 @@ Vue2_admin_deploy1:
     script:
       - x=$(docker ps -f "publish=49400" | awk '{print $1}'| sed -n '2p')
       - docker stop $x && docker rm $x
-      - docker run -d -p 49300:9527  --network bridge   --name vue2admin$CI_PIPELINE_ID   vue2:$CI_PIPELINE_ID
+      - docker run -d -p 49400:9527  --network bridge   --name vue2admin$CI_PIPELINE_ID   vue2:$CI_PIPELINE_ID
       - docker ps
 
 #container_deploy2:
