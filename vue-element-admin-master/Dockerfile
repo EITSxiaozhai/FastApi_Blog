@@ -13,6 +13,6 @@ RUN npm install
 
 COPY . /usr/src/app/
 EXPOSE 9527
-RUN npm run build:prod
+RUN npm run build
 # replace this with your application's default port
 CMD ["npm", "run" ,"dev","-s","dist","--","--host","0.0.0.0"]
