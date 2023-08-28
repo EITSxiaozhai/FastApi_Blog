@@ -25,7 +25,7 @@ Vue2_admin_image_build:
     - echo "Vue build, Dockerfile:"
     - cd vue-element-admin-master
     - cat Dockerfile
-    - docker build -t vue2_admin-test:$CI_PIPELINE_ID .
+    - docker build -t vue2:$CI_PIPELINE_ID .
 
 
 # code_test:
@@ -47,9 +47,9 @@ Fastapi_deploy_test:
 Vue2_admin_deploy_test:
   stage: test
   script:
-    - docker run -d -p 5174 --name vue2admin$CI_PIPELINE_ID vue2_admin-test:$CI_PIPELINE_ID
-    - docker stop vue2_admin-test-$CI_PIPELINE_ID
-    - docker rm vue2_admin-test-$CI_PIPELINE_ID
+    - docker run -d -p 5174 --name vue2admin$CI_PIPELINE_ID vue2:$CI_PIPELINE_ID
+    - docker stop vue2admin$CI_PIPELINE_ID
+    - docker rm vue2admin$CI_PIPELINE_ID
 
 Vue_deploy_test:
   stage: test
@@ -84,7 +84,7 @@ Vue2_admin_deploy1:
     script:
       - x=$(docker ps -f "publish=49400" | awk '{print $1}'| sed -n '2p')
       - docker stop $x && docker rm $x
-      - docker run -d -p 49300:9527  --network bridge   --name vue2_admin-test$CI_PIPELINE_ID   vue:$CI_PIPELINE_ID
+      - docker run -d -p 49300:9527  --network bridge   --name vue2admin$CI_PIPELINE_ID   vue2:$CI_PIPELINE_ID
       - docker ps
 
 #container_deploy2:
