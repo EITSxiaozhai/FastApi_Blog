@@ -5,9 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="优化gitlab CI/CD">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-element-admin-master/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -345,7 +343,7 @@
       <workItem from="1693051339696" duration="9948000" />
       <workItem from="1693107126727" duration="21249000" />
       <workItem from="1693194826457" duration="13807000" />
-      <workItem from="1693209859635" duration="3105000" />
+      <workItem from="1693209859635" duration="3415000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -690,7 +688,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="131" />
+    <option name="localTasksCounter" value="132" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
