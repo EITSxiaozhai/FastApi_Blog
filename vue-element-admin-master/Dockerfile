@@ -1,5 +1,5 @@
 # This file is a template, and might need editing before it works on your project.
-FROM node:17.1.0
+FROM node:14.17.0
 
 WORKDIR /usr/src/app
 
