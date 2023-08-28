@@ -153,10 +153,12 @@ onBeforeUnmount(() => {
   // 移除滚动事件监听
   window.removeEventListener('scroll', updateReadingProgress);
 });
+
+
+
 </script>
 
 <template>
-
   <div class="common-layout">
     <el-container>
       <el-header id="top-mains">

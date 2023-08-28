@@ -80,12 +80,12 @@ async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFi
 #         return 0
 
 @BlogApp.get("/blog/BlogIndex")
-##博客首页API
-async def BlogIndex():
+async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
     async with db_session() as session:
         try:
-            columns = [Blog.BlogId, Blog.title, Blog.created_at, Blog.author,Blog.BlogIntroductionPicture]  # Use a list instead of a tuple
-            stmt = select(*columns).limit(10)  # Use * to unpack the list of columns
+            offset = (page - 1) * pageSize
+            columns = [Blog.BlogId, Blog.title, Blog.created_at, Blog.author, Blog.BlogIntroductionPicture]
+            stmt = select(*columns).offset(offset).limit(pageSize)
             results = await session.execute(stmt)
             data = results.fetchall()
             data_dicts = []
@@ -103,14 +103,14 @@ async def BlogIndex():
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
-        return 0
+        return []
 
 @BlogApp.get("/blog/AdminBlogIndex")
 ##博客首页API
 async def AdminBlogIndex(token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
-            results = await session.execute(select(Blog).limit(10))
+            results = await session.execute(select(Blog))
             data = results.scalars().all()
             data = [item.to_dict() for item in data]
             print(data)
