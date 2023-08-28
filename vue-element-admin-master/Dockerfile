@@ -15,4 +15,4 @@ COPY . /usr/src/app/
 EXPOSE 9527
 RUN npm run build
 # replace this with your application's default port
-CMD ["npm", "run" ,"dev"]
+CMD ["npm", "run" ,"preview"]
