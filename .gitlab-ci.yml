@@ -19,6 +19,15 @@ Vue3_image_build:
     - cat Dockerfile
     - docker build -t vue:$CI_PIPELINE_ID .
 
+Vue2_admin_image_build:
+  stage: build
+  script:
+    - echo "Vue build, Dockerfile:"
+    - cd vue-element-admin-master
+    - cat Dockerfile
+    - docker build -t vue:$CI_PIPELINE_ID .
+
+
 # code_test:
 #   stage: test
 #   script:
@@ -35,6 +44,12 @@ Fastapi_deploy_test:
     - docker stop myfastapi-test-$CI_PIPELINE_ID
     - docker rm myfastapi-test-$CI_PIPELINE_ID
 
+Vue2_admin_deploy_test:
+  stage: build
+  script:
+    - docker run -d -p 5174 --name Vue2_admin-$CI_PIPELINE_ID vue:$CI_PIPELINE_ID
+    - docker stop Vue2_admin-test-$CI_PIPELINE_ID
+    - docker rm Vue2_admin-test-$CI_PIPELINE_ID
 
 Vue_deploy_test:
   stage: test
@@ -42,6 +57,9 @@ Vue_deploy_test:
     - docker run -d -p 5173 --name myvue-test-$CI_PIPELINE_ID vue:$CI_PIPELINE_ID
     - docker stop myvue-test-$CI_PIPELINE_ID
     - docker rm myvue-test-$CI_PIPELINE_ID
+
+
+
 
 Fastapi_container_deploy1:
     stage: deploy
@@ -59,6 +77,14 @@ Vue_container_deploy1:
       - x=$(docker ps -f "publish=49300" | awk '{print $1}'| sed -n '2p')
       - docker stop $x && docker rm $x
       - docker run -d -p 49300:5173  --network bridge   --name myvue-w1-$CI_PIPELINE_ID   vue:$CI_PIPELINE_ID
+      - docker ps
+
+Vue2_admin_deploy1:
+    stage: deploy
+    script:
+      - x=$(docker ps -f "publish=49400" | awk '{print $1}'| sed -n '2p')
+      - docker stop $x && docker rm $x
+      - docker run -d -p 49300:9527  --network bridge   --name Vue2_admin-$CI_PIPELINE_ID   vue:$CI_PIPELINE_ID
       - docker ps
 
 #container_deploy2:
