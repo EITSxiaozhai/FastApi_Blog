@@ -30,11 +30,10 @@ def create_jwt_token(data: dict) -> str:
     return token
 
 
-@AdminApi.post("/token")
-async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
+async def verify_password(username: str, password: str) -> bool:
     async with db_session() as session:
-        getusername = Incoming.username
-        getpassword = Incoming.password
+        getusername = username
+        getpassword = password
         print(getusername)
         results = await session.execute(select(AdminUser).filter(AdminUser.username == getusername))
         user = results.scalar_one_or_none()
@@ -45,12 +44,35 @@ async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
             # 密码不匹配
             raise HTTPException(status_code=401, detail="验证未通过")
         else:
-            token_data = {
+            return True
+    # 在这里进行密码验证的逻辑，比如查询数据库，验证用户名和密码是否匹配
+    # 返回 True 或 False
+    # ...
+    return True  # 示例中直接返回 True，您需要根据实际情况进行验证
+
+@AdminApi.post("/token")
+async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
+    async with db_session() as session:
+        getusername = Incoming.username
+        getpassword = Incoming.password
+        if not await verify_password(getusername, getpassword):
+            raise HTTPException(status_code=401, detail="验证未通过")
+        # print(getusername)
+        # results = await session.execute(select(AdminUser).filter(AdminUser.username == getusername))
+        # user = results.scalar_one_or_none()
+        # if user is None:
+        #     # 用户名不存在
+        #     raise HTTPException(status_code=401, detail="验证未通过")
+        # elif user.userpassword != getpassword:
+        #     # 密码不匹配
+        #     raise HTTPException(status_code=401, detail="验证未通过")
+        # else:
+        token_data = {
                 "username": Incoming.username,
                 "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-            }
-            token = create_jwt_token(data=token_data)
-            return {"access_token": token, "token_type": 'Bearer', "token": token}
+        }
+        token = create_jwt_token(data=token_data)
+        return {"access_token": token, "token_type": 'Bearer', "token": token}
 
 
 @AdminApi.post("/user/login")
@@ -58,11 +80,8 @@ async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
 async def UserLogin(x: UserCredentials):
     async with db_session() as session:
         try:
-            async with httpx.AsyncClient() as client:
-                response = await client.post("http://127.0.0.1:8000/api/token",
-                                             data={"username": x.username, "password": x.password})
-                token_data = response.json()
-                if "token" in token_data:
+            token_data = await Token(OAuth2PasswordRequestForm(username=x.username, password=x.password))
+            if "token" in token_data:
                     return {
                         "code": 20000,
                         "data": {
