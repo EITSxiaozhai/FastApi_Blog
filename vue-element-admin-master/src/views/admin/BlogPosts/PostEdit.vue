@@ -3,6 +3,7 @@
     <el-main>
       <div>
         <template v-if="post.BlogId">
+          <h3>标题</h3>
           <el-input
             v-model="post.title"
             type="textarea"
@@ -26,12 +27,27 @@
                 />
               </div>
             </el-col>
+
             <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
               <div class="grid-content bg-purple-light" />
             </el-col>
           </el-row>
-          <markdown-editor v-model="post.content" style="height: 1000px" />
-          <el-container style="margin-top: 20px;margin-bottom: 20px"><el-avatar shape="square" :size="350" :fit="fit" :src="post.BlogIntroductionPicture" /></el-container>
+          <markdown-editor v-model="post.content" style="height: 1500px" />
+          <div><h1>文章首页图片</h1>
+            <el-upload
+              class="upload-demo"
+              drag
+              action="https://jsonplaceholder.typicode.com/posts/"
+              multiple
+            >
+              <i class="el-icon-upload" />
+              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+          </div>
+          <!--          <el-container style="margin-top: 20px;margin-bottom: 20px">-->
+          <!--            <el-avatar shape="square" :size="350" :fit="fit" :src="post.BlogIntroductionPicture" />-->
+          <!--          </el-container>-->
         </template>
         <template v-else>
           Loading...

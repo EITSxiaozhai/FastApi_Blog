@@ -1,12 +1,31 @@
 <template>
   <el-container>
-    <el-header><el-button type="primary" @click="createItem">创建</el-button></el-header>
+    <el-header style="margin-top: 20px">
+      <el-row class="demo-autocomplete">
+        <el-col :span="6">
+          <div class="sub-title">激活即列出输入建议</div>
+          <el-autocomplete
+            v-model="state2"
+            class="inline-input"
+            :fetch-suggestions="querySearch"
+            placeholder="请输入想要搜索的文章"
+            :trigger-on-focus="false"
+            @select="handleSelect"
+          />
+        </el-col>
+        <el-col :span="6">
+          <el-button type="primary" @click="createItem">增加文章</el-button>
+        </el-col>
+      </el-row>
+    </el-header>
     <el-main>
       <el-card class="box-card">
         <div>
           <el-table :data="adminData" style="width: 100%">
+            <el-table-column prop="BlogId" label="文章id" />
             <el-table-column prop="title" label="标题" />
             <el-table-column prop="author" label="作者" />
+            <el-table-column prop="created_at" label="创建时间" />
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button type="text" @click="editItem(scope.row)">编辑</el-button>
