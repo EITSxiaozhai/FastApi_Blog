@@ -6,8 +6,6 @@ stages:
 
 Fastapi_image_build:
   stage: build
-  only:
-    - test
   script:
     - echo "FastApi build, Dockerfile:"
     - cat Dockerfile
@@ -15,8 +13,6 @@ Fastapi_image_build:
 
 Vue3_image_build:
   stage: build
-  only:
-    - test
   script:
     - echo "Vue build, Dockerfile:"
     - cd BlogIndex
@@ -25,8 +21,6 @@ Vue3_image_build:
 
 Vue2_admin_image_build:
   stage: build
-  only:
-    - test
   script:
     - echo "Vue build, Dockerfile:"
     - cd vue-element-admin-master
@@ -44,8 +38,6 @@ Vue2_admin_image_build:
 
 Fastapi_deploy_test:
   stage: test
-  only:
-    - test
   script:
     - docker run -d -p 80 --name myfastapi-test-$CI_PIPELINE_ID fastapi:$CI_PIPELINE_ID
     - sleep 10 && curl $(ip add show  eno1 | grep "inet " | sed -e 's/.* inet //g' | sed -e 's/ .*//g'):$(docker port myfastapi-test-$CI_PIPELINE_ID | grep 0.0.0 | grep "8999/tcp" |  sed -e 's/.*://g')
@@ -54,8 +46,6 @@ Fastapi_deploy_test:
 
 Vue2_admin_deploy_test:
   stage: test
-  only:
-    - test
   script:
     - docker run -d -p 5174 --name vue2admin$CI_PIPELINE_ID vue2:$CI_PIPELINE_ID
     - docker stop vue2admin$CI_PIPELINE_ID
@@ -63,8 +53,6 @@ Vue2_admin_deploy_test:
 
 Vue_deploy_test:
   stage: test
-  only:
-    - test
   script:
     - docker run -d -p 5173 --name myvue-test-$CI_PIPELINE_ID vue:$CI_PIPELINE_ID
     - docker stop myvue-test-$CI_PIPELINE_ID
@@ -75,8 +63,6 @@ Vue_deploy_test:
 
 Fastapi_container_deploy1:
     stage: deploy
-    only:
-      - test
     script:
       - printenv DB_PASSWORD
       - x=$(docker ps -f "publish=49200" | awk '{print $1}'| sed -n '2p')
@@ -87,8 +73,6 @@ Fastapi_container_deploy1:
 
 Vue_container_deploy1:
     stage: deploy
-    only:
-      - test
     script:
       - x=$(docker ps -f "publish=49300" | awk '{print $1}'| sed -n '2p')
       - docker stop $x && docker rm $x
@@ -97,8 +81,6 @@ Vue_container_deploy1:
 
 Vue2_admin_deploy1:
     stage: deploy
-    only:
-      - test
     script:
       - x=$(docker ps -f "publish=49400" | awk '{print $1}'| sed -n '2p')
       - docker stop $x && docker rm $x
