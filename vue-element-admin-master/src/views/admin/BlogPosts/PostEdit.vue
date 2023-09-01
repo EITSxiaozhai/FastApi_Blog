@@ -14,20 +14,6 @@
             <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
               <div class="grid-content bg-purple" />
             </el-col>
-            <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11">
-              <div class="grid-content bg-purple-light">作者: {{ post.author }}</div>
-            </el-col>
-            <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11">
-              <div class="grid-content bg-purple">创建时间
-                <el-date-picker
-                  v-model="value1"
-                  type="datetime"
-                  placeholder="选择日期时间"
-                  style="margin-bottom: 20px"
-                />
-              </div>
-            </el-col>
-
             <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
               <div class="grid-content bg-purple-light" />
             </el-col>
