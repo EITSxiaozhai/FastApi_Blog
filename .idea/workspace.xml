@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="优化CSS">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/PostEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/PostEdit.vue" afterDir="false" />
-    </list>
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="优化CSS" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -348,7 +345,7 @@
       <workItem from="1693215556128" duration="4357000" />
       <workItem from="1693477418163" duration="6643000" />
       <workItem from="1693540608722" duration="4461000" />
-      <workItem from="1693565282163" duration="3226000" />
+      <workItem from="1693565282163" duration="3525000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -693,7 +690,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="145" />
+    <option name="localTasksCounter" value="146" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
