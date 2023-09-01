@@ -10,6 +10,10 @@ import {useRouter} from "vue-router";
 import {reactive} from "vue";
 import backApi from '../Api/backApi.js';
 import {Discount} from "@element-plus/icons-vue";
+import { ChatDotRound, ChatLineRound, ChatRound } from '@element-plus/icons-vue'
+
+const value = ref()
+const icons = [ChatRound, ChatLineRound, ChatDotRound]
 
 
 import {loadFull} from "tsparticles";
@@ -161,7 +165,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="common-layout">
     <el-container>
-      <el-header id="top-mains">
+      <el-header id="top-mains" :class="{ 'hidden': scrollDirection === 'down' }">
         <el-menu
             class="el-menu-demo"
             mode="horizontal">
@@ -187,27 +191,43 @@ onBeforeUnmount(() => {
       </el-header>
 
       <el-container>
-        <el-aside style="padding-top: 60px">
+        <div style="padding-top: 60px;position: sticky; ">
+        <el-aside style="top: 20px;">
           <el-card>
-            <div class="table-of-contents">
+            <div class="table-of-contents" >
               <h2>目录</h2>
               <ul>
                 <li v-for="(item, index) in tableOfContents" :key="index">
                   <a :href="item.anchor">{{ item.title }}</a>
-
                 </li>
               </ul>
             </div>
           </el-card>
+          <el-card style="margin-top: 20px">
+            <h4>喜欢该文章吗？</h4>
+              <el-rate
+    v-model="value"
+    :icons="icons"
+    :void-icon="ChatRound"
+    :colors="['#409eff', '#67c23a', '#FF9900']"
+  />
+          </el-card>
         </el-aside>
+          </div>
+
+
 
         <el-main style="margin-top: 40px">
           <div v-for="(item, index) in data.data" :key="index" class="text item">
             <el-card class="box-card">
               <template #header>
                 <div class="card-header">
-                  <h1><span>{{ item.title }}</span></h1>
-                  <h1>作者:{{ item.author }}</h1>
+                    <el-row :gutter="20">
+    <el-col :span="20"><div class="grid-content ep-bg-purple" /><h1 style="font-size: 30px"> {{ item.title }} </h1></el-col>
+    <el-col :span="5"><div class="grid-content ep-bg-purple" /><h3>作者:{{ item.author }}</h3></el-col>
+    <el-col :span="5"><div class="grid-content ep-bg-purple" /><h3><el-rate v-model="value" allow-half /></h3></el-col>
+    <el-col :span="5"><div class="grid-content ep-bg-purple" /><h3>发布时间：</h3></el-col>
+  </el-row>
                   <el-divider/>
                   <div v-html="convertMarkdown(item.content)"></div>
                 </div>
@@ -222,6 +242,17 @@ onBeforeUnmount(() => {
 
 
 <style>
+
+.common-layout div .el-aside{
+  top: 60px;
+ position:sticky;
+}
+
+.app{
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+  'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+}
+
 #top-mains {
   opacity: 0.8;
   position: fixed;

@@ -1,4 +1,4 @@
-<script setup>
+<script setup xmlns="http://www.w3.org/1999/html">
 import {useRouter} from 'vue-router';
 import {reactive, ref, onMounted, onBeforeUnmount} from 'vue';
 
@@ -113,7 +113,7 @@ onMounted(() => {
           :options="{
                     background: {
                         color: {
-                            value: '#79bbff'
+                            value: '#C0C4CC'
                         }
                     },
                     fpsLimit: 120,
@@ -329,7 +329,8 @@ onMounted(() => {
       </el-col>
 
 
-      <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="3">
+      <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="3" id="left2" >
+        <div style="position: sticky; top: 80px;">
         <el-card>
           <el-space direction="vertical">
             <template #header>
@@ -364,7 +365,9 @@ onMounted(() => {
         <el-card style="margin-top: 20px">
           网站统计
         </el-card>
+          </div>
       </el-col>
+
     </el-row>
 
 
@@ -414,6 +417,20 @@ onMounted(() => {
 
 <style>
 
+.app{
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+  'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+}
+
+.el-footer {
+  padding-top: 100px;
+  display: flex;
+  height: 4vh;
+  width: 100%;
+  align-items: center;
+}
+
+
 
 #main-boxcard {
   border-top-left-radius: 0px;
@@ -437,14 +454,13 @@ onMounted(() => {
   z-index: 999;
 }
 
+
+
 #login {
   margin-left: auto;
 }
 
 
-#left-my-card {
-  margin-left: 50px;
-}
 
 .el-header {
   padding-left: 0;
