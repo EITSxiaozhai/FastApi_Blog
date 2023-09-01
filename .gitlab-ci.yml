@@ -7,7 +7,6 @@ stages:
 Fastapi_image_build:
   stage: build
   only:
-    - tags
     - test
   script:
     - echo "FastApi build, Dockerfile:"
@@ -17,7 +16,6 @@ Fastapi_image_build:
 Vue3_image_build:
   stage: build
   only:
-    - tags
     - test
   script:
     - echo "Vue build, Dockerfile:"
@@ -28,7 +26,6 @@ Vue3_image_build:
 Vue2_admin_image_build:
   stage: build
   only:
-    - tags
     - test
   script:
     - echo "Vue build, Dockerfile:"
@@ -48,7 +45,6 @@ Vue2_admin_image_build:
 Fastapi_deploy_test:
   stage: test
   only:
-    - tags
     - test
   script:
     - docker run -d -p 80 --name myfastapi-test-$CI_PIPELINE_ID fastapi:$CI_PIPELINE_ID
@@ -59,7 +55,6 @@ Fastapi_deploy_test:
 Vue2_admin_deploy_test:
   stage: test
   only:
-    - tags
     - test
   script:
     - docker run -d -p 5174 --name vue2admin$CI_PIPELINE_ID vue2:$CI_PIPELINE_ID
@@ -69,7 +64,6 @@ Vue2_admin_deploy_test:
 Vue_deploy_test:
   stage: test
   only:
-    - tags
     - test
   script:
     - docker run -d -p 5173 --name myvue-test-$CI_PIPELINE_ID vue:$CI_PIPELINE_ID
@@ -82,7 +76,6 @@ Vue_deploy_test:
 Fastapi_container_deploy1:
     stage: deploy
     only:
-      - tags
       - test
     script:
       - printenv DB_PASSWORD
@@ -95,7 +88,6 @@ Fastapi_container_deploy1:
 Vue_container_deploy1:
     stage: deploy
     only:
-      - tags
       - test
     script:
       - x=$(docker ps -f "publish=49300" | awk '{print $1}'| sed -n '2p')
@@ -106,7 +98,6 @@ Vue_container_deploy1:
 Vue2_admin_deploy1:
     stage: deploy
     only:
-      - tags
       - test
     script:
       - x=$(docker ps -f "publish=49400" | awk '{print $1}'| sed -n '2p')
