@@ -6,13 +6,13 @@ from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter, UploadFile
-from sqlalchemy import select, text
+from sqlalchemy import select, text, func
 from starlette.background import BackgroundTasks
 import datetime
-
+from fastapi import HTTPException
 from app.Fast_blog.apps.AdminApp.superuserAdmin import oauth2_scheme
 from app.Fast_blog.database.database import engine, db_session
-from app.Fast_blog.model.models import Blog
+from app.Fast_blog.model.models import Blog, BlogRating
 import shutil
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -174,3 +174,43 @@ async def AdminBlogidedit(blog_id: int, request_data: dict = Body(...), token: s
             print(e)
             await session.rollback()  # 发生错误时回滚事务
             return {"code": 50000, "message": "更新失败"}
+
+
+@BlogApp.post("/blogs/{blog_id}/ratings/")
+async def rate_blog(blog_id: int, rating: int):  # 将rating的类型改为整数
+    if not (1 <= rating <= 5):
+        raise HTTPException(status_code=400, detail="评分必须在1到5之间")
+
+    async with db_session() as session:
+        blog = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
+        if blog.scalar() is None:
+            raise HTTPException(status_code=404, detail="博客文章不存在")
+
+        # 在这里将rating转换为整数
+        rating = int(rating)
+
+        await session.execute(
+            BlogRating.__table__.insert().values(
+                blog_id=blog_id, rating=rating
+            )
+        )
+        await session.commit()
+        return {"message": "评分成功"}
+
+
+@BlogApp.get("/blogs/{blog_id}/average-rating/", response_model=float)
+async def get_average_rating(blog_id: int):
+    async with db_session() as session:
+        blog = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
+        if blog.scalar() is None:
+            raise HTTPException(status_code=404, detail="博客文章不存在")
+
+        average_rating = await session.execute(
+            select(func.avg(BlogRating.rating)).filter(BlogRating.blog_id == blog_id)
+        )
+        average_rating = average_rating.scalar()
+
+        if average_rating is not None:
+            return int(round(average_rating))
+        else:
+            return {'code': 20000, 'data': "该文章没有评分"}

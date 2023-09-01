@@ -1,11 +1,14 @@
 import asyncio
 import datetime
 
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, MetaData, LargeBinary, DATETIME
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, MetaData, LargeBinary, DATETIME, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import EmailType, ChoiceType, PasswordType, Choice
 from app.Fast_blog.database.database import Base, engine
 from dataclasses import dataclass
+
+
+
 
 
 @dataclass
@@ -83,7 +86,7 @@ class Blog(Base):
     NumberViews = Column(Integer)
     author = Column(String(255))
     admin_id = Column(Integer, ForeignKey('Admintable.UserId'))
-
+    ratings = relationship("BlogRating", back_populates="blog")
     def to_dict(self):
         return dict(BlogId=self.BlogId, title=self.title, content=self.content, author=self.author,
                     BlogIntroductionPicture=self.BlogIntroductionPicture, created_at=self.created_at)
@@ -102,3 +105,12 @@ class PowerMeters(Base):
     def to_dict(self):
         return dict(DataNum=self.DataNum, electricityNum=self.electricityNum, PowerConsumption=self.PowerConsumption,
                     AveragePower=self.AveragePower)
+
+class BlogRating(Base):
+    __tablename__ = "blog_ratings"
+    id = Column(Integer, primary_key=True, index=True)
+    blog_id = Column(Integer, ForeignKey("blogtable.BlogId"))
+    rating = Column(Float)
+    blog = relationship("Blog", back_populates="ratings")
+    def to_dict(self):
+        return dict(blog_id=self.blog_id,rating=self.rating,blog=self.blog)
