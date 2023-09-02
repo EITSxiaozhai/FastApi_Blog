@@ -11,7 +11,7 @@ import {reactive} from "vue";
 import backApi from '../Api/backApi.js';
 import {Discount} from "@element-plus/icons-vue";
 import { ChatDotRound, ChatLineRound, ChatRound } from '@element-plus/icons-vue'
-
+import Fingerprint2 from "fingerprintjs2";
 const value = ref()
 const icons = [ChatRound, ChatLineRound, ChatDotRound]
 
@@ -158,8 +158,82 @@ onBeforeUnmount(() => {
   window.removeEventListener('scroll', updateReadingProgress);
 });
 
+const fingerprint = ref(null);
+
+onMounted(() => {
+  // 使用Fingerprint2生成浏览器指纹
+  const options = {
+    excludes: {
+      userAgent: true, // 排除用户代理信息
+      language: true,  // 排除语言设置
+      colorDepth: true // 排除颜色深度
+      // 更多排除选项可根据需求添加
+    }
+  };
+
+  Fingerprint2.get(options, function (components) {
+    const fingerprintId = Fingerprint2.x64hash128(components.map(function (pair) {
+      return pair.value;
+    }).join(), 31);  // 生成指纹ID
+
+    fingerprint.value = fingerprintId;
+
+    // 可以将 fingerprintId 发送到服务器或进行其他操作
+  });
+});
+
+const vote = async () => {
+  console.log("vote function is called");
+  const blogId = route.params.blogId;
+  const device_id = fingerprint.value;
+  const ratingValue = value.value;
+
+  if (typeof ratingValue !== 'number' || !Number.isInteger(ratingValue) || ratingValue < 1 || ratingValue > 5) {
+    console.error("Invalid rating value:", ratingValue);
+    return;
+  }
+
+  try {
+    const queryParams = new URLSearchParams({
+      rating: ratingValue.toString(),
+      device_id: device_id.toString(),
+    });
+
+    const response = await backApi.post(`/blogs/${blogId}/ratings/?${queryParams.toString()}`);
+    data.data = response.data;
+    generateTableOfContents(response.data.content);
+  } catch (error) {
+    console.error("Error in vote function:", error);
+  }
+};
 
 
+const averageRating = ref(0); // 创建一个 ref 来存储平均评分
+
+// 获取平均评分数据并设置到 averageRating
+const getAverageRating = async () => {
+  const blogId = route.params.blogId;
+  try {
+    const response = await backApi.get(`/blogs/${blogId}/average-rating/`);
+    averageRating.value = response.data; // 设置平均评分数据到 ref
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+onMounted(() => {
+  getAverageRating();
+});
+
+const submitRating = async () => {
+  console.log("submitRating function is called"); // 添加这行日志
+  try {
+    // 调用 vote 函数提交评分
+    await vote();
+  } catch (error) {
+    console.error(error);
+  }
+};
 </script>
 
 <template>
@@ -205,11 +279,12 @@ onBeforeUnmount(() => {
           </el-card>
           <el-card style="margin-top: 20px">
             <h4>喜欢该文章吗？</h4>
-              <el-rate
+  <el-rate
     v-model="value"
     :icons="icons"
     :void-icon="ChatRound"
     :colors="['#409eff', '#67c23a', '#FF9900']"
+    @change="submitRating"
   />
           </el-card>
         </el-aside>
@@ -222,11 +297,14 @@ onBeforeUnmount(() => {
             <el-card class="box-card">
               <template #header>
                 <div class="card-header">
-                    <el-row :gutter="20">
-    <el-col :span="20"><div class="grid-content ep-bg-purple" /><h1 style="font-size: 30px"> {{ item.title }} </h1></el-col>
-    <el-col :span="5"><div class="grid-content ep-bg-purple" /><h3>作者:{{ item.author }}</h3></el-col>
-    <el-col :span="5"><div class="grid-content ep-bg-purple" /><h3><el-rate v-model="value" allow-half /></h3></el-col>
-    <el-col :span="5"><div class="grid-content ep-bg-purple" /><h3>发布时间：</h3></el-col>
+                    <div class="grid-content ep-bg-purple" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+    <h1 style="font-size: 30px">{{ item.title }}</h1>
+  </div>
+                    <el-row :gutter="20" justify="center">
+<!--  <p>浏览器指纹: {{ fingerprint }}</p>-->
+    <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>作者:{{ item.author }}</h3></el-col>
+    <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>总体评分:<el-rate v-model="averageRating" allow-half disabled /></h3></el-col>
+    <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>发布时间：</h3></el-col>
   </el-row>
                   <el-divider/>
                   <div v-html="convertMarkdown(item.content)"></div>

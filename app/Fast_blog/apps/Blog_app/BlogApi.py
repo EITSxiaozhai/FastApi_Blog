@@ -14,6 +14,7 @@ from app.Fast_blog.apps.AdminApp.superuserAdmin import oauth2_scheme
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.model.models import Blog, BlogRating
 import shutil
+from collections import defaultdict
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -176,10 +177,17 @@ async def AdminBlogidedit(blog_id: int, request_data: dict = Body(...), token: s
             return {"code": 50000, "message": "更新失败"}
 
 
+# 创建一个字典来跟踪设备的投票次数
+device_votes = defaultdict(int)
+
+
 @BlogApp.post("/blogs/{blog_id}/ratings/")
-async def rate_blog(blog_id: int, rating: int):  # 将rating的类型改为整数
+async def rate_blog(blog_id: str, rating: int, device_id: str):  # 添加设备标识符参数
     if not (1 <= rating <= 5):
         raise HTTPException(status_code=400, detail="评分必须在1到5之间")
+    # 检查设备是否已经投过票
+    if device_votes[device_id] >= 1:
+         raise HTTPException(status_code=400, detail="每台设备只能投一次票")
 
     async with db_session() as session:
         blog = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
@@ -194,6 +202,10 @@ async def rate_blog(blog_id: int, rating: int):  # 将rating的类型改为整�
                 blog_id=blog_id, rating=rating
             )
         )
+
+        # 增加设备投票次数
+        device_votes[device_id] += 1
+
         await session.commit()
         return {"message": "评分成功"}
 

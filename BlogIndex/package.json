@@ -17,6 +17,7 @@
     "@vue/cli-service": "^5.0.8",
     "axios": "^1.4.0",
     "element-plus": "^2.3.7",
+    "fingerprintjs2": "^2.1.4",
     "highlight.js": "^11.8.0",
     "markdown-it": "^13.0.1",
     "particles.vue3": "^2.10.1",
