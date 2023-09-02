@@ -1,6 +1,8 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
 import os
+from typing import Union
+
 from fastapi import Request, Depends, Body
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
@@ -188,41 +190,34 @@ async def rate_blog(blog_id: str, rating: int, device_id: str):  # 添加设备�
     # 检查设备是否已经投过票
     if device_votes[device_id] >= 1:
          raise HTTPException(status_code=400, detail="每台设备只能投一次票")
-
     async with db_session() as session:
         blog = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
         if blog.scalar() is None:
             raise HTTPException(status_code=404, detail="博客文章不存在")
-
         # 在这里将rating转换为整数
         rating = int(rating)
-
         await session.execute(
             BlogRating.__table__.insert().values(
                 blog_id=blog_id, rating=rating
             )
         )
-
         # 增加设备投票次数
         device_votes[device_id] += 1
-
         await session.commit()
         return {"message": "评分成功"}
 
 
-@BlogApp.get("/blogs/{blog_id}/average-rating/", response_model=float)
+@BlogApp.get("/blogs/{blog_id}/average-rating/", response_model=Union[float, int])
 async def get_average_rating(blog_id: int):
     async with db_session() as session:
         blog = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
         if blog.scalar() is None:
-            raise HTTPException(status_code=404, detail="博客文章不存在")
-
+            return 0  # 返回默认值 0，表示从未评分过
         average_rating = await session.execute(
             select(func.avg(BlogRating.rating)).filter(BlogRating.blog_id == blog_id)
         )
         average_rating = average_rating.scalar()
-
         if average_rating is not None:
             return int(round(average_rating))
         else:
-            return {'code': 20000, 'data': "该文章没有评分"}
+            return 0  # 返回默认值 0，表示从未评分过
