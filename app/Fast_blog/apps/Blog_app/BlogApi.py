@@ -14,6 +14,7 @@ import datetime
 from fastapi import HTTPException
 from app.Fast_blog.apps.AdminApp.superuserAdmin import oauth2_scheme
 from app.Fast_blog.database.database import engine, db_session
+from app.Fast_blog.middleware.backlist import BlogCache
 from app.Fast_blog.model.models import Blog, BlogRating
 import shutil
 from collections import defaultdict
@@ -124,20 +125,12 @@ async def AdminBlogIndex(token: str = Depends(oauth2_scheme)):
         return 0
 
 
+blog_cache = BlogCache()
+
 @BlogApp.post("/user/Blogid")
-##博客详情页API
 async def Blogid(blog_id: int):
-    async with db_session() as session:
-        try:
-            results = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
-            data = results.scalars().all()
-            data = [item.to_dict() for item in data]
-            print(data)
-            return data
-        except Exception as e:
-            print("我们遇到了下面的问题")
-            print(e)
-        return []
+    data = await blog_cache.get_blog_data(blog_id)
+    return data
 
 
 @BlogApp.post("/blog/Blogid")

@@ -245,15 +245,6 @@ const submitRating = async () => {
             mode="horizontal">
           <h1 style="padding-left: 20px;font-size: 20px">
             <router-link to="/blog/" style="text-decoration: none;">Exp1oit Blog</router-link></h1>
-          <div>
-            <el-input
-                v-model="input1"
-                class="w-50 m-2"
-                size="large"
-                placeholder="Please Input"
-                :prefix-icon="Search"
-            />
-          </div>
           <el-sub-menu index="2-4" id="login">
             <template #title>登录</template>
             <el-menu-item index="2-4-1">
