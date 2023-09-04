@@ -1,8 +1,9 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
 import os
+import pickle
 from typing import Union
-
+from sqlalchemy import event
 from fastapi import Request, Depends, Body
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
@@ -127,10 +128,42 @@ async def AdminBlogIndex(token: str = Depends(oauth2_scheme)):
 
 blog_cache = BlogCache()
 
+
+# Create event listener to update cache
+@event.listens_for(Blog, 'after_insert')
+@event.listens_for(Blog, 'after_update')
+@event.listens_for(Blog, 'after_delete')
+def update_cache(mapper, connection, target):
+    redis_key = f"blog_{target.BlogId}"
+    data = {
+        "BlogId": target.BlogId,
+        "title": target.title,
+        "content": target.content,
+        "author": target.author,
+        "BlogIntroductionPicture": target.BlogIntroductionPicture,
+        "created_at": target.created_at,
+    }
+    blog_cache.redis_client.set(redis_key, pickle.dumps([data]))
+    blog_cache.redis_client.expire(redis_key, 3600)  # Set expiration time to 1 hour
+
+
 @BlogApp.post("/user/Blogid")
 async def Blogid(blog_id: int):
-    data = await blog_cache.get_blog_data(blog_id)
-    return data
+    async with db_session() as session:
+        redis_key = f"blog_{blog_id}"
+        cached_data = blog_cache.redis_client.get(redis_key)
+        if cached_data:
+            print('从缓存中读取')
+            cached_data_obj = pickle.loads(cached_data)
+            return cached_data_obj
+        else:
+            print('从数据库中读取')
+            results = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
+            data = results.scalars().all()
+            data = [item.to_dict() for item in data]
+            blog_cache.redis_client.set(redis_key, pickle.dumps(data))
+            blog_cache.redis_client.expire(redis_key, 3600)
+            return data
 
 
 @BlogApp.post("/blog/Blogid")
@@ -152,6 +185,7 @@ async def AdminBlogid(blog_id: int,token: str = Depends(oauth2_scheme)):
 async def AdminBlogidedit(blog_id: int, request_data: dict = Body(...), token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
+
             # 根据 BlogId 查询相应的博客
             blog = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
             blog_entry = blog.scalar_one()

@@ -77,57 +77,5 @@ class BlogCache:
         # 创建Redis连接
         self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, password=db_password)
 
-        # 监听数据库更改事件并触发 Redis 缓存更新
-        event.listen(Blog, 'after_insert', self.on_blog_change)
-        event.listen(Blog, 'after_update', self.on_blog_change)
-        event.listen(Blog, 'after_delete', self.on_blog_change)
 
-    async def get_blog_data(self, blog_id: int):
-        # 尝试从Redis中获取数据
-        cached_data = self.redis_client.get(f"blog_{blog_id}")
 
-        if cached_data:
-            # 如果在Redis中找到缓存数据，反序列化为对象
-            cached_data_obj = pickle.loads(cached_data)
-            return cached_data_obj
-        else:
-            # 如果Redis中没有缓存，从数据库中读取数据
-            async with db_session() as session:
-                try:
-                    # 使用异步数据库连接执行查询
-                    results = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
-                    data = results.scalars().all()
-                    data = [item.to_dict() for item in data]
-                    # 将数据序列化并存储到Redis中，设置合适的过期时间
-                    self.redis_client.setex(f"blog_{blog_id}", 3600, pickle.dumps(data))
-                    return data
-                except Exception as e:
-                    print("我们遇到了下面的问题")
-                    print(e)
-                    return []
-
-    async def update_redis_cache(self, blog_id, operation):
-        async with db_session() as session:
-            if operation == "insert":
-                results = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
-                data = results.scalars().all()
-                data = [item.to_dict() for item in data]
-                # 将数据序列化并存储到Redis中，设置合适的过期时间
-                self.redis_client.setex(f"blog_{blog_id}", 3600, pickle.dumps(data))
-                print(f"Synchronizing insert for Blog ID {blog_id} to Redis...")
-            elif operation == "update":
-                results = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
-                data = results.scalars().all()
-                data = [item.to_dict() for item in data]
-                # 将数据序列化并存储到Redis中，设置合适的过期时间
-                self.redis_client.setex(f"blog_{blog_id}", 3600, pickle.dumps(data))
-                print(f"Synchronizing update for Blog ID {blog_id} to Redis...")
-            elif operation == "delete":
-                self.redis_client.delete(f"blog_{blog_id}")
-                print(f"Synchronizing delete for Blog ID {blog_id} from Redis...")
-
-    def on_blog_change(self, mapper, connection, target):
-        # 在这里触发 Redis 缓存更新，并获取操作类型
-        blog_id = target.BlogId
-        operation = "insert" if target in db_session() else "update"
-        self.update_redis_cache(blog_id, operation)

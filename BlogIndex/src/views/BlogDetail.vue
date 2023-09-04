@@ -88,7 +88,6 @@ const getData = async () => {
   try {
     const response = await backApi.post(`/user/Blogid?blog_id=${blogId}`);
     data.data = response.data;
-
     // 手动触发代码高亮
     setTimeout(() => {
       hljs.highlightAll();
