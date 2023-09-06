@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import BlogDetail from '../views/BlogDetail.vue'
 import Index from "@/views/Index.vue";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -11,7 +12,6 @@ const router = createRouter({
       meta: {
         cacheable: true, // 添加缓存标志
         title: '首页'
-
       },
     },
     {
@@ -46,6 +46,21 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
+// 导航守卫：监听滚动事件
+router.beforeEach((to, from, next) => {
+  if (to.path === '/transition' && from.path === '/transition') {
+    // 如果从 /transition 到 /transition，则不执行跳转
+    next();
+    return;
+  }
+
+  if (to.path === '/transition' && window.scrollY > 200) {
+    // 如果滚动超过 200px 且目标路由是 /transition，则自动跳转到 /blog
+    next('/blog');
+  } else {
+    next();
+  }
+});
 
 
 router.beforeEach((to, from, next) => {

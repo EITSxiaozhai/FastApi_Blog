@@ -1,7 +1,8 @@
 <script setup xmlns="http://www.w3.org/1999/html">
 import {useRouter} from 'vue-router';
 import {reactive, ref, onMounted, onBeforeUnmount} from 'vue';
-
+import TypeIt from 'typeit'
+const text = ref(null)
 import {loadFull} from 'tsparticles';
 import backApi from '../Api/backApi.js';
 import 'element-plus/theme-chalk/display.css'
@@ -43,7 +44,7 @@ const loadData = async (page) => {
     const response = await backApi.get(`/blog/BlogIndex?initialLoad=false&page=${page}&pageSize=${pageSize}`);
     if (response.data.length > 0) {
       data.data.push(...response.data);
-      loading.value = true
+
     }
   } catch (error) {
     console.error(error);
@@ -91,101 +92,21 @@ onMounted(() => {
   document.addEventListener('click', handleGlobalClick);
 });
 
+onMounted(() => {
+    new (TypeIt)(text.value, {
+        strings: ["埋骨何须桑梓地 人生何处不青山"],
+        cursorChar: "<span class='cursorChar'>|<span>",//用于光标的字符。HTML也可以
+        speed: 100,
+        lifeLike: true,// 使打字速度不规则
+        cursor: true,//在字符串末尾显示闪烁的光标
+        breakLines: false,// 控制是将多个字符串打印在彼此之上，还是删除这些字符串并相互替换
+        loop: false,//是否循环
+    }).go()
+})
 </script>
 
 <template>
-  <div id="app">
-    <div class="particles-container" style="z-index: -1;">
-      <vue-particles
-          id="tsparticles"
-          :particlesInit="particlesInit"
-          :particlesLoaded="particlesLoaded"
-
-
-      />
-      <vue-particles
-          id="tsparticles"
-          :particlesInit="particlesInit"
-          :particlesLoaded="particlesLoaded"
-          :options="{
-                    background: {
-                        color: {
-                            value: '#C0C4CC'
-                        }
-                    },
-                    fpsLimit: 120,
-                    interactivity: {
-                        events: {
-                            onClick: {
-                                enable: true,
-                                mode: 'push'
-                            },
-                            onHover: {
-                                enable: true,
-                                mode: 'repulse'
-                            },
-                            resize: true
-                        },
-                        modes: {
-                            bubble: {
-                                distance: 400,
-                                duration: 2,
-                                opacity: 0.8,
-                                size: 40
-                            },
-                            push: {
-                                quantity: 4
-                            },
-                            repulse: {
-                                distance: 200,
-                                duration: 0.4
-                            }
-                        }
-                    },
-                    particles: {
-                        color: {
-                            value: '#ffffff'
-                        },
-                        links: {
-                            color: '#ffffff',
-                            distance: 150,
-                            enable: true,
-                            opacity: 0.5,
-                            width: 1
-                        },
-                        move: {
-                            direction: 'none',
-                            enable: true,
-                            outMode: 'bounce',
-                            random: false,
-                            speed: 1,
-                            straight: false
-                        },
-                        number: {
-                            density: {
-                                enable: true,
-                                area: 800
-                            },
-                            value: 80
-                        },
-                        opacity: {
-                            value: 0.5
-                        },
-                        shape: {
-                            type: 'circle'
-                        },
-                        size: {
-                            random: true,
-                            value: 5
-                        }
-                    },
-                    detectRetina: true
-                }"
-      />
-    </div>
-  </div>
-
-
+  <h1 style="background: #3a835d" ref="text" class="msg"></h1>
   <el-container id="left-my" style="margin-top: 3%;">
     <el-header id="top-mains">
       <el-menu
@@ -279,16 +200,16 @@ onMounted(() => {
         </el-card>
       </el-col>
 
-
-      <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="17">
+      <transition name="el-fade-in-fast">
+      <el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="17" class="maincaretest">
+        <div class="content-container" >
         <el-main id="maincare">
           <div class="about">
             <el-container v-for="(blog, index) in data.data.slice(0, loadedCards)" :key="blog.BlogId">
               <el-main>
                 <!--                  <router-link :to="`/blog/${blog.BlogId}`">-->
-
                 <transition  name="el-fade-in-linear">
-                <el-card v-loading="loading" shadow="hover" id="main-boxcard" class="box-card"
+                <el-card  shadow="hover" id="main-boxcard" class="box-card"
                          @click="jumpFn(blog.BlogId)">
                   <el-container>
                     <el-row :gutter="10">
@@ -323,7 +244,9 @@ onMounted(() => {
             <p v-else>没有更多文章可以查看了</p>
           </div>
         </el-main>
+        </div>
       </el-col>
+        </transition>
 
 
       <el-col :xs="24" :sm="24" :md="24" :lg="4" :xl="3" id="left2" >
@@ -409,8 +332,8 @@ onMounted(() => {
       </div>
     </el-footer>
   </el-container>
-
 </template>
+
 
 <style>
 
@@ -536,8 +459,8 @@ onMounted(() => {
   width: 20%;
   height: 20%;
   transform: translate(-50%, -50%);
-  background-color: white;
-  border: 1px solid #ccc;
+  background-color: rgba(255, 255, 255, 0.84);
+  border: 1px solid rgba(204, 204, 204, 0.35);
   padding: 10px;
   display: none;
   z-index: 9999;
@@ -546,4 +469,23 @@ onMounted(() => {
 .floating-window.show {
   display: block; /* 当 "showFloatingWindow" 为 true 时显示 */
 }
+
+
+.background-container {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* 设置容器高度为视口高度 */
+  overflow: hidden; /* 隐藏溢出的内容 */
+  z-index: -9999;
+}
+
+.background-image {
+  /* 背景图片样式，替换为您的背景图片样式 */
+  background-image: url('http://127.0.0.1:8000/static/uploadimages/1.jpeg');
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  transition: transform 100s ease; /* 添加过渡效果 */
+}
+
 </style>

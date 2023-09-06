@@ -253,6 +253,21 @@ const submitRating = async () => {
         </el-menu>
         <el-progress :percentage="readingProgress" :show-text="false"/>
       </el-header>
+<el-container style="margin-top: 4%; display: flex; justify-content: center; align-items: center;">
+  <div style="width: 50%">
+      <div style="display: flex; flex-direction: column; align-items: center;">
+    <h1 class="el-title">欢迎来到我们的文章介绍页面</h1>
+    <p class="el-text">在这个页面上，我们将介绍如何使用 Element UI 来创建一个引人注目的文章介绍页面。</p>
+  </div>
+    <div>
+          <el-row :gutter="20" justify="center">
+      <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>作者</h3></el-col>
+      <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>总体评分:<el-rate v-model="averageRating" allow-half disabled /></h3></el-col>
+      <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>发布时间：</h3></el-col>
+    </el-row>
+    </div>
+  </div>
+</el-container>
 
       <el-container>
         <div style="padding-top: 60px;position: sticky; ">
@@ -282,21 +297,21 @@ const submitRating = async () => {
 
 
 
-        <el-main style="margin-top: 40px">
+        <el-main>
           <div v-for="(item, index) in data.data" :key="index" class="text item">
             <el-card class="box-card">
               <template #header>
                 <div class="card-header">
-                    <div class="grid-content ep-bg-purple" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-    <h1 style="font-size: 30px">{{ item.title }}</h1>
-  </div>
-                    <el-row :gutter="20" justify="center">
-<!--  <p>浏览器指纹: {{ fingerprint }}</p>-->
-    <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>作者:{{ item.author }}</h3></el-col>
-    <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>总体评分:<el-rate v-model="averageRating" allow-half disabled /></h3></el-col>
-    <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>发布时间：</h3></el-col>
-  </el-row>
-                  <el-divider/>
+<!--                    <div class="grid-content ep-bg-purple" style="display: flex; flex-direction: column; align-items: center; text-align: center;">-->
+<!--    <h1 style="font-size: 30px">{{ item.title }}</h1>-->
+<!--  </div>-->
+<!--                    <el-row :gutter="20" justify="center">-->
+<!--&lt;!&ndash;  <p>浏览器指纹: {{ fingerprint }}</p>&ndash;&gt;-->
+<!--    <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>作者:{{ item.author }}</h3></el-col>-->
+<!--    <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>总体评分:<el-rate v-model="averageRating" allow-half disabled /></h3></el-col>-->
+<!--    <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>发布时间：</h3></el-col>-->
+<!--  </el-row>-->
+<!--                  <el-divider/>-->
                   <div v-html="convertMarkdown(item.content)"></div>
                 </div>
               </template>
@@ -350,5 +365,8 @@ const submitRating = async () => {
 .table-of-contents li {
   margin-bottom: 5px;
 }
+
+
+
 </style>
 
