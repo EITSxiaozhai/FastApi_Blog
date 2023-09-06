@@ -1,7 +1,8 @@
 import asyncio
 import datetime
 
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, MetaData, LargeBinary, DATETIME, Float
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, MetaData, LargeBinary, DATETIME, Float, \
+    UniqueConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import EmailType, ChoiceType, PasswordType, Choice
 from app.Fast_blog.database.database import Base, engine
@@ -114,3 +115,11 @@ class BlogRating(Base):
     blog = relationship("Blog", back_populates="ratings")
     def to_dict(self):
         return dict(blog_id=self.blog_id,rating=self.rating,blog=self.blog)
+class Vote(Base):
+    __tablename__ = "votes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    device_id = Column(String(255), index=True)  # 指定了长度为 255 字符
+    blog_id = Column(String, index=True)
+    vote_count = Column(Integer, default=0)
+    __table_args__ = (UniqueConstraint('device_id', 'blog_id'),)

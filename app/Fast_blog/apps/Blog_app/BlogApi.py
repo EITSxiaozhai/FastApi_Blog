@@ -16,7 +16,7 @@ from fastapi import HTTPException
 from app.Fast_blog.apps.AdminApp.superuserAdmin import oauth2_scheme
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.middleware.backlist import BlogCache
-from app.Fast_blog.model.models import Blog, BlogRating
+from app.Fast_blog.model.models import Blog, BlogRating, Vote
 import shutil
 from collections import defaultdict
 
@@ -211,26 +211,45 @@ device_votes = defaultdict(int)
 
 
 @BlogApp.post("/blogs/{blog_id}/ratings/")
-async def rate_blog(blog_id: str, rating: int, device_id: str):  # 添加设备标识符参数
-    if not (1 <= rating <= 5):
-        raise HTTPException(status_code=400, detail="评分必须在1到5之间")
-    # 检查设备是否已经投过票
-    if device_votes[device_id] >= 1:
-         raise HTTPException(status_code=400, detail="每台设备只能投一次票")
+async def rate_blog(blog_id: str, rating: int, device_id: str):
     async with db_session() as session:
+        # 检查评分是否在有效范围
+        if not (1 <= rating <= 5):
+            raise HTTPException(status_code=400, detail="评分必须在1到5之间")
+
+        # 异步查询博客文章
         blog = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
-        if blog.scalar() is None:
+        blog_entry = blog.scalar_one()  # 使用 scalar_one 获取一行
+
+        if blog_entry is None:
             raise HTTPException(status_code=404, detail="博客文章不存在")
-        # 在这里将rating转换为整数
+
+        # 在这里将 rating 转换为整数
         rating = int(rating)
+
+        # 查询特定设备ID对特定文章的投票次数
+        vote = await session.execute(
+            select(Vote).where((Vote.device_id == device_id) & (Vote.blog_id == blog_id))
+        )
+        vote = vote.scalar()
+
+        if vote is not None and vote.vote_count >= 1:
+            raise HTTPException(status_code=400, detail="每台设备只能投一次票")
+
+        # 插入评分记录
         await session.execute(
             BlogRating.__table__.insert().values(
                 blog_id=blog_id, rating=rating
             )
         )
-        # 增加设备投票次数
-        device_votes[device_id] += 1
-        await session.commit()
+
+        if vote is None:
+            vote = Vote(device_id=device_id, blog_id=blog_id, vote_count=1)
+            session.add(vote)
+        else:
+            vote.vote_count += 1
+
+        await session.commit()  # 使用 await 提交更改到数据库
         return {"message": "评分成功"}
 
 
