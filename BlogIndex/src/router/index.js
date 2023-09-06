@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import BlogDetail from '../views/BlogDetail.vue'
 import Index from "@/views/Index.vue";
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -11,6 +10,8 @@ const router = createRouter({
       name: "home",
       meta: {
         cacheable: true, // 添加缓存标志
+        title: '首页'
+
       },
     },
     {
@@ -19,6 +20,8 @@ const router = createRouter({
       name: "home", // 重复使用 Index 组件
       meta: {
         cacheable: true, // 添加缓存标志
+        title: 'Exploit的Blog'
+
       },
     },
     {
@@ -26,6 +29,7 @@ const router = createRouter({
       component: BlogDetail,
       meta: {
         cacheable: false, // 不缓存该组件
+        title: '详情页'
       },
     },
   ]
@@ -41,5 +45,13 @@ router.beforeEach((to, from, next) => {
   }
   next();
 });
+
+
+
+router.beforeEach((to, from, next) => {
+  window.document.title = to.meta.title
+  next()
+})
+
 
 export default router;

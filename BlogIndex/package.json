@@ -25,6 +25,7 @@
     "tsparticles-engine": "^2.10.1",
     "vue": "^3.3.4",
     "vue-router": "^4.2.2",
+    "vue-wechat-title": "^2.0.7",
     "vue3-particles": "^2.10.1",
     "vuex": "^4.1.0"
   },

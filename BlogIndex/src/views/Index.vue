@@ -6,9 +6,6 @@ import {loadFull} from 'tsparticles';
 import backApi from '../Api/backApi.js';
 import 'element-plus/theme-chalk/display.css'
 
-
-
-
 const particlesInit = async (engine) => {
   await loadFull(engine);
 };
@@ -432,12 +429,7 @@ onMounted(() => {
 
 
 
-#main-boxcard {
-  border-top-left-radius: 0px;
-  border-top-right-radius: 50px;
-  border-bottom-left-radius: 50px;
-  border-bottom-right-radius: 0px;
-}
+
 
 .about div img {
   height: 200px;
