@@ -270,8 +270,8 @@ const submitRating = async () => {
 </el-container>
 
       <el-container>
-        <div style="padding-top: 60px;position: sticky; ">
-        <el-aside style="top: 20px;">
+        <div style="margin-top: 20px;position: sticky; ">
+        <el-aside>
           <el-card>
             <div class="table-of-contents" >
               <h2>目录</h2>
