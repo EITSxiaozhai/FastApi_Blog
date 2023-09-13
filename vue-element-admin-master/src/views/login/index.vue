@@ -44,7 +44,7 @@
           </span>
         </el-form-item>
       </el-tooltip>
-
+      <div class="g-recaptcha" data-sitekey="6LfRyR8oAAAAAEQ34CTwyS7B1m7dhnsVWLtR8TUB" />
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
       <div style="position:relative">
@@ -124,6 +124,11 @@ export default {
     // window.addEventListener('storage', this.afterQRScan)
   },
   mounted() {
+    const script = document.createElement('script')
+    script.src = 'https://www.google.com/recaptcha/api.js'
+    script.async = true
+    script.defer = true
+    document.head.appendChild(script)
     if (this.loginForm.username === '') {
       this.$refs.username.focus()
     } else if (this.loginForm.password === '') {
