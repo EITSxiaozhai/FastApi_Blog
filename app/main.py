@@ -15,11 +15,11 @@ session = SessionLocal()
 
 app = FastAPI()
 
-app.include_router(User_app.UserApp, prefix='/api/generaluser', tags=["普通用户"])
-app.include_router(Blog_app.BlogApp, prefix='/api', tags=["博客前端页面"])
-app.include_router(AdminApp.AdminApi, prefix='/api', tags=["超级用户"])
-app.include_router(Power_Crawl.PowerApp, prefix='/api/power', tags=["电力爬虫"])
-app.include_router(SystemMonitoring.MonitoringApp,prefix='/api/monitoring',tags=["系统监控"])
+app.include_router(User_app.UserApp, prefix='/api/generaluser', tags=["普通用户页面"])
+app.include_router(Blog_app.BlogApp, prefix='/api', tags=["博客游客浏览页面"])
+app.include_router(AdminApp.AdminApi, prefix='/api', tags=["超级用户管理页面"])
+app.include_router(Power_Crawl.PowerApp, prefix='/api/power', tags=["电力爬虫页面"])
+app.include_router(SystemMonitoring.MonitoringApp,prefix='/api/monitoring',tags=["系统监控页面"])
 
 app.mount("/static", StaticFiles(directory="./Fast_blog/static"), name="static")
 

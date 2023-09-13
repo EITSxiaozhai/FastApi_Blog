@@ -1,17 +1,23 @@
+import os
+import shutil
 import uuid
 import datetime
 
-from fastapi import HTTPException
+from fastapi import HTTPException, UploadFile
 import httpx
 import jwt
 from fastapi import APIRouter, Request, Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import EmailStr
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import joinedload
+from starlette.background import BackgroundTasks
 
+from app.Fast_blog.apps.Blog_app import BlogApp
+from app.Fast_blog.apps.Blog_app.BlogApi import static_folder_path
 from app.Fast_blog.database.database import db_session
+from app.Fast_blog.middleware.backlist import oauth2_scheme
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import AdminUser, UserPrivileges
 from app.Fast_blog.schemas.schemas import UserCredentials
@@ -22,7 +28,7 @@ SECRET_KEY = "d81beb2748aa1322fe038c26dbd263907f5808548f9e428f4d9ce780dd4358a6cc
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
+
 
 
 def create_jwt_token(data: dict) -> str:
@@ -323,3 +329,39 @@ async def UserloginOut():
             print("我们遇到了下面的问题")
             print(e)
         return 0
+
+
+
+## Admin页面博客添加
+@AdminApi.post('/blogadd')
+async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFile, background_tasks: BackgroundTasks,
+                  request: Request, token: str = Depends(oauth2_scheme)):
+    async with db_session() as session:
+        try:
+            # 将文件保存到磁盘
+            file_path = os.path.join(static_folder_path, "uploadimages", file.filename)
+            with open(file_path, "wb") as f:
+                shutil.copyfileobj(file.file, f)
+
+            base_url = str(request.base_url)
+            # 构建完整的URL地址
+            image_url = f"{base_url.rstrip('/')}/static/uploadimages/{file.filename}"
+            # 构建参数值字典
+            params = {
+                "title": Addtitle,
+                "content": Addcontent,
+                "BlogIntroductionPicture": image_url,  # 使用完整的URL地址
+                "author": Addauthor,
+                "created_at": datetime.datetime.now()
+            }
+            # 执行插入操作
+            insert_statement = text(
+                "INSERT INTO blogtable (title, content, `BlogIntroductionPicture`, author, created_at) "
+                "VALUES (:title, :content, :BlogIntroductionPicture, :author, :created_at)").params(**params)
+            await session.execute(insert_statement)
+            await session.commit()
+
+            return {'message': '文章已经添加到对应数据库', 'image_url': image_url}
+
+        except Exception as e:
+            print("我们遇到了下面的问题", {"data": e})

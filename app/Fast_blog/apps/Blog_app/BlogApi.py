@@ -13,9 +13,8 @@ from sqlalchemy import select, text, func
 from starlette.background import BackgroundTasks
 import datetime
 from fastapi import HTTPException
-from app.Fast_blog.apps.AdminApp.superuserAdmin import oauth2_scheme
 from app.Fast_blog.database.database import engine, db_session
-from app.Fast_blog.middleware.backlist import BlogCache
+from app.Fast_blog.middleware.backlist import BlogCache, oauth2_scheme
 from app.Fast_blog.model.models import Blog, BlogRating, Vote
 import shutil
 from collections import defaultdict
@@ -31,61 +30,12 @@ static_folder_path = os.path.join(os.getcwd(), "Fast_blog", "static")
 BlogApp.mount("/static", StaticFiles(directory=static_folder_path), name="static")
 
 
-@BlogApp.post('/blogadd')
-async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFile, background_tasks: BackgroundTasks,
-                  request: Request, ):
-    async with db_session() as session:
-        try:
-            # 将文件保存到磁盘
-            file_path = os.path.join(static_folder_path, "uploadimages", file.filename)
-            with open(file_path, "wb") as f:
-                shutil.copyfileobj(file.file, f)
-
-            base_url = str(request.base_url)
-            # 构建完整的URL地址
-            image_url = f"{base_url.rstrip('/')}/static/uploadimages/{file.filename}"
-            # 构建参数值字典
-            params = {
-                "title": Addtitle,
-                "content": Addcontent,
-                "BlogIntroductionPicture": image_url,  # 使用完整的URL地址
-                "author": Addauthor,
-                "created_at": datetime.datetime.now()
-            }
-            # 执行插入操作
-            insert_statement = text(
-                "INSERT INTO blogtable (title, content, `BlogIntroductionPicture`, author, created_at) "
-                "VALUES (:title, :content, :BlogIntroductionPicture, :author, :created_at)").params(**params)
-            await session.execute(insert_statement)
-            await session.commit()
-
-            return {'message': '文章已经添加到对应数据库', 'image_url': image_url}
-
-        except Exception as e:
-            print("我们遇到了下面的问题", {"data": e})
 
 
-##序列化输出示例代码
-# @BlogApp.get("/BlogIndex")
-# ##博客首页API
-# async def BlogIndex():
-#     async with db_session() as session:
-#         try:
-#             stmt = select(models.Blog).order_by(models.Blog.BlogId)
-#             result = await session.execute(text("select * from blogtable LIMIT 3;"))
-#             results = result.fetchall()
-#             results = [tuple(row) for row in results]
-#             print(f"{type(results)} of type {type(results[0])}")
-#             # <class 'list'> of type <class 'tuple'>
-#             json_string = json.dumps(results,ensure_ascii=False)
-#             return ({"data":json_string})
-#         except Exception as e:
-#             print("我们遇到了下面的问题")
-#             print(e)
-#         return 0
 
+## 博客游客用户主页显示
 @BlogApp.get("/blog/BlogIndex")
-async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
+async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4,):
     async with db_session() as session:
         try:
             offset = (page - 1) * pageSize
@@ -111,7 +61,7 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
         return []
 
 @BlogApp.get("/blog/AdminBlogIndex")
-##博客首页API
+##用户博客首页API
 async def AdminBlogIndex(token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
@@ -146,7 +96,7 @@ def update_cache(mapper, connection, target):
     blog_cache.redis_client.set(redis_key, pickle.dumps([data]))
     blog_cache.redis_client.expire(redis_key, 3600)  # Set expiration time to 1 hour
 
-
+### 数据库缓存读取判断
 @BlogApp.post("/user/Blogid")
 async def Blogid(blog_id: int):
     async with db_session() as session:
@@ -167,7 +117,7 @@ async def Blogid(blog_id: int):
 
 
 @BlogApp.post("/blog/Blogid")
-##博客详情页API
+##博客对应ID内容查询
 async def AdminBlogid(blog_id: int,token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
@@ -181,7 +131,7 @@ async def AdminBlogid(blog_id: int,token: str = Depends(oauth2_scheme)):
         return []
 
 @BlogApp.post("/blog/Blogedit")
-##博客详情页API
+##博客对应ID编辑
 async def AdminBlogidedit(blog_id: int, request_data: dict = Body(...), token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
@@ -206,10 +156,7 @@ async def AdminBlogidedit(blog_id: int, request_data: dict = Body(...), token: s
             return {"code": 50000, "message": "更新失败"}
 
 
-# 创建一个字典来跟踪设备的投票次数
-device_votes = defaultdict(int)
-
-
+## 将数据存入数据库
 @BlogApp.post("/blogs/{blog_id}/ratings/")
 async def rate_blog(blog_id: str, rating: int, device_id: str):
     async with db_session() as session:
@@ -252,7 +199,7 @@ async def rate_blog(blog_id: str, rating: int, device_id: str):
         await session.commit()  # 使用 await 提交更改到数据库
         return {"message": "评分成功"}
 
-
+##数据库平均值取出
 @BlogApp.get("/blogs/{blog_id}/average-rating/", response_model=Union[float, int])
 async def get_average_rating(blog_id: int):
     async with db_session() as session:
