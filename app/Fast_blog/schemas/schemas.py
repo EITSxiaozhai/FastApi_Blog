@@ -8,7 +8,10 @@ sys.path.append('../')
 class UserCredentials(BaseModel):
     username: str
     password: str
+    googlerecaptcha: str
 
+class Googlerecaptcha(BaseModel):
+    googlerecaptcha : str
 
 class Token(BaseModel):
     access_token: str

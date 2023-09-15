@@ -20,7 +20,7 @@ from app.Fast_blog.database.database import db_session
 from app.Fast_blog.middleware.backlist import oauth2_scheme
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import AdminUser, UserPrivileges
-from app.Fast_blog.schemas.schemas import UserCredentials
+from app.Fast_blog.schemas.schemas import UserCredentials, Googlerecaptcha
 
 AdminApi = APIRouter()
 
@@ -40,7 +40,6 @@ async def verify_password(username: str, password: str) -> bool:
     async with db_session() as session:
         getusername = username
         getpassword = password
-        print(getusername)
         results = await session.execute(select(AdminUser).filter(AdminUser.username == getusername))
         user = results.scalar_one_or_none()
         if user is None:
@@ -80,23 +79,62 @@ async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
         token = create_jwt_token(data=token_data)
         return {"access_token": token, "token_type": 'Bearer', "token": token}
 
+# "https://recaptcha.net/recaptcha/api/siteverify",
+# {
+#   params: {
+#     secret: "6LdFp74UXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXX",
+#     response: ctx.query.token
+# }
+RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY")
+async def verify_recaptcha(UserreCAPTCHA):
+    # 向Google reCAPTCHA验证端点发送POST请求来验证令牌
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            "https://recaptcha.net/recaptcha/api/siteverify",
+            data={
+                "secret": RECAPTCHA_SECRET_KEY,
+                "response": UserreCAPTCHA,
+            },
+        )
+
+    # 检查验证响应
+    if response.status_code != 200:
+        raise HTTPException(status_code=500, detail="reCAPTCHA验证失败")
+
+    # 解析验证响应
+    verification_result = response.json()
+
+    # 检查reCAPTCHA验证是否成功
+    if not verification_result.get("success"):
+        raise HTTPException(status_code=400, detail="reCAPTCHA验证失败")
+
+    return {"message": response.json()}
+
+
+
 
 @AdminApi.post("/user/login")
 ##博客登录
-async def UserLogin(x: UserCredentials):
-    async with db_session() as session:
+async def UserLogin(x:UserCredentials,request:Request):
         try:
-            token_data = await Token(OAuth2PasswordRequestForm(username=x.username, password=x.password))
-            if "token" in token_data:
-                    return {
-                        "code": 20000,
-                        "data": {
-                            "token": token_data["token"],
-                            "msg": "登录成功",
-                            "state": "true"
+            RecaptchaResponse  =   await verify_recaptcha(UserreCAPTCHA=x.googlerecaptcha)
+            print(RecaptchaResponse)
+            if RecaptchaResponse["message"]["success"]:
+                token_data = await Token(OAuth2PasswordRequestForm(
+                    username=x.username,
+                    password=x.password,
+                ))
+                if "token" in token_data:
+                        return {
+                            "code": 20000,
+                            "data": {
+                                "token": token_data["token"],
+                                "msg": "登录成功",
+                                "state": "true"
+                            }
                         }
-                    }
-            return {"code": 40001, "message": "登录失败。"}
+            else:
+                return {"code": 40001, "message": "登录失败。"}
         # 如果用户未经过身份验证或凭据无效
         except jwt.ExpiredSignatureError:
             return {"code": 40002, "message": "Token已过期"}
@@ -108,7 +146,6 @@ async def UserLogin(x: UserCredentials):
 async def Userinfo(request: Request, token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
-
             print(token)
             if token:
                 token = token.replace("Bearer", "").strip()

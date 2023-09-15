@@ -4,8 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="个人介绍o">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="增加Google人机验证">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/api/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/api/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/store/modules/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/store/modules/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/views/login/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/login/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -396,7 +402,10 @@
       <workItem from="1694529711191" duration="25000" />
       <workItem from="1694572693212" duration="2446000" />
       <workItem from="1694575244988" duration="504000" />
-      <workItem from="1694575825464" duration="6600000" />
+      <workItem from="1694575825464" duration="6622000" />
+      <workItem from="1694684234998" duration="6534000" />
+      <workItem from="1694693578410" duration="9093000" />
+      <workItem from="1694755308672" duration="10558000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -741,7 +750,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="166" />
+    <option name="localTasksCounter" value="167" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -759,7 +768,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改markdown-添加markdown页面编辑" />
     <MESSAGE value="添加markdonw文件前后端对接" />
     <MESSAGE value="编辑文章添加到页面中" />
     <MESSAGE value="构建图表创建请求" />
@@ -784,7 +792,8 @@
     <MESSAGE value="修改CSS" />
     <MESSAGE value="中间件修改," />
     <MESSAGE value="个人介绍o" />
-    <option name="LAST_COMMIT_MESSAGE" value="个人介绍o" />
+    <MESSAGE value="增加Google人机验证" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加Google人机验证" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$models.coverage" NAME="models Coverage Results" MODIFIED="1679217759819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/model" />

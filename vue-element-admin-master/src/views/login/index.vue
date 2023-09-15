@@ -44,7 +44,11 @@
           </span>
         </el-form-item>
       </el-tooltip>
-      <div class="g-recaptcha" data-sitekey="6LfRyR8oAAAAAEQ34CTwyS7B1m7dhnsVWLtR8TUB" />
+
+      <el-form-item v-model="loginForm.googlerecaptcha" prop="googlerecaptcha">
+        <div id="grecaptcha" />
+      </el-form-item>
+
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
       <div style="position:relative">
@@ -70,12 +74,14 @@
 </template>
 
 <script>
+
 import { validUsername } from '@/utils/validate'
 import SocialSign from './components/SocialSignin'
 
 export default {
   name: 'Login',
-  components: { SocialSign },
+  components: { SocialSign
+  },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
@@ -91,21 +97,32 @@ export default {
         callback()
       }
     }
+    const validategooglerecaptcha = (rule, value, callback) => {
+      if (value.length < 6) {
+        callback()
+      } else {
+        callback()
+      }
+    }
     return {
       loginForm: {
         username: '',
-        password: ''
+        password: '',
+        googlerecaptcha: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        googlerecaptcha: [{ required: true, validator: validategooglerecaptcha }]
       },
       passwordType: 'password',
       capsTooltip: false,
       loading: false,
       showDialog: false,
       redirect: undefined,
-      otherQuery: {}
+      otherQuery: {},
+      googlerecaptcha: null,
+      sitekey: '6LfRyR8oAAAAAEQ34CTwyS7B1m7dhnsVWLtR8TUB'
     }
   },
   watch: {
@@ -124,21 +141,40 @@ export default {
     // window.addEventListener('storage', this.afterQRScan)
   },
   mounted() {
-    const script = document.createElement('script')
-    script.src = 'https://www.google.com/recaptcha/api.js'
-    script.async = true
-    script.defer = true
-    document.head.appendChild(script)
     if (this.loginForm.username === '') {
       this.$refs.username.focus()
     } else if (this.loginForm.password === '') {
       this.$refs.password.focus()
+    } else if (this.loginForm.googlerecaptcha === '') {
+      this.$refs.googlerecaptcha.focus()
     }
+    this.loaded()
   },
   destroyed() {
     // window.removeEventListener('storage', this.afterQRScan)
   },
   methods: {
+    submit: function(token) {
+      console.log('Submit button clicked') // 添加此行以确认按钮是否点击
+      if (this.loginForm.googlerecaptcha) {
+        console.log('googlerecaptcha is not empty') // 添加此行以确认 password2 是否不为空
+        console.log(this.loginForm.googlerecaptcha)
+      } else {
+        console.error('googlerecaptcha is empty')
+      }
+    },
+    loaded() {
+      setTimeout(() => {
+        // 在回调函数中调用 submit 方法，同时设置 password2
+        window.grecaptcha.render('grecaptcha', {
+          sitekey: this.sitekey,
+          callback: (token) => {
+            this.loginForm.googlerecaptcha = token
+            this.submit(token) // 在回调函数中调用 submit 方法
+          }
+        })
+      }, 200)
+    },
     checkCapslock(e) {
       const { key } = e
       this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
@@ -155,6 +191,7 @@ export default {
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
+        console.log(this.loginForm)
         if (valid) {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm)
@@ -171,6 +208,7 @@ export default {
         }
       })
     },
+
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
         if (cur !== 'redirect') {
