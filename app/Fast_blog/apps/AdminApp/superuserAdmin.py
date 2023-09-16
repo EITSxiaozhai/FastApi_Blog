@@ -19,7 +19,7 @@ from app.Fast_blog.apps.Blog_app.BlogApi import static_folder_path
 from app.Fast_blog.database.database import db_session
 from app.Fast_blog.middleware.backlist import oauth2_scheme
 from app.Fast_blog.model import models
-from app.Fast_blog.model.models import AdminUser, UserPrivileges
+from app.Fast_blog.model.models import AdminUser, UserPrivileges, Blog
 from app.Fast_blog.schemas.schemas import UserCredentials, Googlerecaptcha
 
 AdminApi = APIRouter()
@@ -27,8 +27,6 @@ AdminApi = APIRouter()
 SECRET_KEY = "d81beb2748aa1322fe038c26dbd263907f5808548f9e428f4d9ce780dd4358a6cc942a1ee8bd49652991bce4989e270c55adeb0c5138ff516de13a07a5bdd5be"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
-
 
 
 def create_jwt_token(data: dict) -> str:
@@ -55,6 +53,7 @@ async def verify_password(username: str, password: str) -> bool:
     # ...
     return True  # 示例中直接返回 True，您需要根据实际情况进行验证
 
+
 @AdminApi.post("/token")
 async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
     async with db_session() as session:
@@ -73,11 +72,12 @@ async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
         #     raise HTTPException(status_code=401, detail="验证未通过")
         # else:
         token_data = {
-                "username": Incoming.username,
-                "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+            "username": Incoming.username,
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
         }
         token = create_jwt_token(data=token_data)
         return {"access_token": token, "token_type": 'Bearer', "token": token}
+
 
 # "https://recaptcha.net/recaptcha/api/siteverify",
 # {
@@ -86,6 +86,8 @@ async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
 #     response: ctx.query.token
 # }
 RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY")
+
+
 async def verify_recaptcha(UserreCAPTCHA):
     # 向Google reCAPTCHA验证端点发送POST请求来验证令牌
     async with httpx.AsyncClient() as client:
@@ -111,35 +113,33 @@ async def verify_recaptcha(UserreCAPTCHA):
     return {"message": response.json()}
 
 
-
-
 @AdminApi.post("/user/login")
 ##博客登录
-async def UserLogin(x:UserCredentials,request:Request):
-        try:
-            RecaptchaResponse  =   await verify_recaptcha(UserreCAPTCHA=x.googlerecaptcha)
-            print(RecaptchaResponse)
-            if RecaptchaResponse["message"]["success"]:
-                token_data = await Token(OAuth2PasswordRequestForm(
-                    username=x.username,
-                    password=x.password,
-                ))
-                if "token" in token_data:
-                        return {
-                            "code": 20000,
-                            "data": {
-                                "token": token_data["token"],
-                                "msg": "登录成功",
-                                "state": "true"
-                            }
-                        }
-            else:
-                return {"code": 40001, "message": "登录失败。"}
-        # 如果用户未经过身份验证或凭据无效
-        except jwt.ExpiredSignatureError:
-            return {"code": 40002, "message": "Token已过期"}
-        except jwt.InvalidTokenError:
-            return {"code": 40003, "message": "无效的Token"}
+async def UserLogin(x: UserCredentials, request: Request):
+    try:
+        RecaptchaResponse = await verify_recaptcha(UserreCAPTCHA=x.googlerecaptcha)
+        print(RecaptchaResponse)
+        if RecaptchaResponse["message"]["success"]:
+            token_data = await Token(OAuth2PasswordRequestForm(
+                username=x.username,
+                password=x.password,
+            ))
+            if "token" in token_data:
+                return {
+                    "code": 20000,
+                    "data": {
+                        "token": token_data["token"],
+                        "msg": "登录成功",
+                        "state": "true"
+                    }
+                }
+        else:
+            return {"code": 40001, "message": "登录失败。"}
+    # 如果用户未经过身份验证或凭据无效
+    except jwt.ExpiredSignatureError:
+        return {"code": 40002, "message": "Token已过期"}
+    except jwt.InvalidTokenError:
+        return {"code": 40003, "message": "无效的Token"}
 
 
 @AdminApi.get("/user/info")
@@ -368,7 +368,6 @@ async def UserloginOut():
         return 0
 
 
-
 ## Admin页面博客添加
 @AdminApi.post('/blogadd')
 async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFile, background_tasks: BackgroundTasks,
@@ -379,25 +378,20 @@ async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFi
             file_path = os.path.join(static_folder_path, "uploadimages", file.filename)
             with open(file_path, "wb") as f:
                 shutil.copyfileobj(file.file, f)
-
+            content_binary = Addcontent.encode("utf-8")
             base_url = str(request.base_url)
             # 构建完整的URL地址
             image_url = f"{base_url.rstrip('/')}/static/uploadimages/{file.filename}"
             # 构建参数值字典
-            params = {
-                "title": Addtitle,
-                "content": Addcontent,
-                "BlogIntroductionPicture": image_url,  # 使用完整的URL地址
-                "author": Addauthor,
-                "created_at": datetime.datetime.now()
-            }
-            # 执行插入操作
-            insert_statement = text(
-                "INSERT INTO blogtable (title, content, `BlogIntroductionPicture`, author, created_at) "
-                "VALUES (:title, :content, :BlogIntroductionPicture, :author, :created_at)").params(**params)
-            await session.execute(insert_statement)
+            new_blog_entry = Blog(
+                title=Addtitle,
+                content=content_binary,
+                BlogIntroductionPicture=image_url,
+                author=Addauthor,
+                created_at=datetime.datetime.now(),
+            )
+            session.add(new_blog_entry)
             await session.commit()
-
             return {'message': '文章已经添加到对应数据库', 'image_url': image_url}
 
         except Exception as e:
