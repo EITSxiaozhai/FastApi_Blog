@@ -92,7 +92,7 @@ export default {
     }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
-        callback()
+        callback(new Error('Passwords do not meet security requirements'))
       } else {
         callback()
       }
