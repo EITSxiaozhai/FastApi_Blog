@@ -98,8 +98,8 @@ export default {
       }
     }
     const validategooglerecaptcha = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback()
+      if (!value) {
+        callback(new Error('Please complete the AI detection.'))
       } else {
         callback()
       }
