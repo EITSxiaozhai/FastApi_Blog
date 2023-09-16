@@ -36,8 +36,8 @@ db_name = os.getenv("DB_NAME")
 
 ALGORITHM = "HS256"
 
-celery_app = Celery('tasks', broker=f"'amqp://{mq_username}:{mq_password}@{mq_host}:{mq_port}//{mq_dbname}'",
-                    backend=f"'redis://:{db_password}@{redis_host}:{redis_port}/{redis_db}'")
+celery_app = Celery('tasks', broker=f'amqp://{mq_username}:{mq_password}@{mq_host}:{mq_port}/{mq_dbname}',
+                    backend=f'redis://:{db_password}@{redis_host}:{redis_port}/{redis_db}')
 
 
 @celery_app.task(name="middleware/backlist")
