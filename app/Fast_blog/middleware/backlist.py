@@ -11,9 +11,10 @@ from celery import Celery
 import redis
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
-from sqlalchemy import select,event
+from sqlalchemy import select, event
 from app.Fast_blog.database.database import db_session
 from app.Fast_blog.model.models import Blog
+
 load_dotenv()
 
 db_password = os.getenv("REDIS_DB_PASSWORD")
@@ -27,7 +28,6 @@ mq_host = os.getenv("MQ_HOSTNAME")
 mq_dbname = os.getenv("MQ_DBNAME")
 mq_port = os.getenv("MQ_DBPORT")
 
-
 db_username = os.getenv("DB_USERNAME")
 mysqldb_password = os.getenv("DB_PASSWORD")
 db_hostname = os.getenv("DB_HOSTNAME")
@@ -40,11 +40,9 @@ celery_app = Celery('tasks', broker=f"'amqp://{mq_username}:{mq_password}@{mq_ho
                     backend=f"'redis://:{db_password}@{redis_host}:{redis_port}/{redis_db}'")
 
 
-
 @celery_app.task(name="middleware/backlist")
 def add(x, y):
     return x + y
-
 
 
 ##token缓存到redis中

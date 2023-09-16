@@ -10,8 +10,10 @@ class UserCredentials(BaseModel):
     password: str
     googlerecaptcha: str
 
+
 class Googlerecaptcha(BaseModel):
-    googlerecaptcha : str
+    googlerecaptcha: str
+
 
 class Token(BaseModel):
     access_token: str

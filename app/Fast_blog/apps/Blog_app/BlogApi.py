@@ -30,12 +30,9 @@ static_folder_path = os.path.join(os.getcwd(), "Fast_blog", "static")
 BlogApp.mount("/static", StaticFiles(directory=static_folder_path), name="static")
 
 
-
-
-
 ## 博客游客用户主页显示
 @BlogApp.get("/blog/BlogIndex")
-async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4,):
+async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4, ):
     async with db_session() as session:
         try:
             offset = (page - 1) * pageSize
@@ -60,6 +57,7 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4,)
             print(e)
         return []
 
+
 @BlogApp.get("/blog/AdminBlogIndex")
 ##用户博客首页API
 async def AdminBlogIndex(token: str = Depends(oauth2_scheme)):
@@ -69,7 +67,7 @@ async def AdminBlogIndex(token: str = Depends(oauth2_scheme)):
             data = results.scalars().all()
             data = [item.to_dict() for item in data]
             print(data)
-            return {"code": 20000,"data":data}
+            return {"code": 20000, "data": data}
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
@@ -96,6 +94,7 @@ def update_cache(mapper, connection, target):
     blog_cache.redis_client.set(redis_key, pickle.dumps([data]))
     blog_cache.redis_client.expire(redis_key, 3600)  # Set expiration time to 1 hour
 
+
 ### 数据库缓存读取判断
 @BlogApp.post("/user/Blogid")
 async def Blogid(blog_id: int):
@@ -118,17 +117,18 @@ async def Blogid(blog_id: int):
 
 @BlogApp.post("/blog/Blogid")
 ##博客对应ID内容查询
-async def AdminBlogid(blog_id: int,token: str = Depends(oauth2_scheme)):
+async def AdminBlogid(blog_id: int, token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
             results = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
             data = results.scalars().all()
             data = [item.to_dict() for item in data]
-            return {"code":20000,"data":data}
+            return {"code": 20000, "data": data}
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
         return []
+
 
 @BlogApp.post("/blog/Blogedit")
 ##博客对应ID编辑
@@ -198,6 +198,7 @@ async def rate_blog(blog_id: str, rating: int, device_id: str):
 
         await session.commit()  # 使用 await 提交更改到数据库
         return {"message": "评分成功"}
+
 
 ##数据库平均值取出
 @BlogApp.get("/blogs/{blog_id}/average-rating/", response_model=Union[float, int])
