@@ -9,6 +9,7 @@ from Fast_blog.apps import Blog_app
 from Fast_blog.apps import Power_Crawl
 from Fast_blog.apps import SystemMonitoring
 from fastapi.middleware.cors import CORSMiddleware
+from app.Fast_blog.middleware.backlist import add
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -34,5 +35,6 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
+    task_result = add.delay(16, 16)  # 使用 .delay() 启动任务
     response_data = {"message": "hahahah"}
     return JSONResponse(content=response_data)
