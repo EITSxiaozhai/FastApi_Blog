@@ -15,7 +15,7 @@ import Fingerprint2 from "fingerprintjs2";
 const value = ref()
 const icons = [ChatRound, ChatLineRound, ChatDotRound]
 
-
+const isLoading = ref(true); // 初始时，骨架屏可见
 import {loadFull} from "tsparticles";
 
 const particlesInit = async (engine) => {
@@ -88,6 +88,7 @@ const getData = async () => {
   try {
     const response = await backApi.post(`/user/Blogid?blog_id=${blogId}`);
     data.data = response.data;
+    isLoading.value = false;
     // 手动触发代码高亮
     setTimeout(() => {
       hljs.highlightAll();
@@ -272,7 +273,7 @@ const submitRating = async () => {
       <el-container>
         <div style="margin-top: 20px;position: sticky; ">
         <el-aside>
-          <el-card>
+          <el-card  v-if="!isLoading" >
             <div class="table-of-contents" >
               <h2>目录</h2>
               <ul>
@@ -281,6 +282,10 @@ const submitRating = async () => {
                 </li>
               </ul>
             </div>
+          </el-card>
+          <el-card v-else>
+      <!-- 骨架屏 -->
+      <el-skeleton :rows="5" animated />
           </el-card>
           <el-card style="margin-top: 20px">
             <h4>喜欢该文章吗？</h4>
@@ -295,28 +300,22 @@ const submitRating = async () => {
         </el-aside>
           </div>
 
-
-
         <el-main>
-          <div v-for="(item, index) in data.data" :key="index" class="text item">
+          <div  v-if="!isLoading" v-for="(item, index) in data.data" :key="index" class="text item">
             <el-card class="box-card">
               <template #header>
-                <div class="card-header">
-<!--                    <div class="grid-content ep-bg-purple" style="display: flex; flex-direction: column; align-items: center; text-align: center;">-->
-<!--    <h1 style="font-size: 30px">{{ item.title }}</h1>-->
-<!--  </div>-->
-<!--                    <el-row :gutter="20" justify="center">-->
-<!--&lt;!&ndash;  <p>浏览器指纹: {{ fingerprint }}</p>&ndash;&gt;-->
-<!--    <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>作者:{{ item.author }}</h3></el-col>-->
-<!--    <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>总体评分:<el-rate v-model="averageRating" allow-half disabled /></h3></el-col>-->
-<!--    <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>发布时间：</h3></el-col>-->
-<!--  </el-row>-->
-<!--                  <el-divider/>-->
+                <div   class="card-header">
                   <div v-html="convertMarkdown(item.content)"></div>
+
                 </div>
+
               </template>
             </el-card>
           </div>
+                          <el-card v-else>
+            <!-- 骨架屏 -->
+        <el-skeleton :rows="5" animated />
+    </el-card>
         </el-main>
       </el-container>
     </el-container>

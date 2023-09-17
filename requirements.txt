@@ -21,3 +21,4 @@ pyjwt~=2.8.0
 httpx~=0.24.1
 redis~=5.0.0
 psutil~=5.9.5
+oss2~=2.18.0
