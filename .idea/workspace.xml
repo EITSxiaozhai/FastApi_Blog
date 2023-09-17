@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改ORM添加文章">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改Celery任务队列消息">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/SystemMonitoring/Monitoring.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/SystemMonitoring/Monitoring.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/backlist.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/backlist.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/celerybeat-schedule.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/celerybeat-schedule.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -413,6 +409,7 @@
       <workItem from="1694693578410" duration="9093000" />
       <workItem from="1694755308672" duration="11565000" />
       <workItem from="1694841120882" duration="708000" />
+      <workItem from="1694918436598" duration="2577000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -757,7 +754,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="173" />
+    <option name="localTasksCounter" value="177" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -775,10 +772,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="优化gitlab CI/CD" />
-    <MESSAGE value="修改nginx配置请求" />
-    <MESSAGE value="优化token传递" />
-    <MESSAGE value="修复url路径" />
     <MESSAGE value="优化CSS" />
     <MESSAGE value="修改CI/CD" />
     <MESSAGE value="添加文章评分" />
@@ -800,7 +793,11 @@
     <MESSAGE value="添加强制验证" />
     <MESSAGE value="优化代码" />
     <MESSAGE value="修改ORM添加文章" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改ORM添加文章" />
+    <MESSAGE value="修改介绍" />
+    <MESSAGE value="添加断线判断" />
+    <MESSAGE value="测试celery进程" />
+    <MESSAGE value="修改Celery任务队列消息" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改Celery任务队列消息" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$models.coverage" NAME="models Coverage Results" MODIFIED="1679217759819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/model" />

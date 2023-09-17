@@ -5,7 +5,9 @@ import os
 import pickle
 import sys
 from datetime import timedelta, datetime
-
+import oss2
+import os
+from oss2.credentials import EnvironmentVariableCredentialsProvider
 import jwt
 from celery import Celery
 import redis
@@ -78,3 +80,31 @@ class BlogCache:
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
+
+## 阿里云文件上传
+class aliOssUpload():
+    def __init__(self):
+        access_key_id = 'LTAI5tNsa58BCkcca4qPmYfQ'
+        access_key_secret = 'm8gx8kmoEnAMrGLmogmT105VuSV2Zw'
+
+        # 填写自己的 Bucket 名称和上传地址
+        self.bucket_name = 'zpwl002'
+        self.upload_path = 'blog/maincare/'
+
+        # 创建 OSS 链接
+        auth = oss2.Auth(access_key_id, access_key_secret)
+        self.bucket = oss2.Bucket(auth, 'http://oss-cn-hangzhou.aliyuncs.com', self.bucket_name)
+
+    def oss_upload_file(self, file_path):
+        # 构造上传路径
+        file_name = os.path.basename(file_path)
+        oss_path = self.upload_path + file_name
+        # 上传文件
+        with open(file_path, 'rb') as file_obj:
+            result = self.bucket.put_object(oss_path, file_obj)
+        # 返回上传地址
+        image_url = f"http://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}{file_name}"
+        print(image_url)
+        return image_url
+
+

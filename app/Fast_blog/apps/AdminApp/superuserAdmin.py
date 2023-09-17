@@ -17,7 +17,7 @@ from starlette.background import BackgroundTasks
 from app.Fast_blog.apps.Blog_app import BlogApp
 from app.Fast_blog.apps.Blog_app.BlogApi import static_folder_path
 from app.Fast_blog.database.database import db_session
-from app.Fast_blog.middleware.backlist import oauth2_scheme
+from app.Fast_blog.middleware.backlist import oauth2_scheme, aliOssUpload
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import AdminUser, UserPrivileges, Blog
 from app.Fast_blog.schemas.schemas import UserCredentials, Googlerecaptcha
@@ -370,18 +370,20 @@ async def UserloginOut():
 
 ## Admin页面博客添加
 @AdminApi.post('/blogadd')
-async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file: UploadFile, background_tasks: BackgroundTasks,
+async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file_path: str, background_tasks: BackgroundTasks,
                   request: Request, token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
             # 将文件保存到磁盘
-            file_path = os.path.join(static_folder_path, "uploadimages", file.filename)
-            with open(file_path, "wb") as f:
-                shutil.copyfileobj(file.file, f)
+            # file_path = os.path.join(static_folder_path, "uploadimages", file.filename)
+            # with open(file_path, "wb") as f:
+            #     shutil.copyfileobj(file.file, f)
             content_binary = Addcontent.encode("utf-8")
-            base_url = str(request.base_url)
+            image_url =  aliOssUpload().oss_upload_file(file_path)
+
+            # base_url = str(request.base_url)
             # 构建完整的URL地址
-            image_url = f"{base_url.rstrip('/')}/static/uploadimages/{file.filename}"
+            # image_url = f"{base_url.rstrip('/')}/static/uploadimages/{file.filename}"
             # 构建参数值字典
             new_blog_entry = Blog(
                 title=Addtitle,
