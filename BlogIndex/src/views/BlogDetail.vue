@@ -254,8 +254,11 @@ const submitRating = async () => {
         </el-menu>
         <el-progress :percentage="readingProgress" :show-text="false"/>
       </el-header>
+      <el-card v-if="!isLoading">
 <el-container style="margin-top: 4%; display: flex; justify-content: center; align-items: center;">
+
   <div style="width: 50%">
+
       <div style="display: flex; flex-direction: column; align-items: center;">
     <h1 class="el-title">欢迎来到我们的文章介绍页面</h1>
     <p class="el-text">在这个页面上，我们将介绍如何使用 Element UI 来创建一个引人注目的文章介绍页面。</p>
@@ -269,6 +272,11 @@ const submitRating = async () => {
     </div>
   </div>
 </el-container>
+        </el-card>
+      <el-card v-else>
+            <!-- 骨架屏 -->
+        <el-skeleton :rows="5" animated />
+    </el-card>
 
       <el-container>
         <div style="margin-top: 20px;position: sticky; ">

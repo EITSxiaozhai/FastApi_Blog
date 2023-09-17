@@ -261,10 +261,10 @@ watch(scrollDirection, (newDirection, oldDirection) => {
               <el-main>
                 <!--                  <router-link :to="`/blog/${blog.BlogId}`">-->
                 <transition  name="el-fade-in-linear">
-<!--                <el-card  shadow="hover" id="main-boxcard" class="box-card"-->
-<!--                         @click="jumpFn(blog.BlogId)">-->
+                <el-card  shadow="hover" id="main-boxcard" class="box-card"
+                         @click="jumpFn(blog.BlogId)">
                   <el-container>
-                    <el-row :gutter="10" @click="jumpFn(blog.BlogId)">
+<!--                    <el-row :gutter="10" @click="jumpFn(blog.BlogId)">-->
                       <el-aside>
                         <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image">
                       </el-aside>
@@ -274,11 +274,11 @@ watch(scrollDirection, (newDirection, oldDirection) => {
                           {{ blog.author }} {{ blog.created_at }}
                         </el-container>
                       </el-main>
-                    </el-row>
+<!--                    </el-row>-->
                   </el-container>
                   <!-- 卡片内容 -->
-<!--                </el-card>-->
-                  </transition>
+                </el-card>
+                </transition>
                 <el-divider />
                 <!--                  </router-link>-->
               </el-main>
@@ -378,9 +378,13 @@ watch(scrollDirection, (newDirection, oldDirection) => {
 
 <style>
 
+
+
+
 .app{
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
   'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
+
 }
 
 .el-footer {
@@ -511,9 +515,7 @@ watch(scrollDirection, (newDirection, oldDirection) => {
   display: block; /* 当 "showFloatingWindow" 为 true 时显示 */
 }
 
-#app > div{
- background-color:#ecf0f1;
-}
+
 
 
 .background-container {
