@@ -197,8 +197,8 @@ watch(scrollDirection, (newDirection, oldDirection) => {
     <!--    文章介绍卡片-->
 
 
-    <el-row :gutter="10" style="display: flex; justify-content: center;">
-      <el-col style="margin-left: 20px" xs="10" :sm="10" :md="15" :lg="4" :xl="3" class="hidden-lg-and-down">
+    <el-row :gutter="10" style="display: flex; justify-content: center; max-width: 100% ">
+      <el-col style="margin-left: 20px" xs="10" :sm="10" :md="15" :lg="4" :xl="3" class="hidden-lg-and-down;">
         <el-card>
           <img
               src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
@@ -247,6 +247,23 @@ watch(scrollDirection, (newDirection, oldDirection) => {
             </el-timeline-item>
           </el-timeline>
           <el-divider/>
+        </el-card>
+                <el-card style="margin-top: 20px">
+          <el-space direction="vertical">
+            <template #header>
+              <div class="card-header">
+                <span>最多阅读文章</span>
+              </div>
+            </template>
+            <div v-for="o in 4" :key="o" class="text item">{{ '这个文章的测试标题为hahahahha ' + o }}</div>
+          </el-space>
+          <el-divider/>
+          <el-carousel iindicator-position="none">
+            <el-carousel-item v-for="blog in data.data">
+              <h3 text="2xl" justify="center"></h3>
+              <img id="blog-img" :src="blog.BlogIntroductionPicture" alt="">
+            </el-carousel-item>
+          </el-carousel>
         </el-card>
       </el-col>
 
@@ -307,23 +324,7 @@ watch(scrollDirection, (newDirection, oldDirection) => {
 
       <el-col :xs="24" :sm="24" :md="12" :lg="5" :xl="3" id="left2" >
         <div style="position: sticky; top: 62px;">
-        <el-card>
-          <el-space direction="vertical">
-            <template #header>
-              <div class="card-header">
-                <span>最多阅读文章</span>
-              </div>
-            </template>
-            <div v-for="o in 4" :key="o" class="text item">{{ '这个文章的测试标题为hahahahha ' + o }}</div>
-          </el-space>
-          <el-divider/>
-          <el-carousel iindicator-position="none">
-            <el-carousel-item v-for="blog in data.data">
-              <h3 text="2xl" justify="center"></h3>
-              <img id="blog-img" :src="blog.BlogIntroductionPicture" alt="">
-            </el-carousel-item>
-          </el-carousel>
-        </el-card>
+
 
 
         <el-card style="margin-top: 20px">
@@ -377,7 +378,6 @@ watch(scrollDirection, (newDirection, oldDirection) => {
 
 
 <style>
-
 
 
 
@@ -515,7 +515,9 @@ watch(scrollDirection, (newDirection, oldDirection) => {
   display: block; /* 当 "showFloatingWindow" 为 true 时显示 */
 }
 
-
+#app > div{
+ background-color:#ecf0f1;
+}
 
 
 .background-container {
