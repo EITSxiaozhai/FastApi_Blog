@@ -11,9 +11,6 @@ class UserCredentials(BaseModel):
     googlerecaptcha: str
 
 
-class Googlerecaptcha(BaseModel):
-    googlerecaptcha: str
-
 
 class Token(BaseModel):
     access_token: str
@@ -25,10 +22,6 @@ class Blog(BaseModel):
     content: str
     Published: Optional[bool]
 
-
-class Token(BaseModel):
-    access_token: str
-    token_type: str
 
 
 class SchemasUser(BaseModel):

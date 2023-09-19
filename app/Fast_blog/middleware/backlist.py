@@ -95,6 +95,12 @@ class aliOssUpload():
         auth = oss2.Auth(access_key_id, access_key_secret)
         self.bucket = oss2.Bucket(auth, 'http://oss-cn-hangzhou.aliyuncs.com', self.bucket_name)
 
+    def Binaryfileupload(self,blogid,bitsfile):
+        self.bucket.put_object(f'{self.upload_path}{ blogid }-maincare.jpg',bitsfile)
+        image_url = f"http://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}{ blogid }-maincare.jpg"
+        print(image_url)
+        return image_url
+
     def oss_upload_file(self, file_path):
         # 构造上传路径
         file_name = os.path.basename(file_path)

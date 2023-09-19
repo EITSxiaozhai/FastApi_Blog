@@ -1,10 +1,12 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
+import base64
+import binascii
 import os
 import pickle
 from typing import Union
 from sqlalchemy import event
-from fastapi import Request, Depends, Body
+from fastapi import Request, Depends, Body, File
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -14,7 +16,7 @@ from starlette.background import BackgroundTasks
 import datetime
 from fastapi import HTTPException
 from app.Fast_blog.database.database import engine, db_session
-from app.Fast_blog.middleware.backlist import BlogCache, oauth2_scheme
+from app.Fast_blog.middleware.backlist import BlogCache, oauth2_scheme, aliOssUpload
 from app.Fast_blog.model.models import Blog, BlogRating, Vote
 import shutil
 from collections import defaultdict
@@ -29,7 +31,7 @@ templates = Jinja2Templates(directory="./Fast_blog/templates")
 static_folder_path = os.path.join(os.getcwd(), "Fast_blog", "static")
 BlogApp.mount("/static", StaticFiles(directory=static_folder_path), name="static")
 
-
+uploadoss = aliOssUpload()
 ## 博客游客用户主页显示
 @BlogApp.get("/blog/BlogIndex")
 async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4, ):
@@ -128,6 +130,17 @@ async def AdminBlogid(blog_id: int, token: str = Depends(oauth2_scheme)):
             print("我们遇到了下面的问题")
             print(e)
         return []
+
+
+@BlogApp.post("/blog/Blogeditimg")
+async def AdminBlogidADDimg(blog_id: int, file: UploadFile = File(...), token: str = Depends(oauth2_scheme)):
+    async with db_session() as session:
+        try:
+            file = await file.read()
+            await uploadoss.Binaryfileupload(blogid=blog_id, bitsfile=file)
+            return {"code": 20000, "message": "更新成功"}
+        except Exception as e:
+            return {"code": 20000, "message": e}
 
 
 @BlogApp.post("/blog/Blogedit")

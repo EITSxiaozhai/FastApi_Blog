@@ -20,8 +20,7 @@ from app.Fast_blog.database.database import db_session
 from app.Fast_blog.middleware.backlist import oauth2_scheme, aliOssUpload
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import AdminUser, UserPrivileges, Blog
-from app.Fast_blog.schemas.schemas import UserCredentials, Googlerecaptcha
-
+from app.Fast_blog.schemas.schemas import UserCredentials
 AdminApi = APIRouter()
 
 SECRET_KEY = "d81beb2748aa1322fe038c26dbd263907f5808548f9e428f4d9ce780dd4358a6cc942a1ee8bd49652991bce4989e270c55adeb0c5138ff516de13a07a5bdd5be"
