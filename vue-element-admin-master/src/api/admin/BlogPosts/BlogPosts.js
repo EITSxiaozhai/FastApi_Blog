@@ -23,3 +23,19 @@ export function BlogDetailsedit(blog_id, data) {
     data
   })
 }
+
+export function CreateContent(data) {
+  return request({
+    url: '/blog/AdminBlogCreate',
+    method: 'post',
+    data
+  })
+}
+
+export function Updatehomepageimage(blog_id, data) {
+  return request({
+    url: `/blog/Blogeditimg?blog_id=${blog_id}`,
+    method: 'post',
+    data
+  })
+}
