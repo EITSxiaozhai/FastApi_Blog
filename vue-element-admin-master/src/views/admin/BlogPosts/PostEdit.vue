@@ -23,8 +23,11 @@
             <el-upload
               class="upload-demo"
               drag
-              action="https://jsonplaceholder.typicode.com/posts/"
+              :action="''"
               multiple
+              :on-success="handleSuccess"
+              :on-error="handleError"
+              :before-upload="beforeUpload"
             >
               <i class="el-icon-upload" />
               <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
@@ -51,7 +54,7 @@
 </template>
 
 <script>
-import { BlogDetails, BlogDetailsedit } from '@/api/admin/BlogPosts/BlogPosts'
+import { BlogDetails, BlogDetailsedit, Updatehomepageimage } from '@/api/admin/BlogPosts/BlogPosts'
 import MarkdownEditor from '@/components/MarkdownEditor'
 
 export default {
@@ -71,6 +74,26 @@ export default {
     this.loadPostDetail(this.$route.query.blog_id)
   },
   methods: {
+    beforeUpload(file) {
+      const blogId = this.post.BlogId
+      // 创建 FormData 对象
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('blog_id', blogId)
+      const newfile = formData.get('file')
+      console.log(newfile)
+      Updatehomepageimage(blogId, formData)
+        .then((response) => {
+          // 处理后端响应
+          console.log('API response:', response.data)
+          // 根据后端响应执行其他操作
+        })
+        .catch((error) => {
+          // 处理请求错误
+          console.error('API error:', error)
+        })
+      return true
+    },
     async loadPostDetail(blog_id) {
       try {
         const response = await BlogDetails(blog_id)

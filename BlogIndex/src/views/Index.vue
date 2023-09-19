@@ -1,7 +1,8 @@
 <script setup xmlns="http://www.w3.org/1999/html">
 import {useRouter} from 'vue-router';
-import {reactive, ref, onMounted, onBeforeUnmount,watchEffect,watch} from 'vue';
+import {reactive, ref, onMounted, onBeforeUnmount, watchEffect, watch,} from 'vue';
 import TypeIt from 'typeit'
+
 const text = ref(null)
 
 import {loadFull} from 'tsparticles';
@@ -39,13 +40,12 @@ const pageSize = 4;
 let currentPage = 1;
 const loadedCards = ref(pageSize);
 
-const loadData = async (page) => {
+const loadData = async (page = 0) => {
   try {
 
     const response = await backApi.get(`/blog/BlogIndex?initialLoad=false&page=${page}&pageSize=${pageSize}`);
     if (response.data.length > 0) {
       data.data.push(...response.data);
-
     }
   } catch (error) {
     console.error(error);
@@ -65,11 +65,6 @@ const loadMoreCards = () => {
 
 
 getData();
-
-const jumpFn = (id) => {
-  console.log(id);
-  router.push(`/blog/${id}`);
-};
 
 
 const showFloatingWindow = ref(false);
@@ -94,16 +89,16 @@ onMounted(() => {
 });
 
 onMounted(() => {
-    new (TypeIt)(text.value, {
-        strings: ["埋骨何须桑梓地 " +
-        "人生何处不青山"],
-        cursorChar: "<span class='cursorChar'>|<span>",//用于光标的字符。HTML也可以
-        speed: 100,
-        lifeLike: true,// 使打字速度不规则
-        cursor: true,//在字符串末尾显示闪烁的光标
-        breakLines: false,// 控制是将多个字符串打印在彼此之上，还是删除这些字符串并相互替换
-        loop: false,//是否循环
-    }).go()
+  new (TypeIt)(text.value, {
+    strings: ["埋骨何须桑梓地 " +
+    "人生何处不青山"],
+    cursorChar: "<span class='cursorChar'>|<span>",//用于光标的字符。HTML也可以
+    speed: 100,
+    lifeLike: true,// 使打字速度不规则
+    cursor: true,//在字符串末尾显示闪烁的光标
+    breakLines: false,// 控制是将多个字符串打印在彼此之上，还是删除这些字符串并相互替换
+    loop: false,//是否循环
+  }).go()
 })
 
 const scrollY = ref(0);
@@ -149,47 +144,49 @@ watch(scrollDirection, (newDirection, oldDirection) => {
 
 <template>
 
-    <div class="background-container" :style="{ transform: `translateY(-${scrollY}px)` }" style="z-index: 3">
-      <div class="background-image"></div>
-      <h1  style=";position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" ref="text" class="msg"></h1>
-    </div>
+  <div class="background-container" :style="{ transform: `translateY(-${scrollY}px)` }" style="z-index: 3">
+    <div class="background-image"></div>
+    <h1 style=";position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" ref="text" class="msg"></h1>
+  </div>
 
   <el-container id="left-my" style="margin-top: 3%;">
-    <el-header id="top-mains" :class="{ 'hidden': isHeaderHidden }" :style="{ 'background-color': headerBackgroundColor }">
+    <el-header id="top-mains" :class="{ 'hidden': isHeaderHidden }"
+               :style="{ 'background-color': headerBackgroundColor }">
       <transition name="fade">
-      <el-menu
-          class="el-menu-demo"
-          mode="horizontal">
-        <h1 style="padding-left: 20px;font-size: 20px">
-          <router-link to="/blog/" style="text-decoration: none;">Exp1oit Blog</router-link>
-        </h1>
-        <div class="search-container">
-          <el-button
-              v-model="input1"
-              class="w-50 m-2"
-              size="large"
-              placeholder="请输入"
-              :prefix-icon="Search"
-              @click.stop="toggleFloatingWindow"
-          >搜索你感兴趣的文章
-          </el-button>
+        <el-menu
+            class="el-menu-demo"
+            mode="horizontal">
+          <h1 style="padding-left: 20px;font-size: 20px">
+            <router-link to="/blog/" style="text-decoration: none;">Exp1oit Blog</router-link>
+          </h1>
+          <div class="search-container">
+            <el-button
+                v-model="input1"
+                class="w-50 m-2"
+                size="large"
+                placeholder="请输入"
 
-          <!-- 浮动窗口 -->
-<transition  name="el-fade-in-linear">
-      <div v-show=showFloatingWindow class="floating-window"  :class="{ show: showFloatingWindow }" @mouseleave="closeFloatingWindow">
-        <el-input v-model="input1" placeholder="请输入" clearable />
-        <el-button @click="searchArticles">搜索</el-button>
-      </div>
-</transition>
-        </div>
+                @click.stop="toggleFloatingWindow"
+            >搜索你感兴趣的文章
+            </el-button>
 
-        <el-sub-menu index="2-4" id="login">
-          <template #title>登录</template>
-          <el-menu-item index="2-4-1">
-            <a href="" style="text-decoration:none">注册</a>
-          </el-menu-item>
-        </el-sub-menu>
-      </el-menu>
+            <!-- 浮动窗口 -->
+            <transition name="el-fade-in-linear">
+              <div v-show=showFloatingWindow class="floating-window" :class="{ show: showFloatingWindow }"
+                   @mouseleave="closeFloatingWindow">
+                <el-input v-model="input1" placeholder="请输入" clearable/>
+                <el-button>搜索</el-button>
+              </div>
+            </transition>
+          </div>
+
+          <el-sub-menu index="2-4" id="login">
+            <template #title>登录</template>
+            <el-menu-item index="2-4-1">
+              <a href="" style="text-decoration:none">注册</a>
+            </el-menu-item>
+          </el-sub-menu>
+        </el-menu>
       </transition>
     </el-header>
 
@@ -197,8 +194,8 @@ watch(scrollDirection, (newDirection, oldDirection) => {
     <!--    文章介绍卡片-->
 
 
-    <el-row :gutter="10" style="display: flex; justify-content: center; max-width: 100% ">
-      <el-col style="margin-left: 20px" xs="10" :sm="10" :md="15" :lg="4" :xl="3" class="hidden-lg-and-down;">
+    <el-row :gutter="10" style=" justify-content: center; max-width: 100% ">
+      <el-col xs="24" :sm="24" :md="12" :lg="4" :xl="3" class="hidden-lg-and-down;">
         <el-card>
           <img
               src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
@@ -248,7 +245,8 @@ watch(scrollDirection, (newDirection, oldDirection) => {
           </el-timeline>
           <el-divider/>
         </el-card>
-                <el-card style="margin-top: 20px">
+
+        <el-card style="margin-top: 20px; position: sticky; top: 62px;">
           <el-space direction="vertical">
             <template #header>
               <div class="card-header">
@@ -269,108 +267,103 @@ watch(scrollDirection, (newDirection, oldDirection) => {
 
       <transition name="el-fade-in-fast">
 
-      <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="10" class="maincaretest">
-        <el-card>
-        <div class="content-container" >
-        <el-main id="maincare">
-          <div class="about">
-            <el-container v-for="(blog, index) in data.data.slice(0, loadedCards)" :key="blog.BlogId">
-              <el-main>
-                <!--                  <router-link :to="`/blog/${blog.BlogId}`">-->
-                <transition  name="el-fade-in-linear">
-                <el-card  shadow="hover" id="main-boxcard" class="box-card"
-                         @click="jumpFn(blog.BlogId)">
-                  <el-container>
-<!--                    <el-row :gutter="10" @click="jumpFn(blog.BlogId)">-->
-                      <el-aside>
-                        <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image">
-                      </el-aside>
-                      <el-main>
-                        <h1 style="font-size: 25px;height: 20%">{{ blog.title }}</h1>
-                        <el-container>
-                          {{ blog.author }} {{ blog.created_at }}
-                        </el-container>
-                      </el-main>
-<!--                    </el-row>-->
+        <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="10" class="maincaretest">
+          <el-card>
+            <div class="content-container">
+              <el-main id="maincare">
+                <div class="about">
+
+                  <el-container v-for="(blog, index) in data.data.slice(0, loadedCards)" :key="blog.BlogId">
+                    <el-main>
+                      <keep-alive>
+                        <transition name="el-fade-in-linear">
+                          <router-link :to="`/blog/${blog.BlogId}`">
+                            <el-card shadow="hover" id="main-boxcard" class="box-card">
+                              <el-container>
+                                <!--                    <el-row :gutter="10" @click="jumpFn(blog.BlogId)">-->
+                                <el-aside>
+                                  <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image">
+                                </el-aside>
+                                <el-main>
+                                  <h1 style="font-size: 25px;height: 20%">{{ blog.title }}</h1>
+                                  <el-container>
+                                    {{ blog.author }} {{ blog.created_at }}
+                                  </el-container>
+                                </el-main>
+                              </el-container>
+                            </el-card>
+                          </router-link>
+                        </transition>
+                      </keep-alive>
+                      <el-divider/>
+                    </el-main>
+                    <div>
+                      <el-backtop :right="100" :bottom="100"/>
+                    </div>
                   </el-container>
-                  <!-- 卡片内容 -->
-                </el-card>
-                </transition>
-                <el-divider />
-                <!--                  </router-link>-->
+                </div>
+                <div class="bt_container" style="display: flex; justify-content: center;">
+                  <el-button
+                      type="primary"
+                      @click="loadMoreCards"
+                      v-if="data.data.length % pageSize === 0 && !loading">
+                    查看更多
+                  </el-button>
+                  <p v-else>没有更多文章可以查看了</p>
+                </div>
               </el-main>
-              <div>
-                <el-backtop :right="100" :bottom="100"/>
-              </div>
-            </el-container>
-          </div>
-          <div class="bt_container" style="display: flex; justify-content: center;">
-            <el-button
-                type="primary"
-                @click="loadMoreCards"
-                v-if="data.data.length % pageSize === 0 && !loading">
-              查看更多
-            </el-button>
-            <p v-else>没有更多文章可以查看了</p>
-          </div>
-        </el-main>
-        </div>
+            </div>
           </el-card>
-      </el-col>
-        </transition>
+        </el-col>
+      </transition>
 
 
-
-
-      <el-col :xs="24" :sm="24" :md="12" :lg="5" :xl="3" id="left2" >
+      <el-col :xs="24" :sm="24" :md="12" :lg="5" :xl="3" id="left2">
         <div style="position: sticky; top: 62px;">
 
+          <el-card style="margin-top: 20px">
+            文章分类
+          </el-card>
 
+          <el-card style="margin-top: 20px">
+            资源链接
+          </el-card>
 
-        <el-card style="margin-top: 20px">
-          文章分类
-        </el-card>
+          <el-card style="margin-top: 20px">
+            文章标签
+          </el-card>
 
-        <el-card style="margin-top: 20px">
-          资源链接
-        </el-card>
-
-        <el-card style="margin-top: 20px">
-          文章标签
-        </el-card>
-
-        <el-card style="margin-top: 20px">
-          网站统计
-        </el-card>
-          </div>
+          <el-card style="margin-top: 20px">
+            网站统计
+          </el-card>
+        </div>
       </el-col>
 
-          <!--    文章介绍卡片-->
-    <el-footer>
-      <div id="footer">
-        <el-row class="footer-content">
-          <el-col :span="6">
-            <h3>关于本站</h3>
-            <p>欢迎来到我的博客，这里分享了各种有趣的技术和知识。</p>
-          </el-col>
-          <el-col :span="6">
-            <h3>联系我们</h3>
-            <p>Email: example@example.com</p>
-            <p>社交媒体: <a href="#">Twitter</a>, <a href="#">Facebook</a></p>
-          </el-col>
-        </el-row>
-        <el-row class="footer-bottom">
-          <el-col :span="12">
-            <p>&copy; 2023 My Blog. All Rights Reserved.</p>
-          </el-col>
-          <el-col :span="12">
-            <p>建站时间: 2022年1月</p>
-          </el-col>
-        </el-row>
-      </div>
-    </el-footer>
+      <!--    文章介绍卡片-->
+      <el-footer>
+        <div id="footer">
+          <el-row class="footer-content">
+            <el-col :span="6">
+              <h3>关于本站</h3>
+              <p>欢迎来到我的博客，这里分享了各种有趣的技术和知识。</p>
+            </el-col>
+            <el-col :span="6">
+              <h3>联系我们</h3>
+              <p>Email: example@example.com</p>
+              <p>社交媒体: <a href="#">Twitter</a>, <a href="#">Facebook</a></p>
+            </el-col>
+          </el-row>
+          <el-row class="footer-bottom">
+            <el-col :span="12">
+              <p>&copy; 2023 My Blog. All Rights Reserved.</p>
+            </el-col>
+            <el-col :span="12">
+              <p>建站时间: 2022年1月</p>
+            </el-col>
+          </el-row>
+        </div>
+      </el-footer>
     </el-row>
-
 
 
   </el-container>
@@ -380,8 +373,7 @@ watch(scrollDirection, (newDirection, oldDirection) => {
 <style>
 
 
-
-.app{
+.app {
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
   'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 
@@ -394,9 +386,6 @@ watch(scrollDirection, (newDirection, oldDirection) => {
   width: 100%;
   align-items: center;
 }
-
-
-
 
 
 .about div img {
@@ -415,18 +404,15 @@ watch(scrollDirection, (newDirection, oldDirection) => {
 }
 
 
-
 #login {
   margin-left: auto;
 }
-
 
 
 .el-header {
   padding-left: 0;
   padding-right: 0;
 }
-
 
 
 .el-card .el-card__body a {
@@ -450,9 +436,7 @@ watch(scrollDirection, (newDirection, oldDirection) => {
   left: 0;
   right: 0;
   box-shadow: 0 0 26px 0 #767697;
-  //background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);
-  margin-top: 20px;
-  width: 100%; /* 将底部栏宽度设置为100% */
+//background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%); margin-top: 20px; width: 100%; /* 将底部栏宽度设置为100% */
   z-index: 1; /* 设置一个适当的 z-index 值 */
 
 }
@@ -482,9 +466,7 @@ watch(scrollDirection, (newDirection, oldDirection) => {
   max-width: 100%; /* 将内容区域的最大宽度设置为100% */
   text-align: center;
   font-size: 12px;
-  //color: #95d475;
-  //border-top: 3px solid #79bbff;
-  padding-top: 20px;
+//color: #95d475; //border-top: 3px solid #79bbff; padding-top: 20px;
 }
 
 
@@ -515,8 +497,8 @@ watch(scrollDirection, (newDirection, oldDirection) => {
   display: block; /* 当 "showFloatingWindow" 为 true 时显示 */
 }
 
-#app > div{
- background-color:#ecf0f1;
+#app > div {
+  background-color: #ecf0f1;
 }
 
 

@@ -10,8 +10,9 @@ import {useRouter} from "vue-router";
 import {reactive} from "vue";
 import backApi from '../Api/backApi.js';
 import {Discount} from "@element-plus/icons-vue";
-import { ChatDotRound, ChatLineRound, ChatRound } from '@element-plus/icons-vue'
+import {ChatDotRound, ChatLineRound, ChatRound} from '@element-plus/icons-vue'
 import Fingerprint2 from "fingerprintjs2";
+
 const value = ref()
 const icons = [ChatRound, ChatLineRound, ChatDotRound]
 
@@ -76,9 +77,7 @@ const convertMarkdown = (markdownText) => {
       }
     });
   }
-
   tableOfContents.value = toc;
-
   return renderedContent;
 };
 
@@ -244,7 +243,8 @@ const submitRating = async () => {
             class="el-menu-demo"
             mode="horizontal">
           <h1 style="padding-left: 20px;font-size: 20px">
-            <router-link to="/blog/" style="text-decoration: none;">Exp1oit Blog</router-link></h1>
+            <router-link to="/blog/" style="text-decoration: none;">Exp1oit Blog</router-link>
+          </h1>
           <el-sub-menu index="2-4" id="login">
             <template #title>登录</template>
             <el-menu-item index="2-4-1">
@@ -255,64 +255,73 @@ const submitRating = async () => {
         <el-progress :percentage="readingProgress" :show-text="false"/>
       </el-header>
       <el-card v-if="!isLoading">
-<el-container style="margin-top: 4%; display: flex; justify-content: center; align-items: center;">
+        <el-container style="margin-top: 4%; display: flex; justify-content: center; align-items: center;">
 
-  <div style="width: 50%">
+          <div style="width: 50%">
 
-      <div style="display: flex; flex-direction: column; align-items: center;">
-    <h1 class="el-title">欢迎来到我们的文章介绍页面</h1>
-    <p class="el-text">在这个页面上，我们将介绍如何使用 Element UI 来创建一个引人注目的文章介绍页面。</p>
-  </div>
-    <div>
-          <el-row :gutter="20" justify="center">
-      <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>作者</h3></el-col>
-      <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>总体评分:<el-rate v-model="averageRating" allow-half disabled /></h3></el-col>
-      <el-col :span="7"><div class="grid-content ep-bg-purple" /><h3>发布时间：</h3></el-col>
-    </el-row>
-    </div>
-  </div>
-</el-container>
-        </el-card>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <h1 class="el-title">欢迎来到我们的文章介绍页面</h1>
+              <p class="el-text">在这个页面上，我们将介绍如何使用 Element UI 来创建一个引人注目的文章介绍页面。</p>
+            </div>
+            <div>
+              <el-row :gutter="20" justify="center">
+                <el-col :span="7">
+                  <div class="grid-content ep-bg-purple"/>
+                  <h3>作者</h3></el-col>
+                <el-col :span="7">
+                  <div class="grid-content ep-bg-purple"/>
+                  <h3>总体评分:
+                    <el-rate v-model="averageRating" allow-half disabled/>
+                  </h3>
+                </el-col>
+                <el-col :span="7">
+                  <div class="grid-content ep-bg-purple"/>
+                  <h3>发布时间：</h3></el-col>
+              </el-row>
+            </div>
+          </div>
+        </el-container>
+      </el-card>
       <el-card v-else>
-            <!-- 骨架屏 -->
-        <el-skeleton :rows="5" animated />
-    </el-card>
+        <!-- 骨架屏 -->
+        <el-skeleton :rows="5" animated/>
+      </el-card>
 
       <el-container>
         <div style="margin-top: 20px;position: sticky; ">
-        <el-aside>
-          <el-card  v-if="!isLoading" >
-            <div class="table-of-contents" >
-              <h2>目录</h2>
-              <ul>
-                <li v-for="(item, index) in tableOfContents" :key="index">
-                  <a :href="item.anchor">{{ item.title }}</a>
-                </li>
-              </ul>
-            </div>
-          </el-card>
-          <el-card v-else>
-      <!-- 骨架屏 -->
-      <el-skeleton :rows="5" animated />
-          </el-card>
-          <el-card style="margin-top: 20px">
-            <h4>喜欢该文章吗？</h4>
-  <el-rate
-    v-model="value"
-    :icons="icons"
-    :void-icon="ChatRound"
-    :colors="['#409eff', '#67c23a', '#FF9900']"
-    @change="submitRating"
-  />
-          </el-card>
-        </el-aside>
-          </div>
+          <el-aside>
+            <el-card v-if="!isLoading">
+              <div class="table-of-contents">
+                <h2>目录</h2>
+                <ul>
+                  <li v-for="(item, index) in tableOfContents" :key="index">
+                    <a :href="item.anchor">{{ item.title }}</a>
+                  </li>
+                </ul>
+              </div>
+            </el-card>
+            <el-card v-else>
+              <!-- 骨架屏 -->
+              <el-skeleton :rows="5" animated/>
+            </el-card>
+            <el-card style="margin-top: 20px">
+              <h4>喜欢该文章吗？</h4>
+              <el-rate
+                  v-model="value"
+                  :icons="icons"
+                  :void-icon="ChatRound"
+                  :colors="['#409eff', '#67c23a', '#FF9900']"
+                  @change="submitRating"
+              />
+            </el-card>
+          </el-aside>
+        </div>
 
         <el-main>
-          <div  v-if="!isLoading" v-for="(item, index) in data.data" :key="index" class="text item">
+          <div v-if="!isLoading" v-for="(item, index) in data.data" :key="index" class="text item">
             <el-card class="box-card">
               <template #header>
-                <div   class="card-header">
+                <div class="card-header">
                   <div v-html="convertMarkdown(item.content)"></div>
 
                 </div>
@@ -320,10 +329,10 @@ const submitRating = async () => {
               </template>
             </el-card>
           </div>
-                          <el-card v-else>
+          <el-card v-else>
             <!-- 骨架屏 -->
-        <el-skeleton :rows="5" animated />
-    </el-card>
+            <el-skeleton :rows="5" animated/>
+          </el-card>
         </el-main>
       </el-container>
     </el-container>
@@ -333,12 +342,12 @@ const submitRating = async () => {
 
 <style>
 
-.common-layout div .el-aside{
+.common-layout div .el-aside {
   top: 60px;
- position:sticky;
+  position: sticky;
 }
 
-.app{
+.app {
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
   'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 }
@@ -372,7 +381,6 @@ const submitRating = async () => {
 .table-of-contents li {
   margin-bottom: 5px;
 }
-
 
 
 </style>
