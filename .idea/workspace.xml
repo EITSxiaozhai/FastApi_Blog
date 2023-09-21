@@ -4,161 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修复图片上传阿里云">
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/aixin.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/aojiao.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/baoquan.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/baoyou.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/chaokaixin.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/chaozan.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/chigua.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/cold.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/dacall.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/daku.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/daxiao.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/doge.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/dq.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/dx.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/eyes.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/fanbaiyan.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/fengdou.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/ganga.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/goutou.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/guai.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/guzhang.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/han.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/haqian.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/heart.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/hejiu.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/huaji.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/hx.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/jianxiao.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/jingxi.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/jingya.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/kouzhao.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/kungou.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/layanjing.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/lianhong.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/like.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/linghunchuqiao.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/miaoa.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/mojing.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/nanguo.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/oh.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/ok.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/piezui.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/shengbing.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/shengli.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/shengqi.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/sikao.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/sl.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/smile.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/star.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/teeth.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/teng.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tiaopi.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/touxiao.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tu.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tushe.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/bishi.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/bizui.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/chan.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/dai.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/daku.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/dalao.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/dalian.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/dianzan.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/doge.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/facai.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/fanu.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/ganga.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/guilian.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/guzhang.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/haixiu.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/huaixiao.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/jingxia.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/keai.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/koubi.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/kun.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/lenmo.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/liubixue.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/liuhan.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/liulei.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/miantian.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/mudengkoudai.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/nanguo.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/outu.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/qinqin.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/se.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/shengbing.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/shengqi.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/shuizhe.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/sikao.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/tiaokan.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/tiaopi.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/touxiao.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/tuxue.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/tv.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/weiqu.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/weixiao.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/wenhao.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/wunai.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/xiaoku.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/xieyanxiao.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/yiwen.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/yun.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/zaijian.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/zhoumei.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/tv/zhuakuang.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/weiqu.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/wulian.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/wulianku.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/wuyan.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/wy.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/xia.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/xiaoku.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/xq.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/xusheng.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/yh.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/yinxian.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/zaijian.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/zanghu.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/zhichi.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/emoji/zhuakuang.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/img/blindfold.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/img/commentBack.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/img/greeting.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/public/static/img/normal.webp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/src/App.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/blogvuets/src/assets/comment.js" afterDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="TS转型文件调整">
+      <change afterPath="$PROJECT_DIR$/blogvuets/.env.development" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/blogvuets/.env.production" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/blogvuets/Dockerfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/.vscode/extensions.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/auto-imports.d.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/components.d.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/public/JS/backjs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/public/backCss.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/public/favicon.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/public/images/backgrade.jpg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/public/images/swap.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/src/Api/backApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/Api/backApi.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/src/App.vue" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/src/components/particles/particles.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/src/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/src/router/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/src/store/store.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/src/views/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/vite.config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BlogIndex/vitest.config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/backlist.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/backlist.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/PostEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/PostEdit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,6 +25,7 @@
         <option value="TypeScript File" />
         <option value="Python Script" />
         <option value="Vue Composition API Component" />
+        <option value="Dockerfile" />
       </list>
     </option>
   </component>
@@ -248,7 +100,7 @@
     "TODO_SCOPE": "All Places",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "D:/项目备份/fast-api/blogvuets/src/assets",
+    "last_opened_file_path": "D:/项目备份/fast-api/blogvuets",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -267,9 +119,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\项目备份\fast-api\blogvuets" />
       <recent name="D:\项目备份\fast-api\blogvuets\src\assets" />
       <recent name="D:\项目备份\fast-api\blogvuets\public" />
-      <recent name="D:\项目备份\fast-api\blogvuets" />
       <recent name="D:\项目备份\fast-api\blogvuets\src" />
       <recent name="D:\项目备份\fast-api\blogvuets\src\views" />
     </key>
@@ -570,7 +422,7 @@
       <workItem from="1695131371401" duration="5086000" />
       <workItem from="1695210342521" duration="5179000" />
       <workItem from="1695275433598" duration="5864000" />
-      <workItem from="1695282010219" duration="5838000" />
+      <workItem from="1695282010219" duration="7233000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -915,7 +767,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="185" />
+    <option name="localTasksCounter" value="187" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -939,8 +791,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改环境变量" />
-    <MESSAGE value="优化title" />
     <MESSAGE value="添加用户投票验证" />
     <MESSAGE value="修改打字机CSS" />
     <MESSAGE value="修改CSS" />
@@ -964,7 +814,9 @@
     <MESSAGE value="优化首页CSS" />
     <MESSAGE value="博客首页优化API" />
     <MESSAGE value="修复图片上传阿里云" />
-    <option name="LAST_COMMIT_MESSAGE" value="修复图片上传阿里云" />
+    <MESSAGE value="转型TS写法。增加ESLine" />
+    <MESSAGE value="TS转型文件调整" />
+    <option name="LAST_COMMIT_MESSAGE" value="TS转型文件调整" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$models.coverage" NAME="models Coverage Results" MODIFIED="1679217759819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/model" />
