@@ -8,6 +8,7 @@ module.exports = {
     });
     },
   devServer: {
-        port:8080
+        port:8080,
+
     },
 };
