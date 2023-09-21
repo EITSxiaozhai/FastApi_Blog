@@ -7,7 +7,7 @@
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修复network:unavailable">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/vue.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/vue.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -420,7 +420,7 @@
       <workItem from="1695131371401" duration="5086000" />
       <workItem from="1695210342521" duration="5179000" />
       <workItem from="1695275433598" duration="5864000" />
-      <workItem from="1695282010219" duration="13132000" />
+      <workItem from="1695282010219" duration="13624000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -765,7 +765,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="193" />
+    <option name="localTasksCounter" value="194" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
