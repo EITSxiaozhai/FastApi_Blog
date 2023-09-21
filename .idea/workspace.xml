@@ -5,7 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="环境增加-添加API">
-      <change beforePath="$PROJECT_DIR$/.gitlab-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.gitlab-ci.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/blogvuets/# .env.test" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/blogvuets/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/.env.development" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/.env.development" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/.env.production" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/.env.production" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/Api/backApi.js" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/Api/backApi.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/vue.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/vue.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -418,7 +426,7 @@
       <workItem from="1695131371401" duration="5086000" />
       <workItem from="1695210342521" duration="5179000" />
       <workItem from="1695275433598" duration="5864000" />
-      <workItem from="1695282010219" duration="7487000" />
+      <workItem from="1695282010219" duration="10501000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -763,17 +771,11 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="188" />
+    <option name="localTasksCounter" value="189" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-    <option name="exactExcludedFiles">
-      <list>
-        <option value="$PROJECT_DIR$/BlogIndex/src/main.js.map" />
-        <option value="$PROJECT_DIR$/BlogIndex/src/main.js" />
-      </list>
-    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

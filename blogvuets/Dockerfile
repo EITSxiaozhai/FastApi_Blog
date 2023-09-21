@@ -15,4 +15,4 @@ COPY . /usr/src/app/
 EXPOSE 5173
 RUN npm run build
 # replace this with your application's default port
-CMD ["npm", "run" ,"serve-prod"]
+CMD ["npm", "run" ,"server"]
