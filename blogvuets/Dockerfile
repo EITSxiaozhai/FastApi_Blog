@@ -12,7 +12,7 @@ RUN npm install
 
 
 COPY . /usr/src/app/
-EXPOSE 8080
+EXPOSE 5173
 RUN npm run build
 # replace this with your application's default port
-CMD ["npx", "vue-cli-service","serve","--mode","test","--public","0.0.0.0:8080"]
+CMD ["npx", "vue-cli-service","serve","--mode","test","--public","0.0.0.0:5173"]
