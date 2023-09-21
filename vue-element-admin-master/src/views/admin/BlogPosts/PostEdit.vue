@@ -20,19 +20,61 @@
           </el-row>
           <markdown-editor v-model="post.content" style="height: 1500px" />
           <div><h1>文章首页图片</h1>
+            <!--            <el-upload-->
+            <!--              class="upload-demo"-->
+            <!--              drag-->
+            <!--              :action="''"-->
+            <!--              multiple-->
+            <!--              :on-success="handleSuccess"-->
+            <!--              :on-error="handleError"-->
+            <!--              :before-upload="beforeUpload"-->
+            <!--            >-->
+            <!--              <i class="el-icon-upload" />-->
+            <!--              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>-->
+            <!--              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
+            <!--            </el-upload>-->
+          </div>
+          <div>
             <el-upload
-              class="upload-demo"
-              drag
-              :action="''"
-              multiple
-              :on-success="handleSuccess"
-              :on-error="handleError"
               :before-upload="beforeUpload"
+              action="#"
+              list-type="picture-card"
+              :auto-upload="false"
             >
-              <i class="el-icon-upload" />
-              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+              <i slot="default" class="el-icon-plus" />
+              <div slot="file" slot-scope="{file}">
+                <img
+                  class="el-upload-list__item-thumbnail"
+                  :src="file.url"
+                >
+                <span class="el-upload-list__item-actions">
+                  <span
+                    class="el-upload-list__item-preview"
+                    @click="handlePictureCardPreview(file)"
+                  >
+                    <i class="el-icon-zoom-in" />
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleDownload(file.url)"
+                  >
+                    <i class="el-icon-download" />
+                  </span>
+                  <span
+                    v-if="!disabled"
+                    class="el-upload-list__item-delete"
+                    @click="handleRemove(file)"
+                  >
+                    <i class="el-icon-delete" />
+                  </span>
+                </span>
+              </div>
             </el-upload>
+            <el-dialog :visible.sync="dialogVisible">
+              <img width="100%" :src="dialogImageUrl" alt="">
+            </el-dialog>
+            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </div>
           <!--          <el-container style="margin-top: 20px;margin-bottom: 20px">-->
           <!--            <el-avatar shape="square" :size="350" :fit="fit" :src="post.BlogIntroductionPicture" />-->
@@ -67,7 +109,10 @@ export default {
       post: {},
       editMode: false,
       value1: '',
-      title: ''
+      title: '',
+      dialogImageUrl: '',
+      dialogVisible: false,
+      disabled: false
     }
   },
   created() {
@@ -80,17 +125,24 @@ export default {
       const formData = new FormData()
       formData.append('file', file)
       formData.append('blog_id', blogId)
-      const newfile = formData.get('file')
-      console.log(newfile)
       Updatehomepageimage(blogId, formData)
         .then((response) => {
           // 处理后端响应
-          console.log('API response:', response.data)
+          file.url = response.data.msg
+          this.dialogImageUrl = file.url
           // 根据后端响应执行其他操作
+          this.$message({
+            message: '博客首页图片上传成功',
+            type: 'success'
+          })
         })
         .catch((error) => {
           // 处理请求错误
           console.error('API error:', error)
+          this.$message({
+            message: '博客首页图片上传失败',
+            type: 'warning'
+          })
         })
       return true
     },
@@ -134,6 +186,16 @@ export default {
       // Reset the post object to its original state
       this.loadPostDetail(this.$route.query.blog_id)
       this.editMode = false
+    },
+    handleRemove(file) {
+      console.log(file)
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
+    },
+    handleDownload(file) {
+      console.log(file)
     }
   }
 }

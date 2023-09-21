@@ -137,10 +137,16 @@ async def AdminBlogidADDimg(blog_id: int, file: UploadFile = File(...), token: s
     async with db_session() as session:
         try:
             file = await file.read()
-            await uploadoss.Binaryfileupload(blogid=blog_id, bitsfile=file)
-            return {"code": 20000, "message": "更新成功"}
+            fileurl = await uploadoss.Binaryfileupload(blogid=blog_id, bitsfile=file)
+            return {
+                "code": 20000,
+                "data": {
+                    "msg": fileurl
+                }
+            }
         except Exception as e:
-            return {"code": 20000, "message": e}
+            print(f"我们遇到了下面的错误{e}")
+            return {"code": 50000, "message": "服务器错误"}
 
 
 @BlogApp.post("/blog/Blogedit")
