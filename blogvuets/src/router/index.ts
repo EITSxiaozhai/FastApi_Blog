@@ -4,7 +4,7 @@ import BlogDetail from '../views/BlogDetail.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: '/blog',
     name: 'home',
     component: HomeView
   },
