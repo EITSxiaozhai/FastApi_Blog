@@ -6,5 +6,8 @@ module.exports = {
       env['process.env']['VUE_APP_API_URL'] = JSON.stringify(process.env.VUE_APP_API_URL);
       return args;
     });
-  },
+    },
+  devServer: {
+        host: '0.0.0.0',
+    },
 };
