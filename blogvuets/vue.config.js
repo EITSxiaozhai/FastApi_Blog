@@ -7,7 +7,9 @@ module.exports = {
       return args;
     });
     },
-  devServer: {
-        host: '0.0.0.0',
-    },
+  // devServer: {
+  //       host:'0.0.0.0',
+  //       public: '192.168.0.150:8080',
+  //       port:8080
+  //   },
 };
