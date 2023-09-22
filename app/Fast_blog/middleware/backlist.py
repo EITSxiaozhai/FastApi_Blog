@@ -36,7 +36,7 @@ mysqldb_password = os.getenv("DB_PASSWORD")
 db_hostname = os.getenv("DB_HOSTNAME")
 db_port = os.getenv("DB_PORT")
 db_name = os.getenv("DB_NAME")
-
+secret_key = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 
 celery_app = Celery('tasks', broker=f'amqp://{mq_username}:{mq_password}@{mq_host}:{mq_port}/{mq_dbname}',
@@ -50,7 +50,7 @@ def add(x, y):
 
 ##token缓存到redis中
 class TokenManager():
-    def __init__(self, secret_key):
+    def __init__(self, secret_key=secret_key):
         self.secret_key = secret_key
         self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, password=db_password)
 

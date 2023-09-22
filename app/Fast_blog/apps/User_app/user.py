@@ -1,6 +1,6 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
-
+import datetime
 import uuid
 
 
@@ -13,6 +13,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter, Request, HTTPException
 from app.Fast_blog.database.database import db_session
+from app.Fast_blog.middleware.backlist import TokenManager
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import User
 
@@ -79,7 +80,13 @@ async def UserLogin(request:Request):
             # 密码不匹配
             raise HTTPException(status_code=401, detail="验证未通过")
         else:
-            return {"success":"true","message":loginusername}
+            usertoken = TokenManager()
+            token_data = {
+                "username": loginusername,
+                "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+            }
+            token_cont =  usertoken.create_jwt_token(data=token_data)
+            return {"success":"true","message":loginusername,'token':token_cont}
 
 ##查询全部用户名
 @UserApp.get("/alluser")
