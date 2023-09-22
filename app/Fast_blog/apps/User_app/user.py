@@ -3,6 +3,7 @@
 
 import uuid
 
+
 from pydantic import EmailStr
 from sqlalchemy import select
 
@@ -10,9 +11,10 @@ from app.Fast_blog.database.database import engine
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi import APIRouter
+from fastapi import APIRouter, Request, HTTPException
 from app.Fast_blog.database.database import db_session
 from app.Fast_blog.model import models
+from app.Fast_blog.model.models import User
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Session = SessionLocal()
@@ -42,7 +44,7 @@ async def GetUser(inputusername: str):
             print(e)
 
 
-@UserApp.get("/")
+@UserApp.get("/reguser")
 async def query(inputname: str, inpassword: str, inEmail: EmailStr, ingender: bool):
     async with db_session() as session:
         try:
@@ -60,6 +62,24 @@ async def query(inputname: str, inpassword: str, inEmail: EmailStr, ingender: bo
             print(e)
         return {"重复用户名": UserQurey}
 
+
+@UserApp.post("/login")
+async def UserLogin(request:Request):
+    async with db_session() as session:
+        request_data = await request.json()
+        loginusername = request_data["username"]
+        loginpassword = request_data["password"]
+        sql = select(User).filter(User.username == loginusername)
+        result = await session.execute(sql)
+        user = result.scalar_one_or_none()
+        if user is None:
+            # 用户名不存在
+            raise HTTPException(status_code=401, detail="验证未通过")
+        elif user.userpassword != loginpassword:
+            # 密码不匹配
+            raise HTTPException(status_code=401, detail="验证未通过")
+        else:
+            return {"success":"true","message":loginusername}
 
 ##查询全部用户名
 @UserApp.get("/alluser")

@@ -1,7 +1,8 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import BlogDetail from '../views/BlogDetail.vue'
-import Index from "@/views/IndexPage.vue";
-
+import Index from "../views/IndexPage.vue"
+import Iogin from "../views/user/Userlogin.vue"
+import userReg from "../views/user/Userreg.vue"
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,22 @@ const router = createRouter({
             meta: {
                 cacheable: false, // 不缓存该组件
                 title: '详情页'
+            },
+        },
+        {
+            path: '/login',
+            component: Iogin,
+            meta: {
+                cacheable: false, // 不缓存该组件
+                title: '登录页面'
+            },
+        },
+        {
+            path: '/reg',
+            component: userReg,
+            meta: {
+                cacheable: false, // 不缓存该组件
+                title: '注册页面'
             },
         },
     ]

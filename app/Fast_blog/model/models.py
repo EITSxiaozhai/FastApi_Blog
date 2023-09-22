@@ -39,10 +39,27 @@ class User(Base):
     Last_Login_Time = Column(DateTime, default=datetime.datetime.now)
     UserUuid = Column(String(255))
     UserEmail = Column(EmailType(255))
-
+    comments = relationship("Comment", back_populates="user")
     def to_dict(self):
         return dict(UserId=self.UserId, username=self.username, userpassword=self.userpassword, gender=self.gender,
                     UserEmail=self.UserEmail, UserUuid=self.UserUuid)
+
+@dataclass
+class Comment(Base):
+    __tablename__ = "comments"
+    id = Column(Integer, primary_key=True, index=True)
+    parentId = Column(Integer, ForeignKey('comments.id'), nullable=True)
+
+    uid = Column(Integer, ForeignKey('usertable.UserId'))
+    blog_id = Column(Integer, ForeignKey('blogtable.BlogId'))
+    blog = relationship("Blog", back_populates="comments")
+    address = Column(String(255))
+    content = Column(String(255), nullable=False)  # 修改此行，为 content 指定长度
+    likes = Column(Integer, default=0)
+    createTime = Column(String(255), default="1分钟前")  # 修改此行，为 createTime 指定长度
+    contentImg = Column(String(255))  # 修改此行，为 contentImg 指定长度
+    user = relationship("User", back_populates="comments")
+    replies = relationship("Comment", backref="parent_comment", remote_side=[id])
 
 
 @dataclass
@@ -85,7 +102,7 @@ class Blog(Base):
     author = Column(String(255))
     admin_id = Column(Integer, ForeignKey('Admintable.UserId'))
     ratings = relationship("BlogRating", back_populates="blog")
-
+    comments = relationship("Comment", back_populates="blog")
     def to_dict(self):
         return dict(BlogId=self.BlogId, title=self.title, content=self.content, author=self.author,
                     BlogIntroductionPicture=self.BlogIntroductionPicture, created_at=self.created_at)
@@ -122,6 +139,6 @@ class Vote(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     device_id = Column(String(255), index=True)  # 指定了长度为 255 字符
-    blog_id = Column(String, index=True)
+    blog_id = Column(String(255), index=True)
     vote_count = Column(Integer, default=0)
     __table_args__ = (UniqueConstraint('device_id', 'blog_id'),)

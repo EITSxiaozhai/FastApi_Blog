@@ -17,7 +17,7 @@ import datetime
 from fastapi import HTTPException
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.middleware.backlist import BlogCache, oauth2_scheme, aliOssUpload
-from app.Fast_blog.model.models import Blog, BlogRating, Vote
+from app.Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User
 import shutil
 from collections import defaultdict
 
@@ -234,3 +234,16 @@ async def get_average_rating(blog_id: int):
             return int(round(average_rating))
         else:
             return 0  # 返回默认值 0，表示从未评分过
+
+
+@BlogApp.post("/blogs/{blog_id}/submitcomments/")
+async def SubmitComments(blog_id: int,comment: Comment):
+    async with db_session() as session:
+        user = session.query(User).filter_by(UserId=comment.uid).first()
+        if user is None:
+            raise HTTPException(status_code=400, detail="User not found")
+
+        new_comment = Comment(**comment.dict(), uid=user.UserId)
+        session.add(new_comment)
+        session.commit()
+        return {"message": "Comment submitted successfully!"}
