@@ -8,7 +8,7 @@ import 'highlight.js/styles/default.css'; // Import the style you prefer
 const route = useRoute()
 import {useRouter} from "vue-router";
 import {reactive} from "vue";
-import backApi from '../Api/backApi.js';
+import backApi from '../Api/backApi.ts';
 import {Discount} from "@element-plus/icons-vue";
 import {ChatDotRound, ChatLineRound, ChatRound} from '@element-plus/icons-vue'
 import Fingerprint2 from "fingerprintjs2";

@@ -3,15 +3,16 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "test:unit": "vitest",
     "serve": "vite",
-    "test": "vue-cli-service build --mode test && npm run  serve -s dist",
-    "publish": "vue-cli-service build && vue-cli-service build --mode test"
+    "build": "vite build",
+    "test:unit": "vitest",
+    "dev": "vite",
+    "preview": "vite preview",
+    "publish": "vue-cli-service build && vue-cli-service build --mode test",
+    "test": "vue-cli-service build --mode test && npm run  serve -s dist"
   },
   "dependencies": {
+    "@vitejs/plugin-vue": "^4.3.4",
     "axios": "^1.5.0",
     "core-js": "^3.8.3",
     "element-plus": "^2.3.14",
@@ -20,6 +21,8 @@
     "os": "^0.1.2",
     "typeit": "^8.7.1",
     "undraw-ui": "^0.9.8",
+    "unplugin-auto-import": "^0.16.6",
+    "unplugin-vue-components": "^0.25.2",
     "vite": "^4.4.9",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",

@@ -2,7 +2,7 @@
 import {useRouter} from 'vue-router';
 import {reactive, ref, onMounted, onBeforeUnmount, watchEffect, watch,} from 'vue';
 import TypeIt from 'typeit'
-import backApi from '../Api/backApi.js';
+import backApi from '../Api/backApi.ts';
 import 'element-plus/theme-chalk/display.css'
 
 
