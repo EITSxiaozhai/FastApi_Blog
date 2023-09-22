@@ -15,4 +15,4 @@ COPY . /usr/src/app/
 EXPOSE 5173
 RUN npm run build
 # replace this with your application's default port
-CMD ["npx", "vue-cli-service","serve","--mode","test","--public","172.17.0.6:5173"]
+CMD ["npm", "run" ,"dev","-s","dist","--","--host","0.0.0.0"]

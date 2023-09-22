@@ -1,26 +1,39 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import HomeView from '../views/IndexPage.vue'
+import {createRouter, createWebHistory} from 'vue-router'
 import BlogDetail from '../views/BlogDetail.vue'
+import Index from "@/views/IndexPage.vue";
 
-const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/blog',
-    name: 'home',
-    component: HomeView
-  },
-  {
+
+const router = createRouter({
+    history: createWebHistory(import.meta.env.BASE_URL),
+    routes: [
+        {
+            path: "/",
+            component: Index,
+            name: "home",
+            meta: {
+                cacheable: true, // 添加缓存标志
+                title: '首页'
+            },
+        },
+        {
+            path: '/blog',
+            component: Index,
+            name: "home", // 重复使用 Index 组件
+            meta: {
+                cacheable: true, // 添加缓存标志
+                title: 'Exploit的Blog',
+                keepAlive: true,
+            },
+        },
+        {
             path: '/blog/:blogId',
             component: BlogDetail,
             meta: {
                 cacheable: false, // 不缓存该组件
                 title: '详情页'
             },
-  },
-]
-
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
+        },
+    ]
 })
 
-export default router
+export default router;
