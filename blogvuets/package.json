@@ -8,6 +8,7 @@
     "test:unit": "vitest",
     "dev": "vite",
     "preview": "vite preview",
+    "lint": "vue-cli-service lint",
     "publish": "vue-cli-service build && vue-cli-service build --mode test",
     "test": "vue-cli-service build --mode test && npm run  serve -s dist"
   },
