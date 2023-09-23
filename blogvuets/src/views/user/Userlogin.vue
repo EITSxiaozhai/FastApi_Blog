@@ -8,23 +8,19 @@ import vueRecaptcha from 'vue3-recaptcha2';
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
 
 // 回傳一組 token，並把 token 傳給後端驗證
-const recaptchaVerified = (res) => {
-  console.log(res);
-      ElNotification({
-        title: 'Warning',
-        message: '您还没有登录哦，点击卡片跳转到登录页面',
-        type: 'warning',
-      })
+const isLoginButtonDisabled = ref(true);
+const recaptchaVerified = (response) => {
+  console.log(response);
+  isLoginButtonDisabled.value = false; // 用户通过验证，按钮变为有效
 };
 
 const recaptchaExpired = () => {
-  // 過期後執行動作
+  isLoginButtonDisabled.value = true; // 验证过期，按钮变为无效
 };
 
 const recaptchaFailed = () => {
-  // 失敗執行動作
+  isLoginButtonDisabled.value = true; // 验证失败，按钮变为无效
 };
-
 
 const loginForm = ref({
   username: '',
@@ -89,6 +85,10 @@ const login = async () => {
     console.error('登录失败:', error);
   }
 };
+
+
+
+
 </script>
 
 <template>
@@ -102,18 +102,26 @@ const login = async () => {
     </el-form-item>
 
     <el-form-item>
+      <div>
   <vueRecaptcha
-    :sitekey="v2Sitekey"
-    @verified="recaptchaVerified"
-    @expired="recaptchaExpired"
-    @failed="recaptchaFailed"
-  ></vueRecaptcha>
+  :sitekey="v2Sitekey"
+  size="normal"
+  theme="light"
+  hl="zh-CN"
+  @verify="recaptchaVerified"
+  @expire="recaptchaExpired"
+  @fail="recaptchaFailed"
+  >
+</vueRecaptcha>
+      </div>
+
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" @click="login">登录</el-button>
+       <el-button type="primary" @click="login" :disabled="isLoginButtonDisabled">登录</el-button>
     </el-form-item>
   </el-form>
+
 </template>
 
 <style scoped>

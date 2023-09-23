@@ -99,11 +99,15 @@ const register = () => {
     </el-form-item>
     <el-form-item>
   <vueRecaptcha
-    :sitekey="v2Sitekey"
-    @verified="recaptchaVerified"
-    @expired="recaptchaExpired"
-    @failed="recaptchaFailed"
-  ></vueRecaptcha>
+  :sitekey="v2Sitekey"
+  size="normal"
+  theme="light"
+  hl="zh-CN"
+  @verify="recaptchaVerified"
+  @expire="recaptchaExpired"
+  @fail="recaptchaFailed"
+  >
+</vueRecaptcha>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" native-type="submit">注册</el-button>
