@@ -4,6 +4,7 @@ import Index from "../views/IndexPage.vue"
 import Iogin from "../views/user/Userlogin.vue"
 import userReg from "../views/user/Userreg.vue"
 
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [

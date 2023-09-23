@@ -14,7 +14,8 @@ import {ChatDotRound, ChatLineRound, ChatRound} from '@element-plus/icons-vue'
 import Fingerprint2 from "fingerprintjs2";
 
 import emoji from '@/assets/emoji'
-import { UToast, createObjectURL } from 'undraw-ui';
+import { UToast, createObjectURL} from 'undraw-ui';
+import {ElNotification} from "element-plus";
 
 const value = ref()
 const icons = [ChatRound, ChatLineRound, ChatDotRound]
@@ -249,7 +250,22 @@ let temp_id = 100
 const submit = ({ content, parentId, files, finish, reply }) => {
     let str = '提交评论:' + content + ';\t父id: ' + parentId + ';\t图片:' + files + ';\t被回复评论:'
   console.log(str, reply)
+  const token = localStorage.getItem("token");
 
+  if (!token) {
+    ElNotification({
+    title: 'Warning',
+    message: '您还没有登录哦，点击卡片跳转到登录页面',
+    type: 'warning',
+    onClick: () => {
+      // 用户点击通知时执行的操作
+      router.push('/login'); // 跳转到登录页面
+    },
+  })
+    // 如果没有 token，阻止评论的提交并提示用户去登录
+    console.log("用户未登录，请先登录");
+    return;
+  }
   /**
    * 上传文件后端返回图片访问地址，格式以'||'为分割; 如:  '/static/img/program.gif||/static/img/normal.webp'
    */

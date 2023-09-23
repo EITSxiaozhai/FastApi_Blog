@@ -13,11 +13,13 @@
     "test": "vue-cli-service build --mode test && npm run  serve -s dist"
   },
   "dependencies": {
+    "@unhead/vue": "^1.7.4",
     "@vitejs/plugin-vue": "^4.3.4",
     "axios": "^1.5.0",
     "core-js": "^3.8.3",
     "element-plus": "^2.3.14",
     "fingerprintjs2": "^2.1.4",
+    "grecaptcha": "^1.0.3",
     "markdown-it": "^13.0.1",
     "os": "^0.1.2",
     "typeit": "^8.7.1",
@@ -26,7 +28,9 @@
     "unplugin-vue-components": "^0.25.2",
     "vite": "^4.4.9",
     "vue": "^3.2.13",
+    "vue-recaptcha": "^3.0.0-alpha.2",
     "vue-router": "^4.0.13",
+    "vue3-recaptcha2": "^1.8.0",
     "vuex": "^4.0.0"
   },
   "devDependencies": {

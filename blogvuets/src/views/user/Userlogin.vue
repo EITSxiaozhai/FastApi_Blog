@@ -1,8 +1,26 @@
 <script setup>
-import { ref, onMounted, onBeforeMount } from 'vue';
+import { ref, onMounted, onBeforeMount,nextTick,onActivated } from 'vue';
 import backApi from "@/Api/backApi";
 import { useRouter } from 'vue-router'; // 导入useRouter函数
 import { ElNotification } from 'element-plus';
+import vueRecaptcha from 'vue3-recaptcha2';
+
+const v2Sitekey = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
+
+// 回傳一組 token，並把 token 傳給後端驗證
+const recaptchaVerified = (res) => {
+  console.log(res);
+};
+
+const recaptchaExpired = () => {
+  // 過期後執行動作
+};
+
+const recaptchaFailed = () => {
+  // 失敗執行動作
+};
+
+
 const loginForm = ref({
   username: '',
   password: '',
@@ -15,6 +33,7 @@ onBeforeMount(() => {
 });
 
 
+
 const token = ref(''); // 创建一个ref变量来存储令牌
 
 onMounted(() => {
@@ -24,6 +43,8 @@ onMounted(() => {
     token.value = storedToken;
   }
 });
+
+
 
 const login = async () => {
   try {
@@ -74,6 +95,16 @@ const login = async () => {
       <el-input @input="loginForm.password = $event" type="password" v-model="loginForm.password"
                 placeholder="请输入密码"></el-input>
     </el-form-item>
+
+    <el-form-item>
+  <vueRecaptcha
+    :sitekey="v2Sitekey"
+    @verified="recaptchaVerified"
+    @expired="recaptchaExpired"
+    @failed="recaptchaFailed"
+  ></vueRecaptcha>
+    </el-form-item>
+
     <el-form-item>
       <el-button type="primary" @click="login">登录</el-button>
     </el-form-item>
