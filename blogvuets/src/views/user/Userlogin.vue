@@ -5,11 +5,16 @@ import { useRouter } from 'vue-router'; // 导入useRouter函数
 import { ElNotification } from 'element-plus';
 import vueRecaptcha from 'vue3-recaptcha2';
 
-const v2Sitekey = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
+const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
 
 // 回傳一組 token，並把 token 傳給後端驗證
 const recaptchaVerified = (res) => {
   console.log(res);
+      ElNotification({
+        title: 'Warning',
+        message: '您还没有登录哦，点击卡片跳转到登录页面',
+        type: 'warning',
+      })
 };
 
 const recaptchaExpired = () => {

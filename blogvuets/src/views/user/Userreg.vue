@@ -1,5 +1,21 @@
 <script setup>
 import { ref, reactive } from 'vue';
+import vueRecaptcha from 'vue3-recaptcha2';
+
+const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
+
+// 回傳一組 token，並把 token 傳給後端驗證
+const recaptchaVerified = (res) => {
+  console.log(res);
+};
+
+const recaptchaExpired = () => {
+  // 過期後執行動作
+};
+
+const recaptchaFailed = () => {
+  // 失敗執行動作
+};
 
 const registerForm = ref({
   username: '',
@@ -80,6 +96,14 @@ const register = () => {
       >
         {{ verificationCodeButtonText }}
       </el-button>
+    </el-form-item>
+    <el-form-item>
+  <vueRecaptcha
+    :sitekey="v2Sitekey"
+    @verified="recaptchaVerified"
+    @expired="recaptchaExpired"
+    @failed="recaptchaFailed"
+  ></vueRecaptcha>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" native-type="submit">注册</el-button>
