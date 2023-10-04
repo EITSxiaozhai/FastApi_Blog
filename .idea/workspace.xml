@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="vue3 登录页面添加Google验证">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加按钮禁用状态">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/Userlogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/Userlogin.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/Userreg.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/Userreg.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/PostEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/PostEdit.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -425,7 +427,13 @@
       <workItem from="1695350161552" duration="1995000" />
       <workItem from="1695356822280" duration="4575000" />
       <workItem from="1695388717699" duration="6916000" />
-      <workItem from="1695465513358" duration="6582000" />
+      <workItem from="1695465513358" duration="6707000" />
+      <workItem from="1695568039226" duration="30000" />
+      <workItem from="1696042913054" duration="1255000" />
+      <workItem from="1696060047933" duration="10000" />
+      <workItem from="1696330226595" duration="685000" />
+      <workItem from="1696330977561" duration="1165000" />
+      <workItem from="1696414442924" duration="7573000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -770,7 +778,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="213" />
+    <option name="localTasksCounter" value="214" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -788,7 +796,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="添加强制验证" />
     <MESSAGE value="优化代码" />
     <MESSAGE value="修改ORM添加文章" />
     <MESSAGE value="修改介绍" />
@@ -813,7 +820,8 @@
     <MESSAGE value="登录弹窗" />
     <MESSAGE value="token中间键" />
     <MESSAGE value="vue3 登录页面添加Google验证" />
-    <option name="LAST_COMMIT_MESSAGE" value="vue3 登录页面添加Google验证" />
+    <MESSAGE value="添加按钮禁用状态" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加按钮禁用状态" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$models.coverage" NAME="models Coverage Results" MODIFIED="1679217759819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/model" />

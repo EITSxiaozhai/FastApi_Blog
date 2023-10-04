@@ -12,9 +12,12 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter, UploadFile
 from sqlalchemy import select, text, func
+from sqlalchemy import update
 from starlette.background import BackgroundTasks
 import datetime
 from fastapi import HTTPException
+
+from app.Fast_blog import model
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.middleware.backlist import BlogCache, oauth2_scheme, aliOssUpload
 from app.Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User
@@ -138,12 +141,27 @@ async def AdminBlogidADDimg(blog_id: int, file: UploadFile = File(...), token: s
         try:
             file = await file.read()
             fileurl = await uploadoss.Binaryfileupload(blogid=blog_id, bitsfile=file)
-            return {
-                "code": 20000,
-                "data": {
-                    "msg": fileurl
+            result = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
+            now = result.scalars().first()
+            if now is None:
+                return {
+                    "code": 40000,
+                    "data": {
+                        "msg": "no such file or directory"
+                    }
                 }
-            }
+            else:
+                update_stmt = update(Blog).where(Blog.BlogId == blog_id).values(BlogIntroductionPicture=fileurl)
+                # 执行更新操作
+                await session.execute(update_stmt)
+                await session.commit()  # 提交事务以保存更改
+                return {
+                    "code": 20000,
+                    "data": {
+                        "msg": fileurl
+                    }
+                }
+
         except Exception as e:
             print(f"我们遇到了下面的错误{e}")
             return {"code": 50000, "message": "服务器错误"}

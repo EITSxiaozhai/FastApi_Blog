@@ -39,7 +39,7 @@
               :before-upload="beforeUpload"
               action="#"
               list-type="picture-card"
-              :auto-upload="false"
+              :auto-upload="true"
             >
               <i slot="default" class="el-icon-plus" />
               <div slot="file" slot-scope="{file}">

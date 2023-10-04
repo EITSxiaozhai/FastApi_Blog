@@ -383,7 +383,7 @@ config.comments = [
             </el-card>
           </el-card>
         </el-aside>
-
+        <el-backtop :right="100" :bottom="100" />
         <el-main>
           <el-card v-if="!isLoading">
             <div v-for="(item, index) in data.data" :key="index" class="text item">
@@ -398,10 +398,7 @@ config.comments = [
         </el-main>
       </el-container>
         <u-comment :config="config" @submit="submit" @like="like">
-    <!-- <template>导航栏卡槽</template> -->
-    <!-- <template #info>用户信息卡槽</template> -->
-    <!-- <template #card>用户信息卡片卡槽</template> -->
-    <!-- <template #opearte>操作栏卡槽</template> -->
+
   </u-comment>
     </el-container>
   </div>
