@@ -572,7 +572,7 @@ onUnmounted(() => {
 
 .background-image {
   /* 背景图片样式，替换为您的背景图片样式 */
-  background-image: url('http://127.0.0.1:8000/static/uploadimages/1.jpeg');
+  background-image: url('https://www.loliapi.com/acg/pc/');
   background-size: cover;
   width: 100%;
   height: 100%;
