@@ -40,6 +40,7 @@
               action="#"
               list-type="picture-card"
               :auto-upload="true"
+              :file-list="fileList"
             >
               <i slot="default" class="el-icon-plus" />
               <div slot="file" slot-scope="{file}">
@@ -112,7 +113,8 @@ export default {
       title: '',
       dialogImageUrl: '',
       dialogVisible: false,
-      disabled: false
+      disabled: false,
+      fileList: []
     }
   },
   created() {
@@ -121,16 +123,19 @@ export default {
   methods: {
     beforeUpload(file) {
       const blogId = this.post.BlogId
-      // 创建 FormData 对象
       const formData = new FormData()
       formData.append('file', file)
       formData.append('blog_id', blogId)
+
       Updatehomepageimage(blogId, formData)
         .then((response) => {
           // 处理后端响应
           file.url = response.data.msg
           this.dialogImageUrl = file.url
-          // 根据后端响应执行其他操作
+
+          // 添加上传的文件到 fileList 数组中
+          this.fileList.push(file)
+
           this.$message({
             message: '博客首页图片上传成功',
             type: 'success'
@@ -144,6 +149,7 @@ export default {
             type: 'warning'
           })
         })
+
       return true
     },
     async loadPostDetail(blog_id) {
@@ -152,6 +158,28 @@ export default {
         this.post = response.data[0]
         // 将 created_at 转换为 JavaScript Date 对象并设置为 value1
         this.value1 = new Date(this.post.created_at)
+        console.log(this.post)
+        // 加载文章首页图片并设置到 fileList 数组中
+        this.loadHomepageImage(blog_id)
+      } catch (error) {
+        console.error('API error:', error)
+      }
+    },
+    async loadHomepageImage(blog_id) {
+      try {
+      // 在此处调用您的 API 来加载文章首页图片的URL，假设该 API 是 loadHomepageImage
+        const response = this.post.BlogIntroductionPicture
+        const imgUrl = response
+        // 创建一个文件对象并设置URL
+        const file = {
+          url: imgUrl,
+          name: '图片名称.jpg', // 设置图片名称
+          status: 'success', // 设置图片状态为成功
+          uid: 1 // 设置唯一ID
+        }
+
+        // 将文件对象添加到 fileList 数组中
+        this.fileList.push(file)
       } catch (error) {
         console.error('API error:', error)
       }
