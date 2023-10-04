@@ -1,6 +1,6 @@
 <script setup >
 import {useRouter} from 'vue-router';
-import {reactive, ref, onMounted, onBeforeUnmount, watchEffect, watch,} from 'vue';
+import {reactive, ref, onMounted, onBeforeUnmount, watchEffect, watch,onUnmounted,toRefs} from 'vue';
 import TypeIt from 'typeit'
 import backApi from '../Api/backApi.ts';
 import 'element-plus/theme-chalk/display.css'
@@ -128,6 +128,57 @@ watch(scrollDirection, (newDirection, oldDirection) => {
     // 向下滚动时隐藏标题栏
     isHeaderHidden.value = true;
   }
+});
+const siteCreationTime = ref({ value: new Date('2023-10-04') });
+const timeElapsed = ref({
+  years: 0,
+  months: 0,
+  days: 0,
+  hours: 0,
+  minutes: 0,
+  seconds: 0,
+});
+
+const updateSiteCreationTime = () => {
+  const startTime = siteCreationTime.value.value;
+  const currentTime = new Date();
+  let timeDiff = currentTime - startTime;
+
+  // 计算时间差的各个时间单位
+  const millisecondsPerSecond = 1000;
+  const millisecondsPerMinute = 60 * millisecondsPerSecond;
+  const millisecondsPerHour = 60 * millisecondsPerMinute;
+  const millisecondsPerDay = 24 * millisecondsPerHour;
+  const millisecondsPerMonth = 30 * millisecondsPerDay;
+  const millisecondsPerYear = 365 * millisecondsPerDay;
+
+  timeElapsed.value.years = Math.floor(timeDiff / millisecondsPerYear);
+  timeDiff -= timeElapsed.value.years * millisecondsPerYear;
+
+  timeElapsed.value.months = Math.floor(timeDiff / millisecondsPerMonth);
+  timeDiff -= timeElapsed.value.months * millisecondsPerMonth;
+
+  timeElapsed.value.days = Math.floor(timeDiff / millisecondsPerDay);
+  timeDiff -= timeElapsed.value.days * millisecondsPerDay;
+
+  timeElapsed.value.hours = Math.floor(timeDiff / millisecondsPerHour);
+  timeDiff -= timeElapsed.value.hours * millisecondsPerHour;
+
+  timeElapsed.value.minutes = Math.floor(timeDiff / millisecondsPerMinute);
+  timeDiff -= timeElapsed.value.minutes * millisecondsPerMinute;
+
+  timeElapsed.value.seconds = Math.floor(timeDiff / millisecondsPerSecond);
+};
+
+// 使用setInterval每秒更新建站时间
+let timerId;
+onMounted(() => {
+  updateSiteCreationTime();
+  timerId = setInterval(updateSiteCreationTime, 1000);
+});
+
+onUnmounted(() => {
+  clearInterval(timerId); // 组件销毁时清除定时器
 });
 </script>
 
@@ -327,17 +378,17 @@ watch(scrollDirection, (newDirection, oldDirection) => {
       <!--    文章介绍卡片-->
     </el-row>
 
-    <el-footer style="margin-top: 2%">
+    <el-footer style="margin-top: 10%">
         <div id="footer">
           <el-row class="footer-content">
-            <el-col :span="6">
+            <el-col :span="6" class="left-align">
               <h3>关于本站</h3>
               <p>欢迎来到我的博客，这里分享了各种有趣的技术和知识。</p>
             </el-col>
             <el-col :span="6">
-              <h3>联系我们</h3>
-              <p>Email: example@example.com</p>
-              <p>社交媒体: <a href="#">Twitter</a>, <a href="#">Facebook</a></p>
+              <h3>联系我</h3>
+              <p>Email: watch.dog@qq.com</p>
+
             </el-col>
           </el-row>
           <el-row class="footer-bottom">
@@ -345,7 +396,15 @@ watch(scrollDirection, (newDirection, oldDirection) => {
               <p>&copy; 2023 My Blog. All Rights Reserved.</p>
             </el-col>
             <el-col :span="12">
-              <p>建站时间: 2022年1月</p>
+              <p>
+  建站时间:
+  {{ timeElapsed.years }}年
+  {{ timeElapsed.months }}月
+  {{ timeElapsed.days }}天
+  {{ timeElapsed.hours }}小时
+  {{ timeElapsed.minutes }}分钟
+  {{ timeElapsed.seconds }}秒
+</p>
             </el-col>
           </el-row>
         </div>
@@ -358,6 +417,52 @@ watch(scrollDirection, (newDirection, oldDirection) => {
 
 <style>
 
+
+#footer {
+  background-color: #333; /* 设置背景颜色 */
+  color: #fff; /* 设置文本颜色 */
+  padding: 10px 0; /* 减小上下边距 */
+}
+
+/* 脚注内容的样式 */
+.footer-content {
+  max-width: 1200px; /* 设置最大宽度，根据需要调整 */
+  margin: 0 auto; /* 居中对齐 */
+}
+
+.footer-content h3 {
+  font-size: 24px; /* 设置标题字体大小 */
+}
+
+.footer-content p {
+  font-size: 16px; /* 设置段落字体大小 */
+  margin: 5px 0; /* 减小段落上下边距 */
+}
+
+/* 链接的样式 */
+.footer-content a {
+  color: #fff; /* 设置链接颜色 */
+  text-decoration: underline; /* 添加下划线 */
+  margin-right: 10px; /* 设置链接右侧间距 */
+}
+
+/* 脚注底部样式 */
+.footer-bottom {
+  max-width: 1200px; /* 设置最大宽度，根据需要调整 */
+  margin: 10px auto 0; /* 减小上外边距 */
+  font-size: 14px; /* 设置字体大小 */
+  text-align: center; /* 文本居中对齐 */
+}
+
+/* 版权信息样式 */
+.footer-bottom p {
+  margin: 5px 0; /* 设置段落上下边距 */
+}
+
+/* 建站时间样式 */
+.footer-bottom p:last-child {
+  margin-top: 10px; /* 设置最后一个段落的上外边距 */
+}
 
 .app {
   font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
