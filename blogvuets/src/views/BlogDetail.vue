@@ -342,17 +342,19 @@ config.comments = [
       </el-header>
 
       <el-card style="margin-top: 3%; display: flex; justify-content: center;" v-if="!isLoading">
+        <div v-for="(item, index) in data.data" :key="index" class="text item">
         <div>
           <div style="display: flex; flex-direction: column; align-items: center;">
-            <h1 style="font-size: 250%" class="el-title">欢迎来到我们的文章介绍页面</h1>
+            <h1 style="font-size: 250%" class="el-title">{{item.title}}</h1>
           </div>
           <div style="display: flex; justify-content: center; align-items: center;">
-            <h3 style="padding-right: 50px">作者:</h3>
+            <h3 style="padding-right: 50px">作者:{{item.author }}</h3>
             <h3>总体评分:</h3>
             <el-rate style="padding-right: 50px" v-model="averageRating" allow-half disabled/>
-            <h3 style="padding-right: 50px">发布时间：</h3>
+            <h3 style="padding-right: 50px">发布时间：{{item.created_at }}</h3>
           </div>
         </div>
+          </div>
       </el-card>
       <el-card v-else>
         <!-- 骨架屏 -->
