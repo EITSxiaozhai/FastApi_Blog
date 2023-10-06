@@ -268,11 +268,18 @@ async def SubmitComments(blog_id: int,comment: Comment):
 
 @BlogApp.post("/blog/BlogCreate")
 ##博客Admin创建问斩
-async def AdminBlogCreate():
+async def AdminBlogCreate(request_data: dict):
     async with db_session() as session:
         try:
-            return {"data": "success"}
+            content = request_data.get('content').encode('utf-8')  # 将content字段转换为字节
+            request_data['content'] = content  # 更新request_data中的content值
+
+            blog = Blog(**request_data)
+            session.add(blog)
+            await session.commit()
+
+            return {"code": 20000, "message": "更新成功"}
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
-        return 0
+            return {"code": 50000, "message": "服务器错误"}

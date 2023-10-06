@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { Postlist, DeletePost } from '@/api/admin/BlogPosts/BlogPosts'
+import { Postlist, DeletePost, Updatehomepageimage } from '@/api/admin/BlogPosts/BlogPosts'
 import { MessageBox } from 'element-ui'
 import PostEdit from '@/views/admin/BlogPosts/PostEdit.vue'
 export default {
@@ -74,28 +74,40 @@ export default {
         console.error('API error:', error)
       }
     },
-    async createItem() {
-      try {
-        // 获取所有文章列表
-        const response = await Postlist()
-        const posts = response.data
+    beforeUpload(file) {
+      const blogId = this.post.BlogId
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('blog_id', blogId)
 
-        // 找到最大的文章id
-        let maxId = 0
-        for (const post of posts) {
-          if (post.BlogId > maxId) {
-            maxId = post.BlogId
-          }
-        }
+      Updatehomepageimage(blogId, formData)
+        .then((response) => {
+          // 处理后端响应
+          file.url = response.data.msg
+          this.dialogImageUrl = file.url
 
-        // 将最大文章id加1作为新文章的id
-        const newId = maxId + 1
+          // 添加上传的文件到 fileList 数组中
+          this.fileList.push(file)
 
-        // 构建路由链接，将新文章的id作为参数传递到创建文章页面
-        this.$router.push({ name: 'CreateArticle', query: { id: newId }})
-      } catch (error) {
-        console.error('Create error:', error)
-      }
+          this.$message({
+            message: '博客首页图片上传成功',
+            type: 'success'
+          })
+        })
+        .catch((error) => {
+          // 处理请求错误
+          console.error('API error:', error)
+          this.$message({
+            message: '博客首页图片上传失败',
+            type: 'warning'
+          })
+        })
+
+      return true
+    },
+    createItem() {
+    // 使用路由名称导航到增加文章页面
+      this.$router.push({ name: 'CreateArticle' })
     },
     async deleteItem(item) {
       try {

@@ -20,19 +20,6 @@
           </el-row>
           <markdown-editor v-model="post.content" style="height: 1500px" />
           <div><h1>文章首页图片</h1>
-            <!--            <el-upload-->
-            <!--              class="upload-demo"-->
-            <!--              drag-->
-            <!--              :action="''"-->
-            <!--              multiple-->
-            <!--              :on-success="handleSuccess"-->
-            <!--              :on-error="handleError"-->
-            <!--              :before-upload="beforeUpload"-->
-            <!--            >-->
-            <!--              <i class="el-icon-upload" />-->
-            <!--              <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>-->
-            <!--              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>-->
-            <!--            </el-upload>-->
           </div>
           <div>
             <el-upload

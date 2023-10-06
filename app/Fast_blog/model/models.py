@@ -96,7 +96,7 @@ class Blog(Base):
     title = Column(String(255))
     content = Column(LargeBinary)
     BlogIntroductionPicture = Column(String(255))
-    created_at = Column(DateTime)
+    created_at = Column(DateTime,default=datetime.datetime.now)
     NumberLikes = Column(Integer)
     NumberViews = Column(Integer)
     author = Column(String(255))

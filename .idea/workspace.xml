@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加随机图片API">
-      <change afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/CreateArticle.vue" afterDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加创建文章最大值">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/BlogPosts/BlogPosts.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/BlogPosts/BlogPosts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/model/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/CreateArticle.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/CreateArticle.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/PostEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/PostEdit.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -439,7 +439,7 @@
       <workItem from="1696414442924" duration="13125000" />
       <workItem from="1696518767580" duration="102000" />
       <workItem from="1696518940209" duration="171000" />
-      <workItem from="1696583029853" duration="3157000" />
+      <workItem from="1696583029853" duration="5656000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -784,7 +784,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="219" />
+    <option name="localTasksCounter" value="220" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -802,7 +802,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改Celery任务队列消息" />
     <MESSAGE value="阿里云文件传输" />
     <MESSAGE value="详情页骨架屏" />
     <MESSAGE value="优化CSS" />
@@ -827,7 +826,8 @@
     <MESSAGE value="前端倒计时功能" />
     <MESSAGE value="修改博客详情页面" />
     <MESSAGE value="添加随机图片API" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加随机图片API" />
+    <MESSAGE value="添加创建文章最大值" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加创建文章最大值" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$models.coverage" NAME="models Coverage Results" MODIFIED="1679217759819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/model" />
