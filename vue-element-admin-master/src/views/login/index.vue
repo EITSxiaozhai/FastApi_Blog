@@ -74,7 +74,7 @@
 </template>
 
 <script>
-
+import Cookies from 'js-cookie'
 import { validUsername } from '@/utils/validate'
 import SocialSign from './components/SocialSignin'
 
@@ -194,6 +194,7 @@ export default {
         console.log(this.loginForm)
         if (valid) {
           this.loading = true
+          Cookies.set('username', this.loginForm.username)
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })

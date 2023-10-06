@@ -7,7 +7,6 @@
           <h1>
             <el-input v-model="post.title" placeholder="请输入标题" />
           </h1>
-
           <div style="padding-top: 20px" />
           <markdown-editor v-model="post.content" style="height: 1500px" />
           <div style="padding-top: 20px">
@@ -70,7 +69,7 @@
 <script>
 import { CreateContent, Updatehomepageimage } from '@/api/admin/BlogPosts/BlogPosts'
 import MarkdownEditor from '@/components/MarkdownEditor'
-
+import Cookies from 'js-cookie'
 export default {
   components: {
     // eslint-disable-next-line vue/no-unused-components
@@ -81,7 +80,8 @@ export default {
       post: {
         title: '',
         content: '',
-        BlogIntroductionPicture: ''
+        BlogIntroductionPicture: '',
+        author: ''
       },
       dialogImageUrl: '',
       dialogVisible: false,
@@ -91,6 +91,9 @@ export default {
     }
   },
   methods: {
+    updateAuthor() {
+      this.post.author = Cookies.get('username')
+    },
     beforeUpload(file) {
       // if (!this.post.title || !this.post.content) { // 检查标题和内容是否为空
       //   this.$message.error('请完成标题和内容后再上传图片')
