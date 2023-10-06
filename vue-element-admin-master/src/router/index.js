@@ -143,6 +143,16 @@ export const asyncRoutes = [
         }
       },
       {
+        path: '/blogcreat',
+        component: () => import('@/views/admin/BlogPosts/CreateArticle.vue'),
+        name: 'CreateArticle',
+        meta: {
+          title: '创建文章',
+          roles: ['admin'] // or you can only set roles in sub nav
+        },
+        hidden: true
+      },
+      {
         path: '/Blogid',
         component: () => import('@/views/admin/BlogPosts/PostEdit.vue'), // 或者你的编辑页面组件路径
         name: 'PostEdit',

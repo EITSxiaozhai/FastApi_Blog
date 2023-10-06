@@ -61,6 +61,7 @@ export default {
     this.fetchAdminData()
   },
   methods: {
+
     editItem(item) {
       // 导航到编辑页面，传递文章ID作为参数
       this.$router.push({ path: `/Blogid`, query: { blog_id: item.BlogId }})
@@ -73,9 +74,28 @@ export default {
         console.error('API error:', error)
       }
     },
-    createItem() {
-      // 进入创建页面的逻辑，跳转或者弹出对话框
-      // 例如：this.$router.push('/create'); 或者使用对话框组件
+    async createItem() {
+      try {
+        // 获取所有文章列表
+        const response = await Postlist()
+        const posts = response.data
+
+        // 找到最大的文章id
+        let maxId = 0
+        for (const post of posts) {
+          if (post.BlogId > maxId) {
+            maxId = post.BlogId
+          }
+        }
+
+        // 将最大文章id加1作为新文章的id
+        const newId = maxId + 1
+
+        // 构建路由链接，将新文章的id作为参数传递到创建文章页面
+        this.$router.push({ name: 'CreateArticle', query: { id: newId }})
+      } catch (error) {
+        console.error('Create error:', error)
+      }
     },
     async deleteItem(item) {
       try {

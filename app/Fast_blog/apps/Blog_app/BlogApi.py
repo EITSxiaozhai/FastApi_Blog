@@ -265,3 +265,14 @@ async def SubmitComments(blog_id: int,comment: Comment):
         session.add(new_comment)
         session.commit()
         return {"message": "Comment submitted successfully!"}
+
+@BlogApp.post("/blog/BlogCreate")
+##博客Admin创建问斩
+async def AdminBlogCreate():
+    async with db_session() as session:
+        try:
+            return {"data": "success"}
+        except Exception as e:
+            print("我们遇到了下面的问题")
+            print(e)
+        return 0

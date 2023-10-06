@@ -24,9 +24,9 @@ export function BlogDetailsedit(blog_id, data) {
   })
 }
 
-export function CreateContent(data) {
+export function CreateContent(data, blog_id) {
   return request({
-    url: '/blog/AdminBlogCreate',
+    url: '/blog/BlogCreate',
     method: 'post',
     data
   })
