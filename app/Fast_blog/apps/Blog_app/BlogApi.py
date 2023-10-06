@@ -143,14 +143,17 @@ async def AdminBlogidADDimg(blog_id: int, file: UploadFile = File(...), token: s
             fileurl = await uploadoss.Binaryfileupload(blogid=blog_id, bitsfile=file)
             result = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
             now = result.scalars().first()
+
             if now is None:
+                print("数据库中还没有对应ID图片，进行新建")
                 return {
-                    "code": 40000,
+                    "code": 20000,
                     "data": {
-                        "msg": "no such file or directory"
+                        "msg": fileurl
                     }
                 }
             else:
+                print("数据库中存在对应ID图片，进行修改")
                 update_stmt = update(Blog).where(Blog.BlogId == blog_id).values(BlogIntroductionPicture=fileurl)
                 # 执行更新操作
                 await session.execute(update_stmt)
@@ -275,6 +278,7 @@ async def AdminBlogCreate(request_data: dict):
             request_data['content'] = content  # 更新request_data中的content值
 
             blog = Blog(**request_data)
+
             session.add(blog)
             await session.commit()
 

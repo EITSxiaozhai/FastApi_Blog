@@ -80,28 +80,35 @@ export default {
     return {
       post: {
         title: '',
-        content: ''
+        content: '',
+        BlogIntroductionPicture: ''
       },
-      editMode: false
+      dialogImageUrl: '',
+      dialogVisible: false,
+      disabled: false,
+      editMode: false,
+      fileList: []
     }
   },
   methods: {
     beforeUpload(file) {
-      if (!this.post.title || !this.post.content) { // 检查标题和内容是否为空
-        this.$message.error('请完成标题和内容后再上传图片')
-        return false // 阻止上传
-      }
+      // if (!this.post.title || !this.post.content) { // 检查标题和内容是否为空
+      //   this.$message.error('请完成标题和内容后再上传图片')
+      //   return false // 阻止上传
+      // }
+      const blogId = this.$route.query.blog_id
       const formData = new FormData()
       formData.append('file', file)
-      Updatehomepageimage(formData)
+      formData.append('blog_id', blogId)
+      Updatehomepageimage(blogId, formData)
         .then((response) => {
           // 处理后端响应
           file.url = response.data.msg
           this.dialogImageUrl = file.url
-
+          console.log(file.url)
           // 添加上传的文件到 fileList 数组中
           this.fileList.push(file)
-
+          this.post.BlogIntroductionPicture = file.url
           this.$message({
             message: '博客首页图片上传成功',
             type: 'success'
@@ -148,6 +155,16 @@ export default {
     },
     enterEditMode() {
       this.editMode = true
+    },
+    handleRemove(file) {
+      console.log(file)
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
+    },
+    handleDownload(file) {
+      console.log(file)
     }
   }
 }

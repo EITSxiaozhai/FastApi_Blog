@@ -75,7 +75,7 @@ export default {
       }
     },
     beforeUpload(file) {
-      const blogId = this.post.BlogId
+      const blogId = this.$route.query.blog_id
       const formData = new FormData()
       formData.append('file', file)
       formData.append('blog_id', blogId)
@@ -105,9 +105,27 @@ export default {
 
       return true
     },
-    createItem() {
-    // 使用路由名称导航到增加文章页面
-      this.$router.push({ name: 'CreateArticle' })
+    async createItem() {
+      try {
+        // 获取所有文章列表
+        const response = await Postlist()
+        const posts = response.data
+        // 找到最大的文章id
+        let maxId = 0
+        for (const post of posts) {
+          if (post.BlogId > maxId) {
+            maxId = post.BlogId
+          }
+        }
+
+        // 将最大文章id加1作为新文章的id
+        const newId = maxId + 1
+
+        // 构建路由链接，将新文章的id作为参数传递到创建文章页面
+        this.$router.push({ name: 'CreateArticle', query: { blog_id: newId }})
+      } catch (error) {
+        console.error('Create error:', error)
+      }
     },
     async deleteItem(item) {
       try {
