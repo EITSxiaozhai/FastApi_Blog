@@ -271,7 +271,7 @@ async def SubmitComments(blog_id: int,comment: Comment):
 
 @BlogApp.post("/blog/BlogCreate")
 ##博客Admin创建问斩
-async def AdminBlogCreate(request_data: dict):
+async def AdminBlogCreate(request_data: dict,token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
             content = request_data.get('content').encode('utf-8')  # 将content字段转换为字节

@@ -3,13 +3,10 @@
     <el-header style="margin-top: 20px">
       <el-row class="demo-autocomplete">
         <el-col :span="6">
-          <div class="sub-title">激活即列出输入建议</div>
           <el-autocomplete
-            v-model="state2"
-            class="inline-input"
-            :fetch-suggestions="querySearch"
+            v-model="state"
+            :fetch-suggestions="querySearchAsync"
             placeholder="请输入想要搜索的文章"
-            :trigger-on-focus="false"
             @select="handleSelect"
           />
         </el-col>
@@ -54,14 +51,45 @@ export default {
   },
   data() {
     return {
-      adminData: []
+      adminData: [],
+      state: '',
+      timeout: null
+
     }
   },
   created() {
     this.fetchAdminData()
   },
   methods: {
-
+    querySearchAsync(queryString, cb) {
+      const articles = this.adminData // 使用你的文章数据数组 adminData
+      const results = queryString
+        ? articles.filter(this.createArticleFilter(queryString)).map((article) => ({
+          value: article.title, // 将文章标题作为显示文本
+          data: article // 保留原始文章数据
+        }))
+        : []
+      console.log('Search results:', results) // 添加这行代码进行调试
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => {
+        cb(results)
+      }, 1) // 这里可以根据需要调整延迟时间
+    },
+    createArticleFilter(queryString) {
+      return (article) => {
+        // 确保文章标题存在，并且进行模糊匹配
+        return article.title && article.title.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+      }
+    },
+    handleSelect(item) {
+      // 用户选择了搜索结果后的处理逻辑
+      // 可以根据选中的文章执行相关操作
+      console.log(item)
+      // 获取选中文章的BlogId
+      const blogId = item.data.BlogId
+      // 导航到对应的文章博客页面，并传递正确的blog_id参数
+      this.$router.push({ path: `/Blogid`, query: { blog_id: blogId }})
+    },
     editItem(item) {
       // 导航到编辑页面，传递文章ID作为参数
       this.$router.push({ path: `/Blogid`, query: { blog_id: item.BlogId }})
