@@ -22,7 +22,6 @@ from app.Fast_blog import model
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.middleware.backlist import BlogCache, oauth2_scheme, aliOssUpload
 from app.Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User
-import torch
 from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
 
 import shutil
