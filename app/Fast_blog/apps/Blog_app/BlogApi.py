@@ -22,7 +22,7 @@ from app.Fast_blog import model
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.middleware.backlist import BlogCache, oauth2_scheme, aliOssUpload
 from app.Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User
-from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
+
 
 import shutil
 from collections import defaultdict
@@ -296,20 +296,4 @@ async def AdminBlogCreate(request_data: dict,token: str = Depends(oauth2_scheme)
             return {"code": 50000, "message": "服务器错误"}
 
 
-@BlogApp.post("/blog/commentsubmission")
-##博客Admin创建问斩
-async def NLPcommentsubmission(comment: str):
-    async with db_session() as session:
-        nlp = pipeline("sentiment-analysis", model="bert-base-chinese")
-        # 进行情感分析
-        results = nlp(comment)
 
-        # 输出情感分析结果
-        for result in results:
-            label = result['label']
-            if label == 'LABEL_1':
-                return JSONResponse(content={"message": "评论是负面的，可能不友好"})
-            elif label == 'LABEL_2':
-                return JSONResponse(content={"message": "评论是中性的，可能不确定"})
-            elif label == 'LABEL_3':
-                return JSONResponse(content={"message": "评论是正面的，可能友好"})
