@@ -6,7 +6,7 @@ from typing import List
 from fastapi import APIRouter
 from fastapi import FastAPI, WebSocket,WebSocketDisconnect
 import psutil  # 用于获取系统信息
-from starlette.responses import HTMLResponse
+
 
 MonitoringApp = APIRouter()
 

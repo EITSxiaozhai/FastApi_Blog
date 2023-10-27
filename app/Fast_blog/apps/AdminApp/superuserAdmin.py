@@ -1,21 +1,18 @@
 import os
-import shutil
 import uuid
 import datetime
 
-from fastapi import HTTPException, UploadFile
+from fastapi import HTTPException
 import httpx
 import jwt
 from fastapi import APIRouter, Request, Depends
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import EmailStr
-from sqlalchemy import select, text
+from sqlalchemy import select
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import joinedload
 from starlette.background import BackgroundTasks
 
-from app.Fast_blog.apps.Blog_app import BlogApp
-from app.Fast_blog.apps.Blog_app.BlogApi import static_folder_path
 from app.Fast_blog.database.database import db_session
 from app.Fast_blog.middleware.backlist import oauth2_scheme, aliOssUpload
 from app.Fast_blog.model import models
