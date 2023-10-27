@@ -16,11 +16,15 @@ from sqlalchemy import update
 from starlette.background import BackgroundTasks
 import datetime
 from fastapi import HTTPException
+from starlette.responses import JSONResponse
 
 from app.Fast_blog import model
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.middleware.backlist import BlogCache, oauth2_scheme, aliOssUpload
 from app.Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User
+import torch
+from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
+
 import shutil
 from collections import defaultdict
 
@@ -69,14 +73,18 @@ async def AdminBlogIndex(token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
             results = await session.execute(select(Blog))
-            data = results.scalars().all()
-            data = [item.to_dict() for item in data]
-            print(data)
-            return {"code": 20000, "data": data}
+            if results is not None:
+                data = results.scalars().all()
+                data = [item.to_dict() for item in data]
+                print(data)
+                return {"code": 20000, "data": data}
+            else:
+                return {"code": 20001, "message": "未找到数据"}
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
-        return 0
+            return {"code": 50000, "message": "内部服务器错误"}
+
 
 
 blog_cache = BlogCache()
@@ -287,3 +295,22 @@ async def AdminBlogCreate(request_data: dict,token: str = Depends(oauth2_scheme)
             print("我们遇到了下面的问题")
             print(e)
             return {"code": 50000, "message": "服务器错误"}
+
+
+@BlogApp.post("/blog/commentsubmission")
+##博客Admin创建问斩
+async def NLPcommentsubmission(comment: str):
+    async with db_session() as session:
+        nlp = pipeline("sentiment-analysis", model="bert-base-chinese")
+        # 进行情感分析
+        results = nlp(comment)
+
+        # 输出情感分析结果
+        for result in results:
+            label = result['label']
+            if label == 'LABEL_1':
+                return JSONResponse(content={"message": "评论是负面的，可能不友好"})
+            elif label == 'LABEL_2':
+                return JSONResponse(content={"message": "评论是中性的，可能不确定"})
+            elif label == 'LABEL_3':
+                return JSONResponse(content={"message": "评论是正面的，可能友好"})

@@ -23,10 +23,18 @@
             <el-table-column prop="title" label="标题" />
             <el-table-column prop="author" label="作者" />
             <el-table-column prop="created_at" label="创建时间" />
+            <el-table-column prop="xxx" label="阅读量" />
+            <el-table-column prop="xxx" label="评分值">
+              <template>
+                <!-- 在这里自定义列内容 -->
+                <el-rate v-model="testrate" disabled>测试</el-rate>
+              </template>
+            </el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button type="text" @click="editItem(scope.row)">编辑</el-button>
                 <el-button type="text" @click="deleteItem(scope.row)">删除</el-button>
+                <el-button size="small">评论</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -44,6 +52,7 @@
 import { Postlist, DeletePost, Updatehomepageimage } from '@/api/admin/BlogPosts/BlogPosts'
 import { MessageBox } from 'element-ui'
 import PostEdit from '@/views/admin/BlogPosts/PostEdit.vue'
+
 export default {
   components: {
     // eslint-disable-next-line vue/no-unused-components
@@ -53,8 +62,8 @@ export default {
     return {
       adminData: [],
       state: '',
-      timeout: null
-
+      timeout: null,
+      testrate: 2
     }
   },
   created() {
