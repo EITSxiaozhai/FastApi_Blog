@@ -145,7 +145,7 @@ const updateReadingProgress = () => {
 
   // 更新currentStep
   currentStep.value = calculatedStep;
-  stepMarginTop.value = -calculatedStep * 20;
+  stepMarginTop.value = -calculatedStep * 25;
   readingProgress.value = scrollPercentage;
 };
 
