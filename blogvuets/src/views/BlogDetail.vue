@@ -29,6 +29,9 @@ const data = reactive({
 })
 
 
+const currentStep = ref(0); // 创建响应式变量用于跟踪当前标题索引
+
+
 // 创建Markdown渲染器实例
 const md = new MarkdownIt();
 
@@ -135,8 +138,22 @@ const updateReadingProgress = () => {
   const scrollableDistance = documentHeight - windowHeight;
   const scrollPercentage = (scrollTop / scrollableDistance) * 100;
 
+
+    // 根据阅读进度计算当前标题索引
+  const totalSteps = tableOfContents.value.length;
+  const calculatedStep = Math.floor((scrollPercentage / 100) * totalSteps);
+
+  // 更新currentStep
+  currentStep.value = calculatedStep;
+  stepMarginTop.value = -calculatedStep * 20;
   readingProgress.value = scrollPercentage;
 };
+
+
+// 在 data.data 中的字符数，用于计算阅读进度
+const stepMarginTop = ref(); // 创建响应式变量来存储步骤条的 margin-top 值
+
+
 
 // 获取数据并计算阅读进度
 getData().then(() => {
@@ -145,7 +162,10 @@ getData().then(() => {
 
   // 监听滚动事件，更新阅读进度
   window.addEventListener('scroll', updateReadingProgress);
+
 });
+
+
 
 onBeforeUnmount(() => {
   // 移除滚动事件监听
@@ -318,35 +338,37 @@ config.comments = [
   }
 ]
 
+
+
+
+
 </script>
 
 <template>
   <el-container>
-    <el-aside style="margin-top: 20%;width: 13%">
-      <el-card >
-        <div class="table-of-contents" v-if="!isLoading">
-          <h2>目录</h2>
-          <ul>
-            <li v-for="(item, index) in tableOfContents" :key="index">
-              <a :href="item.anchor">{{ item.title }}</a>
-            </li>
-          </ul>
-        </div>
 
-        <el-skeleton :rows="5" animated v-else/>
-
-
-      </el-card>
-                    <el-card style="margin-top: 20px">
+    <el-aside style="width: 13%;">
+      <el-card style="height: 40%; position: fixed; width: 13%;margin-top: 20%">
+        <el-steps
+          direction="vertical"
+          :active="currentStep"
+          v-if="!isLoading"
+          :style="{ 'margin-top': stepMarginTop + 'px' }"
+        >
+          <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"></el-step>
+        </el-steps>
+        <el-skeleton :rows="5" animated v-else />
+        <el-card style="margin-top: 20px">
           <h4>喜欢该文章吗？</h4>
           <el-rate
-              v-model="value"
-              :icons="icons"
-              :void-icon="ChatRound"
-              :colors="['#409eff', '#67c23a', '#FF9900']"
-              @change="submitRating"
+            v-model="value"
+            :icons="icons"
+            :void-icon="ChatRound"
+            :colors="['#409eff', '#67c23a', '#FF9900']"
+            @change="submitRating"
           />
         </el-card>
+      </el-card>
     </el-aside>
 
 
@@ -430,27 +452,6 @@ config.comments = [
   z-index: 2;
 }
 
-.table-of-contents {
-
-  top: 20%; /* 距离屏幕上方的百分比，根据需要调整 */
-  background-color: #f2f2f2;
-  border-radius: 4px;
-  padding: 20px;
-}
-
-.table-of-contents h2 {
-  font-size: 18px;
-  margin-bottom: 10px;
-}
-
-.table-of-contents ul {
-  list-style: none;
-  padding: 0;
-}
-
-.table-of-contents li {
-  margin-bottom: 5px;
-}
 
 
 </style>
