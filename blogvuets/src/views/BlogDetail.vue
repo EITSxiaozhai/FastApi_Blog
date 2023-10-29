@@ -14,16 +14,13 @@ import {ChatDotRound, ChatLineRound, ChatRound} from '@element-plus/icons-vue'
 import Fingerprint2 from "fingerprintjs2";
 
 import emoji from '@/assets/emoji'
-import { UToast, createObjectURL} from 'undraw-ui';
+import {UToast, createObjectURL} from 'undraw-ui';
 import {ElNotification} from "element-plus";
 
 const value = ref()
 const icons = [ChatRound, ChatLineRound, ChatDotRound]
 
 const isLoading = ref(true); // 初始时，骨架屏可见
-
-
-
 
 
 const router = useRouter()
@@ -247,21 +244,21 @@ const config = reactive({
 
 let temp_id = 100
 // 提交评论事件
-const submit = ({ content, parentId, files, finish, reply }) => {
-    let str = '提交评论:' + content + ';\t父id: ' + parentId + ';\t图片:' + files + ';\t被回复评论:'
+const submit = ({content, parentId, files, finish, reply}) => {
+  let str = '提交评论:' + content + ';\t父id: ' + parentId + ';\t图片:' + files + ';\t被回复评论:'
   console.log(str, reply)
   const token = localStorage.getItem("token");
 
   if (!token) {
     ElNotification({
-    title: 'Warning',
-    message: '您还没有登录哦，点击卡片跳转到登录页面',
-    type: 'warning',
-    onClick: () => {
-      // 用户点击通知时执行的操作
-      router.push('/login'); // 跳转到登录页面
-    },
-  })
+      title: 'Warning',
+      message: '您还没有登录哦，点击卡片跳转到登录页面',
+      type: 'warning',
+      onClick: () => {
+        // 用户点击通知时执行的操作
+        router.push('/login'); // 跳转到登录页面
+      },
+    })
     // 如果没有 token，阻止评论的提交并提示用户去登录
     console.log("用户未登录，请先登录");
     return;
@@ -290,7 +287,7 @@ const submit = ({ content, parentId, files, finish, reply }) => {
   }
   setTimeout(() => {
     finish(comment)
-    UToast({ message: '评论成功!', type: 'info' })
+    UToast({message: '评论成功!', type: 'info'})
   }, 200)
 }
 // 点赞按钮事件 将评论id返回后端判断是否点赞，然后在处理点赞状态
@@ -308,7 +305,7 @@ config.comments = [
     uid: '1',
     address: '来自上海',
     content:
-      '缘生缘灭，缘起缘落，我在看别人的故事，别人何尝不是在看我的故事?别人在演绎人生，我又何尝不是在这场戏里?谁的眼神沧桑了谁?我的眼神，只是沧桑了自己[喝酒]',
+        '缘生缘灭，缘起缘落，我在看别人的故事，别人何尝不是在看我的故事?别人在演绎人生，我又何尝不是在这场戏里?谁的眼神沧桑了谁?我的眼神，只是沧桑了自己[喝酒]',
     likes: 2,
     contentImg: 'https://gitee.com/undraw/undraw-ui/raw/master/public/docs/normal.webp',
     createTime: '1分钟前',
@@ -324,7 +321,35 @@ config.comments = [
 </script>
 
 <template>
-  <div class="common-layout">
+  <el-container>
+    <el-aside style="margin-top: 20%;width: 13%">
+      <el-card >
+        <div class="table-of-contents" v-if="!isLoading">
+          <h2>目录</h2>
+          <ul>
+            <li v-for="(item, index) in tableOfContents" :key="index">
+              <a :href="item.anchor">{{ item.title }}</a>
+            </li>
+          </ul>
+        </div>
+
+        <el-skeleton :rows="5" animated v-else/>
+
+
+      </el-card>
+                    <el-card style="margin-top: 20px">
+          <h4>喜欢该文章吗？</h4>
+          <el-rate
+              v-model="value"
+              :icons="icons"
+              :void-icon="ChatRound"
+              :colors="['#409eff', '#67c23a', '#FF9900']"
+              @change="submitRating"
+          />
+        </el-card>
+    </el-aside>
+
+
     <el-container>
       <el-header :class="{ 'hidden': scrollDirection === 'down' }" id="top-mains">
         <el-menu class="el-menu-demo" mode="horizontal">
@@ -340,72 +365,49 @@ config.comments = [
         </el-menu>
         <el-progress :percentage="readingProgress" :show-text="false"/>
       </el-header>
-
-      <el-card style="margin-top: 3%; display: flex; justify-content: center;" v-if="!isLoading">
-        <div v-for="(item, index) in data.data" :key="index" class="text item">
-        <div>
-          <div style="display: flex; flex-direction: column; align-items: center;">
-            <h1 style="font-size: 250%" class="el-title">{{item.title}}</h1>
-          </div>
-          <div style="display: flex; justify-content: center; align-items: center;">
-            <h3 style="padding-right: 50px">作者:{{item.author }}</h3>
-            <h3>总体评分:</h3>
-            <el-rate style="padding-right: 50px" v-model="averageRating" allow-half disabled/>
-            <h3 style="padding-right: 50px">发布时间：{{item.created_at }}</h3>
-          </div>
-        </div>
-          </div>
-      </el-card>
-      <el-card v-else>
-        <!-- 骨架屏 -->
-        <el-skeleton :rows="5" animated/>
-      </el-card>
-
-      <el-container>
-        <el-aside style="margin-top: 20px;position: sticky; ">
-          <el-card>
-            <div class="table-of-contents" v-if="!isLoading">
-              <h2>目录</h2>
-              <ul>
-                <li v-for="(item, index) in tableOfContents" :key="index">
-                  <a :href="item.anchor">{{ item.title }}</a>
-                </li>
-              </ul>
+      <el-main >
+        <el-card style="margin-top: 5%; display: flex; justify-content: center;" v-if="!isLoading" pa>
+          <div v-for="(item, index) in data.data" :key="index" class="text item">
+            <div>
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <h1 style="font-size: 200%" class="el-title">{{ item.title }}</h1>
+              </div>
+              <div style="display: flex; justify-content: center; align-items: center;">
+                <h3 style="padding-right: 50px">作者:{{ item.author }}</h3>
+                <h3>总体评分:</h3>
+                <el-rate style="padding-right: 50px" v-model="averageRating" allow-half disabled/>
+                <h3 style="padding-right: 50px">发布时间：{{ item.created_at }}</h3>
+              </div>
             </div>
-            <el-skeleton :rows="5" animated v-else/>
-            <el-card style="margin-top: 20px">
-              <h4>喜欢该文章吗？</h4>
-              <el-rate
-                v-model="value"
-                :icons="icons"
-                :void-icon="ChatRound"
-                :colors="['#409eff', '#67c23a', '#FF9900']"
-                @change="submitRating"
-              />
-            </el-card>
-          </el-card>
-        </el-aside>
-        <el-backtop :right="100" :bottom="100" />
-        <el-main>
-          <el-card v-if="!isLoading">
-            <div v-for="(item, index) in data.data" :key="index" class="text item">
+          </div>
 
-                <div class="card-header">
-                  <div v-html="convertMarkdown(item.content)"></div>
-                </div>
+        </el-card>
+        <el-card v-else>
+          <!-- 骨架屏 -->
+          <el-skeleton :rows="5" animated/>
+        </el-card>
+        <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
+          <div v-for="(item, index) in data.data" :key="index" class="text item">
+            <div class="card-header">
+              <div v-html="convertMarkdown(item.content)"></div>
             </div>
+          </div>
+        </el-card>
+        <el-skeleton :rows="5" animated v-else/>
+      </el-main>
 
-          </el-card>
-          <el-skeleton :rows="5" animated v-else/>
-        </el-main>
-      </el-container>
-        <u-comment :config="config" @submit="submit" @like="like">
-
-  </u-comment>
+      <el-footer style="margin-top: 10%;" v-if="!isLoading">
+        <u-comment style="width: 100%" :config="config" @submit="submit" @like="like">
+        </u-comment>
+      </el-footer>
+      <el-skeleton :rows="5" animated v-else/>
     </el-container>
-  </div>
-</template>
 
+  </el-container>
+
+
+
+</template>
 
 
 <style>
@@ -429,9 +431,11 @@ config.comments = [
 }
 
 .table-of-contents {
-  padding: 20px;
+
+  top: 20%; /* 距离屏幕上方的百分比，根据需要调整 */
   background-color: #f2f2f2;
   border-radius: 4px;
+  padding: 20px;
 }
 
 .table-of-contents h2 {
