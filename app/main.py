@@ -16,7 +16,7 @@ session = SessionLocal()
 
 app = FastAPI()
 
-app.include_router(User_app.UserApp, prefix='/api/generaluser', tags=["普通用户页面"])
+app.include_router(User_app.UserApp, prefix='/api/git config user.name', tags=["普通用户页面"])
 app.include_router(Blog_app.BlogApp, prefix='/api', tags=["博客游客浏览页面"])
 app.include_router(AdminApp.AdminApi, prefix='/api', tags=["超级用户管理页面"])
 app.include_router(Power_Crawl.PowerApp, prefix='/api/power', tags=["电力爬虫页面"])
