@@ -78,8 +78,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
 ## 阿里云文件上传
 class aliOssUpload():
     def __init__(self):
-        access_key_id = 'LTAI5tNsa58BCkcca4qPmYfQ'
-        access_key_secret = 'm8gx8kmoEnAMrGLmogmT105VuSV2Zw'
+        access_key_id = os.getenv('ACCESS_KEY_ID')
+        access_key_secret = os.getenv('ACCESS_KEY_SECRET')
 
         # 填写自己的 Bucket 名称和上传地址
         self.bucket_name = 'zpwl002'
