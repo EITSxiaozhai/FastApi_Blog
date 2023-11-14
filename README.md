@@ -59,7 +59,7 @@ uvicorn.exe main:app --reload
  celery -A app.Fast_blog.middleware.celerybeat-schedule:celery_app beat
 ```
 ---
-
+### 下述为部署到公网或者服务器端的地址。如果再本机开发则不需要关心这个。以env配置文件为准
 #### 前端启动方法
 
 前端分为用户前端和管理前端。需要分别CD到对应的文件夹中随后开启web。
