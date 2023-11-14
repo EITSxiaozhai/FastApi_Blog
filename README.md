@@ -13,6 +13,33 @@
 
 # 部署方法
 
+### **alembic导入数据库**。请参考下述教程。请先完成数据库迁移
+
+https://juejin.cn/post/7077022949374443533
+
+该项目使用了Gitlab进行自动部署。所以如果你想自己部署。请设置自己的环境配置文件。**请Google python env文件和VUe的env文件配置**。此步非常重要。否则无法启动。
+
+该项目目前存在的Python env配置.当然可以自己后续自行添加
+
+- ACCESS_KEY_ID
+- ACCESS_KEY_SECRET
+- DB_HOSTNAME
+- DB_NAME
+- DB_PASSWORD
+- DB_PORT
+- DB_USERNAME
+- RECAPTCHA_SECRET_KEY
+- REDIS_DB_HOSTNAME
+- REDIS_DB_NAME
+- REDIS_DB_PASSWORD
+- REDIS_DB_PORT
+- MQ_USERNAME
+- MQ_USERPASSWORD
+- MQ_HOSTNAME
+- MQ_DBNAME
+- MQ_DBPORT
+- MQ_USERNAME
+
 ### 1.直接部署
 
 ####  可以利用python直接运行后端接口
@@ -41,7 +68,7 @@ uvicorn.exe main:app --reload
 npm run dev
 ```
 
-该项目使用了Gitlab进行自动部署。所以如果你想自己部署。请设置自己的环境配置文件。**请Google python env文件和VUe的env文件配置**。此步非常重要。否则无法启动。
+
 
 #### 后端接口地址
 
@@ -191,4 +218,3 @@ server{
 ### 利用gitlab部署完成后。还是需要利用nginx进行反向代理
 
 **请参考上述示例代码**
-
