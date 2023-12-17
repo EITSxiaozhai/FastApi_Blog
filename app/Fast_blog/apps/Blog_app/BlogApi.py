@@ -291,4 +291,17 @@ async def AdminBlogCreate(request_data: dict,token: str = Depends(oauth2_scheme)
             return {"code": 50000, "message": "服务器错误"}
 
 
-
+@BlogApp.post("/blog/BlogDel")
+##博客Admin删除
+async def AdminBlogDel(blog_id: int,token: str = Depends(oauth2_scheme)):
+    async with db_session() as session:
+        async with session.begin():
+            try:
+                result = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
+                original = result.scalars().first()
+                await    session.delete(original)
+                return {"code": 20000, "message": "删除成功", "success": True}
+            except Exception as e:
+                print("我们遇到了下面的问题")
+                print(e)
+                return {"code": 50000, "message": "服务器错误", "success": False}

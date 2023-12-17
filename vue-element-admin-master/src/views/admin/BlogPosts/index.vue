@@ -165,19 +165,25 @@ export default {
       }
     },
     async deleteItem(item) {
+      console.log(item.BlogId)
       try {
         const confirmResult = await MessageBox.confirm('确认删除此项吗？', '提示', {
           type: 'warning'
         })
-
         if (confirmResult === 'confirm') {
           const response = await DeletePost(item.BlogId)
-          if (response.data.success) {
-            this.fetchAdminData()
-          }
+          console.log('DeletePost 响应:', response)
+          this.$message({
+            message: '删除成功',
+            type: 'success'
+          })
         }
       } catch (error) {
         console.error('Delete error:', error)
+        this.$message({
+          message: '删除失败，请重试',
+          type: 'error'
+        })
       }
     }
   }
