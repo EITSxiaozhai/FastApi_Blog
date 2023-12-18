@@ -177,6 +177,7 @@ export default {
             message: '删除成功',
             type: 'success'
           })
+          this.fetchAdminData()
         }
       } catch (error) {
         console.error('Delete error:', error)

@@ -17,6 +17,7 @@ db_password = os.getenv("REDIS_DB_PASSWORD")
 redis_host = os.getenv("REDIS_DB_HOSTNAME")
 redis_port = os.getenv("REDIS_DB_PORT")
 redis_db = os.getenv("REDIS_DB_NAME")
+redis_user = os.getenv("REDIS_USER_NAME")
 
 mq_password = os.getenv("MQ_USERPASSWORD")
 mq_username = os.getenv("MQ_USERNAME")
@@ -45,7 +46,7 @@ def add(x, y):
 class TokenManager():
     def __init__(self, secret_key=secret_key):
         self.secret_key = secret_key
-        self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, password=db_password)
+        self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, username=redis_user,password=db_password)
 
     def create_jwt_token(self, data: dict) -> str:
         token = jwt.encode(data, self.secret_key, algorithm=ALGORITHM)
