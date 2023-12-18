@@ -1,4 +1,4 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.10
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.11
 COPY /requirements.txt /
 RUN echo "nameserver 8.8.8.8" |  tee -a /etc/resolv.conf
 RUN python -m pip install --upgrade pip
