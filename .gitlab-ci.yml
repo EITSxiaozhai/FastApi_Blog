@@ -9,7 +9,7 @@ Fastapi_image_build:
   script:
     - echo "FastApi build, Dockerfile:"
     - cat Dockerfile
-    - docker build --network=host -t fastapi:$CI_PIPELINE_ID .
+    - docker build  -t fastapi:$CI_PIPELINE_ID .
 
 Vue3_image_build:
   stage: build
