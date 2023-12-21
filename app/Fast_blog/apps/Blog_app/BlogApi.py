@@ -34,15 +34,28 @@ BlogApp.mount("/static", StaticFiles(directory=static_folder_path), name="static
 
 uploadoss = aliOssUpload()
 ## 博客游客用户主页显示
+
+from sqlalchemy import func
+
 @BlogApp.get("/blog/BlogIndex")
-async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4, ):
+async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
     async with db_session() as session:
         try:
-            offset = (page - 1) * pageSize
             columns = [Blog.BlogId, Blog.title, Blog.created_at, Blog.author, Blog.BlogIntroductionPicture]
-            stmt = select(*columns).offset(offset).limit(pageSize)
+
+            # 查询实际数据库中的文章总数
+            total_articles = await session.scalar(select(func.count()).select_from(Blog))
+
+            # 根据实际数据库中的文章总数调整 pageSize
+            adjusted_page_size = min(pageSize, total_articles)
+
+            # 计算合法的 offset，确保不超过实际文章数量
+            offset = (page - 1) * adjusted_page_size
+
+            stmt = select(*columns).offset(offset).limit(adjusted_page_size)
             results = await session.execute(stmt)
             data = results.fetchall()
+
             data_dicts = []
             for row in data:
                 data_dict = {
@@ -53,11 +66,17 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4, 
                     "BlogIntroductionPicture": row[4],
                 }
                 data_dicts.append(data_dict)
+
             return data_dicts
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
             return {"errorCode": 500}
+
+
+
+
+
 
 
 @BlogApp.get("/blog/AdminBlogIndex")
