@@ -53,12 +53,11 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4, 
                     "BlogIntroductionPicture": row[4],
                 }
                 data_dicts.append(data_dict)
-            print(data_dicts)
             return data_dicts
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
-        return []
+            return {"errorCode": 500}
 
 
 @BlogApp.get("/blog/AdminBlogIndex")

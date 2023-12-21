@@ -90,11 +90,11 @@ class aliOssUpload():
         auth = oss2.Auth(access_key_id, access_key_secret)
         self.bucket = oss2.Bucket(auth, 'http://oss-cn-hangzhou.aliyuncs.com', self.bucket_name)
     def upload_bitsfile(self, blogid, bitsfile):
-        self.bucket.put_object(f'{self.upload_path}{blogid}-maincare.jpg', bitsfile)
+        self.bucket.put_object(f'{self.upload_path}{blogid}-maincard.jpg', bitsfile)
 
     async def Binaryfileupload(self,blogid,bitsfile):
         await asyncio.to_thread(self.upload_bitsfile, blogid, bitsfile)
-        image_url = f"http://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}{ blogid }-maincare.jpg"
+        image_url = f"http://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}{ blogid }-maincard.jpg"
         return image_url
 
 
