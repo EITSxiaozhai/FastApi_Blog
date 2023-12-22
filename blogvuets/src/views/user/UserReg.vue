@@ -62,7 +62,7 @@ const register = () => {
     label-width="80px"
     class="register-form"
     ref="registerForm"
-    @submit.native.prevent="register"
+    @submit.prevent="register"
   >
     <el-form-item label="用户名" prop="username">
       <el-input v-model="registerForm.username" placeholder="请输入用户名"></el-input>

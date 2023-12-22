@@ -1,28 +1,27 @@
-import {createRouter, createWebHistory} from 'vue-router'
-import BlogDetail from '../views/BlogDetail.vue'
-import Index from "../views/IndexPage.vue"
-import Iogin from "../views/user/Userlogin.vue"
-import userReg from "../views/user/Userreg.vue"
-
+import { createRouter, createWebHistory } from 'vue-router';
+import BlogDetail from '../views/BlogDetail.vue';
+import Index from '../views/IndexPage.vue';  // 修改相对路径
+import UserLogin from '../views/user/UserLogin.vue';  // 修改相对路径
+import UserReg from '../views/user/UserReg.vue';  // 修改相对路径
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHistory('/'),
     routes: [
         {
-            path: "/",
+            path: '/',
             component: Index,
-            name: "home",
+            name: 'home',
             meta: {
-                cacheable: true, // 添加缓存标志
+                cacheable: true,
                 title: '首页'
             },
         },
         {
             path: '/blog',
             component: Index,
-            name: "home", // 重复使用 Index 组件
+            name: 'home',
             meta: {
-                cacheable: true, // 添加缓存标志
+                cacheable: true,
                 title: 'Exploit的Blog',
                 keepAlive: true,
             },
@@ -31,27 +30,27 @@ const router = createRouter({
             path: '/blog/:blogId',
             component: BlogDetail,
             meta: {
-                cacheable: false, // 不缓存该组件
+                cacheable: false,
                 title: '详情页'
             },
         },
         {
             path: '/login',
-            component: Iogin,
+            component: UserLogin,
             meta: {
-                cacheable: false, // 不缓存该组件
+                cacheable: false,
                 title: '登录页面'
             },
         },
         {
             path: '/reg',
-            component: userReg,
+            component: UserReg,
             meta: {
-                cacheable: false, // 不缓存该组件
+                cacheable: false,
                 title: '注册页面'
             },
         },
     ]
-})
+});
 
 export default router;

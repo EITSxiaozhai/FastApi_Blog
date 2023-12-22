@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修复文章计数bug" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修复文章计数bug">
+      <change afterPath="$PROJECT_DIR$/blogvuets/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/Api/backApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/Api/backApi.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/router/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/Userlogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/Userreg.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserReg.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/vite.config.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -518,7 +528,8 @@
       <workItem from="1702876601812" duration="3180000" />
       <workItem from="1702894462701" duration="10028000" />
       <workItem from="1702957359667" duration="4141000" />
-      <workItem from="1703168246559" duration="3807000" />
+      <workItem from="1703168246559" duration="3846000" />
+      <workItem from="1703215627348" duration="3488000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -863,7 +874,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="250" />
+    <option name="localTasksCounter" value="251" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

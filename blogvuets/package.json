@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "lint": "vue-cli-service lint",
     "publish": "vue-cli-service build && vue-cli-service build --mode test",
-    "test": "vue-cli-service build --mode test && npm run  serve -s dist"
+    "test": "vue-cli-service build --mode test && npm run  serve -s dist",
+    "production": "vue-cli-service build --mode production && npm run serve -s dist"
   },
   "dependencies": {
     "@unhead/vue": "^1.7.4",
