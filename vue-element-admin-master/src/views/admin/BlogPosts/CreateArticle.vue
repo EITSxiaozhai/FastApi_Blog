@@ -141,6 +141,7 @@ export default {
         if (response.data.code === 20000) {
           // 创建成功，可以处理成功的逻辑，例如跳转到文章详情页面
           this.$router.push({ name: 'ArticleDetail', params: { blog_id: response.data.blog_id }})
+          this.$message.success('创建文章成功')
         } else {
           // 创建失败，处理失败逻辑
           this.$message.error('创建文章失败')
