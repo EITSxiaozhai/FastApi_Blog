@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="创建文章优化">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/Api/backApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/Api/backApi.ts" afterDir="false" />
-    </list>
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改api判定" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -523,7 +520,7 @@
       <workItem from="1702957359667" duration="4141000" />
       <workItem from="1703168246559" duration="3846000" />
       <workItem from="1703215627348" duration="3625000" />
-      <workItem from="1703332096636" duration="6968000" />
+      <workItem from="1703332096636" duration="7294000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -868,7 +865,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="257" />
+    <option name="localTasksCounter" value="258" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -912,7 +909,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="vue3 登录页面添加Google验证" />
     <MESSAGE value="添加按钮禁用状态" />
     <MESSAGE value="添加首页图片修改功能" />
     <MESSAGE value="进入页面显示图片" />
@@ -937,7 +933,8 @@
     <MESSAGE value="自动布局修改适配手机端平板端屏幕" />
     <MESSAGE value="添加pydantic对于数据库" />
     <MESSAGE value="创建文章优化" />
-    <option name="LAST_COMMIT_MESSAGE" value="创建文章优化" />
+    <MESSAGE value="修改api判定" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改api判定" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
