@@ -5,6 +5,29 @@ import TypeIt from 'typeit'
 import backApi from '../Api/backApi.ts';
 import 'element-plus/theme-chalk/display.css'
 
+//自动布局修改适配手机端平板端屏幕
+const useXlLayout = () => {
+  const xlLayout = ref(window.innerWidth <= 1200);
+
+  const checkLayout = () => {
+    xlLayout.value = window.innerWidth <= 1200;
+  };
+
+  onMounted(() => {
+    window.addEventListener('resize', checkLayout);
+  });
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('resize', checkLayout);
+  });
+
+  return {
+    xlLayout,
+  };
+};
+
+const { xlLayout } = useXlLayout();
+
 
 const input1 = ref('');
 const text = ref(null)
@@ -308,49 +331,60 @@ onUnmounted(() => {
       <transition name="el-fade-in-fast">
 
         <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="10" class="maincaretest">
-            <div class="content-container">
-              <el-main id="maincare">
-                <div class="about">
-                  <el-container v-for="(blog) in data.data.slice(0, loadedCards)" :key="blog.BlogId">
-                    <el-main>
-                      <keep-alive>
-                        <transition name="el-fade-in-linear">
-                          <router-link :to="`/blog/${blog.BlogId}`">
-                            <el-card shadow="hover" id="main-boxcard" class="box-card">
-                              <el-container>
-                                <!--                    <el-row :gutter="10" @click="jumpFn(blog.BlogId)">-->
+  <div class="content-container">
+    <el-main id="maincare">
+      <div class="about">
+        <el-container v-for="(blog) in data.data.slice(0, loadedCards)" :key="blog.BlogId">
+          <el-main>
+            <keep-alive>
+              <transition name="el-fade-in-linear">
+                <router-link :to="`/blog/${blog.BlogId}`">
+                  <!-- 使用条件判断选择布局 -->
+                  <template v-if="xlLayout ">
+                    <el-card shadow="hover" id="main-boxcard" class="box-card" style="display: flex; flex-direction: column; height: 100%;">
+  <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image" style="flex: 1 0 auto;">
 
-                                  <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image">
-
-                                <el-main>
-                                  <h1 style="font-size: 25px;">{{ blog.title }}</h1>
-                                  <p>  作者:{{ blog.author }} </p>
-                                  <p>发布日期:{{ blog.created_at }}</p>
-                                </el-main>
-                              </el-container>
-                            </el-card>
-                          </router-link>
-                        </transition>
-                      </keep-alive>
-                    </el-main>
-                    <div>
-                      <el-backtop :right="100" :bottom="100"/>
-                    </div>
-                  </el-container>
-                </div>
-                <div class="bt_container" style="display: flex; justify-content: center;">
-                  <el-button
-                      type="primary"
-                      @click="loadMoreCards"
-                      v-if="data.data.length % pageSize === 0 && !loading">
-                    查看更多
-                  </el-button>
-                  <p v-else>没有更多文章可以查看了</p>
-                </div>
-              </el-main>
-            </div>
-
-        </el-col>
+  <div style="flex: 0 0 auto; padding: 10px;">
+    <h1 style="font-size: 25px;">{{ blog.title }}</h1>
+    <p>作者:{{ blog.author }}</p>
+    <p>发布日期:{{ blog.created_at }}</p>
+  </div>
+</el-card>
+                  </template>
+                  <template v-else>
+                    <!-- 使用你的布局 -->
+                    <el-card shadow="hover" id="main-boxcard" class="box-card">
+                      <el-container>
+                        <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image">
+                        <el-main>
+                          <h1 style="font-size: 25px;">{{ blog.title }}</h1>
+                          <p>作者:{{ blog.author }}</p>
+                          <p>发布日期:{{ blog.created_at }}</p>
+                        </el-main>
+                      </el-container>
+                    </el-card>
+                  </template>
+                </router-link>
+              </transition>
+            </keep-alive>
+          </el-main>
+          <div>
+            <el-backtop :right="100" :bottom="100"/>
+          </div>
+        </el-container>
+      </div>
+      <div class="bt_container" style="display: flex; justify-content: center;">
+        <el-button
+          type="primary"
+          @click="loadMoreCards"
+          v-if="data.data.length % pageSize === 0 && !loading">
+          查看更多
+        </el-button>
+        <p v-else>没有更多文章可以查看了</p>
+      </div>
+    </el-main>
+  </div>
+</el-col>
 
       </transition>
 
