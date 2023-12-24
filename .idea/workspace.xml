@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改api判定" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改api判定">
+      <change afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/TagView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/model/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/BlogPosts/BlogPosts.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/BlogPosts/BlogPosts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/router/index.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -19,8 +27,8 @@
         <option value="TypeScript File" />
         <option value="Dockerfile" />
         <option value="Vue Composition API Component" />
-        <option value="Vue Options API Component" />
         <option value="Python Script" />
+        <option value="Vue Options API Component" />
       </list>
     </option>
   </component>
@@ -520,7 +528,8 @@
       <workItem from="1702957359667" duration="4141000" />
       <workItem from="1703168246559" duration="3846000" />
       <workItem from="1703215627348" duration="3625000" />
-      <workItem from="1703332096636" duration="7294000" />
+      <workItem from="1703332096636" duration="7887000" />
+      <workItem from="1703425342771" duration="4147000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -865,7 +874,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="258" />
+    <option name="localTasksCounter" value="259" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

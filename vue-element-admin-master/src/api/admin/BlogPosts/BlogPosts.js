@@ -47,3 +47,19 @@ export function DeletePost(blog_id, data) {
     data
   })
 }
+
+export function BlogTagList(data) {
+  return request({
+    url: `/blog/Blogtaglist`,
+    method: 'post',
+    data
+  })
+}
+
+export function BlogTagCreate(data) {
+  return request({
+    url: `/blog/BlogtagCreate`,
+    method: 'post',
+    data
+  })
+}

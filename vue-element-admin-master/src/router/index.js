@@ -162,6 +162,15 @@ export const asyncRoutes = [
           // ...其他 meta 信息...
         },
         hidden: true
+      },
+      {
+        path: '/blogtagview',
+        component: () => import('@/views/admin/BlogPosts/TagView.vue'),
+        name: 'TagCreation',
+        meta: {
+          title: '文章标签',
+          roles: ['admin'] // or you can only set roles in sub nav
+        }
       }
     ]
   },
