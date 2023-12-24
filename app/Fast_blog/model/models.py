@@ -87,6 +87,8 @@ class AdminUser(Base):
                     UserUuid=self.UserUuid, userPrivileges=self.userPrivileges)
 
 
+
+
 @dataclass
 class Blog(Base):
     __tablename__ = "blogtable"
@@ -100,6 +102,7 @@ class Blog(Base):
     NumberLikes = Column(Integer)
     NumberViews = Column(Integer)
     author = Column(String(255))
+    BlogTags = relationship("BlogTag")
     admin_id = Column(Integer, ForeignKey('Admintable.UserId'))
     ratings = relationship("BlogRating", back_populates="blog")
     comments = relationship("Comment", back_populates="blog")
@@ -107,6 +110,15 @@ class Blog(Base):
         return dict(BlogId=self.BlogId, title=self.title, content=self.content, author=self.author,
                     BlogIntroductionPicture=self.BlogIntroductionPicture, created_at=self.created_at)
 
+class BlogTag(Base):
+    __tablename__ = "blogtag"
+    id = Column(Integer, primary_key=True, index=True)
+    blog_id = Column(Integer, ForeignKey('blogtable.BlogId'))
+    Article_Type = Column(String(255), index=True)
+    tag_created_at = Column(DateTime, default=datetime.datetime.now)
+
+    def to_dict(self):
+        return dict(blog_id=self.blog_id,  blog_type=self.Article_Type, tag_created_at=self.tag_created_at)
 
 @dataclass
 class PowerMeters(Base):
@@ -142,3 +154,5 @@ class Vote(Base):
     blog_id = Column(String(255), index=True)
     vote_count = Column(Integer, default=0)
     __table_args__ = (UniqueConstraint('device_id', 'blog_id'),)
+
+

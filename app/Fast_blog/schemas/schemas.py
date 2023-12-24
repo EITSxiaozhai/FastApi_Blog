@@ -110,3 +110,8 @@ class VoteModel(BaseModel):
     device_id: str
     blog_id: str
     vote_count: int
+
+class BlogTagModel(BaseModel):
+    blog_id : int
+    Article_Type : str
+    tag_created_at : datetime

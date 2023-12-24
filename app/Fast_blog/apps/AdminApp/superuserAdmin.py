@@ -2,7 +2,7 @@ import os
 import uuid
 import datetime
 
-from fastapi import HTTPException
+from fastapi import HTTPException, FastAPI
 import httpx
 import jwt
 from fastapi import APIRouter, Request, Depends
@@ -16,7 +16,7 @@ from starlette.background import BackgroundTasks
 from app.Fast_blog.database.database import db_session
 from app.Fast_blog.middleware.backlist import oauth2_scheme, aliOssUpload
 from app.Fast_blog.model import models
-from app.Fast_blog.model.models import AdminUser, UserPrivileges, Blog
+from app.Fast_blog.model.models import AdminUser, UserPrivileges, Blog,BlogTag
 from app.Fast_blog.schemas.schemas import UserCredentials
 AdminApi = APIRouter()
 
@@ -394,3 +394,18 @@ async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file_path: str
 
         except Exception as e:
             print("我们遇到了下面的问题", {"data": e})
+
+@AdminApi.post('/Blogtaglist')
+async def BlogTagList(token: str = Depends(oauth2_scheme)):
+    async with db_session() as session:
+        try:
+            sql = select(models.BlogTag)
+            print(sql)
+            result = await session.execute(sql)
+            enddata = []
+            for i in result.scalars().all():
+                enddata.append(i.to_dict())
+            return {"data": enddata, "code":20000}
+        except Exception as e:
+            print("我们遇到了下面的问题", {"data": e})
+
