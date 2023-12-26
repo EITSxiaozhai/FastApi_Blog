@@ -1,9 +1,10 @@
 import asyncio
 import datetime
+from typing import List
 
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, MetaData, LargeBinary, DATETIME, Float, \
     UniqueConstraint
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped
 from sqlalchemy_utils import EmailType, ChoiceType, PasswordType, Choice
 from app.Fast_blog.database.database import Base, engine
 from dataclasses import dataclass
@@ -102,23 +103,27 @@ class Blog(Base):
     NumberLikes = Column(Integer)
     NumberViews = Column(Integer)
     author = Column(String(255))
-    BlogTags = relationship("BlogTag")
+    BlogTags = relationship("BlogTag", back_populates="blogs", primaryjoin="Blog.BlogId == BlogTag.blog_id")
     admin_id = Column(Integer, ForeignKey('Admintable.UserId'))
     ratings = relationship("BlogRating", back_populates="blog")
     comments = relationship("Comment", back_populates="blog")
+
     def to_dict(self):
         return dict(BlogId=self.BlogId, title=self.title, content=self.content, author=self.author,
                     BlogIntroductionPicture=self.BlogIntroductionPicture, created_at=self.created_at)
 
 class BlogTag(Base):
     __tablename__ = "blogtag"
+    __allow_unmapped__ = True
     id = Column(Integer, primary_key=True, index=True)
-    blog_id = Column(Integer, ForeignKey('blogtable.BlogId'))
     Article_Type = Column(String(255), index=True)
     tag_created_at = Column(DateTime, default=datetime.datetime.now)
+    blog_id = Column(Integer, ForeignKey('blogtable.BlogId'))
+    blogs = relationship("Blog", back_populates="BlogTags", primaryjoin="BlogTag.blog_id == Blog.BlogId")
 
     def to_dict(self):
-        return dict(blog_id=self.blog_id,  blog_type=self.Article_Type, tag_created_at=self.tag_created_at)
+        return dict(blog_id=self.blog_id, id=self.id, blog_type=self.Article_Type, tag_created_at=self.tag_created_at.timestamp(),
+                    Related_Blogs=[blog.to_dict() for blog in self.blogs])
 
 @dataclass
 class PowerMeters(Base):

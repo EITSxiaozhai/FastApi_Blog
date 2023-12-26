@@ -8,7 +8,7 @@ import jwt
 from fastapi import APIRouter, Request, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import EmailStr
-from sqlalchemy import select
+from sqlalchemy import select,update,delete
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import joinedload
 from starlette.background import BackgroundTasks
@@ -395,17 +395,62 @@ async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file_path: str
         except Exception as e:
             print("我们遇到了下面的问题", {"data": e})
 
+
+
+
 @AdminApi.post('/Blogtaglist')
 async def BlogTagList(token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
             sql = select(models.BlogTag)
-            print(sql)
             result = await session.execute(sql)
             enddata = []
-            for i in result.scalars().all():
-                enddata.append(i.to_dict())
-            return {"data": enddata, "code":20000}
+            for tag in result.scalars().all():
+                enddata.append(tag)
+            return {"data": enddata, "code": 20000}
+        except Exception as e:
+            print("我们遇到了下面的问题",e)
+
+
+
+
+
+@AdminApi.post('/Blogtagcreate/{blog_id}/{type}')
+async def BlogTagcreate(type: str,blog_id:int,token: str = Depends(oauth2_scheme)):
+    async with db_session() as session:
+        try:
+            new_type = models.BlogTag(Article_Type=type,blog_id=blog_id)
+            session.add(new_type)
+            await session.commit()
+            return {"data": new_type, "code":20000}
         except Exception as e:
             print("我们遇到了下面的问题", {"data": e})
+
+
+@AdminApi.post('/Blogtagmodify/{blog_id}/{type}')
+async def BlogTagModify(blog_id: int, type: str, token: str = Depends(oauth2_scheme)):
+    async with db_session() as session:
+        try:
+            # 查询是否存在对应的记录
+            sql_select = select(models.Blog).filter_by(BlogId=blog_id)
+            result_select = await session.execute(sql_select)
+
+            if len(result_select.all()) == 0:
+                return {"data": "没有查到对应的ID跳过修改", "code": 50000}
+
+            # 查询并修改指定的记录
+            sql_update = update(models.BlogTag).where(
+                (models.BlogTag.blog_id == blog_id) & (models.BlogTag.Article_Type == type)
+            ).values(tag_created_at=datetime.datetime.now())
+
+            # 使用 fetchall 获取所有结果
+            result_update = await session.execute(sql_update)
+            await session.flush()
+
+            return {"data": "修改成功", "code": 20000}
+        except Exception as e:
+            print("我们遇到了下面的问题", {"data": str(e)})
+
+
+
 
