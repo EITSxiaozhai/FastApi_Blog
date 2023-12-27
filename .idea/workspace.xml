@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="标签数据库修改查询添加">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="优化基础UI">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/User_app/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/UserReg.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserReg.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -24,8 +24,8 @@
         <option value="TypeScript File" />
         <option value="Dockerfile" />
         <option value="Vue Composition API Component" />
-        <option value="Python Script" />
         <option value="Vue Options API Component" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -530,7 +530,7 @@
       <workItem from="1703562656761" duration="7688000" />
       <workItem from="1703572150699" duration="2658000" />
       <workItem from="1703593236404" duration="395000" />
-      <workItem from="1703673734435" duration="7166000" />
+      <workItem from="1703673734435" duration="12227000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -875,7 +875,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="263" />
+    <option name="localTasksCounter" value="264" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -919,7 +919,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="前端倒计时功能" />
     <MESSAGE value="添加随机图片API" />
     <MESSAGE value="添加创建文章最大值" />
     <MESSAGE value="CSS优化布局" />
@@ -944,7 +943,8 @@
     <MESSAGE value="添加博客标签页面。" />
     <MESSAGE value="添加标签后端api" />
     <MESSAGE value="标签数据库修改查询添加" />
-    <option name="LAST_COMMIT_MESSAGE" value="标签数据库修改查询添加" />
+    <MESSAGE value="优化基础UI" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化基础UI" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

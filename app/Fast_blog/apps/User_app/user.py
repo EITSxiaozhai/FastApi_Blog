@@ -3,16 +3,16 @@
 import datetime
 import uuid
 
-
+import requests
 from pydantic import EmailStr
 from sqlalchemy import select
 
-from app.Fast_blog.database.database import engine
+
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter, Request, HTTPException
-from app.Fast_blog.database.database import db_session
+from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.middleware.backlist import TokenManager
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import User
@@ -45,23 +45,23 @@ async def GetUser(inputusername: str):
             print(e)
 
 
-@UserApp.get("/reguser")
-async def query(inputname: str, inpassword: str, inEmail: EmailStr, ingender: bool):
+@UserApp.post("/reguser")
+async def query(request: Request):
     async with db_session() as session:
         try:
-            UserQurey = await GetUser(inputusername=inputname)
-            if UserQurey != None:
-                return ({"用户已经存在,存在值为:": UserQurey['username']})
-            elif UserQurey == None:
-                x = models.User(username=inputname, userpassword=inpassword, UserEmail=inEmail, gender=ingender,
-                                UserUuid=str((UUID_crt(inputname))))
-                session.add(x)
-                await session.commit()
-                print("用户添加成功")
-                return ({"用户添加成功,你的用户名为:": inputname})
+            x = await request.json()
+            print(x)
+            enddata = await session.execute(select(User).filter_by(username=x['username']))
+            now = enddata.scalars().first()
+            if now is None:
+                Created = User(username=x['username'],userpassword=x['password'], UserEmail=x['email'],creation_time=datetime.datetime.now(),UserUuid=UUID_crt(UuidApi=x['username']))
+                session.add(Created)
+                await  session.commit()
+                return {'success':'True','cod':'200','data': "User Created"}
+            else:
+                return {'success':'False','cod': '201' ,'data':"存在重复用户。跳过创建"}
         except Exception as e:
-            print(e)
-        return {"重复用户名": UserQurey}
+            return {'cod':'500','data':f"我们遇到了一点问题： {e}"}
 
 
 @UserApp.post("/login")
