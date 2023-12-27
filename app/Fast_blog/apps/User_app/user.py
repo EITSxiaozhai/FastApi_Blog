@@ -50,16 +50,18 @@ async def query(request: Request):
     async with db_session() as session:
         try:
             x = await request.json()
-            print(x)
-            enddata = await session.execute(select(User).filter_by(username=x['username']))
-            now = enddata.scalars().first()
-            if now is None:
-                Created = User(username=x['username'],userpassword=x['password'], UserEmail=x['email'],creation_time=datetime.datetime.now(),UserUuid=UUID_crt(UuidApi=x['username']))
-                session.add(Created)
-                await  session.commit()
-                return {'success':'True','cod':'200','data': "User Created"}
+            if x['username'] == '' or x['password'] == '' or x['email'] == '':
+                enddata = await session.execute(select(User).filter_by(username=x['username']))
+                now = enddata.scalars().first()
+                if now is None:
+                    Created = User(username=x['username'],userpassword=x['password'], UserEmail=x['email'],creation_time=datetime.datetime.now(),UserUuid=UUID_crt(UuidApi=x['username']))
+                    session.add(Created)
+                    await  session.commit()
+                    return {'Success':'True','cod':'200','data': "success"}
+                else:
+                    return {'Success':'False','cod': '201' ,'data':"存在重复用户。跳过创建"}
             else:
-                return {'success':'False','cod': '201' ,'data':"存在重复用户。跳过创建"}
+                return {'Success':'False','data':'传递参数违法'}
         except Exception as e:
             return {'cod':'500','data':f"我们遇到了一点问题： {e}"}
 
