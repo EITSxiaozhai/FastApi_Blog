@@ -27,6 +27,45 @@ const registerForm = ref({
   verificationCode: '',
 });
 
+
+const validatePassword = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('请输入密码'));
+  } else if (value.length < 6) {
+    callback(new Error('密码长度不能小于 6 位'));
+  } else {
+    callback();
+  }
+};
+
+const validateConfirmPassword = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('请再次输入密码'));
+  } else if (value !== registerForm.value.password) {
+    callback(new Error('两次输入密码不一致'));
+  } else {
+    callback();
+  }
+};
+
+const validateUsername = (rule, value, callback) => {
+  const reg = /^\S+$/;
+  if (!reg.test(value)) {
+    callback(new Error('用户名不能包含空格'));
+  } else {
+    callback();
+  }
+};
+
+const validateEmail = (rule, value, callback) => {
+  const reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+  if (!reg.test(value)) {
+    callback(new Error('请输入正确的邮箱地址'));
+  } else {
+    callback();
+  }
+};
+
 const verificationCodeDisabled = ref(false);
 const verificationCodeButtonText = ref('获取验证码');
 
@@ -51,8 +90,6 @@ const getVerificationCode = () => {
 
 const register = async () => {
   try {
-    console.log(registerForm);
-
     const response = await backApi.post('/generaluser/reguser', {
       username: registerForm.value.username,
       password: registerForm.value.password,
@@ -70,7 +107,7 @@ const register = async () => {
       });
 
       // 在注册成功后，您可能还需要执行其他操作，例如跳转到登录页面
-      // router.push('/login');
+      this.router.push('/login');
     } else {
       // 注册失败的处理
       console.error('注册失败:', response.data.message);
@@ -89,9 +126,6 @@ const register = async () => {
     });
   }
 };
-
-// 调用注册函数
-register();
 </script>
 
 <template>
@@ -103,31 +137,38 @@ register();
     @submit.prevent="register"
 
   >
-    <el-form-item label="用户名" prop="username">
-      <el-input  @input='registerForm.username($event)' v-model="registerForm.username" placeholder="请输入用户名"></el-input>
-    </el-form-item>
-    <el-form-item label="邮箱" prop="email">
-      <el-input @input='registerForm.username($event)' v-model="registerForm.email" placeholder="请输入邮箱"></el-input>
-    </el-form-item>
-    <el-form-item label="密码" prop="password">
-      <el-input
-        type="password"
-        v-model="registerForm.password"
-        placeholder="请输入密码"
-        @input='registerForm.username($event)'
-      ></el-input>
-    </el-form-item>
-    <el-form-item label="确认密码" prop="confirmPassword">
-      <el-input
-        type="password"
-        @input='registerForm.username($event)'
-        v-model="registerForm.confirmPassword"
-        placeholder="请确认密码"
-      ></el-input>
-    </el-form-item>
+<el-form-item label="用户名" prop="username" :rules="[{ validator: validateUsername, trigger: 'blur' }]">
+    <el-input @input="registerForm.username($event)" v-model="registerForm.username" placeholder="请输入用户名"></el-input>
+  </el-form-item>
+
+  <el-form-item label="密码" prop="password" :rules="[{ validator: validatePassword, trigger: 'blur' }]">
+    <el-input
+      type="password"
+      @input="registerForm.password($event)"
+      v-model="registerForm.password"
+      placeholder="请输入密码"
+      :show-password="true"
+    ></el-input>
+  </el-form-item>
+
+  <el-form-item label="确认密码" prop="confirmPassword" :rules="[{ validator: validateConfirmPassword, trigger: 'blur' }]">
+    <el-input
+      type="password"
+      @input="registerForm.confirmPassword($event)"
+      v-model="registerForm.confirmPassword"
+      placeholder="请确认密码"
+      :show-password="true"
+    ></el-input>
+  </el-form-item>
+
+  <el-form-item label="邮箱" prop="email" :rules="[{ validator: validateEmail, trigger: 'blur' }]">
+    <el-input @input="registerForm.email($event)" v-model="registerForm.email" placeholder="请输入邮箱"></el-input>
+  </el-form-item>
+
     <el-form-item label="验证码" prop="verificationCode">
       <el-input
-          @input='registerForm.username($event)'
+
+          @input='registerForm.verificationCode($event)'
         v-model="registerForm.verificationCode"
         placeholder="请输入验证码"
       ></el-input>
