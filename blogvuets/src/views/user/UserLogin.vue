@@ -118,7 +118,8 @@ const login = async () => {
     </el-form-item>
 
     <el-form-item>
-       <el-button type="primary" @click="login" :disabled="isLoginButtonDisabled">登录</el-button>
+      <el-button type="primary" @click="login" :disabled="isLoginButtonDisabled">登录</el-button>
+      <el-button  type="primary" ><router-link  style="text-decoration: none" to="/reg">注册</router-link></el-button>
     </el-form-item>
   </el-form>
 

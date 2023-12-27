@@ -111,6 +111,7 @@ const register = () => {
     </el-form-item>
     <el-form-item>
       <el-button type="primary" native-type="submit">注册</el-button>
+      <el-button  type="primary" ><router-link  style="text-decoration: none" to="/login">登录</router-link></el-button>
     </el-form-item>
   </el-form>
 </template>

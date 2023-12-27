@@ -418,10 +418,11 @@ config.comments = [
         <el-skeleton :rows="5" animated v-else/>
       </el-main>
 
-      <el-footer style="margin-top: 10%;" v-if="!isLoading">
-        <u-comment style="width: 100%" :config="config" @submit="submit" @like="like">
+      <el-footer style="padding-top: 15%;" v-if="!isLoading">
+                    <u-comment style="width: 100%" :config="config" @submit="submit" @like="like">
         </u-comment>
       </el-footer>
+
       <el-skeleton :rows="5" animated v-else/>
     </el-container>
 
