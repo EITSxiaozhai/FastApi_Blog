@@ -341,7 +341,7 @@ onUnmounted(() => {
                 <router-link :to="`/blog/${blog.BlogId}`">
                   <!-- 使用条件判断选择布局 -->
                   <template v-if="xlLayout ">
-                    <el-card shadow="hover" id="main-boxcard" class="box-card" style="display: flex; flex-direction: column; height: 100%;">
+                    <el-card shadow="hover" id="main-boxcard" class="box-card" style="display: flex; flex-direction: column; height: 99%;">
   <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image" style="flex: 1 0 auto;">
 
   <div style="flex: 0 0 auto; padding: 10px;">
