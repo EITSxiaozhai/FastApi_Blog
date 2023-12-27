@@ -119,7 +119,7 @@ class BlogTag(Base):
     Article_Type = Column(String(255), index=True)
     tag_created_at = Column(DateTime, default=datetime.datetime.now)
     blog_id = Column(Integer, ForeignKey('blogtable.BlogId'))
-    blogs = relationship("Blog", back_populates="BlogTags", primaryjoin="BlogTag.blog_id == Blog.BlogId")
+    blogs = relationship("Blog", back_populates="BlogTags", primaryjoin="BlogTag.blog_id == Blog.BlogId", uselist=True)
 
     def to_dict(self):
         return dict(blog_id=self.blog_id, id=self.id, blog_type=self.Article_Type, tag_created_at=self.tag_created_at.timestamp(),

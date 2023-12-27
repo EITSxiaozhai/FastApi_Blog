@@ -403,13 +403,21 @@ async def BlogTagList(token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
             sql = select(models.BlogTag)
-            result = await session.execute(sql)
-            enddata = []
+            result = await session.execute(sql)  # 使用 execute_async 替代 execute
+            enddata = {}
             for tag in result.scalars().all():
-                enddata.append(tag)
+                if tag.blog_id not in enddata:
+                    sql2 = select(models.Blog).filter_by(BlogId=tag.blog_id)
+                    blogresult = await session.execute(sql2)
+                    for blogname in blogresult.scalars().all():
+                        enddata[tag.blog_id] = {
+                            'TagName': tag.Article_Type,
+                            'Date': blogname.created_at,
+                            'Title': blogname.title,
+                        }
             return {"data": enddata, "code": 20000}
         except Exception as e:
-            print("我们遇到了下面的问题",e)
+            print("我们遇到了下面的问题", e)
 
 
 
