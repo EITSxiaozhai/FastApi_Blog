@@ -25,24 +25,18 @@ class UserPrivileges(Base):
 
 @dataclass
 class User(Base):
-    choices = [
-        ('0', 'woman'),
-        ('1', 'man'),
-        ('2', 'NULL')
-    ]
     __tablename__ = "usertable"
     __table_args__ = {'extend_existing': True}
     UserId = Column(Integer, primary_key=True, index=True)
     username = Column(String(255), unique=True)
     userpassword = Column(PasswordType(schemes=['pbkdf2_sha256']))
-    gender = Column(ChoiceType(choices), default="O")
     creation_time = Column(DateTime, default=datetime.datetime.now)
     Last_Login_Time = Column(DateTime, default=datetime.datetime.now)
     UserUuid = Column(String(255))
     UserEmail = Column(EmailType(255))
     comments = relationship("Comment", back_populates="user")
     def to_dict(self):
-        return dict(UserId=self.UserId, username=self.username, userpassword=self.userpassword, gender=self.gender,
+        return dict(UserId=self.UserId, username=self.username, userpassword=self.userpassword,
                     UserEmail=self.UserEmail, UserUuid=self.UserUuid)
 
 @dataclass
