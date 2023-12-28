@@ -90,6 +90,7 @@ async def UserLogin(request:Request):
                     "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
                 }
                 token_cont =  usertoken.create_jwt_token(data=token_data)
+                print(token_cont)
                 return {"success":"true","message":loginusername,'token':token_cont}
         except Exception as e:
             print(f"遇到了下面的问题：{e}")
