@@ -51,6 +51,8 @@ async def query(request: Request):
         try:
             x = await request.json()
             if x['username'] == '' or x['password'] == '' or x['email'] == '':
+                return {'Success': 'False', 'data': '传递参数违法'}
+            else:
                 enddata = await session.execute(select(User).filter_by(username=x['username']))
                 now = enddata.scalars().first()
                 if now is None:
@@ -60,8 +62,6 @@ async def query(request: Request):
                     return {'Success':'True','cod':'200','data': "success"}
                 else:
                     return {'Success':'False','cod': '201' ,'data':"存在重复用户。跳过创建"}
-            else:
-                return {'Success':'False','data':'传递参数违法'}
         except Exception as e:
             return {'cod':'500','data':f"我们遇到了一点问题： {e}"}
 
@@ -69,26 +69,31 @@ async def query(request: Request):
 @UserApp.post("/login")
 async def UserLogin(request:Request):
     async with db_session() as session:
-        request_data = await request.json()
-        loginusername = request_data["username"]
-        loginpassword = request_data["password"]
-        sql = select(User).filter(User.username == loginusername)
-        result = await session.execute(sql)
-        user = result.scalar_one_or_none()
-        if user is None:
-            # 用户名不存在
-            raise HTTPException(status_code=401, detail="验证未通过")
-        elif user.userpassword != loginpassword:
-            # 密码不匹配
-            raise HTTPException(status_code=401, detail="验证未通过")
-        else:
-            usertoken = TokenManager()
-            token_data = {
-                "username": loginusername,
-                "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-            }
-            token_cont =  usertoken.create_jwt_token(data=token_data)
-            return {"success":"true","message":loginusername,'token':token_cont}
+        try:
+            request_data = await request.json()
+            loginusername = request_data["username"]
+            loginpassword = request_data["password"]
+
+            sql = select(User).filter(User.username == loginusername)
+            result = await session.execute(sql)
+            user = result.scalars().first()
+            if user is None:
+                # 用户名不存在
+               return {"data":'Error'}
+            elif user.userpassword != loginpassword:
+                # 密码不匹配
+                return {'data':'Error'}
+            else:
+                usertoken = TokenManager()
+                token_data = {
+                    "username": loginusername,
+                    "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+                }
+                token_cont =  usertoken.create_jwt_token(data=token_data)
+                return {"success":"true","message":loginusername,'token':token_cont}
+        except Exception as e:
+            print(f"遇到了下面的问题：{e}")
+            return {"data":f'{e}'}
 
 ##查询全部用户名
 @UserApp.get("/alluser")
