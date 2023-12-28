@@ -4,6 +4,9 @@ import backApi from "@/Api/backApi";
 import { useRouter } from 'vue-router'; // 导入useRouter函数
 import { ElNotification } from 'element-plus';
 import vueRecaptcha from 'vue3-recaptcha2';
+import { useStore } from 'vuex';
+import VueJwtDecode from 'vue-jwt-decode';
+
 
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
 
@@ -11,7 +14,7 @@ const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
 const isLoginButtonDisabled = ref(true);
 
 const recaptchaVerified = (response) => {
-  console.log(response);
+
   isLoginButtonDisabled.value = false; // 用户通过验证，按钮变为有效
 };
 
@@ -47,11 +50,12 @@ onMounted(() => {
 });
 
 
+const store = useStore();
 
 const login = async () => {
   try {
-    console.log(LoginUserForm);
-    console.log(token)
+
+
     const response = await backApi.post('/generaluser/login', {
       username: LoginUserForm.value.username,
       password: LoginUserForm.value.password,
@@ -60,10 +64,15 @@ const login = async () => {
     if (response.data.success) {
       const newToken = response.data.token;
       localStorage.setItem("token", newToken);
+
       token.value = newToken;
 
-
+      const decodedToken = VueJwtDecode.decode(newToken);
+      const username = decodedToken.username;
+  // 调用 Vuex mutation 设置 token 和用户名
+      store.commit('setTokenAndUsername', { token: newToken, username });
       router.push('/blog'); // 使用router进行页面重定向
+
       ElNotification({
     title: 'Success',
     message: '登录成功',
@@ -93,7 +102,10 @@ const login = async () => {
 </script>
 
 <template>
-  <el-form :model="LoginUserForm" label-width="80px" class="login-form">
+  <el-container>
+      <el-aside  style="height: 100vh;width: 70%;background-size: cover;;background-image: url('https://api.vvhan.com/api/view');" >测试</el-aside>
+    <el-main style= 'padding-top: 20%'>
+       <el-form  :model="LoginUserForm" label-width="80px" class="login-form">
     <el-form-item label="用户名" prop="username">
       <el-input  v-model="LoginUserForm.username" placeholder="请输入用户名"></el-input>
     </el-form-item>
@@ -115,14 +127,14 @@ const login = async () => {
   >
 </vueRecaptcha>
       </div>
-
     </el-form-item>
-
     <el-form-item>
       <el-button type="primary" @click="login" :disabled="isLoginButtonDisabled">登录</el-button>
       <el-button  type="primary" ><router-link  style="text-decoration: none" to="/reg">注册</router-link></el-button>
     </el-form-item>
   </el-form>
+    </el-main>
+  </el-container>
 
 </template>
 

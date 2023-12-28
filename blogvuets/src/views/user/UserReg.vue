@@ -13,7 +13,7 @@ const googleRecaptchaVerified = ref(false);
 const recaptchaVerified = (res) => {
   // 设置 googleRecaptchaVerified 为 true
   googleRecaptchaVerified.value = true;
-  console.log(res);
+
 };
 
 const recaptchaExpired = () => {
@@ -35,7 +35,7 @@ const RegisterUserForm = ref({
 
 
 const validatePassword = (rule, value, callback) => {
-  console.log('validatePassword - value:', value);
+
   if (value === undefined) {
     callback(new Error('密码不能为空'));
   } else if (value === '') {
@@ -116,7 +116,7 @@ const register = async () => {
       // Check the registration response
       if (response.data.Success === 'True') {
         // Registration successful
-        console.log('Registration successful:', response.data.data);
+
         ElNotification({
           title: 'Success',
           message: 'Registration successful',
@@ -152,8 +152,8 @@ const register = async () => {
 
 <template>
   <el-container>
-    <el-aside  style="height: 100vh;width: 70%;background-size: cover;;background-image: url('https://api.vvhan.com/api/view');l" >测试</el-aside>
-  <el-main  style="padding-top: 20%;">
+    <el-aside  style="height: 100vh;width: 70%;background-size: cover;background-image: url('https://api.vvhan.com/api/view');" >测试</el-aside>
+  <el-main  style="padding-top: 15%;">
     <h1  style="padding-left:40%" >注册页面</h1>
     <el-form
     v-model="RegisterUserForm"
