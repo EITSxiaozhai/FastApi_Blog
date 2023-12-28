@@ -1,5 +1,5 @@
 <script setup>
-import {ref, onBeforeMount, onMounted, onBeforeUnmount, onUnmounted} from 'vue';
+import {ref, onBeforeMount, onMounted, onBeforeUnmount, onUnmounted,computed} from 'vue';
 import {RouterLink, RouterView} from 'vue-router'
 import {useRoute} from "vue-router";
 import MarkdownIt from 'markdown-it';
@@ -12,6 +12,7 @@ import backApi from '../Api/backApi.ts';
 import {Discount} from "@element-plus/icons-vue";
 import {ChatDotRound, ChatLineRound, ChatRound} from '@element-plus/icons-vue'
 import Fingerprint2 from "fingerprintjs2";
+import { useStore } from 'vuex';
 
 import emoji from '@/assets/emoji'
 import {UToast, createObjectURL} from 'undraw-ui';
@@ -197,7 +198,7 @@ onMounted(() => {
 });
 
 const vote = async () => {
-  console.log("vote function is called");
+
   const blogId = route.params.blogId;
   const device_id = fingerprint.value;
   const ratingValue = value.value;
@@ -240,7 +241,7 @@ onMounted(() => {
 });
 
 const submitRating = async () => {
-  console.log("submitRating function is called"); // 添加这行日志
+
   try {
     // 调用 vote 函数提交评分
     await vote();
@@ -249,10 +250,15 @@ const submitRating = async () => {
   }
 };
 
+const store = useStore();
+const usernames = computed(() => store.getters.getUsername);
+const tokens = computed(() => store.getters.getToken);
+
+
 const config = reactive({
   user: {
     id: 1,
-    username: 'jack',
+    username: usernames.value,
     avatar: 'https://static.juzicon.com/avatars/avatar-200602130320-HMR2.jpeg?x-oss-process=image/resize,w_100',
     // 评论id数组 建议:存储方式用户uid和评论id组成关系,根据用户uid来获取对应点赞评论id,然后加入到数组中返回
     likeIds: [1, 2, 3]
@@ -266,7 +272,8 @@ let temp_id = 100
 // 提交评论事件
 const submit = ({content, parentId, files, finish, reply}) => {
   let str = '提交评论:' + content + ';\t父id: ' + parentId + ';\t图片:' + files + ';\t被回复评论:'
-  console.log(str, reply)
+
+
   const token = localStorage.getItem("token");
 
   if (!token) {
@@ -280,13 +287,15 @@ const submit = ({content, parentId, files, finish, reply}) => {
       },
     })
     // 如果没有 token，阻止评论的提交并提示用户去登录
-    console.log("用户未登录，请先登录");
+
     return;
   }
   /**
    * 上传文件后端返回图片访问地址，格式以'||'为分割; 如:  '/static/img/program.gif||/static/img/normal.webp'
    */
   let contentImg = files.map(e => createObjectURL(e)).join('||')
+
+
 
   const comment = {
     id: String((temp_id += 1)),
@@ -312,7 +321,7 @@ const submit = ({content, parentId, files, finish, reply}) => {
 }
 // 点赞按钮事件 将评论id返回后端判断是否点赞，然后在处理点赞状态
 const like = (id, finish) => {
-  console.log('点赞: ' + id)
+
   setTimeout(() => {
     finish()
   }, 200)
