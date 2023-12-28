@@ -8,14 +8,14 @@ from pydantic import EmailStr
 from sqlalchemy import select
 
 
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, selectinload
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter, Request, HTTPException
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.middleware.backlist import TokenManager
 from app.Fast_blog.model import models
-from app.Fast_blog.model.models import User
+from app.Fast_blog.model.models import User, Comment ,Blog
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Session = SessionLocal()
@@ -106,3 +106,61 @@ async def AllUser():
         for i in x:
             print(i.__dict__['username'], i.__dict__['UserUuid'])
     return ("查询全部用户")
+
+
+
+@UserApp.post("/{vueblogid}/commentlist")
+async def CommentList(vueblogid:int):
+    async with db_session() as session:
+        sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
+        result = await session.execute(sql)
+        data = {}
+        for i in result.scalars().all():
+            data[i.__dict__['createTime'].strftime("%Y-%m-%d %H:%M:%S")] =  {'content':i.__dict__['content'],'uid':i.__dict__['uid'],'likes':i.__dict__['likes'],'address':i.__dict__['address'],"user":{"homeLink":1,"username":i.__dict__['uid'],'avatar':i.__dict__['uid']}}
+        return {'data':f"{data}"}
+
+@UserApp.post("/{vueblogid}/commentsave")
+async def CommentSave(vueblogid : int):
+    async with db_session() as session:
+        sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
+        result = await session.execute(sql)
+        for i in result.scalars().all():
+            print(i.__dict__['comment'])
+            return {"data":f"{i}"}
+#
+# @UserApp.get("/comment/page/{pageNum}/{pageSize}")
+# async def page(pageNum: int, pageSize: int, articleId: Optional[int] = None):
+#     # Convert query parameters to Python function parameters
+#     result = comment_service.pageByAid(pageNum, pageSize, articleId)
+#     return {"data": result}
+#
+# @UserApp.get("/comment/replyPage/{pageNum}/{pageSize}")
+# async def reply_page(pageNum: int, pageSize: int, parentId: Optional[int] = None):
+#     # Convert query parameters to Python function parameters
+#     result = comment_service.replyPage(pageNum, pageSize, parentId)
+#     return {"data": result}
+#
+# @UserApp.post("/comment/save")
+# async def save(commentDTO: CommentDTO):
+#     # Convert request body to Python function parameter
+#     result = comment_service._save(commentDTO)
+#     return {"data": result}
+#
+# @UserApp.delete("/comment/remove/{id}")
+# async def remove(id: int):
+#     # Convert path parameter to Python function parameter
+#     result = comment_service.removeById(id)
+#     return {"data": result}
+#
+# @UserApp.post("/comment/liked")
+# async def liked(likedDTO: LikedDTO):
+#     # Convert request body to Python function parameter
+#     likedDTO.uid = 1  # Set the uid as needed
+#     comment_like_service.liked(likedDTO)
+#     return {"data": "OK"}
+#
+# @UserApp.get("/comment/cidList/{uid}")
+# async def cid_list(uid: int):
+#     # Convert path parameter to Python function parameter
+#     result = comment_like_service.cidListByUid(uid)
+#     return {"data": result}

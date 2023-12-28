@@ -51,11 +51,12 @@ class Comment(Base):
     address = Column(String(255))
     content = Column(String(255), nullable=False)  # 修改此行，为 content 指定长度
     likes = Column(Integer, default=0)
-    createTime = Column(String(255), default="1分钟前")  # 修改此行，为 createTime 指定长度
+    createTime = Column(DateTime, default=datetime.datetime.now)  # 修改此行，为 createTime 指定长度
     contentImg = Column(String(255))  # 修改此行，为 contentImg 指定长度
     user = relationship("User", back_populates="comments")
     replies = relationship("Comment", backref="parent_comment", remote_side=[id])
-
+    def to_dict(self):
+        return dict(parentId=self.parentId, uid=self.uid,blog_id=self.blog_id, content=self.content, likes=self,createTime=self.createTime, contentImg=self.contentImg, user=self.user,replies=self.replies)
 
 @dataclass
 class AdminUser(Base):
