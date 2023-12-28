@@ -6,8 +6,13 @@ import backApi from "@/Api/backApi";
 
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
 
+
+const googleRecaptchaVerified = ref(false);
+
 // 回傳一組 token，並把 token 傳給後端驗證
 const recaptchaVerified = (res) => {
+  // 设置 googleRecaptchaVerified 为 true
+  googleRecaptchaVerified.value = true;
   console.log(res);
 };
 
@@ -19,20 +24,24 @@ const recaptchaFailed = () => {
   // 失敗執行動作
 };
 
-const registerForm = ref({
+const RegisterUserForm = ref({
   username: '',
   email: '',
   password: '',
   confirmPassword: '',
   verificationCode: '',
+
 });
 
 
 const validatePassword = (rule, value, callback) => {
-  if (value === '') {
+  console.log('validatePassword - value:', value);
+  if (value === undefined) {
+    callback(new Error('密码不能为空'));
+  } else if (value === '') {
     callback(new Error('请输入密码'));
-  } else if (value.length < 6) {
-    callback(new Error('密码长度不能小于 6 位'));
+  } else if (value.length < 8) {
+    callback(new Error('密码长度不能小于 8 位'));
   } else {
     callback();
   }
@@ -41,7 +50,7 @@ const validatePassword = (rule, value, callback) => {
 const validateConfirmPassword = (rule, value, callback) => {
   if (value === '') {
     callback(new Error('请再次输入密码'));
-  } else if (value !== registerForm.value.password) {
+  } else if (value !== RegisterUserForm.value.password) {
     callback(new Error('两次输入密码不一致'));
   } else {
     callback();
@@ -49,22 +58,26 @@ const validateConfirmPassword = (rule, value, callback) => {
 };
 
 const validateUsername = (rule, value, callback) => {
-  const reg = /^\S+$/;
+
+
+  //匹配不包含空格和中文字符的用户名
+  const reg = /^[^\s\u4e00-\u9fa5]+$/;
   if (!reg.test(value)) {
-    callback(new Error('用户名不能包含空格'));
+    callback(new Error('用户名不能包含空格和中文字符'));
   } else {
     callback();
   }
 };
 
 const validateEmail = (rule, value, callback) => {
-  const reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+  const reg = /^[a-zA-Z0-9_-]*@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
   if (!reg.test(value)) {
     callback(new Error('请输入正确的邮箱地址'));
   } else {
     callback();
   }
 };
+
 
 const verificationCodeDisabled = ref(false);
 const verificationCodeButtonText = ref('获取验证码');
@@ -90,47 +103,60 @@ const getVerificationCode = () => {
 
 const register = async () => {
   try {
-    const response = await backApi.post('/generaluser/reguser', {
-      username: registerForm.value.username,
-      password: registerForm.value.password,
-      email: registerForm.value.email,
-      // 其他注册需要的字段
-    });
-
-    if (response.data.success) {
-      // 注册成功的处理
-      console.log('注册成功:', response.data.message);
-      ElNotification({
-        title: 'Success',
-        message: '注册成功',
-        type: 'success',
+    // Check if Google reCAPTCHA is verified
+    if (googleRecaptchaVerified.value) {
+      // Perform registration logic
+      const response = await backApi.post('/generaluser/reguser', {
+        username: RegisterUserForm.value.username,
+        password: RegisterUserForm.value.password,
+        email: RegisterUserForm.value.email,
+        // Other registration fields
       });
 
-      // 在注册成功后，您可能还需要执行其他操作，例如跳转到登录页面
-      this.router.push('/login');
+      // Check the registration response
+      if (response.data.Success === 'True') {
+        // Registration successful
+        console.log('Registration successful:', response.data.data);
+        ElNotification({
+          title: 'Success',
+          message: 'Registration successful',
+          type: 'success',
+        });
+
+        // After successful registration, you may want to perform other actions, such as redirecting to the login page
+        this.router.push('/login');
+      } else {
+        // Registration failed
+        console.error('Registration failed:', response.data.message);
+        ElNotification({
+          title: 'Warning',
+          message: 'Registration failed',
+          type: 'warning',
+        });
+      }
     } else {
-      // 注册失败的处理
-      console.error('注册失败:', response.data.message);
+      // If Google reCAPTCHA is not verified, show a warning to the user
       ElNotification({
         title: 'Warning',
-        message: '注册失败',
+        message: 'Please complete Google reCAPTCHA verification',
         type: 'warning',
       });
     }
   } catch (error) {
-    console.error('注册失败:', error);
-    ElNotification({
-      title: 'Warning',
-      message: '注册失败',
-      type: 'warning',
-    });
+    // Handle registration error
+    console.error('Registration failed:', error);
+
   }
 };
 </script>
 
 <template>
-  <el-form
-    :model="registerForm"
+  <el-container>
+    <el-aside  style="height: 100vh;width: 70%;background-size: cover;;background-image: url('https://api.vvhan.com/api/view');l" >测试</el-aside>
+  <el-main  style="padding-top: 20%;">
+    <h1  style="padding-left:40%" >注册页面</h1>
+    <el-form
+    v-model="RegisterUserForm"
     label-width="80px"
     class="register-form"
     ref="registerForm"
@@ -138,14 +164,13 @@ const register = async () => {
 
   >
 <el-form-item label="用户名" prop="username" :rules="[{ validator: validateUsername, trigger: 'blur' }]">
-    <el-input @input="registerForm.username($event)" v-model="registerForm.username" placeholder="请输入用户名"></el-input>
+    <el-input  v-model="RegisterUserForm.username" placeholder="请输入用户名"></el-input>
   </el-form-item>
 
   <el-form-item label="密码" prop="password" :rules="[{ validator: validatePassword, trigger: 'blur' }]">
     <el-input
       type="password"
-      @input="registerForm.password($event)"
-      v-model="registerForm.password"
+      v-model="RegisterUserForm.password"
       placeholder="请输入密码"
       :show-password="true"
     ></el-input>
@@ -154,22 +179,19 @@ const register = async () => {
   <el-form-item label="确认密码" prop="confirmPassword" :rules="[{ validator: validateConfirmPassword, trigger: 'blur' }]">
     <el-input
       type="password"
-      @input="registerForm.confirmPassword($event)"
-      v-model="registerForm.confirmPassword"
+      v-model="RegisterUserForm.confirmPassword"
       placeholder="请确认密码"
       :show-password="true"
     ></el-input>
   </el-form-item>
 
   <el-form-item label="邮箱" prop="email" :rules="[{ validator: validateEmail, trigger: 'blur' }]">
-    <el-input @input="registerForm.email($event)" v-model="registerForm.email" placeholder="请输入邮箱"></el-input>
+    <el-input  v-model="RegisterUserForm.email" placeholder="请输入邮箱"></el-input>
   </el-form-item>
 
     <el-form-item label="验证码" prop="verificationCode">
       <el-input
-
-          @input='registerForm.verificationCode($event)'
-        v-model="registerForm.verificationCode"
+        v-model="RegisterUserForm.verificationCode"
         placeholder="请输入验证码"
       ></el-input>
       <el-button
@@ -181,22 +203,26 @@ const register = async () => {
       </el-button>
     </el-form-item>
     <el-form-item>
-  <vueRecaptcha
-  :sitekey="v2Sitekey"
-  size="normal"
-  theme="light"
-  hl="zh-CN"
-  @verify="recaptchaVerified"
-  @expire="recaptchaExpired"
-  @fail="recaptchaFailed"
-  >
-</vueRecaptcha>
+  <el-form-item>
+    <vueRecaptcha
+      :sitekey="v2Sitekey"
+      size="normal"
+      theme="light"
+      hl="zh-CN"
+      @verify="recaptchaVerified"
+      @expire="recaptchaExpired"
+      @fail="recaptchaFailed"
+    ></vueRecaptcha>
+  </el-form-item>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" native-type="submit">注册</el-button>
       <el-button  type="primary" ><router-link  style="text-decoration: none" to="/login">登录</router-link></el-button>
     </el-form-item>
   </el-form>
+  </el-main>
+
+    </el-container>
 </template>
 
 

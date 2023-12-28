@@ -9,6 +9,7 @@ const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
 
 // 回傳一組 token，並把 token 傳給後端驗證
 const isLoginButtonDisabled = ref(true);
+
 const recaptchaVerified = (response) => {
   console.log(response);
   isLoginButtonDisabled.value = false; // 用户通过验证，按钮变为有效
@@ -22,7 +23,7 @@ const recaptchaFailed = () => {
   isLoginButtonDisabled.value = true; // 验证失败，按钮变为无效
 };
 
-const loginForm = ref({
+const LoginUserForm = ref({
   username: '',
   password: '',
 });
@@ -49,11 +50,11 @@ onMounted(() => {
 
 const login = async () => {
   try {
-    console.log(loginForm);
+    console.log(LoginUserForm);
     console.log(token)
     const response = await backApi.post('/generaluser/login', {
-      username: loginForm.value.username,
-      password: loginForm.value.password,
+      username: LoginUserForm.value.username,
+      password: LoginUserForm.value.password,
     });
 
     if (response.data.success) {
@@ -92,12 +93,12 @@ const login = async () => {
 </script>
 
 <template>
-  <el-form :model="loginForm" label-width="80px" class="login-form">
+  <el-form :model="LoginUserForm" label-width="80px" class="login-form">
     <el-form-item label="用户名" prop="username">
-      <el-input @input="loginForm.username = $event" v-model="loginForm.username" placeholder="请输入用户名"></el-input>
+      <el-input  v-model="LoginUserForm.username" placeholder="请输入用户名"></el-input>
     </el-form-item>
     <el-form-item label="密码" prop="password">
-      <el-input @input="loginForm.password = $event" type="password" v-model="loginForm.password"
+      <el-input type="password" v-model="LoginUserForm.password"
                 placeholder="请输入密码"></el-input>
     </el-form-item>
 
