@@ -116,8 +116,9 @@ async def CommentList(vueblogid:int):
         result = await session.execute(sql)
         data = {}
         for i in result.scalars().all():
-            data[i.__dict__['createTime'].strftime("%Y-%m-%d %H:%M:%S")] =  {'content':i.__dict__['content'],'uid':i.__dict__['uid'],'likes':i.__dict__['likes'],'address':i.__dict__['address'],"user":{"homeLink":1,"username":i.__dict__['uid'],'avatar':i.__dict__['uid']}}
-        return {'data':f"{data}"}
+            data =  {'id':i.__dict__['id'],'parentId': 'null','uid':i.__dict__['uid'],'content':i.__dict__['content'],'likes':i.__dict__['likes'],'address':i.__dict__['address'],"user":{"homeLink": '1',"username":i.__dict__['uid'],'avatar':i.__dict__['uid']}}
+            # [i.__dict__['createTime'].strftime("%Y-%m-%d %H:%M:%S")]
+        return data
 
 @UserApp.post("/{vueblogid}/commentsave")
 async def CommentSave(vueblogid : int):

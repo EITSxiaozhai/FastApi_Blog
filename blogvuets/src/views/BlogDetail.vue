@@ -236,8 +236,22 @@ const getAverageRating = async () => {
   }
 };
 
+const LoadComments = async () => {
+  const blogId = route.params.blogId;
+  try {
+    const CommentList = await backApi.post(`/generaluser/${ blogId }/commentlist`);
+    config.comments.push(CommentList.data)
+    console.log(config.comments)
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+
+
 onMounted(() => {
   getAverageRating();
+  LoadComments();
 });
 
 const submitRating = async () => {
@@ -270,12 +284,10 @@ const config = reactive({
 
 let temp_id = 100
 // 提交评论事件
-const submit = ({content, parentId, files, finish, reply}) => {
+const submit = async ({content, parentId, files, finish, reply}) => {
   let str = '提交评论:' + content + ';\t父id: ' + parentId + ';\t图片:' + files + ';\t被回复评论:'
-
-
   const token = localStorage.getItem("token");
-
+  const blogId = route.params.blogId;
   if (!token) {
     ElNotification({
       title: 'Warning',
@@ -294,7 +306,6 @@ const submit = ({content, parentId, files, finish, reply}) => {
    * 上传文件后端返回图片访问地址，格式以'||'为分割; 如:  '/static/img/program.gif||/static/img/normal.webp'
    */
   let contentImg = files.map(e => createObjectURL(e)).join('||')
-
 
 
   const comment = {
@@ -342,9 +353,9 @@ config.comments = [
       username: '落🤍尘',
       avatar: 'https://static.juzicon.com/avatars/avatar-200602130320-HMR2.jpeg?x-oss-process=image/resize,w_100',
       level: 6,
-      homeLink: '/1'
+      homeLink: '2'
     }
-  }
+  },
 ]
 
 
