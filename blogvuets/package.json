@@ -21,6 +21,8 @@
     "element-plus": "^2.3.14",
     "fingerprintjs2": "^2.1.4",
     "grecaptcha": "^1.0.3",
+    "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
     "markdown-it": "^13.0.1",
     "os": "^0.1.2",
     "typeit": "^8.7.1",
@@ -29,10 +31,12 @@
     "unplugin-vue-components": "^0.25.2",
     "vite": "^4.4.9",
     "vue": "^3.2.13",
+    "vue-jwt-decode": "^0.1.0",
     "vue-recaptcha": "^3.0.0-alpha.2",
     "vue-router": "^4.0.13",
     "vue3-recaptcha2": "^1.8.0",
-    "vuex": "^4.0.0"
+    "vuex": "^4.0.0",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.4.0",

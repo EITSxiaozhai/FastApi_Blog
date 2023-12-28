@@ -4,9 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加规则判断">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加详细判定">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/User_app/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/model/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/store/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/store/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/UserReg.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserReg.vue" afterDir="false" />
     </list>
@@ -531,7 +538,8 @@
       <workItem from="1703572150699" duration="2658000" />
       <workItem from="1703593236404" duration="395000" />
       <workItem from="1703673734435" duration="16165000" />
-      <workItem from="1703734617498" duration="6997000" />
+      <workItem from="1703734617498" duration="9374000" />
+      <workItem from="1703761729557" duration="4830000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -876,7 +884,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="270" />
+    <option name="localTasksCounter" value="272" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -920,8 +928,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="完成新建图片上传" />
-    <MESSAGE value="添加创建作者名称" />
     <MESSAGE value="文章搜索。点击跳转" />
     <MESSAGE value="修改数据库文章判断" />
     <MESSAGE value="删除多余无用包" />
@@ -945,7 +951,9 @@
     <MESSAGE value="添加注册API" />
     <MESSAGE value="优化手机屏幕显示" />
     <MESSAGE value="添加规则判断" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加规则判断" />
+    <MESSAGE value="优化布局和规则判断" />
+    <MESSAGE value="添加详细判定" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加详细判定" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
