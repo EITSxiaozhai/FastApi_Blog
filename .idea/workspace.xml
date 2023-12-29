@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="后端接口评论输出">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="前端显示后端评论数据">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/User_app/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -532,7 +531,8 @@
       <workItem from="1703673734435" duration="16165000" />
       <workItem from="1703734617498" duration="9374000" />
       <workItem from="1703761729557" duration="4830000" />
-      <workItem from="1703767607769" duration="9251000" />
+      <workItem from="1703767607769" duration="9444000" />
+      <workItem from="1703848412274" duration="3713000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -877,7 +877,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="273" />
+    <option name="localTasksCounter" value="274" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -921,7 +921,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改数据库文章判断" />
     <MESSAGE value="删除多余无用包" />
     <MESSAGE value="修改博客详情页面" />
     <MESSAGE value="实时更新目录页面" />
@@ -946,7 +945,8 @@
     <MESSAGE value="优化布局和规则判断" />
     <MESSAGE value="添加详细判定" />
     <MESSAGE value="后端接口评论输出" />
-    <option name="LAST_COMMIT_MESSAGE" value="后端接口评论输出" />
+    <MESSAGE value="前端显示后端评论数据" />
+    <option name="LAST_COMMIT_MESSAGE" value="前端显示后端评论数据" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

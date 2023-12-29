@@ -116,9 +116,18 @@ async def CommentList(vueblogid:int):
         result = await session.execute(sql)
         data = {}
         for i in result.scalars().all():
-            data =  {'id':i.__dict__['id'],'parentId': 'null','uid':i.__dict__['uid'],'content':i.__dict__['content'],'likes':i.__dict__['likes'],'address':i.__dict__['address'],"user":{"homeLink": '1',"username":i.__dict__['uid'],'avatar':i.__dict__['uid']}}
+            data =  {'id':i.__dict__['id'],'parentId': i.__dict__['parentId'],'uid':i.__dict__['uid'],'content':i.__dict__['content'],'likes':i.__dict__['likes'],'address':i.__dict__['address'],"user":{"homeLink": '1',"username":i.__dict__['uid'],'avatar':i.__dict__['uid']},'reply': {'total': 0, 'list': []}}
             # [i.__dict__['createTime'].strftime("%Y-%m-%d %H:%M:%S")]
+            print()
+        CommentPaging= select(models.Comment).filter(models.Comment.parentId == i.__dict__['parentId'])
+        ResultPagin = await session.execute(CommentPaging)
+        CommentPagingData = []
+        for Result in ResultPagin.scalars().all():
+                Replytocomment =  {'id': Result.__dict__['id'],'parentId': Result.parentId,'uid':Result.__dict__['uid'],'content':Result.__dict__['content'],'likes':Result.__dict__['likes'],'address':Result.__dict__['address'],"user":{"homeLink": '1',"username":Result.__dict__['uid'],'avatar':Result.__dict__['uid']}}
+                CommentPagingData.append(Replytocomment)
+                data['reply']['list'] = CommentPagingData
         return data
+
 
 @UserApp.post("/{vueblogid}/commentsave")
 async def CommentSave(vueblogid : int):
