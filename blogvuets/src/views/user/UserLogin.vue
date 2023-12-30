@@ -14,7 +14,7 @@ const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
 const isLoginButtonDisabled = ref(true);
 
 const recaptchaVerified = (response) => {
-
+  LoginUserForm.value.googlerecaptcha = response
   isLoginButtonDisabled.value = false; // 用户通过验证，按钮变为有效
 };
 
@@ -29,6 +29,7 @@ const recaptchaFailed = () => {
 const LoginUserForm = ref({
   username: '',
   password: '',
+  googlerecaptcha: '',
 });
 
 let router; // 声明路由器变量
@@ -47,6 +48,7 @@ onMounted(() => {
   if (storedToken) {
     token.value = storedToken;
   }
+
 });
 
 
@@ -55,10 +57,10 @@ const store = useStore();
 const login = async () => {
   try {
 
-
     const response = await backApi.post('/generaluser/login', {
       username: LoginUserForm.value.username,
       password: LoginUserForm.value.password,
+      googlerecaptcha : LoginUserForm.value.googlerecaptcha
     });
 
     if (response.data.success) {
