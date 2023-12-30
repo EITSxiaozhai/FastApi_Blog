@@ -145,7 +145,7 @@ async def CommentList(vueblogid: int):
         try:
             sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
             result = await session.execute(sql)
-            data = []
+            comment_dict = {}
 
             for i in result.scalars().all():
                 comment_data = {
@@ -160,29 +160,16 @@ async def CommentList(vueblogid: int):
                     'reply': {'total': 0, 'list': []}
                 }
 
-                CommentPaging = select(models.Comment).filter(models.Comment.parentId == i.__dict__['id'])
-                ResultPagin = await session.execute(CommentPaging)
-                CommentPagingData = []
+                if i.__dict__['parentId'] is None:
+                    comment_dict[i.__dict__['id']] = comment_data
+                else:
+                    parent_id = i.__dict__['parentId']
+                    if parent_id in comment_dict:
+                        comment_dict[parent_id]['reply']['list'].append(comment_data)
+                        comment_dict[parent_id]['reply']['total'] += 1
 
-                for Result in ResultPagin.scalars().all():
-                    reply_data = {
-                        'id': Result.__dict__['id'],
-                        'parentId': Result.parentId,
-                        'uid': Result.__dict__['uid'],
-                        'content': Result.__dict__['content'],
-                        'likes': Result.__dict__['likes'],
-                        'address': Result.__dict__['address'],
-                        "user": {"homeLink": '1', "username": Result.__dict__['uid'],
-                                 'avatar': "https://api.vvhan.com/api/avatar"}
-                    }
+            return list(comment_dict.values())
 
-                    CommentPagingData.append(reply_data)
-
-                comment_data['reply']['total'] = len(CommentPagingData)
-                comment_data['reply']['list'] = CommentPagingData
-                data.append(comment_data)
-
-            return data
         except Exception as e:
             return {"error": f"commentlist {e}"}
 
@@ -227,7 +214,7 @@ async def CommentSave(vueblogid: int, request: Request,token: str = Depends(User
                 if i:
                     sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
                     result = await session.execute(sql)
-                    if result.first():
+                    if result.first() is not None:
                         commentUp = Comment(
                             uid=  i.UserId,
                             content=x['content']['content'],
@@ -239,6 +226,8 @@ async def CommentSave(vueblogid: int, request: Request,token: str = Depends(User
                         await session.flush()
                         await session.commit()
                         return {"data":'评论添加成功'}
+                    else:
+                        return {"data": "评论添加失败"}
                 else:
                         return {"data":"评论添加失败"}
             # 如果用户未经过身份验证或凭据无效
@@ -246,41 +235,3 @@ async def CommentSave(vueblogid: int, request: Request,token: str = Depends(User
             return {"code": 40002, "message": "Token已过期"}
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
-
-#
-# @UserApp.get("/comment/page/{pageNum}/{pageSize}")
-# async def page(pageNum: int, pageSize: int, articleId: Optional[int] = None):
-#     # Convert query parameters to Python function parameters
-#     result = comment_service.pageByAid(pageNum, pageSize, articleId)
-#     return {"data": result}
-#
-# @UserApp.get("/comment/replyPage/{pageNum}/{pageSize}")
-# async def reply_page(pageNum: int, pageSize: int, parentId: Optional[int] = None):
-#     # Convert query parameters to Python function parameters
-#     result = comment_service.replyPage(pageNum, pageSize, parentId)
-#     return {"data": result}
-#
-# @UserApp.post("/comment/save")
-# async def save(commentDTO: CommentDTO):
-#     # Convert request body to Python function parameter
-#     result = comment_service._save(commentDTO)
-#     return {"data": result}
-#
-# @UserApp.delete("/comment/remove/{id}")
-# async def remove(id: int):
-#     # Convert path parameter to Python function parameter
-#     result = comment_service.removeById(id)
-#     return {"data": result}
-#
-# @UserApp.post("/comment/liked")
-# async def liked(likedDTO: LikedDTO):
-#     # Convert request body to Python function parameter
-#     likedDTO.uid = 1  # Set the uid as needed
-#     comment_like_service.liked(likedDTO)
-#     return {"data": "OK"}
-#
-# @UserApp.get("/comment/cidList/{uid}")
-# async def cid_list(uid: int):
-#     # Convert path parameter to Python function parameter
-#     result = comment_like_service.cidListByUid(uid)
-#     return {"data": result}
