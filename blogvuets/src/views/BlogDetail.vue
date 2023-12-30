@@ -248,6 +248,28 @@ const LoadComments = async () => {
 };
 
 
+const UpComments = async (str) => {
+  const blogId = route.params.blogId;
+  const token = localStorage.getItem("token"); // 从本地存储获取 token
+
+  try {
+    if (!token) {
+      router.push('/login'); // 跳转到登录页面
+      return;
+    }
+    const UpComment = await backApi.post(`/generaluser/${blogId}/commentsave`, {
+      content: str,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // 在 headers 中包含 token
+      },
+    });
+    console.log(UpComment);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
 onMounted(() => {
   getAverageRating();
@@ -286,8 +308,18 @@ let temp_id = 100
 // 提交评论事件
 const submit = async ({content, parentId, files, finish, reply}) => {
   let str = '提交评论:' + content + ';\t父id: ' + parentId + ';\t图片:' + files + ';\t被回复评论:'
+
+
+  const jsonData = {
+  content: content,
+  parentId: parentId,
+  files: files,
+  };
+
+  console.log(jsonData)
   const token = localStorage.getItem("token");
   const blogId = route.params.blogId;
+  await UpComments(jsonData);
   if (!token) {
     ElNotification({
       title: 'Warning',
@@ -299,7 +331,6 @@ const submit = async ({content, parentId, files, finish, reply}) => {
       },
     })
     // 如果没有 token，阻止评论的提交并提示用户去登录
-
     return;
   }
   /**

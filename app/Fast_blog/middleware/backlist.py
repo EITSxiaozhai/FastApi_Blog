@@ -10,7 +10,6 @@ import redis
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
 
-
 load_dotenv()
 
 db_password = os.getenv("REDIS_DB_PASSWORD")
@@ -46,7 +45,8 @@ def add(x, y):
 class TokenManager():
     def __init__(self, secret_key=secret_key):
         self.secret_key = secret_key
-        self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, username=redis_user,password=db_password)
+        self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, username=redis_user,
+                                              password=db_password)
 
     def create_jwt_token(self, data: dict) -> str:
         token = jwt.encode(data, self.secret_key, algorithm=ALGORITHM)
@@ -76,6 +76,7 @@ class BlogCache:
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
 
+
 ## 阿里云文件上传
 class aliOssUpload():
     def __init__(self):
@@ -89,14 +90,14 @@ class aliOssUpload():
         # 创建 OSS 链接
         auth = oss2.Auth(access_key_id, access_key_secret)
         self.bucket = oss2.Bucket(auth, 'http://oss-cn-hangzhou.aliyuncs.com', self.bucket_name)
+
     def upload_bitsfile(self, blogid, bitsfile):
         self.bucket.put_object(f'{self.upload_path}{blogid}-maincard.jpg', bitsfile)
 
-    async def Binaryfileupload(self,blogid,bitsfile):
+    async def Binaryfileupload(self, blogid, bitsfile):
         await asyncio.to_thread(self.upload_bitsfile, blogid, bitsfile)
-        image_url = f"http://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}{ blogid }-maincard.jpg"
+        image_url = f"http://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}{blogid}-maincard.jpg"
         return image_url
-
 
     def oss_upload_file(self, file_path):
         # 构造上传路径
@@ -109,5 +110,3 @@ class aliOssUpload():
         image_url = f"http://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}{file_name}"
         print(image_url)
         return image_url
-
-

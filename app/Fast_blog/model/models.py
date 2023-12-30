@@ -35,9 +35,11 @@ class User(Base):
     UserUuid = Column(String(255))
     UserEmail = Column(EmailType(255))
     comments = relationship("Comment", back_populates="user")
+
     def to_dict(self):
         return dict(UserId=self.UserId, username=self.username, userpassword=self.userpassword,
                     UserEmail=self.UserEmail, UserUuid=self.UserUuid)
+
 
 @dataclass
 class Comment(Base):
@@ -55,8 +57,11 @@ class Comment(Base):
     contentImg = Column(String(255))  # 修改此行，为 contentImg 指定长度
     user = relationship("User", back_populates="comments")
     replies = relationship("Comment", backref="parent_comment", remote_side=[id])
+
     def to_dict(self):
-        return dict(parentId=self.parentId, uid=self.uid,blog_id=self.blog_id, content=self.content, likes=self,createTime=self.createTime, contentImg=self.contentImg, user=self.user,replies=self.replies)
+        return dict(parentId=self.parentId, uid=self.uid, blog_id=self.blog_id, content=self.content, likes=self,
+                    createTime=self.createTime, contentImg=self.contentImg, user=self.user, replies=self.replies)
+
 
 @dataclass
 class AdminUser(Base):
@@ -83,8 +88,6 @@ class AdminUser(Base):
                     UserUuid=self.UserUuid, userPrivileges=self.userPrivileges)
 
 
-
-
 @dataclass
 class Blog(Base):
     __tablename__ = "blogtable"
@@ -94,7 +97,7 @@ class Blog(Base):
     title = Column(String(255))
     content = Column(LargeBinary)
     BlogIntroductionPicture = Column(String(255))
-    created_at = Column(DateTime,default=datetime.datetime.now)
+    created_at = Column(DateTime, default=datetime.datetime.now)
     NumberLikes = Column(Integer)
     NumberViews = Column(Integer)
     author = Column(String(255))
@@ -107,6 +110,7 @@ class Blog(Base):
         return dict(BlogId=self.BlogId, title=self.title, content=self.content, author=self.author,
                     BlogIntroductionPicture=self.BlogIntroductionPicture, created_at=self.created_at)
 
+
 class BlogTag(Base):
     __tablename__ = "blogtag"
     __allow_unmapped__ = True
@@ -117,8 +121,10 @@ class BlogTag(Base):
     blogs = relationship("Blog", back_populates="BlogTags", primaryjoin="BlogTag.blog_id == Blog.BlogId", uselist=True)
 
     def to_dict(self):
-        return dict(blog_id=self.blog_id, id=self.id, blog_type=self.Article_Type, tag_created_at=self.tag_created_at.timestamp(),
+        return dict(blog_id=self.blog_id, id=self.id, blog_type=self.Article_Type,
+                    tag_created_at=self.tag_created_at.timestamp(),
                     Related_Blogs=[blog.to_dict() for blog in self.blogs])
+
 
 @dataclass
 class PowerMeters(Base):
@@ -154,5 +160,3 @@ class Vote(Base):
     blog_id = Column(String(255), index=True)
     vote_count = Column(Integer, default=0)
     __table_args__ = (UniqueConstraint('device_id', 'blog_id'),)
-
-

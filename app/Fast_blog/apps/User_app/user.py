@@ -7,7 +7,6 @@ import requests
 from pydantic import EmailStr
 from sqlalchemy import select
 
-
 from sqlalchemy.orm import sessionmaker, selectinload
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -15,7 +14,8 @@ from fastapi import APIRouter, Request, HTTPException
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.middleware.backlist import TokenManager
 from app.Fast_blog.model import models
-from app.Fast_blog.model.models import User, Comment ,Blog
+from app.Fast_blog.model.models import User, Comment, Blog
+from app.Fast_blog.schemas.schemas import CommentDTO
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Session = SessionLocal()
@@ -56,18 +56,19 @@ async def query(request: Request):
                 enddata = await session.execute(select(User).filter_by(username=x['username']))
                 now = enddata.scalars().first()
                 if now is None:
-                    Created = User(username=x['username'],userpassword=x['password'], UserEmail=x['email'],creation_time=datetime.datetime.now(),UserUuid=UUID_crt(UuidApi=x['username']))
+                    Created = User(username=x['username'], userpassword=x['password'], UserEmail=x['email'],
+                                   creation_time=datetime.datetime.now(), UserUuid=UUID_crt(UuidApi=x['username']))
                     session.add(Created)
                     await  session.commit()
-                    return {'Success':'True','cod':'200','data': "success"}
+                    return {'Success': 'True', 'cod': '200', 'data': "success"}
                 else:
-                    return {'Success':'False','cod': '201' ,'data':"存在重复用户。跳过创建"}
+                    return {'Success': 'False', 'cod': '201', 'data': "存在重复用户。跳过创建"}
         except Exception as e:
-            return {'cod':'500','data':f"我们遇到了一点问题： {e}"}
+            return {'cod': '500', 'data': f"我们遇到了一点问题： {e}"}
 
 
 @UserApp.post("/login")
-async def UserLogin(request:Request):
+async def UserLogin(request: Request):
     async with db_session() as session:
         try:
             request_data = await request.json()
@@ -79,22 +80,23 @@ async def UserLogin(request:Request):
             user = result.scalars().first()
             if user is None:
                 # 用户名不存在
-               return {"data":'Error'}
+                return {"data": 'Error'}
             elif user.userpassword != loginpassword:
                 # 密码不匹配
-                return {'data':'Error'}
+                return {'data': 'Error'}
             else:
                 usertoken = TokenManager()
                 token_data = {
                     "username": loginusername,
                     "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
                 }
-                token_cont =  usertoken.create_jwt_token(data=token_data)
+                token_cont = usertoken.create_jwt_token(data=token_data)
                 print(token_cont)
-                return {"success":"true","message":loginusername,'token':token_cont}
+                return {"success": "true", "message": loginusername, 'token': token_cont}
         except Exception as e:
             print(f"遇到了下面的问题：{e}")
-            return {"data":f'{e}'}
+            return {"data": f'{e}'}
+
 
 ##查询全部用户名
 @UserApp.get("/alluser")
@@ -108,35 +110,47 @@ async def AllUser():
     return ("查询全部用户")
 
 
-
 @UserApp.post("/{vueblogid}/commentlist")
-async def CommentList(vueblogid:int):
+async def CommentList(vueblogid: int):
     async with db_session() as session:
-        sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
-        result = await session.execute(sql)
-        data = {}
-        for i in result.scalars().all():
-            data =  {'id':i.__dict__['id'],'parentId': i.__dict__['parentId'],'uid':i.__dict__['uid'],'content':i.__dict__['content'],'likes':i.__dict__['likes'],'address':i.__dict__['address'],"user":{"homeLink": '1',"username":i.__dict__['uid'],'avatar':i.__dict__['uid']},'reply': {'total': 0, 'list': []}}
-            # [i.__dict__['createTime'].strftime("%Y-%m-%d %H:%M:%S")]
-            print()
-        CommentPaging= select(models.Comment).filter(models.Comment.parentId == i.__dict__['parentId'])
-        ResultPagin = await session.execute(CommentPaging)
-        CommentPagingData = []
-        for Result in ResultPagin.scalars().all():
-                Replytocomment =  {'id': Result.__dict__['id'],'parentId': Result.parentId,'uid':Result.__dict__['uid'],'content':Result.__dict__['content'],'likes':Result.__dict__['likes'],'address':Result.__dict__['address'],"user":{"homeLink": '1',"username":Result.__dict__['uid'],'avatar':Result.__dict__['uid']}}
+        try:
+            sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
+            result = await session.execute(sql)
+            data = {}
+            for i in result.scalars().all():
+                if i.parentId is None:  # 主评论
+                    data = {'id': i.__dict__['id'], 'parentId': i.__dict__['parentId'], 'uid': i.__dict__['uid'],
+                            'content': i.__dict__['content'], 'likes': i.__dict__['likes'],
+                            'address': i.__dict__['address'],
+                            "user": {"homeLink": '1', "username": i.__dict__['uid'], 'avatar': "https://api.vvhan.com/api/avatar"},
+                            'reply': {'total': 0, 'list': []}}
+            CommentPaging = select(models.Comment).filter(models.Comment.parentId == i.__dict__['parentId'])
+            ResultPagin = await session.execute(CommentPaging)
+            CommentPagingData = []
+            for Result in ResultPagin.scalars().all():
+                Replytocomment = {'id': Result.__dict__['id'], 'parentId': Result.parentId,
+                                  'uid': Result.__dict__['uid'], 'content': Result.__dict__['content'],
+                                  'likes': Result.__dict__['likes'], 'address': Result.__dict__['address'],
+                                  "user": {"homeLink": '1', "username": Result.__dict__['uid'],
+                                           'avatar': "https://api.vvhan.com/api/avatar"}}
                 CommentPagingData.append(Replytocomment)
+                data['reply']['total'] = len(CommentPagingData)
                 data['reply']['list'] = CommentPagingData
-        return data
+            return data
+        except Exception as e:
+            return ("commentlist"f'{e}')
 
 
 @UserApp.post("/{vueblogid}/commentsave")
-async def CommentSave(vueblogid : int):
+async def CommentSave(vueblogid: int, request: Request):
     async with db_session() as session:
+        x = await request.json()
+        y =  request.headers
+        print(y)
+
         sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
         result = await session.execute(sql)
-        for i in result.scalars().all():
-            print(i.__dict__['comment'])
-            return {"data":f"{i}"}
+        return {"data":'评论添加成功'}
 #
 # @UserApp.get("/comment/page/{pageNum}/{pageSize}")
 # async def page(pageNum: int, pageSize: int, articleId: Optional[int] = None):

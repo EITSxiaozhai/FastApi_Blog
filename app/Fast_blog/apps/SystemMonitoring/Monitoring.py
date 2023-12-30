@@ -4,9 +4,8 @@ import time
 from typing import List
 
 from fastapi import APIRouter
-from fastapi import FastAPI, WebSocket,WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import psutil  # 用于获取系统信息
-
 
 MonitoringApp = APIRouter()
 
@@ -27,7 +26,9 @@ class ConnectionManager:
         # 关闭时 移除ws对象
         self.active_connections.remove(ws)
 
+
 manager = ConnectionManager()
+
 
 @MonitoringApp.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -40,7 +41,8 @@ async def websocket_endpoint(websocket: WebSocket):
             cpu_info = psutil.cpu_percent()
             current_time = datetime.datetime.now().isoformat()
             await websocket.send_json(
-                {"cpu_info": cpu_info, "memory_percent": memory_percent, "current_time": current_time})  # 发送保留两位小数的百分比数字
+                {"cpu_info": cpu_info, "memory_percent": memory_percent,
+                 "current_time": current_time})  # 发送保留两位小数的百分比数字
             await asyncio.sleep(1)
     except Exception as e:
         # 捕获异常，表示连接断开

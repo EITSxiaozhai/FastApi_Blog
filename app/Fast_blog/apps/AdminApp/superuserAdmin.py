@@ -8,7 +8,7 @@ import jwt
 from fastapi import APIRouter, Request, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import EmailStr
-from sqlalchemy import select,update,delete
+from sqlalchemy import select, update, delete
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import joinedload
 from starlette.background import BackgroundTasks
@@ -16,8 +16,9 @@ from starlette.background import BackgroundTasks
 from app.Fast_blog.database.database import db_session
 from app.Fast_blog.middleware.backlist import oauth2_scheme, aliOssUpload
 from app.Fast_blog.model import models
-from app.Fast_blog.model.models import AdminUser, UserPrivileges, Blog,BlogTag
+from app.Fast_blog.model.models import AdminUser, UserPrivileges, Blog, BlogTag
 from app.Fast_blog.schemas.schemas import UserCredentials
+
 AdminApi = APIRouter()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -375,7 +376,7 @@ async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file_path: str
             # with open(file_path, "wb") as f:
             #     shutil.copyfileobj(file.file, f)
             content_binary = Addcontent.encode("utf-8")
-            image_url =  aliOssUpload().oss_upload_file(file_path)
+            image_url = aliOssUpload().oss_upload_file(file_path)
 
             # base_url = str(request.base_url)
             # 构建完整的URL地址
@@ -394,8 +395,6 @@ async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file_path: str
 
         except Exception as e:
             print("我们遇到了下面的问题", {"data": e})
-
-
 
 
 @AdminApi.post('/Blogtaglist')
@@ -420,17 +419,14 @@ async def BlogTagList(token: str = Depends(oauth2_scheme)):
             print("我们遇到了下面的问题", e)
 
 
-
-
-
 @AdminApi.post('/Blogtagcreate/{blog_id}/{type}')
-async def BlogTagcreate(type: str,blog_id:int,token: str = Depends(oauth2_scheme)):
+async def BlogTagcreate(type: str, blog_id: int, token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
-            new_type = models.BlogTag(Article_Type=type,blog_id=blog_id)
+            new_type = models.BlogTag(Article_Type=type, blog_id=blog_id)
             session.add(new_type)
             await session.commit()
-            return {"data": new_type, "code":20000}
+            return {"data": new_type, "code": 20000}
         except Exception as e:
             print("我们遇到了下面的问题", {"data": e})
 
@@ -458,7 +454,3 @@ async def BlogTagModify(blog_id: int, type: str, token: str = Depends(oauth2_sch
             return {"data": "修改成功", "code": 20000}
         except Exception as e:
             print("我们遇到了下面的问题", {"data": str(e)})
-
-
-
-

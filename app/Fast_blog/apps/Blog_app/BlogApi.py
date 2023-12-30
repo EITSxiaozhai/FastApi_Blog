@@ -5,7 +5,7 @@ import os
 import pickle
 from typing import Union
 from sqlalchemy import event
-from fastapi import  Depends, Body, File
+from fastapi import Depends, Body, File
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -18,9 +18,6 @@ from fastapi import HTTPException
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.middleware.backlist import BlogCache, oauth2_scheme, aliOssUpload
 from app.Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User
-
-
-
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -36,6 +33,7 @@ uploadoss = aliOssUpload()
 ## 博客游客用户主页显示
 
 from sqlalchemy import func
+
 
 @BlogApp.get("/blog/BlogIndex")
 async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
@@ -74,11 +72,6 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
             return {"errorCode": 500}
 
 
-
-
-
-
-
 @BlogApp.get("/blog/AdminBlogIndex")
 ##用户博客首页API
 async def AdminBlogIndex(token: str = Depends(oauth2_scheme)):
@@ -96,7 +89,6 @@ async def AdminBlogIndex(token: str = Depends(oauth2_scheme)):
             print("我们遇到了下面的问题")
             print(e)
             return {"code": 50000, "message": "内部服务器错误"}
-
 
 
 blog_cache = BlogCache()
@@ -278,7 +270,7 @@ async def get_average_rating(blog_id: int):
 
 
 @BlogApp.post("/blogs/{blog_id}/submitcomments/")
-async def SubmitComments(blog_id: int,comment: Comment):
+async def SubmitComments(blog_id: int, comment: Comment):
     async with db_session() as session:
         user = session.query(User).filter_by(UserId=comment.uid).first()
         if user is None:
@@ -289,9 +281,10 @@ async def SubmitComments(blog_id: int,comment: Comment):
         session.commit()
         return {"message": "Comment submitted successfully!"}
 
+
 @BlogApp.post("/blog/BlogCreate")
 ##博客Admin创建问斩
-async def AdminBlogCreate(request_data: dict,token: str = Depends(oauth2_scheme)):
+async def AdminBlogCreate(request_data: dict, token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         try:
             content = request_data.get('content').encode('utf-8')  # 将content字段转换为字节
@@ -311,7 +304,7 @@ async def AdminBlogCreate(request_data: dict,token: str = Depends(oauth2_scheme)
 
 @BlogApp.post("/blog/BlogDel")
 ##博客Admin删除
-async def AdminBlogDel(blog_id: int,token: str = Depends(oauth2_scheme)):
+async def AdminBlogDel(blog_id: int, token: str = Depends(oauth2_scheme)):
     async with db_session() as session:
         async with session.begin():
             try:
@@ -323,5 +316,3 @@ async def AdminBlogDel(blog_id: int,token: str = Depends(oauth2_scheme)):
                 print("我们遇到了下面的问题")
                 print(e)
                 return {"code": 50000, "message": "服务器错误", "success": False}
-
-

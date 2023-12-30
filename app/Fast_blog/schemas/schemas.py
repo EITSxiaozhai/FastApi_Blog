@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from fastapi import UploadFile
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 import sys
@@ -13,7 +14,6 @@ class UserCredentials(BaseModel):
     googlerecaptcha: str
 
 
-
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -25,7 +25,6 @@ class Blog(BaseModel):
     Published: Optional[bool]
 
 
-
 class SchemasUser(BaseModel):
     inusername: str
     inuserpassword: str
@@ -34,13 +33,14 @@ class SchemasUser(BaseModel):
     UserEmail: EmailStr
 
 
-
 from typing import Optional, List
 from pydantic import BaseModel, EmailStr, constr
+
 
 class UserPrivilegesModel(BaseModel):
     NameId: int
     privilegeName: str
+
 
 class UserModel(BaseModel):
     UserId: int
@@ -52,6 +52,7 @@ class UserModel(BaseModel):
     UserUuid: str
     UserEmail: EmailStr
     comments: List[Optional["CommentModel"]] = []
+
 
 class CommentModel(BaseModel):
     id: int
@@ -67,6 +68,7 @@ class CommentModel(BaseModel):
     user: Optional[UserModel]
     replies: List[Optional["CommentModel"]] = []
 
+
 class AdminUserModel(BaseModel):
     UserId: int
     username: str
@@ -78,6 +80,7 @@ class AdminUserModel(BaseModel):
     UserEmail: EmailStr
     userPrivileges: Optional[int]
     privileges: Optional[UserPrivilegesModel]
+
 
 class BlogModel(BaseModel):
     BlogId: int
@@ -92,6 +95,7 @@ class BlogModel(BaseModel):
     ratings: List[Optional["BlogRatingModel"]] = []
     comments: List[Optional[CommentModel]] = []
 
+
 class PowerMetersModel(BaseModel):
     PowerId: int
     DataNum: datetime
@@ -99,11 +103,13 @@ class PowerMetersModel(BaseModel):
     PowerConsumption: str
     AveragePower: str
 
+
 class BlogRatingModel(BaseModel):
     id: int
     blog_id: int
     rating: float
     blog: Optional[BlogModel]
+
 
 class VoteModel(BaseModel):
     id: int
@@ -111,7 +117,15 @@ class VoteModel(BaseModel):
     blog_id: str
     vote_count: int
 
+
 class BlogTagModel(BaseModel):
-    blog_id : int
-    Article_Type : str
-    tag_created_at : datetime
+    blog_id: int
+    Article_Type: str
+    tag_created_at: datetime
+
+
+
+class CommentDTO(BaseModel):
+    articleId: int
+    content: str
+    parentId: int
