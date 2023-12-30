@@ -240,7 +240,7 @@ const LoadComments = async () => {
   const blogId = route.params.blogId;
   try {
     const CommentList = await backApi.post(`/generaluser/${ blogId }/commentlist`);
-    config.comments.push(CommentList.data)
+    config.comments = CommentList.data;
     console.log(config.comments)
   } catch (error) {
     console.error(error);
@@ -378,23 +378,7 @@ const like = (id, finish) => {
 }
 
 config.comments = [
-  {
-    id: '1',
-    parentId: null,
-    uid: '1',
-    address: '来自上海',
-    content:
-        '缘生缘灭，缘起缘落，我在看别人的故事，别人何尝不是在看我的故事?别人在演绎人生，我又何尝不是在这场戏里?谁的眼神沧桑了谁?我的眼神，只是沧桑了自己[喝酒]',
-    likes: 2,
-    contentImg: 'https://gitee.com/undraw/undraw-ui/raw/master/public/docs/normal.webp',
-    createTime: '1分钟前',
-    user: {
-      username: '落🤍尘',
-      avatar: 'https://static.juzicon.com/avatars/avatar-200602130320-HMR2.jpeg?x-oss-process=image/resize,w_100',
-      level: 6,
-      homeLink: '2'
-    }
-  },
+
 ]
 
 
@@ -407,7 +391,7 @@ config.comments = [
   <el-container>
 
     <el-aside style="width: 13%;">
-      <el-card style="height: 40%; position: fixed; width: 13%;margin-top: 20%">
+      <el-card style="height: 40%; position: fixed; width: 13%;margin-top: 10%">
         <el-steps
           direction="vertical"
           :active="currentStep"
@@ -417,8 +401,9 @@ config.comments = [
           <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"></el-step>
         </el-steps>
         <el-skeleton :rows="5" animated v-else />
-        <el-card style="margin-top: 20px">
-          <h4>喜欢该文章吗？</h4>
+      </el-card>
+            <el-card style="height:20%; position: fixed; width: 13%;margin-top: 30%">
+                <h4>喜欢该文章吗？</h4>
           <el-rate
             v-model="value"
             :icons="icons"
@@ -427,7 +412,6 @@ config.comments = [
             @change="submitRating"
           />
         </el-card>
-      </el-card>
     </el-aside>
 
 
@@ -475,16 +459,16 @@ config.comments = [
           </div>
         </el-card>
         <el-skeleton :rows="5" animated v-else/>
+        <el-card  style="margin-top: 1%" >
+                  <u-comment :config="config" @submit="submit" @like="like">
+        </u-comment>
+
+
+          </el-card>
       </el-main>
 
-      <el-footer style="padding-top: 15%;" v-if="!isLoading">
-                    <u-comment style="width: 100%" :config="config" @submit="submit" @like="like">
-        </u-comment>
-      </el-footer>
-
-      <el-skeleton :rows="5" animated v-else/>
     </el-container>
-
+    <el-backtop :right="100" :bottom="100" />
   </el-container>
 
 
@@ -512,7 +496,9 @@ config.comments = [
   z-index: 2;
 }
 
-
+#app .el-backtop{
+ background-color: rgb(210, 109, 109);
+}
 
 </style>
 

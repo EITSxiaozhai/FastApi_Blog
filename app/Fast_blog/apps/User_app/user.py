@@ -14,6 +14,8 @@ from sqlalchemy.orm import sessionmaker, selectinload
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter, Request, HTTPException, Depends
+from sqlalchemy.sql.functions import current_user
+
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.middleware.backlist import TokenManager, Useroauth2_scheme, verify_recaptcha
 from app.Fast_blog.model import models
@@ -143,29 +145,46 @@ async def CommentList(vueblogid: int):
         try:
             sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
             result = await session.execute(sql)
-            data = {}
+            data = []
+
             for i in result.scalars().all():
-                if i.parentId is None:  # 主评论
-                    data = {'id': i.__dict__['id'], 'parentId': i.__dict__['parentId'], 'uid': i.__dict__['uid'],
-                            'content': i.__dict__['content'], 'likes': i.__dict__['likes'],
-                            'address': i.__dict__['address'],
-                            "user": {"homeLink": '1', "username": i.__dict__['uid'], 'avatar': "https://api.vvhan.com/api/avatar"},
-                            'reply': {'total': 0, 'list': []}}
-            CommentPaging = select(models.Comment).filter(models.Comment.parentId == i.__dict__['parentId'])
-            ResultPagin = await session.execute(CommentPaging)
-            CommentPagingData = []
-            for Result in ResultPagin.scalars().all():
-                Replytocomment = {'id': Result.__dict__['id'], 'parentId': Result.parentId,
-                                  'uid': Result.__dict__['uid'], 'content': Result.__dict__['content'],
-                                  'likes': Result.__dict__['likes'], 'address': Result.__dict__['address'],
-                                  "user": {"homeLink": '1', "username": Result.__dict__['uid'],
-                                           'avatar': "https://api.vvhan.com/api/avatar"}}
-                CommentPagingData.append(Replytocomment)
-                data['reply']['total'] = len(CommentPagingData)
-                data['reply']['list'] = CommentPagingData
+                comment_data = {
+                    'id': i.__dict__['id'],
+                    'parentId': i.__dict__['parentId'],
+                    'uid': i.__dict__['uid'],
+                    'content': i.__dict__['content'],
+                    'likes': i.__dict__['likes'],
+                    'address': i.__dict__['address'],
+                    "user": {"homeLink": '1', "username": i.__dict__['uid'],
+                             'avatar': "https://api.vvhan.com/api/avatar"},
+                    'reply': {'total': 0, 'list': []}
+                }
+
+                CommentPaging = select(models.Comment).filter(models.Comment.parentId == i.__dict__['id'])
+                ResultPagin = await session.execute(CommentPaging)
+                CommentPagingData = []
+
+                for Result in ResultPagin.scalars().all():
+                    reply_data = {
+                        'id': Result.__dict__['id'],
+                        'parentId': Result.parentId,
+                        'uid': Result.__dict__['uid'],
+                        'content': Result.__dict__['content'],
+                        'likes': Result.__dict__['likes'],
+                        'address': Result.__dict__['address'],
+                        "user": {"homeLink": '1', "username": Result.__dict__['uid'],
+                                 'avatar': "https://api.vvhan.com/api/avatar"}
+                    }
+
+                    CommentPagingData.append(reply_data)
+
+                comment_data['reply']['total'] = len(CommentPagingData)
+                comment_data['reply']['list'] = CommentPagingData
+                data.append(comment_data)
+
             return data
         except Exception as e:
-            return ("commentlist"f'{e}')
+            return {"error": f"commentlist {e}"}
 
 
 
@@ -199,14 +218,29 @@ async def CommentSave(vueblogid: int, request: Request,token: str = Depends(User
     async with db_session() as session:
         try:
             token = token.replace("Bearer", "").strip()
-
             # Verify and decode the token
             token_data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-            print(token_data)
-
-            sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
-            result = await session.execute(sql)
-            return {"data":'评论添加成功'}
+            user = select(User).filter(User.username == token_data["username"])
+            UserResult = await session.execute(user)
+            x = await request.json()
+            for i in UserResult.scalars().all():
+                if i:
+                    sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
+                    result = await session.execute(sql)
+                    if result.first():
+                        commentUp = Comment(
+                            uid=  i.UserId,
+                            content=x['content']['content'],
+                            createTime=datetime.datetime.now(),
+                            parentId=x['content']['parentId'],
+                            blog_id=vueblogid
+                        )
+                        session.add(commentUp)
+                        await session.flush()
+                        await session.commit()
+                        return {"data":'评论添加成功'}
+                else:
+                        return {"data":"评论添加失败"}
             # 如果用户未经过身份验证或凭据无效
         except jwt.ExpiredSignatureError:
             return {"code": 40002, "message": "Token已过期"}
