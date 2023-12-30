@@ -405,7 +405,21 @@ onUnmounted(() => {
           </el-card>
 
           <el-card style="margin-top: 20px">
-            网站统计
+
+            <el-row>
+    <el-col :span="6">
+      <el-statistic title="浏览用户" :value="1234" />
+    </el-col>
+                  <el-col :span="6">
+      <el-statistic title="注册用户" :value="2" />
+    </el-col>
+              <el-col :span="6">
+      <el-statistic title="评论数量" :value="12" />
+    </el-col>
+                            <el-col :span="6">
+      <el-statistic title="文章数" :value="2" />
+    </el-col>
+            </el-row>
           </el-card>
         </div>
       </el-col>

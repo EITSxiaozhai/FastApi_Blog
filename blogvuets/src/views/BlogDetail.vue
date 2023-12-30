@@ -402,7 +402,7 @@ config.comments = [
         </el-steps>
         <el-skeleton :rows="5" animated v-else />
       </el-card>
-            <el-card style="height:20%; position: fixed; width: 13%;margin-top: 30%">
+            <el-card style="position: fixed; width: 13%;margin-top: 30%">
                 <h4>喜欢该文章吗？</h4>
           <el-rate
             v-model="value"
