@@ -16,7 +16,7 @@ from sqlalchemy import update
 from fastapi import HTTPException
 
 from app.Fast_blog.database.database import engine, db_session
-from app.Fast_blog.middleware.backlist import BlogCache, oauth2_scheme, aliOssUpload
+from app.Fast_blog.middleware.backlist import BlogCache, Adminoauth2_scheme, aliOssUpload
 from app.Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -74,7 +74,7 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
 
 @BlogApp.get("/blog/AdminBlogIndex")
 ##用户博客首页API
-async def AdminBlogIndex(token: str = Depends(oauth2_scheme)):
+async def AdminBlogIndex(token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             results = await session.execute(select(Blog))
@@ -134,7 +134,7 @@ async def Blogid(blog_id: int):
 
 @BlogApp.post("/blog/Blogid")
 ##博客对应ID内容查询
-async def AdminBlogid(blog_id: int, token: str = Depends(oauth2_scheme)):
+async def AdminBlogid(blog_id: int, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             results = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
@@ -148,7 +148,7 @@ async def AdminBlogid(blog_id: int, token: str = Depends(oauth2_scheme)):
 
 
 @BlogApp.post("/blog/Blogeditimg")
-async def AdminBlogidADDimg(blog_id: int, file: UploadFile = File(...), token: str = Depends(oauth2_scheme)):
+async def AdminBlogidADDimg(blog_id: int, file: UploadFile = File(...), token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             file = await file.read()
@@ -184,7 +184,7 @@ async def AdminBlogidADDimg(blog_id: int, file: UploadFile = File(...), token: s
 
 @BlogApp.post("/blog/Blogedit")
 ##博客对应ID编辑
-async def AdminBlogidedit(blog_id: int, request_data: dict = Body(...), token: str = Depends(oauth2_scheme)):
+async def AdminBlogidedit(blog_id: int, request_data: dict = Body(...), token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
 
@@ -284,7 +284,7 @@ async def SubmitComments(blog_id: int, comment: Comment):
 
 @BlogApp.post("/blog/BlogCreate")
 ##博客Admin创建问斩
-async def AdminBlogCreate(request_data: dict, token: str = Depends(oauth2_scheme)):
+async def AdminBlogCreate(request_data: dict, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             content = request_data.get('content').encode('utf-8')  # 将content字段转换为字节
@@ -304,7 +304,7 @@ async def AdminBlogCreate(request_data: dict, token: str = Depends(oauth2_scheme
 
 @BlogApp.post("/blog/BlogDel")
 ##博客Admin删除
-async def AdminBlogDel(blog_id: int, token: str = Depends(oauth2_scheme)):
+async def AdminBlogDel(blog_id: int, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         async with session.begin():
             try:

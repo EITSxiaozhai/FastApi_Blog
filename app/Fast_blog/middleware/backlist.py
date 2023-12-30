@@ -74,8 +74,8 @@ class BlogCache:
         self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, password=db_password)
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
-
+Adminoauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
+Useroauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
 
 ## 阿里云文件上传
 class aliOssUpload():

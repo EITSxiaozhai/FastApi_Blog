@@ -4,18 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="多层回复评论">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加请求头。评论数据优化">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/SystemMonitoring/Monitoring.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/SystemMonitoring/Monitoring.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/User_app/user.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/backlist.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/backlist.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/model/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -545,7 +539,7 @@
       <workItem from="1703854638125" duration="8220000" />
       <workItem from="1703916873676" duration="801000" />
       <workItem from="1703931013433" duration="126000" />
-      <workItem from="1703931197697" duration="1456000" />
+      <workItem from="1703931197697" duration="4048000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -890,7 +884,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="275" />
+    <option name="localTasksCounter" value="276" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -934,7 +928,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改博客详情页面" />
     <MESSAGE value="实时更新目录页面" />
     <MESSAGE value="更新env文件" />
     <MESSAGE value="添加删除文章功能" />
@@ -959,7 +952,8 @@
     <MESSAGE value="后端接口评论输出" />
     <MESSAGE value="前端显示后端评论数据" />
     <MESSAGE value="多层回复评论" />
-    <option name="LAST_COMMIT_MESSAGE" value="多层回复评论" />
+    <MESSAGE value="添加请求头。评论数据优化" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加请求头。评论数据优化" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

@@ -1,18 +1,21 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
 import datetime
+import os
 import uuid
 
+import jwt
 import requests
+from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import EmailStr
 from sqlalchemy import select
 
 from sqlalchemy.orm import sessionmaker, selectinload
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, Request, HTTPException, Depends
 from app.Fast_blog.database.database import engine, db_session
-from app.Fast_blog.middleware.backlist import TokenManager
+from app.Fast_blog.middleware.backlist import TokenManager, Useroauth2_scheme
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import User, Comment, Blog
 from app.Fast_blog.schemas.schemas import CommentDTO
@@ -26,6 +29,9 @@ templates = Jinja2Templates(directory="./Fast_blog/templates")
 
 UserApp.mount("/static", StaticFiles(directory="./Fast_blog/static"), name="static")
 
+SECRET_KEY = os.getenv("User_SECRET_KEY")
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 def UUID_crt(UuidApi):
     UuidGenerator = uuid.uuid5(uuid.NAMESPACE_DNS, UuidApi)
@@ -140,17 +146,72 @@ async def CommentList(vueblogid: int):
         except Exception as e:
             return ("commentlist"f'{e}')
 
+def create_jwt_token(data: dict) -> str:
+    token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+    return token
+
+async def verify_password(username: str, password: str) -> bool:
+    async with db_session() as session:
+        getusername = username
+        getpassword = password
+        results = await session.execute(select(User).filter(User.username == getusername))
+        user = results.scalar_one_or_none()
+        if user is None:
+            # 用户名不存在
+            raise HTTPException(status_code=401, detail="验证未通过")
+        elif user.userpassword != getpassword:
+            # 密码不匹配
+            raise HTTPException(status_code=401, detail="验证未通过")
+        else:
+            return True
+    # 在这里进行密码验证的逻辑，比如查询数据库，验证用户名和密码是否匹配
+    # 返回 True 或 False
+    # ...
+    return True  # 示例中直接返回 True，您需要根据实际情况进行验证
+
+@UserApp.post("/token")
+async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
+    async with db_session() as session:
+        getusername = Incoming.username
+        getpassword = Incoming.password
+        if not await verify_password(getusername, getpassword):
+            raise HTTPException(status_code=401, detail="验证未通过")
+        # print(getusername)
+        # results = await session.execute(select(AdminUser).filter(AdminUser.username == getusername))
+        # user = results.scalar_one_or_none()
+        # if user is None:
+        #     # 用户名不存在
+        #     raise HTTPException(status_code=401, detail="验证未通过")
+        # elif user.userpassword != getpassword:
+        #     # 密码不匹配
+        #     raise HTTPException(status_code=401, detail="验证未通过")
+        # else:
+        token_data = {
+            "username": Incoming.username,
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+        }
+        token = create_jwt_token(data=token_data)
+        return {"access_token": token, "token_type": 'Bearer', "token": token}
+
 
 @UserApp.post("/{vueblogid}/commentsave")
-async def CommentSave(vueblogid: int, request: Request):
+async def CommentSave(vueblogid: int, request: Request,token: str = Depends(Useroauth2_scheme)):
     async with db_session() as session:
-        x = await request.json()
-        y =  request.headers
-        print(y)
+        try:
+            token = token.replace("Bearer", "").strip()
+            # Verify and decode the token
+            token_data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
 
-        sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
-        result = await session.execute(sql)
-        return {"data":'评论添加成功'}
+
+            sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
+            result = await session.execute(sql)
+            return {"data":'评论添加成功'}
+            # 如果用户未经过身份验证或凭据无效
+        except jwt.ExpiredSignatureError:
+            return {"code": 40002, "message": "Token已过期"}
+        except jwt.InvalidTokenError:
+            return {"code": 40003, "message": "无效的Token"}
+
 #
 # @UserApp.get("/comment/page/{pageNum}/{pageSize}")
 # async def page(pageNum: int, pageSize: int, articleId: Optional[int] = None):

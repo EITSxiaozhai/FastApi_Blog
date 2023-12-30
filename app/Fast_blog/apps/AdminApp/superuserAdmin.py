@@ -14,7 +14,7 @@ from sqlalchemy.orm import joinedload
 from starlette.background import BackgroundTasks
 
 from app.Fast_blog.database.database import db_session
-from app.Fast_blog.middleware.backlist import oauth2_scheme, aliOssUpload
+from app.Fast_blog.middleware.backlist import Adminoauth2_scheme, aliOssUpload
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import AdminUser, UserPrivileges, Blog, BlogTag
 from app.Fast_blog.schemas.schemas import UserCredentials
@@ -140,7 +140,7 @@ async def UserLogin(x: UserCredentials, request: Request):
 
 
 @AdminApi.get("/user/info")
-async def Userinfo(request: Request, token: str = Depends(oauth2_scheme)):
+async def Userinfo(request: Request, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             print(token)
@@ -176,7 +176,7 @@ async def Userinfo(request: Request, token: str = Depends(oauth2_scheme)):
 
 @AdminApi.get("/transaction/list")
 ##博客Admin 动态权限生成菜单
-async def Userinfo(token: str = Depends(oauth2_scheme)):
+async def Userinfo(token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             # Get the token from the request headers
@@ -210,7 +210,7 @@ async def Userinfo(token: str = Depends(oauth2_scheme)):
 
 
 @AdminApi.post("/user/adminlist")
-async def AllAdminUser(token: str = Depends(oauth2_scheme)):
+async def AllAdminUser(token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             if token:
@@ -242,7 +242,7 @@ def UUID_crt(UuidApi):
     return UuidGenerator
 
 
-async def GetUser(inputusername: str, token: str = Depends(oauth2_scheme)):
+async def GetUser(inputusername: str, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             stmt = select(models.AdminUser).filter_by(username=inputusername)
@@ -256,7 +256,7 @@ async def GetUser(inputusername: str, token: str = Depends(oauth2_scheme)):
 
 @AdminApi.get("/Adminadd")
 async def query(inputname: str, inpassword: str, inEmail: EmailStr, ingender: bool, Typeofuser: bool,
-                token: str = Depends(oauth2_scheme)):
+                token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             UserQurey = await GetUser(inputusername=inputname)
@@ -275,7 +275,7 @@ async def query(inputname: str, inpassword: str, inEmail: EmailStr, ingender: bo
 
 
 @AdminApi.post("/user/updateUser")
-async def UpdateUser(request: Request, token: str = Depends(oauth2_scheme)):
+async def UpdateUser(request: Request, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             data = await request.json()  # This will extract the JSON data from the request body
@@ -319,7 +319,7 @@ async def UpdateUser(request: Request, token: str = Depends(oauth2_scheme)):
 
 @AdminApi.post("/user/getTypeofuserData")
 ##博客Admin权限管理
-async def UserPrivilegeName(request: Request, token: str = Depends(oauth2_scheme)):
+async def UserPrivilegeName(request: Request, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             data = await request.json()
@@ -368,7 +368,7 @@ async def UserloginOut():
 ## Admin页面博客添加
 @AdminApi.post('/blogadd')
 async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file_path: str, background_tasks: BackgroundTasks,
-                  request: Request, token: str = Depends(oauth2_scheme)):
+                  request: Request, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             # 将文件保存到磁盘
@@ -398,7 +398,7 @@ async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file_path: str
 
 
 @AdminApi.post('/Blogtaglist')
-async def BlogTagList(token: str = Depends(oauth2_scheme)):
+async def BlogTagList(token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             sql = select(models.BlogTag)
@@ -420,7 +420,7 @@ async def BlogTagList(token: str = Depends(oauth2_scheme)):
 
 
 @AdminApi.post('/Blogtagcreate/{blog_id}/{type}')
-async def BlogTagcreate(type: str, blog_id: int, token: str = Depends(oauth2_scheme)):
+async def BlogTagcreate(type: str, blog_id: int, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             new_type = models.BlogTag(Article_Type=type, blog_id=blog_id)
@@ -432,7 +432,7 @@ async def BlogTagcreate(type: str, blog_id: int, token: str = Depends(oauth2_sch
 
 
 @AdminApi.post('/Blogtagmodify/{blog_id}/{type}')
-async def BlogTagModify(blog_id: int, type: str, token: str = Depends(oauth2_scheme)):
+async def BlogTagModify(blog_id: int, type: str, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             # 查询是否存在对应的记录
