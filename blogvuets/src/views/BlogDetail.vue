@@ -249,27 +249,36 @@ const LoadComments = async () => {
 
 
 const UpComments = async (str) => {
-  const blogId = route.params.blogId;
-  const token = localStorage.getItem("token"); // 从本地存储获取 token
-
-  try {
-    if (!token) {
-      router.push('/login'); // 跳转到登录页面
-      return;
+    const blogId = route.params.blogId;
+    const token = localStorage.getItem("token"); // 从本地存储获取 token
+    try {
+        if (!token) {
+            router.push('/login'); // 跳转到登录页面
+            return; // 提前结束函数执行
+        }
+        const UpComment = await backApi.post(`/generaluser/${blogId}/commentsave`, {
+            content: str,
+        }, {
+            headers: {
+                'Authorization': `Bearer ${token}`, // 在 headers 中包含 token
+            },
+        });
+        if (UpComment.data.code === 40002) {
+            // Token 已过期
+            console.error('Token 已过期');
+            return; // 提前结束函数执行
+        } else if (UpComment.data.code === 40003) {
+            // 无效的 Token
+            console.error('无效的 Token');
+            return; // 提前结束函数执行
+        } else {
+            // 其他错误状态码的处理
+            return;
+        }
+    } catch (error) {
+        console.error(error);
     }
-    const UpComment = await backApi.post(`/generaluser/${blogId}/commentsave`, {
-      content: str,
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token}`, // 在 headers 中包含 token
-      },
-    });
-    console.log(UpComment);
-  } catch (error) {
-    console.error(error);
-  }
 };
-
 
 onMounted(() => {
   getAverageRating();
@@ -308,7 +317,6 @@ let temp_id = 100
 // 提交评论事件
 const submit = async ({content, parentId, files, finish, reply}) => {
   let str = '提交评论:' + content + ';\t父id: ' + parentId + ';\t图片:' + files + ';\t被回复评论:'
-
 
   const jsonData = {
   content: content,
