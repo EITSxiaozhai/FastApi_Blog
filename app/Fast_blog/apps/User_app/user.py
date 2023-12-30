@@ -15,10 +15,10 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter, Request, HTTPException, Depends
 from app.Fast_blog.database.database import engine, db_session
-from app.Fast_blog.middleware.backlist import TokenManager, Useroauth2_scheme
+from app.Fast_blog.middleware.backlist import TokenManager, Useroauth2_scheme, verify_recaptcha
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import User, Comment, Blog
-from app.Fast_blog.schemas.schemas import CommentDTO
+from app.Fast_blog.schemas.schemas import CommentDTO, UserCredentials
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Session = SessionLocal()
@@ -29,7 +29,7 @@ templates = Jinja2Templates(directory="./Fast_blog/templates")
 
 UserApp.mount("/static", StaticFiles(directory="./Fast_blog/static"), name="static")
 
-SECRET_KEY = os.getenv("User_SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -72,33 +72,54 @@ async def query(request: Request):
         except Exception as e:
             return {'cod': '500', 'data': f"我们遇到了一点问题： {e}"}
 
+def create_jwt_token(data: dict) -> str:
+    token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+    return token
+
+async def verify_password(username: str, password: str) -> bool:
+    async with db_session() as session:
+        getusername = username
+        getpassword = password
+        results = await session.execute(select(User).filter(User.username == getusername))
+        user = results.scalar_one_or_none()
+        if user is None:
+            # 用户名不存在
+            raise HTTPException(status_code=401, detail="验证未通过")
+        elif user.userpassword != getpassword:
+            # 密码不匹配
+            raise HTTPException(status_code=401, detail="验证未通过")
+        else:
+            return True
+    # 在这里进行密码验证的逻辑，比如查询数据库，验证用户名和密码是否匹配
+    # 返回 True 或 False
+    # ...
+    return True  # 示例中直接返回 True，您需要根据实际情况进行验证
+
 
 @UserApp.post("/login")
-async def UserLogin(request: Request):
+async def UserLogin(x: UserCredentials):
     async with db_session() as session:
         try:
-            request_data = await request.json()
-            loginusername = request_data["username"]
-            loginpassword = request_data["password"]
-
-            sql = select(User).filter(User.username == loginusername)
-            result = await session.execute(sql)
-            user = result.scalars().first()
-            if user is None:
-                # 用户名不存在
-                return {"data": 'Error'}
-            elif user.userpassword != loginpassword:
-                # 密码不匹配
-                return {'data': 'Error'}
-            else:
-                usertoken = TokenManager()
-                token_data = {
-                    "username": loginusername,
-                    "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-                }
-                token_cont = usertoken.create_jwt_token(data=token_data)
-                print(token_cont)
-                return {"success": "true", "message": loginusername, 'token': token_cont}
+            RecaptchaResponse = await verify_recaptcha(UserreCAPTCHA=x.googlerecaptcha,SecretKeyTypology="user")
+            if RecaptchaResponse["message"]["success"]:
+                sql = select(User).filter(User.username == x.username)
+                result = await session.execute(sql)
+                user = result.scalars().first()
+                if user is None:
+                    # 用户名不存在
+                    return {"data": 'Error'}
+                elif user.userpassword != x.password:
+                    # 密码不匹配
+                    return {'data': 'Error'}
+                else:
+                    usertoken = TokenManager()
+                    token_data = {
+                        "username": x.username,
+                        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+                    }
+                    token_cont = usertoken.create_jwt_token(data=token_data)
+                    print(token_cont)
+                    return {"success": "true", "message": x.username, 'token': token_cont}
         except Exception as e:
             print(f"遇到了下面的问题：{e}")
             return {"data": f'{e}'}
@@ -146,28 +167,7 @@ async def CommentList(vueblogid: int):
         except Exception as e:
             return ("commentlist"f'{e}')
 
-def create_jwt_token(data: dict) -> str:
-    token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
-    return token
 
-async def verify_password(username: str, password: str) -> bool:
-    async with db_session() as session:
-        getusername = username
-        getpassword = password
-        results = await session.execute(select(User).filter(User.username == getusername))
-        user = results.scalar_one_or_none()
-        if user is None:
-            # 用户名不存在
-            raise HTTPException(status_code=401, detail="验证未通过")
-        elif user.userpassword != getpassword:
-            # 密码不匹配
-            raise HTTPException(status_code=401, detail="验证未通过")
-        else:
-            return True
-    # 在这里进行密码验证的逻辑，比如查询数据库，验证用户名和密码是否匹配
-    # 返回 True 或 False
-    # ...
-    return True  # 示例中直接返回 True，您需要根据实际情况进行验证
 
 @UserApp.post("/token")
 async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
@@ -199,9 +199,10 @@ async def CommentSave(vueblogid: int, request: Request,token: str = Depends(User
     async with db_session() as session:
         try:
             token = token.replace("Bearer", "").strip()
+
             # Verify and decode the token
             token_data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-
+            print(token_data)
 
             sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
             result = await session.execute(sql)
