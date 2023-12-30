@@ -3,7 +3,7 @@ import uuid
 import datetime
 
 from fastapi import HTTPException, FastAPI
-import httpx
+
 import jwt
 from fastapi import APIRouter, Request, Depends
 from fastapi.security import OAuth2PasswordRequestForm
@@ -14,7 +14,7 @@ from sqlalchemy.orm import joinedload
 from starlette.background import BackgroundTasks
 
 from app.Fast_blog.database.database import db_session
-from app.Fast_blog.middleware.backlist import Adminoauth2_scheme, aliOssUpload
+from app.Fast_blog.middleware.backlist import Adminoauth2_scheme, aliOssUpload, verify_recaptcha
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import AdminUser, UserPrivileges, Blog, BlogTag
 from app.Fast_blog.schemas.schemas import UserCredentials
@@ -82,32 +82,32 @@ async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
 #     secret: "6LdFp74UXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXX",
 #     response: ctx.query.token
 # }
-RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY")
 
 
-async def verify_recaptcha(UserreCAPTCHA):
-    # 向Google reCAPTCHA验证端点发送POST请求来验证令牌
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            "https://recaptcha.net/recaptcha/api/siteverify",
-            data={
-                "secret": RECAPTCHA_SECRET_KEY,
-                "response": UserreCAPTCHA,
-            },
-        )
 
-    # 检查验证响应
-    if response.status_code != 200:
-        raise HTTPException(status_code=500, detail="reCAPTCHA验证失败")
-
-    # 解析验证响应
-    verification_result = response.json()
-
-    # 检查reCAPTCHA验证是否成功
-    if not verification_result.get("success"):
-        raise HTTPException(status_code=400, detail="reCAPTCHA验证失败")
-
-    return {"message": response.json()}
+# async def verify_recaptcha(UserreCAPTCHA):
+#     # 向Google reCAPTCHA验证端点发送POST请求来验证令牌
+#     async with httpx.AsyncClient() as client:
+#         response = await client.post(
+#             "https://recaptcha.net/recaptcha/api/siteverify",
+#             data={
+#                 "secret": RECAPTCHA_SECRET_KEY,
+#                 "response": UserreCAPTCHA,
+#             },
+#         )
+#
+#     # 检查验证响应
+#     if response.status_code != 200:
+#         raise HTTPException(status_code=500, detail="reCAPTCHA验证失败")
+#
+#     # 解析验证响应
+#     verification_result = response.json()
+#
+#     # 检查reCAPTCHA验证是否成功
+#     if not verification_result.get("success"):
+#         raise HTTPException(status_code=400, detail="reCAPTCHA验证失败")
+#
+#     return {"message": response.json()}
 
 
 @AdminApi.post("/user/login")
