@@ -2,6 +2,9 @@
 # author: YAO XU time:
 import asyncio
 from datetime import datetime
+from http.client import HTTPException
+
+import httpx
 import oss2
 import os
 import jwt
@@ -9,6 +12,8 @@ from celery import Celery
 import redis
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
+
+
 
 load_dotenv()
 
@@ -30,6 +35,8 @@ db_hostname = os.getenv("DB_HOSTNAME")
 db_port = os.getenv("DB_PORT")
 db_name = os.getenv("DB_NAME")
 secret_key = os.getenv("SECRET_KEY")
+ADMIN_RECAPTCHA_SECRET_KEY = os.getenv("ADMIN_RECAPTCHA_SECRET_KEY")
+GENERAL_USER_RECAPTCHA_SECRET_KEY = os.getenv("GENERAL_USER_RECAPTCHA_SECRET_KEY")
 ALGORITHM = "HS256"
 
 celery_app = Celery('tasks', broker=f'amqp://{mq_username}:{mq_password}@{mq_host}:{mq_port}/{mq_dbname}',
@@ -44,6 +51,7 @@ def add(x, y):
 ##token缓存到redis中
 class TokenManager():
     def __init__(self, secret_key=secret_key):
+
         self.secret_key = secret_key
         self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, username=redis_user,
                                               password=db_password)
@@ -65,6 +73,32 @@ class TokenManager():
             return True
 
         return False
+
+async def verify_recaptcha(UserreCAPTCHA, SecretKeyTypology):
+    if SecretKeyTypology == "admin":
+        # 向Google reCAPTCHA验证端点发送POST请求来验证令牌
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                "https://recaptcha.net/recaptcha/api/siteverify",
+                data={
+                    "secret": ADMIN_RECAPTCHA_SECRET_KEY,
+                    "response": UserreCAPTCHA,
+                },
+            )
+        return {"message": response.json()}
+    elif SecretKeyTypology == "user":
+        # 向Google reCAPTCHA验证端点发送POST请求来验证令牌
+        async with httpx.AsyncClient() as client:
+            response = await client.post(
+                "https://recaptcha.net/recaptcha/api/siteverify",
+                data={
+                    "secret": GENERAL_USER_RECAPTCHA_SECRET_KEY,
+                    "response": UserreCAPTCHA,
+                },
+            )
+        return {"message": response.json()}
+
+
 
 
 ###将命中率高的数据同步到redis中
