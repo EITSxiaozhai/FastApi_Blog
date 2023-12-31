@@ -12,6 +12,7 @@ const googleRecaptchaVerified = ref(false);
 // 回傳一組 token，並把 token 傳給後端驗證
 const recaptchaVerified = (res) => {
   // 设置 googleRecaptchaVerified 为 true
+  RegisterUserForm.value.googlerecaptcha = res
   googleRecaptchaVerified.value = true;
 
 };
@@ -30,6 +31,8 @@ const RegisterUserForm = ref({
   password: '',
   confirmPassword: '',
   verificationCode: '',
+  googlerecaptcha:'',
+  EmailverificationCod:'',
 
 });
 
@@ -109,7 +112,11 @@ const register = async () => {
       const response = await backApi.post('/generaluser/reguser', {
         username: RegisterUserForm.value.username,
         password: RegisterUserForm.value.password,
+        confirmpassword: RegisterUserForm.value.confirmPassword,
         email: RegisterUserForm.value.email,
+        googlerecaptcha : RegisterUserForm.value.googlerecaptcha,
+        EmailverificationCod: RegisterUserForm.value.EmailverificationCod,
+
         // Other registration fields
       });
 
@@ -191,7 +198,7 @@ const register = async () => {
 
     <el-form-item label="验证码" prop="verificationCode">
       <el-input
-        v-model="RegisterUserForm.verificationCode"
+        v-model="RegisterUserForm.EmailverificationCod"
         placeholder="请输入验证码"
       ></el-input>
       <el-button
@@ -209,6 +216,7 @@ const register = async () => {
       size="normal"
       theme="light"
       hl="zh-CN"
+      v-model="RegisterUserForm.googlerecaptcha"
       @verify="recaptchaVerified"
       @expire="recaptchaExpired"
       @fail="recaptchaFailed"
