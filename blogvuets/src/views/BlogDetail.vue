@@ -462,8 +462,6 @@ config.comments = [
         <el-card  style="margin-top: 1%" >
                   <u-comment :config="config" @submit="submit" @like="like">
         </u-comment>
-
-
           </el-card>
       </el-main>
 
