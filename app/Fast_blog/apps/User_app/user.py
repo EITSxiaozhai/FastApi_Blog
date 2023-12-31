@@ -98,7 +98,7 @@ async def RegUser(reg: UserRegCredentials):
                     result_verification_code = await session.execute(sql_verification_code)
                     existing_verification_code_user = result_verification_code.scalar()
                     if existing_verification_code_user:
-                        sql = update(User).where(User.ActivationCode == reg.EmailverificationCod).values(username =reg.username,userpassword= reg.password,UserEmail= reg.email,ActivationState=0)
+                        sql = update(User).where(User.ActivationCode == reg.EmailverificationCod).values(username =reg.username,UserUuid=UUID_crt(UuidApi=reg.username),userpassword= reg.password,UserEmail= reg.email,ActivationState=0)
                         await session.execute(sql)
                         await session.commit()
                         return {"message": "用户已经创建","success": True}
@@ -220,16 +220,6 @@ async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
         getpassword = Incoming.password
         if not await verify_password(getusername, getpassword):
             raise HTTPException(status_code=401, detail="验证未通过")
-        # print(getusername)
-        # results = await session.execute(select(AdminUser).filter(AdminUser.username == getusername))
-        # user = results.scalar_one_or_none()
-        # if user is None:
-        #     # 用户名不存在
-        #     raise HTTPException(status_code=401, detail="验证未通过")
-        # elif user.userpassword != getpassword:
-        #     # 密码不匹配
-        #     raise HTTPException(status_code=401, detail="验证未通过")
-        # else:
         token_data = {
             "username": Incoming.username,
             "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)

@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="发送到后端的数据修改">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="优化UI">
+      <change beforePath="$PROJECT_DIR$/.gitlab-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.gitlab-ci.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/User_app/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/backlist.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/backlist.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/model/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/UserReg.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserReg.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -545,7 +543,7 @@
       <workItem from="1703931013433" duration="126000" />
       <workItem from="1703931197697" duration="17249000" />
       <workItem from="1703999400284" duration="4227000" />
-      <workItem from="1704005414125" duration="19439000" />
+      <workItem from="1704005414125" duration="20427000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -890,7 +888,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="292" />
+    <option name="localTasksCounter" value="294" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -934,8 +932,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="添加标签后端api" />
-    <MESSAGE value="标签数据库修改查询添加" />
     <MESSAGE value="优化基础UI" />
     <MESSAGE value="添加注册API" />
     <MESSAGE value="优化手机屏幕显示" />
@@ -959,7 +955,9 @@
     <MESSAGE value="修改基础介绍" />
     <MESSAGE value="Celery邮件发送测试" />
     <MESSAGE value="发送到后端的数据修改" />
-    <option name="LAST_COMMIT_MESSAGE" value="发送到后端的数据修改" />
+    <MESSAGE value="修复用户重复注册失败bug" />
+    <MESSAGE value="优化UI" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化UI" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
