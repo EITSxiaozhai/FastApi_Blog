@@ -3,7 +3,9 @@
 import asyncio
 from datetime import datetime
 from http.client import HTTPException
-
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 import httpx
 import oss2
 import os
@@ -37,6 +39,10 @@ db_name = os.getenv("DB_NAME")
 secret_key = os.getenv("SECRET_KEY")
 ADMIN_RECAPTCHA_SECRET_KEY = os.getenv("ADMIN_RECAPTCHA_SECRET_KEY")
 GENERAL_USER_RECAPTCHA_SECRET_KEY = os.getenv("GENERAL_USER_RECAPTCHA_SECRET_KEY")
+SMTPSERVER = os.getenv("SMTPSERVER")
+SMTPPORT = os.getenv("SMTPPORT")
+SMTPUSER = os.getenv("SMTPUSER")
+SMTPPASSWORD = os.getenv("SMTPPASSWORD")
 ALGORITHM = "HS256"
 
 celery_app = Celery('tasks', broker=f'amqp://{mq_username}:{mq_password}@{mq_host}:{mq_port}/{mq_dbname}',
@@ -44,8 +50,31 @@ celery_app = Celery('tasks', broker=f'amqp://{mq_username}:{mq_password}@{mq_hos
 
 
 @celery_app.task(name="middleware/backlist")
-def add(x, y):
-    return x + y
+def send_activation_email(email, activation_code=1234):
+    smtp_server = SMTPSERVER
+    smtp_port = 465
+    smtp_user = SMTPUSER
+    smtp_password = SMTPPASSWORD
+
+    sender_email = SMTPUSER
+    receiver_email = email
+    subject = 'Account Activation'
+    # Convert activation_code to string
+    activation_code_str = str(activation_code)
+
+    # 构建邮件内容
+    msg = MIMEMultipart()
+    msg['From'] = sender_email
+    msg['To'] = receiver_email
+    msg['Subject'] = subject
+
+    body = f'Your activation code is: {activation_code_str}'
+    msg.attach(MIMEText(body, 'plain'))
+
+    # 连接到 SMTP 服务器并发送邮件
+    with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
+        server.login(smtp_user, smtp_password)
+        server.sendmail(sender_email, receiver_email, msg.as_string())
 
 
 ##token缓存到redis中
@@ -144,3 +173,5 @@ class aliOssUpload():
         image_url = f"http://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}{file_name}"
         print(image_url)
         return image_url
+
+

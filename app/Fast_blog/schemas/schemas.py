@@ -13,6 +13,15 @@ class UserCredentials(BaseModel):
     password: str
     googlerecaptcha: str
 
+class UserRegCredentials(BaseModel):
+    username: str
+    password: str
+    confirmpassword : str
+    googlerecaptcha: str
+    email: EmailStr
+    EmailverificationCod : int
+
+
 
 class Token(BaseModel):
     access_token: str

@@ -20,7 +20,7 @@ from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.middleware.backlist import TokenManager, Useroauth2_scheme, verify_recaptcha
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import User, Comment, Blog
-from app.Fast_blog.schemas.schemas import CommentDTO, UserCredentials
+from app.Fast_blog.schemas.schemas import CommentDTO, UserCredentials, UserRegCredentials
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Session = SessionLocal()
@@ -53,26 +53,8 @@ async def GetUser(inputusername: str):
             print(e)
 
 
-@UserApp.post("/reguser")
-async def query(request: Request):
-    async with db_session() as session:
-        try:
-            x = await request.json()
-            if x['username'] == '' or x['password'] == '' or x['email'] == '':
-                return {'Success': 'False', 'data': '传递参数违法'}
-            else:
-                enddata = await session.execute(select(User).filter_by(username=x['username']))
-                now = enddata.scalars().first()
-                if now is None:
-                    Created = User(username=x['username'], userpassword=x['password'], UserEmail=x['email'],
-                                   creation_time=datetime.datetime.now(), UserUuid=UUID_crt(UuidApi=x['username']))
-                    session.add(Created)
-                    await  session.commit()
-                    return {'Success': 'True', 'cod': '200', 'data': "success"}
-                else:
-                    return {'Success': 'False', 'cod': '201', 'data': "存在重复用户。跳过创建"}
-        except Exception as e:
-            return {'cod': '500', 'data': f"我们遇到了一点问题： {e}"}
+
+
 
 def create_jwt_token(data: dict) -> str:
     token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
@@ -96,6 +78,28 @@ async def verify_password(username: str, password: str) -> bool:
     # 返回 True 或 False
     # ...
     return True  # 示例中直接返回 True，您需要根据实际情况进行验证
+
+@UserApp.post("/reguser")
+async def RegUser(reg: UserRegCredentials):
+    async with db_session() as session:
+        try:
+            RecaptchaResponse = await verify_recaptcha(UserreCAPTCHA=reg.googlerecaptcha, SecretKeyTypology="user")
+
+            if RecaptchaResponse["message"]["success"]:
+                sql = select(User).filter(User.username == reg.username)
+                result = await session.execute(sql)
+                existing_user = result.scalar()
+                if existing_user:
+                    # 用户名已存在
+                    return {"message": "用户名已存在","success": False}
+                else:
+
+                    return {"message": "用户已经创建","success": True}
+            else:
+                return {"message": "reCAPTCHA 验证失败","success": False}
+        except Exception as e:
+            print("发生了下面的错误:",{e})
+
 
 
 @UserApp.post("/login")
