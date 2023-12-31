@@ -6,6 +6,8 @@ from http.client import HTTPException
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from random import random
+
 import httpx
 import oss2
 import os
@@ -49,8 +51,9 @@ celery_app = Celery('tasks', broker=f'amqp://{mq_username}:{mq_password}@{mq_hos
                     backend=f'redis://:{db_password}@{redis_host}:{redis_port}/{redis_db}')
 
 
+
 @celery_app.task(name="middleware/backlist")
-def send_activation_email(email, activation_code=1234):
+def send_activation_email(email, activation_code):
     smtp_server = SMTPSERVER
     smtp_port = 465
     smtp_user = SMTPUSER

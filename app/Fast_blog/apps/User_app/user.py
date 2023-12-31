@@ -8,16 +8,17 @@ import jwt
 import requests
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import EmailStr
-from sqlalchemy import select
+from sqlalchemy import select, update
 
 from sqlalchemy.orm import sessionmaker, selectinload
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter, Request, HTTPException, Depends
 from sqlalchemy.sql.functions import current_user
+import random
 
 from app.Fast_blog.database.database import engine, db_session
-from app.Fast_blog.middleware.backlist import TokenManager, Useroauth2_scheme, verify_recaptcha
+from app.Fast_blog.middleware.backlist import TokenManager, Useroauth2_scheme, verify_recaptcha, send_activation_email
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import User, Comment, Blog
 from app.Fast_blog.schemas.schemas import CommentDTO, UserCredentials, UserRegCredentials
@@ -93,8 +94,14 @@ async def RegUser(reg: UserRegCredentials):
                     # 用户名已存在
                     return {"message": "用户名已存在","success": False}
                 else:
-
-                    return {"message": "用户已经创建","success": True}
+                    sql_verification_code = select(User).filter(User.ActivationCode == reg.EmailverificationCod)
+                    result_verification_code = await session.execute(sql_verification_code)
+                    existing_verification_code_user = result_verification_code.scalar()
+                    if existing_verification_code_user:
+                        sql = update(User).where(User.ActivationCode == reg.EmailverificationCod).values(username =reg.username,userpassword= reg.password,UserEmail= reg.email,ActivationState=0)
+                        await session.execute(sql)
+                        await session.commit()
+                        return {"message": "用户已经创建","success": True}
             else:
                 return {"message": "reCAPTCHA 验证失败","success": False}
         except Exception as e:
@@ -129,6 +136,33 @@ async def UserLogin(x: UserCredentials):
         except Exception as e:
             print(f"遇到了下面的问题：{e}")
             return {"data": f'{e}'}
+
+
+def generate_numeric_verification_code(length=6):
+    # 生成指定长度的随机整数验证码
+    return ''.join(str(random.randint(0, 9)) for _ in range(length))
+
+##查询全部用户名
+@UserApp.post("/emailcod")
+async def CAPTCHAByEmail(request: Request):
+    async with db_session() as session:
+        x = await request.json()
+        print(x)
+        sql = select(User).filter(User.UserEmail == x["email"])
+        result = await session.execute(sql)
+        verification_code = generate_numeric_verification_code()
+        if result.scalars().first():
+            update_sql = update(User).where(User.UserEmail == x["email"]).values(ActivationCode=verification_code)
+            result = await session.execute(update_sql)
+            await session.commit()
+            send_activation_email.delay(email=x["email"],activation_code=verification_code)
+            return {"data": 'Notification sent'}
+        else:
+            new_user = User(UserEmail=x["email"], ActivationCode=verification_code)
+            session.add(new_user)
+            await session.commit()
+            return {"data": 'User added'}
+
 
 
 ##查询全部用户名
