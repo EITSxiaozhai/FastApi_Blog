@@ -1,3 +1,5 @@
+import subprocess
+
 from fastapi import FastAPI
 from starlette.responses import JSONResponse
 from Fast_blog.database.database import engine
@@ -32,6 +34,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+celery_command = "celery -A Fast_blog.middleware.backlist worker --loglevel=info -P eventlet"
+subprocess.Popen(celery_command, shell=True)
 
 @app.get("/")
 async def root():
