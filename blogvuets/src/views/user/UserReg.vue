@@ -85,7 +85,18 @@ const validateEmail = (rule, value, callback) => {
 const verificationCodeDisabled = ref(false);
 const verificationCodeButtonText = ref('获取验证码');
 
-const getVerificationCode = () => {
+const getVerificationCode = async () => {
+  // 检查邮箱是否为空
+  if (!RegisterUserForm.value.email) {
+    // 如果邮箱为空，不发送请求
+    console.log("Email is empty. Request not sent.");
+    return;
+  }
+
+  const response = await backApi.post('/generaluser/emailcod', {
+    email: RegisterUserForm.value.email,
+  });
+
   // 在这里执行获取验证码的逻辑
   // 可以向后端发送请求获取验证码
   // 示例代码中仅模拟获取验证码并计时60秒
@@ -158,9 +169,9 @@ const register = async () => {
 </script>
 
 <template>
-  <el-container>
-    <el-aside  style="height: 100vh;width: 70%;background-size: cover;background-image: url('https://api.vvhan.com/api/view');" >测试</el-aside>
-  <el-main  style="padding-top: 15%;">
+  <el-container style="height: 100%;width: 100%;background-size: cover;background-image: url('https://api.vvhan.com/api/view');" >
+
+  <el-main  >
     <h1  style="padding-left:40%" >注册页面</h1>
     <el-form
     v-model="RegisterUserForm"
@@ -249,4 +260,11 @@ const register = async () => {
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+#app .el-main form{
+ background-color:#faf9f9;
+  opacity: 0.9;
+
+}
+
 </style>

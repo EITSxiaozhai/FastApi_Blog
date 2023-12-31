@@ -104,9 +104,9 @@ const login = async () => {
 </script>
 
 <template>
-  <el-container>
-      <el-aside  style="height: 100vh;width: 70%;background-size: cover;;background-image: url('https://api.vvhan.com/api/view');" >测试</el-aside>
-    <el-main style= 'padding-top: 20%'>
+  <el-container style="height: 100%;width: 100%;background-size: cover;background-image: url('https://api.vvhan.com/api/view');" >
+    <el-main>
+
        <el-form  :model="LoginUserForm" label-width="80px" class="login-form">
     <el-form-item label="用户名" prop="username">
       <el-input  v-model="LoginUserForm.username" placeholder="请输入用户名"></el-input>
@@ -135,7 +135,9 @@ const login = async () => {
       <el-button  type="primary" ><router-link  style="text-decoration: none" to="/reg">注册</router-link></el-button>
     </el-form-item>
   </el-form>
+
     </el-main>
+
   </el-container>
 
 </template>
@@ -148,5 +150,11 @@ const login = async () => {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#app .el-main form{
+ background-color:#faf9f9;
+  opacity: 0.9;
+
 }
 </style>
