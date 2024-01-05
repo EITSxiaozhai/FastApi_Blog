@@ -165,6 +165,15 @@ class aliOssUpload():
         image_url = f"http://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}{blogid}-maincard.jpg"
         return image_url
 
+    def upload_bitsfileAvatar(self,bitsfile):
+        self.bucket.put_object(f'{self.upload_path}-avatar.jpg', bitsfile)
+
+    async def Binaryfileuploadavatar(self, bitsfile):
+        await asyncio.to_thread(self.upload_bitsfileAvatar,  bitsfile)
+        image_url = f"http://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}-avatar.jpg"
+        return image_url
+
+
     def oss_upload_file(self, file_path):
         # 构造上传路径
         file_name = os.path.basename(file_path)
