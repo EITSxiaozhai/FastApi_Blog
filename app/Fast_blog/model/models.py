@@ -39,6 +39,7 @@ class User(Base):
     Last_Login_Time = Column(DateTime, default=datetime.datetime.now)
     UserUuid = Column(String(255))
     UserEmail = Column(EmailType(255))
+    UserAvatar = Column(String(255), unique=True)
     comments = relationship("Comment", back_populates="user")
     ActivationCode = Column(Integer, default=None)
     ActivationState = Column(ChoiceType(ActivationStateType), default="NA")
