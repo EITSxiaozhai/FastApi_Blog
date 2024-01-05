@@ -12,12 +12,13 @@ from sqlalchemy import select, update
 
 from sqlalchemy.orm import sessionmaker
 
-from fastapi import APIRouter, Request, HTTPException, Depends
+from fastapi import APIRouter, Request, HTTPException, Depends, UploadFile, File
 from sqlalchemy.sql.functions import current_user
 import random
 
 from app.Fast_blog.database.database import engine, db_session
-from app.Fast_blog.middleware.backlist import TokenManager, Useroauth2_scheme, verify_recaptcha, send_activation_email
+from app.Fast_blog.middleware.backlist import TokenManager, Useroauth2_scheme, verify_recaptcha, send_activation_email, \
+    aliOssUpload
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import User, Comment, Blog
 from app.Fast_blog.schemas.schemas import CommentDTO, UserCredentials, UserRegCredentials
@@ -75,11 +76,25 @@ async def verify_password(username: str, password: str) -> bool:
     # 返回 True 或 False
     # ...
     return True  # 示例中直接返回 True，您需要根据实际情况进行验证
+@UserApp.post("/putuser")
+async def PutUser(file: UploadFile = File(...)):
+    async with db_session() as session:
+        try:
+            contents = await file.read()
+            # Process the contents, e.g., upload to storage, etc.
+            image_url = await aliOssUpload().Binaryfileuploadavatar(bitsfile=contents)
+            # Respond with any necessary data
+            print(image_url)
+            return {"file_name": file.filename, "content_type": file.content_type,"image_url":image_url}
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            return {"error": str(e)}
 
 @UserApp.post("/reguser")
 async def RegUser(reg: UserRegCredentials):
     async with db_session() as session:
         try:
+
             RecaptchaResponse = await verify_recaptcha(UserreCAPTCHA=reg.googlerecaptcha, SecretKeyTypology="user")
 
             if RecaptchaResponse["message"]["success"]:
@@ -102,6 +117,7 @@ async def RegUser(reg: UserRegCredentials):
                 return {"message": "reCAPTCHA 验证失败","success": False}
         except Exception as e:
             print("发生了下面的错误:",{e})
+
 
 
 
