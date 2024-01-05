@@ -71,8 +71,10 @@ const login = async () => {
 
       const decodedToken = VueJwtDecode.decode(newToken);
       const username = decodedToken.username;
-  // 调用 Vuex mutation 设置 token 和用户名
+      // 调用 Vuex mutation 设置 token 和用户名
       store.commit('setTokenAndUsername', { token: newToken, username });
+      // 更新 Vuex store 中的用户名
+      store.commit('setUsername', username);
       router.push('/blog'); // 使用router进行页面重定向
 
       ElNotification({

@@ -1,6 +1,12 @@
 import { createStore } from 'vuex';
+import createPersistedState from "vuex-persistedstate";
 
+// export default createStore({
+//   // ...其他配置
+//   plugins: [createPersistedState()],
+// });
 export default createStore({
+  plugins: [createPersistedState()],
   state: {
     token: '', // 初始状态为空令牌
     username: '', // 添加一个用于用户名的新属性
