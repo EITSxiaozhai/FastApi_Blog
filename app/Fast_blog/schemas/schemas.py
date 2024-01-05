@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from fastapi import UploadFile
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr,FileUrl
 from typing import Optional
 import sys
 
@@ -20,6 +20,7 @@ class UserRegCredentials(BaseModel):
     googlerecaptcha: str
     email: EmailStr
     EmailverificationCod : int
+    UserAvatar: FileUrl
 
 
 
