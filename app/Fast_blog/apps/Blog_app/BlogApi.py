@@ -8,7 +8,7 @@ from sqlalchemy import event
 from fastapi import Depends, Body, File
 from sqlalchemy.orm import sessionmaker
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+# from fastapi.templating import Jinja2Templates
 from fastapi import APIRouter, UploadFile
 from sqlalchemy import select, text, func
 from sqlalchemy import update
@@ -24,7 +24,7 @@ session = SessionLocal()
 
 BlogApp = APIRouter()
 
-templates = Jinja2Templates(directory="./Fast_blog/templates")
+
 
 static_folder_path = os.path.join(os.getcwd(), "Fast_blog", "static")
 BlogApp.mount("/static", StaticFiles(directory=static_folder_path), name="static")
@@ -48,8 +48,7 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
             adjusted_page_size = min(pageSize, total_articles)
 
             # 计算合法的 offset，确保不超过实际文章数量
-            offset = (page - 1) * adjusted_page_size
-
+            offset = (page - 1) * adjusted_page_size if page > 0 else 0
             stmt = select(*columns).offset(offset).limit(adjusted_page_size)
             results = await session.execute(stmt)
             data = results.fetchall()
