@@ -141,7 +141,7 @@ class BlogCache:
 
 
 Adminoauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
-Useroauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
+Useroauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/generaluser/token")
 
 ## 阿里云文件上传
 class aliOssUpload():
