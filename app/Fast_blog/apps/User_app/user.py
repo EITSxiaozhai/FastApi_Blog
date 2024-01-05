@@ -10,7 +10,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import EmailStr
 from sqlalchemy import select, update
 
-from sqlalchemy.orm import sessionmaker, selectinload
+from sqlalchemy.orm import sessionmaker
 
 from fastapi import APIRouter, Request, HTTPException, Depends
 from sqlalchemy.sql.functions import current_user
@@ -173,6 +173,12 @@ async def AllUser():
             print(i.__dict__['username'], i.__dict__['UserUuid'])
     return ("查询全部用户")
 
+async def CommentListUserNameGet(user):
+    async with db_session() as session:
+        sql = select(User).filter(User.UserId == user)
+        result = await session.execute(sql)
+        for i in result.first():
+            return i.username
 
 @UserApp.post("/{vueblogid}/commentlist")
 async def CommentList(vueblogid: int):
@@ -181,8 +187,9 @@ async def CommentList(vueblogid: int):
             sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
             result = await session.execute(sql)
             comment_dict = {}
-
             for i in result.scalars().all():
+                x = i.__dict__['uid']
+                user =  await CommentListUserNameGet(user = x)
                 comment_data = {
                     'id': i.__dict__['id'],
                     'parentId': i.__dict__['parentId'],
@@ -190,7 +197,7 @@ async def CommentList(vueblogid: int):
                     'content': i.__dict__['content'],
                     'likes': i.__dict__['likes'],
                     'address': i.__dict__['address'],
-                    "user": {"homeLink": '1', "username": i.__dict__['uid'],
+                    "user": {"homeLink": '1', "username": f"{user}",
                              'avatar': "https://api.vvhan.com/api/avatar"},
                     'reply': {'total': 0, 'list': []}
                 }
@@ -206,6 +213,8 @@ async def CommentList(vueblogid: int):
             return list(comment_dict.values())
 
         except Exception as e:
+            print("Caught an exception:", repr(e))
+            print("Error:", e)
             return {"error": f"commentlist {e}"}
 
 
