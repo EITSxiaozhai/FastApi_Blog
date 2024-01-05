@@ -26,9 +26,9 @@ class UserPrivileges(Base):
 @dataclass
 class User(Base):
     ActivationStateType = [
-        (0, 'Activated'),
-        (1, 'Pending Activation'),
-        (2, 'NULL')
+        ('YA', 'Activated'),
+        ('NA', 'Pending Activation'),
+        ('NULL', 'NULL')
     ]
     __tablename__ = "usertable"
     __table_args__ = {'extend_existing': True}
@@ -41,7 +41,7 @@ class User(Base):
     UserEmail = Column(EmailType(255))
     comments = relationship("Comment", back_populates="user")
     ActivationCode = Column(Integer, default=None)
-    ActivationState = Column(ChoiceType(ActivationStateType), default=None)
+    ActivationState = Column(ChoiceType(ActivationStateType), default="NA")
 
     def to_dict(self):
         return dict(UserId=self.UserId, username=self.username, userpassword=self.userpassword,
