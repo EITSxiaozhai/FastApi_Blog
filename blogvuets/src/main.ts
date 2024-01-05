@@ -9,4 +9,5 @@ import 'element-plus/dist/index.css'
 
 
 
+// @ts-ignore
 createApp(App).use(store).use(router).use(UndrawUi).use(ElementPlus).mount('#app')
