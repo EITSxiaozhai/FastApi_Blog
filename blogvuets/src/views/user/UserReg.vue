@@ -1,10 +1,35 @@
-<script setup>
+<script lang="ts" setup>
 import { ref, reactive } from 'vue';
 import vueRecaptcha from 'vue3-recaptcha2';
 import { ElNotification } from 'element-plus';
 import backApi from "@/Api/backApi";
+import { Plus } from '@element-plus/icons-vue'
+import type { UploadProps } from 'element-plus'
+import {post} from "axios";
 
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
+
+const imageUrl = ref('')
+
+
+
+const handleAvatarSuccess: UploadProps['onSuccess'] = (
+  response,
+  uploadFile
+) => {
+  imageUrl.value = URL.createObjectURL(uploadFile.raw!)
+}
+
+const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
+  if (rawFile.type !== 'image/jpeg') {
+    ElMessage.error('Avatar picture must be JPG format!')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    ElMessage.error('Avatar picture size can not exceed 2MB!')
+    return false
+  }
+  return true
+}
 
 
 const googleRecaptchaVerified = ref(false);
@@ -220,24 +245,38 @@ const register = async () => {
         {{ verificationCodeButtonText }}
       </el-button>
     </el-form-item>
-    <el-form-item>
-  <el-form-item>
-    <vueRecaptcha
-      :sitekey="v2Sitekey"
-      size="normal"
-      theme="light"
-      hl="zh-CN"
-      v-model="RegisterUserForm.googlerecaptcha"
-      @verify="recaptchaVerified"
-      @expire="recaptchaExpired"
-      @fail="recaptchaFailed"
-    ></vueRecaptcha>
-  </el-form-item>
-    </el-form-item>
+      <el-form-item>
+              <div>
+  <vueRecaptcha
+  :sitekey="v2Sitekey"
+  size="normal"
+  theme="light"
+  hl="zh-CN"
+  @verify="recaptchaVerified"
+  @expire="recaptchaExpired"
+  @fail="recaptchaFailed"
+  >
+</vueRecaptcha>
+      </div>
+      </el-form-item>
+      <el-form-item>
+          <el-upload
+    class="avatar-uploader"
+    action= "http://127.0.0.1:8000/api/generaluser/putuser"
+    :show-file-list="false"
+    method="post"
+    :on-success="handleAvatarSuccess"
+    :before-upload="beforeAvatarUpload"
+  >
+    <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+    <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+  </el-upload>
+      </el-form-item>
     <el-form-item>
       <el-button type="primary" native-type="submit">注册</el-button>
       <el-button  type="primary" ><router-link  style="text-decoration: none" to="/login">登录</router-link></el-button>
     </el-form-item>
+
   </el-form>
   </el-main>
 
@@ -265,6 +304,35 @@ const register = async () => {
  background-color:#faf9f9;
   opacity: 0.9;
 
+}
+
+.avatar-uploader .avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
+</style>
+
+<style>
+.avatar-uploader .el-upload {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  text-align: center;
 }
 
 </style>
