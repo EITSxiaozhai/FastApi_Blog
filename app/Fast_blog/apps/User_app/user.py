@@ -11,8 +11,7 @@ from pydantic import EmailStr
 from sqlalchemy import select, update
 
 from sqlalchemy.orm import sessionmaker, selectinload
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+
 from fastapi import APIRouter, Request, HTTPException, Depends
 from sqlalchemy.sql.functions import current_user
 import random
@@ -28,9 +27,6 @@ Session = SessionLocal()
 
 UserApp = APIRouter()
 
-templates = Jinja2Templates(directory="./Fast_blog/templates")
-
-UserApp.mount("/static", StaticFiles(directory="./Fast_blog/static"), name="static")
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
@@ -120,11 +116,12 @@ async def UserLogin(x: UserCredentials):
                 user = result.scalars().first()
                 if user is None:
                     # 用户名不存在
-                    return {"data": 'Error'}
+                    return {"data": '用户名或者密码错误'}
                 elif user.userpassword != x.password:
                     # 密码不匹配
-                    return {'data': 'Error'}
+                    return {'data': '用户名或者密码错误'}
                 else:
+
                     usertoken = TokenManager()
                     token_data = {
                         "username": x.username,

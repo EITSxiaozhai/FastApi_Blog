@@ -1,3 +1,4 @@
+import logging
 import subprocess
 
 from fastapi import FastAPI
@@ -40,6 +41,12 @@ subprocess.Popen(celery_command, shell=True)
 
 @app.get("/")
 async def root():
-    send_activation_email.delay(email="eitsxiaozhai@gmail.com")
     return {"message": "Hello world"}
+
+@app.on_event("startup")
+async def startup_event():
+    logger = logging.getLogger("uvicorn.access")
+    handler = logging.handlers.RotatingFileHandler("api.log",mode="a",maxBytes = 100*1024, backupCount = 3)
+    handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
+    logger.addHandler(handler)
 
