@@ -1,9 +1,10 @@
 <script setup >
 import {useRouter} from 'vue-router';
-import {reactive, ref, onMounted, onBeforeUnmount, watchEffect, watch,onUnmounted,toRefs} from 'vue';
+import {reactive, ref, onMounted, onBeforeUnmount, watchEffect, watch, onUnmounted, toRefs, computed} from 'vue';
 import TypeIt from 'typeit'
 import backApi from '../Api/backApi.ts';
 import 'element-plus/theme-chalk/display.css'
+import {useStore} from "vuex";
 
 //自动布局修改适配手机端平板端屏幕
 const useXlLayout = () => {
@@ -203,6 +204,24 @@ onMounted(() => {
 onUnmounted(() => {
   clearInterval(timerId); // 组件销毁时清除定时器
 });
+
+const store = useStore();
+const usernames = computed(() => store.getters.getUsername);
+const tokens = computed(() => store.getters.getToken);
+const isLoggedIn = computed(() => !!usernames.value);
+    // 跳转到注册页面
+    const redirectToRegister = () => {
+      // 在这里编写跳转逻辑
+      router.push('/register');
+    };
+
+    // 跳转到用户个人资料页面
+    const redirectToUserProfile = () => {
+      // 在这里编写跳转逻辑
+      router.push('/user-profile');
+    };
+
+
 </script>
 
 <template>
@@ -243,12 +262,17 @@ onUnmounted(() => {
             </transition>
           </div>
 
-          <el-sub-menu index="2-4" id="login">
-            <template #title>登录</template>
-            <el-menu-item index="2-4-1">
-              <a href="" style="text-decoration:none">注册</a>
-            </el-menu-item>
-          </el-sub-menu>
+  <el-sub-menu index="2-4" id="login">
+    <template #title>
+      {{ isLoggedIn ? `你好：${usernames}` : '登录' }}
+    </template>
+    <el-menu-item v-if="isLoggedIn" index="2-4-2">
+      <a href="#" style="text-decoration:none" @click.prevent="redirectToUserProfile">个人资料</a>
+    </el-menu-item>
+    <el-menu-item index="2-4-1">
+      <a href="" style="text-decoration:none" @click.prevent="redirectToRegister">注册</a>
+    </el-menu-item>
+  </el-sub-menu>
         </el-menu>
       </transition>
     </el-header>

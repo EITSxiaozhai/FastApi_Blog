@@ -22,7 +22,6 @@
     "fingerprintjs2": "^2.1.4",
     "grecaptcha": "^1.0.3",
     "jsonwebtoken": "^9.0.2",
-    "jwt-decode": "^4.0.0",
     "markdown-it": "^13.0.1",
     "os": "^0.1.2",
     "typeit": "^8.7.1",

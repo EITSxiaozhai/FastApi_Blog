@@ -266,10 +266,12 @@ const UpComments = async (str) => {
         if (UpComment.data.code === 40002) {
             // Token 已过期
             console.error('Token 已过期');
+            localStorage.removeItem("token"); // 删除本地存储中的过期 Token
             return; // 提前结束函数执行
         } else if (UpComment.data.code === 40003) {
             // 无效的 Token
             console.error('无效的 Token');
+            localStorage.removeItem("token"); // 删除本地存储中的过期 Token
             return; // 提前结束函数执行
         } else {
             // 其他错误状态码的处理
@@ -384,6 +386,18 @@ config.comments = [
 
 
 
+const isLoggedIn = computed(() => !!usernames.value);
+    // 跳转到注册页面
+    const redirectToRegister = () => {
+      // 在这里编写跳转逻辑
+      router.push('/register');
+    };
+
+    // 跳转到用户个人资料页面
+    const redirectToUserProfile = () => {
+      // 在这里编写跳转逻辑
+      router.push('/user-profile');
+    };
 
 </script>
 
@@ -421,12 +435,17 @@ config.comments = [
           <h1 style="padding-left: 20px;font-size: 20px">
             <router-link to="/blog" style="text-decoration: none;">Exp1oit Blog</router-link>
           </h1>
-          <el-sub-menu index="2-4" id="login">
-            <template #title>登录</template>
-            <el-menu-item index="2-4-1">
-              <a href="" style="text-decoration:none">注册</a>
-            </el-menu-item>
-          </el-sub-menu>
+  <el-sub-menu index="2-4" id="login">
+    <template #title>
+      {{ isLoggedIn ? `你好：${usernames}` : '登录' }}
+    </template>
+    <el-menu-item v-if="isLoggedIn" index="2-4-2">
+      <a href="#" style="text-decoration:none" @click.prevent="redirectToUserProfile">个人资料</a>
+    </el-menu-item>
+    <el-menu-item index="2-4-1">
+      <a href="" style="text-decoration:none" @click.prevent="redirectToRegister">注册</a>
+    </el-menu-item>
+  </el-sub-menu>
         </el-menu>
         <el-progress :percentage="readingProgress" :show-text="false"/>
       </el-header>
