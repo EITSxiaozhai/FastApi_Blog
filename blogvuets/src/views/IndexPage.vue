@@ -74,6 +74,7 @@ const loadMoreCards = () => {
   currentPage++;
   loadedCards.value = pageSize * currentPage;
   loadData(currentPage);
+
 };
 
 
@@ -198,6 +199,7 @@ const updateSiteCreationTime = () => {
 let timerId;
 onMounted(() => {
   updateSiteCreationTime();
+
   timerId = setInterval(updateSiteCreationTime, 1000);
 });
 
@@ -209,6 +211,7 @@ const store = useStore();
 const usernames = computed(() => store.getters.getUsername);
 const tokens = computed(() => store.getters.getToken);
 const isLoggedIn = computed(() => !!usernames.value);
+console.log(tokens)
     // 跳转到注册页面
     const redirectToRegister = () => {
       // 在这里编写跳转逻辑
