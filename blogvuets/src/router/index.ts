@@ -13,15 +13,6 @@ const router = createRouter({
             name: 'home',
             meta: {
                 cacheable: true,
-                title: '首页'
-            },
-        },
-        {
-            path: '/blog',
-            component: Index,
-            name: 'home',
-            meta: {
-                cacheable: true,
                 title: 'Exploit的Blog',
                 keepAlive: true,
             },
