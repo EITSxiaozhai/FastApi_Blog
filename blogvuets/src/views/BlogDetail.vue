@@ -433,7 +433,7 @@ const isLoggedIn = computed(() => !!usernames.value);
       <el-header :class="{ 'hidden': scrollDirection === 'down' }" id="top-mains">
         <el-menu class="el-menu-demo" mode="horizontal">
           <h1 style="padding-left: 20px;font-size: 20px">
-            <router-link to="/blog" style="text-decoration: none;">Exp1oit Blog</router-link>
+            <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
           </h1>
   <el-sub-menu index="2-4" id="login">
     <template #title>

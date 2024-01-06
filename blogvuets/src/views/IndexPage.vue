@@ -102,10 +102,21 @@ onMounted(() => {
   document.addEventListener('click', handleGlobalClick);
 });
 
-onMounted(() => {
+const VerseGetting = async () => {
+  try {
+    const response = await fetch('https://v1.jinrishici.com/rensheng/shiguang');
+    const data = await response.json();
+    return data.content
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
+
+onMounted(async () => {
+  const content = await VerseGetting();
   new (TypeIt)(text.value, {
-    strings: ["埋骨何须桑梓地 " +
-    "人生何处不青山"],
+    strings: [content],
     cursorChar: "<span class='cursorChar'>|<span>",//用于光标的字符。HTML也可以
     speed: 100,
     lifeLike: true,// 使打字速度不规则
@@ -211,7 +222,7 @@ const store = useStore();
 const usernames = computed(() => store.getters.getUsername);
 const tokens = computed(() => store.getters.getToken);
 const isLoggedIn = computed(() => !!usernames.value);
-console.log(tokens)
+
     // 跳转到注册页面
     const redirectToRegister = () => {
       // 在这里编写跳转逻辑
@@ -242,7 +253,7 @@ console.log(tokens)
             class="el-menu-demo"
             mode="horizontal">
           <h1 style="padding-left: 20px;font-size: 20px">
-            <router-link to="/blog/" style="text-decoration: none;">Exp1oit Blog</router-link>
+            <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
           </h1>
           <div class="search-container">
             <el-button
@@ -491,7 +502,14 @@ console.log(tokens)
 
 
 <style>
+#app .background-image{
+ filter: contrast(0.6);
+}
 
+
+#app .background-container h1{
+ font-size:65px;
+}
 
 #footer {
   background-color: #333; /* 设置背景颜色 */
@@ -647,7 +665,7 @@ console.log(tokens)
 
 .background-image {
   /* 背景图片样式，替换为您的背景图片样式 */
-  background-image: url('https://www.loliapi.com/acg/pc/');
+  background-image: url('https://api.vvhan.com/api/view');
   background-size: cover;
   width: 100%;
   height: 100%;
