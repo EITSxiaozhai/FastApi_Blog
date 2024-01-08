@@ -1,7 +1,10 @@
+import datetime
 import logging
 import subprocess
 
+from fastapi import FastAPI, Response
 from fastapi import FastAPI
+from sqlalchemy import select
 from starlette.responses import JSONResponse
 from Fast_blog.database.database import engine
 from sqlalchemy.orm import sessionmaker
@@ -13,6 +16,8 @@ from Fast_blog.apps import Power_Crawl
 from Fast_blog.apps import SystemMonitoring
 from fastapi.middleware.cors import CORSMiddleware
 from Fast_blog.middleware.backlist import  send_activation_email
+from app.Fast_blog.database.database import engine, db_session
+from app.Fast_blog.model.models import Blog
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -39,9 +44,36 @@ app.add_middleware(
 celery_command = "celery -A Fast_blog.middleware.backlist worker --loglevel=info -P eventlet"
 subprocess.Popen(celery_command, shell=True)
 
+
+
+
+
 @app.get("/")
 async def root():
     return {"message": "Hello world"}
+
+@app.get("/sitemap.xml")
+async def generate_sitemap():
+    async with db_session() as session:
+        my_sitemap = """<?xml version="1.0" encoding="UTF-8"?>
+                    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">"""
+        id = select(Blog)
+        id = await session.execute(id)
+        urls = []
+        id = id.scalars().all()
+        for blog in id:
+            urls.append(f"""<url>
+                  <loc>https://www.exploit-db.xyz/blog/{blog.BlogId}</loc>
+                  <lastmod>{blog.created_at.strftime('%Y-%m-%dT%H:%M:%S+00:00')}</lastmod>
+                  <changefreq>weekly</changefreq>
+                  <priority>1</priority>
+              </url>""")
+
+        my_sitemap += "\n".join(urls)
+        my_sitemap += """</urlset>"""
+
+        return Response(content=my_sitemap, media_type="application/xml")
+
 
 @app.on_event("startup")
 async def startup_event():
