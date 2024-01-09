@@ -190,7 +190,6 @@ onMounted(async () => {
 });
 
 const vote = async () => {
-
   const blogId = route.params.blogId;
   const device_id = fingerprint.value;
   const ratingValue = value.value;
@@ -207,8 +206,13 @@ const vote = async () => {
     });
 
     const response = await backApi.post(`/blogs/${blogId}/ratings/?${queryParams.toString()}`);
+    const oldContent = data.data[0].content; // 保存投票前的内容
     data.data = response.data;
-    generateTableOfContents(response.data.content);
+
+    // 判断是否需要重新生成目录
+    if (oldContent !== data.data[0].content) {
+      generateTableOfContents(data.data.content);
+    }
   } catch (error) {
     console.error("Error in vote function:", error);
   }
