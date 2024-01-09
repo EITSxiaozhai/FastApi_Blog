@@ -132,7 +132,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "D:\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "E:\\pytest\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
