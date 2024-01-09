@@ -114,7 +114,7 @@ async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
 ##博客登录
 async def UserLogin(x: UserCredentials, request: Request):
     try:
-        RecaptchaResponse = await verify_recaptcha(UserreCAPTCHA=x.googlerecaptcha)
+        RecaptchaResponse = await verify_recaptcha(UserreCAPTCHA=x.googlerecaptcha,SecretKeyTypology="admin")
         print(RecaptchaResponse)
         if RecaptchaResponse["message"]["success"]:
             token_data = await Token(OAuth2PasswordRequestForm(
