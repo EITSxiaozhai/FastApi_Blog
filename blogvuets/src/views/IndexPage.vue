@@ -55,11 +55,20 @@ const loadedCards = ref(pageSize);
 
 const loadData = async (page = 0) => {
   try {
-
     const response = await backApi.get(`/blog/BlogIndex?initialLoad=false&page=${page}&pageSize=${pageSize}`);
-    if (response.data.length > 0) {
-      data.data.push(...response.data);
+if (response.data.length > 0) {
+  response.data.forEach(blog => {
+    // 判断博客是否已加载，根据 BlogID 判断
+    const isBlogLoaded = data.data.some(loadedBlog => loadedBlog.BlogId === blog.BlogId);
+
+    if (!isBlogLoaded) {
+      // 如果博客未加载，则将其推入数据数组
+      data.data.push(blog);
+      // 可选：如果你想要跟踪已加载的 BlogID，可以将其添加到集合中
+      // loadedBlogIds.value.add(blog.BlogId);
     }
+  });
+}
   } catch (error) {
     console.error(error);
   }
@@ -68,6 +77,8 @@ const loadData = async (page = 0) => {
 onMounted(() => {
   loadData(currentPage.value);
 });
+
+
 
 
 const loadMoreCards = () => {
@@ -372,7 +383,7 @@ const isLoggedIn = computed(() => !!usernames.value);
   <div class="content-container">
     <el-main id="maincare">
       <div class="about">
-        <el-container v-for="(blog) in data.data.slice(0, loadedCards)" :key="blog.BlogId">
+        <el-container v-for="(blog) in data.data" :key="blog.BlogId">
           <el-main>
             <keep-alive>
               <transition name="el-fade-in-linear">
