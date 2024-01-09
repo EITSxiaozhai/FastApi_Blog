@@ -519,7 +519,7 @@ const isLoggedIn = computed(() => !!usernames.value);
 
 
 #app .background-container h1{
- font-size:65px;
+ font-size:30px;
 }
 
 #footer {

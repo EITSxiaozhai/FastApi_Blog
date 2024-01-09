@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="路由守卫自动修改标题">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="解决分页bug">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -550,7 +549,7 @@
       <workItem from="1704446963530" duration="2982000" />
       <workItem from="1704674938506" duration="2912000" />
       <workItem from="1704677919406" duration="460000" />
-      <workItem from="1704690270626" duration="22812000" />
+      <workItem from="1704690270626" duration="22962000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -895,7 +894,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="318" />
+    <option name="localTasksCounter" value="319" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -939,7 +938,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改基础介绍" />
     <MESSAGE value="Celery邮件发送测试" />
     <MESSAGE value="发送到后端的数据修改" />
     <MESSAGE value="修复用户重复注册失败bug" />
@@ -964,7 +962,8 @@
     <MESSAGE value="sitemap提交" />
     <MESSAGE value="修改admin密钥错误" />
     <MESSAGE value="路由守卫自动修改标题" />
-    <option name="LAST_COMMIT_MESSAGE" value="路由守卫自动修改标题" />
+    <MESSAGE value="解决分页bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="解决分页bug" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
