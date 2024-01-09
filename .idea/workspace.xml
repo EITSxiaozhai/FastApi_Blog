@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="Google-sitemap-API发送请求">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,14 +123,14 @@
     "TODO_SCOPE": "All Places",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "D:/FastApi_Blog/blogvuets/public",
+    "last_opened_file_path": "E:/pytest/FastApi_Blog/app/Fast_blog",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "http.proxy",
     "ts.external.directory.path": "E:\\pytest\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   },
@@ -144,18 +143,18 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\pytest\FastApi_Blog\app\Fast_blog" />
       <recent name="D:\FastApi_Blog\blogvuets\public" />
       <recent name="D:\FastApi_Blog\blogvuets\src\views\pages" />
       <recent name="D:\项目备份\fast-api\blogvuets" />
       <recent name="D:\项目备份\fast-api\blogvuets\src\assets" />
-      <recent name="D:\项目备份\fast-api\blogvuets\public" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\pytest\FastApi_Blog\app" />
       <recent name="D:\项目备份\fast-api\BlogIndex\src\assets" />
       <recent name="D:\项目备份\fast-api\vue-element-admin-master\src\views\admin\BlogPosts" />
       <recent name="D:\项目备份\fast-api\app\Fast_blog\apps\AdminApp" />
       <recent name="D:\项目备份\fast-api\vue-project\src\views" />
-      <recent name="D:\项目备份\fast-api\vue-project\src\views\index" />
     </key>
   </component>
   <component name="RunManager" selected="Python.1">
@@ -552,6 +551,7 @@
       <workItem from="1704677919406" duration="460000" />
       <workItem from="1704690270626" duration="33287000" />
       <workItem from="1704796308315" duration="4849000" />
+      <workItem from="1704806186755" duration="3304000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -896,7 +896,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="321" />
+    <option name="localTasksCounter" value="324" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -940,8 +940,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="发送到后端的数据修改" />
-    <MESSAGE value="修复用户重复注册失败bug" />
     <MESSAGE value="优化UI" />
     <MESSAGE value="更新环境变量" />
     <MESSAGE value="添加启动执行命令" />
@@ -965,7 +963,9 @@
     <MESSAGE value="路由守卫自动修改标题" />
     <MESSAGE value="解决分页bug" />
     <MESSAGE value="修改字体大小" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改字体大小" />
+    <MESSAGE value="视图优化" />
+    <MESSAGE value="Google-sitemap-API发送请求" />
+    <option name="LAST_COMMIT_MESSAGE" value="Google-sitemap-API发送请求" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
