@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="模块修改-评论时显示用户名">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="sitemap提交">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/public/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/public/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/router/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,9 +25,9 @@
         <option value="JavaScript File" />
         <option value="TypeScript File" />
         <option value="Dockerfile" />
-        <option value="Vue Composition API Component" />
         <option value="Python Script" />
         <option value="Vue Options API Component" />
+        <option value="Vue Composition API Component" />
       </list>
     </option>
   </component>
@@ -118,39 +119,39 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.1.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/项目备份/fast-api/blogvuets&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;http.proxy&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;E:\\pytest\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.1.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "TODO_SCOPE": "All Places",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "D:/FastApi_Blog/blogvuets/public",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "http.proxy",
+    "ts.external.directory.path": "D:\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;vue.recent.templates&quot;: [
-      &quot;Vue Composition API Component&quot;,
-      &quot;Vue Options API Component&quot;
+  "keyToStringList": {
+    "vue.recent.templates": [
+      "Vue Options API Component",
+      "Vue Composition API Component"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\FastApi_Blog\blogvuets\public" />
+      <recent name="D:\FastApi_Blog\blogvuets\src\views\pages" />
       <recent name="D:\项目备份\fast-api\blogvuets" />
       <recent name="D:\项目备份\fast-api\blogvuets\src\assets" />
       <recent name="D:\项目备份\fast-api\blogvuets\public" />
-      <recent name="D:\项目备份\fast-api\blogvuets\src" />
-      <recent name="D:\项目备份\fast-api\blogvuets\src\views" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\项目备份\fast-api\BlogIndex\src\assets" />
@@ -549,7 +550,10 @@
       <workItem from="1704370155601" duration="3335000" />
       <workItem from="1704414732977" duration="25642000" />
       <workItem from="1704444246985" duration="2660000" />
-      <workItem from="1704446963530" duration="2706000" />
+      <workItem from="1704446963530" duration="2982000" />
+      <workItem from="1704674938506" duration="2912000" />
+      <workItem from="1704677919406" duration="460000" />
+      <workItem from="1704690270626" duration="16724000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -894,7 +898,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="308" />
+    <option name="localTasksCounter" value="316" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -938,11 +942,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="格式化代码" />
-    <MESSAGE value="修改中间件" />
-    <MESSAGE value="添加评论判断" />
-    <MESSAGE value="优化布局-修复输出bug" />
-    <MESSAGE value="优化评论排序" />
     <MESSAGE value="添加环境变量" />
     <MESSAGE value="修改配置" />
     <MESSAGE value="修改基础介绍" />
@@ -963,7 +962,12 @@
     <MESSAGE value="修复选择bug" />
     <MESSAGE value="添加顶栏用户名" />
     <MESSAGE value="模块修改-评论时显示用户名" />
-    <option name="LAST_COMMIT_MESSAGE" value="模块修改-评论时显示用户名" />
+    <MESSAGE value="添加头像OSS" />
+    <MESSAGE value="添加头像栏位" />
+    <MESSAGE value="添加头像操作API" />
+    <MESSAGE value="添加注册头像" />
+    <MESSAGE value="sitemap提交" />
+    <option name="LAST_COMMIT_MESSAGE" value="sitemap提交" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

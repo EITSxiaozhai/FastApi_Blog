@@ -1,26 +1,24 @@
 <script setup>
-import {ref, onBeforeMount, onMounted, onBeforeUnmount, onUnmounted,computed} from 'vue';
+import {ref, onBeforeMount, onMounted, onBeforeUnmount, computed} from 'vue';
 import {RouterLink, RouterView} from 'vue-router'
 import {useRoute} from "vue-router";
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/default.css'; // Import the style you prefer
-const route = useRoute()
 import {useRouter} from "vue-router";
 import {reactive} from "vue";
 import backApi from '../Api/backApi.ts';
 import {Discount} from "@element-plus/icons-vue";
 import {ChatDotRound, ChatLineRound, ChatRound} from '@element-plus/icons-vue'
 import Fingerprint2 from "fingerprintjs2";
-import { useStore } from 'vuex';
-
+import {useStore} from 'vuex';
 import emoji from '@/assets/emoji'
 import {UToast, createObjectURL} from 'undraw-ui';
 import {ElNotification} from "element-plus";
 
+const route = useRoute()
 const value = ref()
 const icons = [ChatRound, ChatLineRound, ChatDotRound]
-
 const isLoading = ref(true); // 初始时，骨架屏可见
 
 
@@ -87,7 +85,7 @@ const getData = async () => {
     const response = await backApi.post(`/user/Blogid?blog_id=${blogId}`);
     data.data = response.data;
     isLoading.value = false;
-    // 手动触发代码高亮
+    document.title = data.data[0].title
     setTimeout(() => {
       hljs.highlightAll();
     }, 0);
@@ -121,7 +119,6 @@ const generateTableOfContents = (markdownContent) => {
       }
     });
   }
-
   tableOfContents.value = toc;
 };
 
@@ -140,7 +137,7 @@ const updateReadingProgress = () => {
   const scrollPercentage = (scrollTop / scrollableDistance) * 100;
 
 
-    // 根据阅读进度计算当前标题索引
+  // 根据阅读进度计算当前标题索引
   const totalSteps = tableOfContents.value.length;
   const calculatedStep = Math.floor((scrollPercentage / 100) * totalSteps);
 
@@ -155,7 +152,6 @@ const updateReadingProgress = () => {
 const stepMarginTop = ref(); // 创建响应式变量来存储步骤条的 margin-top 值
 
 
-
 // 获取数据并计算阅读进度
 getData().then(() => {
   // 获取文章内容的总字符数，确保 data.data[0] 有值
@@ -165,7 +161,6 @@ getData().then(() => {
   window.addEventListener('scroll', updateReadingProgress);
 
 });
-
 
 
 onBeforeUnmount(() => {
@@ -239,7 +234,7 @@ const getAverageRating = async () => {
 const LoadComments = async () => {
   const blogId = route.params.blogId;
   try {
-    const CommentList = await backApi.post(`/generaluser/${ blogId }/commentlist`);
+    const CommentList = await backApi.post(`/generaluser/${blogId}/commentlist`);
     config.comments = CommentList.data;
     console.log(config.comments)
   } catch (error) {
@@ -249,37 +244,37 @@ const LoadComments = async () => {
 
 
 const UpComments = async (str) => {
-    const blogId = route.params.blogId;
-    const token = localStorage.getItem("token"); // 从本地存储获取 token
-    try {
-        if (!token) {
-            router.push('/login'); // 跳转到登录页面
-            return; // 提前结束函数执行
-        }
-        const UpComment = await backApi.post(`/generaluser/${blogId}/commentsave`, {
-            content: str,
-        }, {
-            headers: {
-                'Authorization': `Bearer ${token}`, // 在 headers 中包含 token
-            },
-        });
-        if (UpComment.data.code === 40002) {
-            // Token 已过期
-            console.error('Token 已过期');
-            localStorage.removeItem("token"); // 删除本地存储中的过期 Token
-            return; // 提前结束函数执行
-        } else if (UpComment.data.code === 40003) {
-            // 无效的 Token
-            console.error('无效的 Token');
-            localStorage.removeItem("token"); // 删除本地存储中的过期 Token
-            return; // 提前结束函数执行
-        } else {
-            // 其他错误状态码的处理
-            return;
-        }
-    } catch (error) {
-        console.error(error);
+  const blogId = route.params.blogId;
+  const token = localStorage.getItem("token"); // 从本地存储获取 token
+  try {
+    if (!token) {
+      router.push('/login'); // 跳转到登录页面
+      return; // 提前结束函数执行
     }
+    const UpComment = await backApi.post(`/generaluser/${blogId}/commentsave`, {
+      content: str,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // 在 headers 中包含 token
+      },
+    });
+    if (UpComment.data.code === 40002) {
+      // Token 已过期
+      console.error('Token 已过期');
+      localStorage.removeItem("token"); // 删除本地存储中的过期 Token
+      return; // 提前结束函数执行
+    } else if (UpComment.data.code === 40003) {
+      // 无效的 Token
+      console.error('无效的 Token');
+      localStorage.removeItem("token"); // 删除本地存储中的过期 Token
+      return; // 提前结束函数执行
+    } else {
+      // 其他错误状态码的处理
+      return;
+    }
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 onMounted(() => {
@@ -321,9 +316,9 @@ const submit = async ({content, parentId, files, finish, reply}) => {
   let str = '提交评论:' + content + ';\t父id: ' + parentId + ';\t图片:' + files + ';\t被回复评论:'
 
   const jsonData = {
-  content: content,
-  parentId: parentId,
-  files: files,
+    content: content,
+    parentId: parentId,
+    files: files,
   };
 
   console.log(jsonData)
@@ -379,25 +374,21 @@ const like = (id, finish) => {
   }, 200)
 }
 
-config.comments = [
-
-]
-
-
+config.comments = []
 
 
 const isLoggedIn = computed(() => !!usernames.value);
-    // 跳转到注册页面
-    const redirectToRegister = () => {
-      // 在这里编写跳转逻辑
-      router.push('/register');
-    };
+// 跳转到注册页面
+const redirectToRegister = () => {
+  // 在这里编写跳转逻辑
+  router.push('/register');
+};
 
-    // 跳转到用户个人资料页面
-    const redirectToUserProfile = () => {
-      // 在这里编写跳转逻辑
-      router.push('/user-profile');
-    };
+// 跳转到用户个人资料页面
+const redirectToUserProfile = () => {
+  // 在这里编写跳转逻辑
+  router.push('/user-profile');
+};
 
 </script>
 
@@ -407,25 +398,25 @@ const isLoggedIn = computed(() => !!usernames.value);
     <el-aside style="width: 13%;">
       <el-card style="height: 40%; position: fixed; width: 13%;margin-top: 10%">
         <el-steps
-          direction="vertical"
-          :active="currentStep"
-          v-if="!isLoading"
-          :style="{ 'margin-top': stepMarginTop + 'px' }"
+            direction="vertical"
+            :active="currentStep"
+            v-if="!isLoading"
+            :style="{ 'margin-top': stepMarginTop + 'px' }"
         >
           <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"></el-step>
         </el-steps>
-        <el-skeleton :rows="5" animated v-else />
+        <el-skeleton :rows="5" animated v-else/>
       </el-card>
-            <el-card style="position: fixed; width: 13%;margin-top: 30%">
-                <h4>喜欢该文章吗？</h4>
-          <el-rate
+      <el-card style="position: fixed; width: 13%;margin-top: 30%">
+        <h4>喜欢该文章吗？</h4>
+        <el-rate
             v-model="value"
             :icons="icons"
             :void-icon="ChatRound"
             :colors="['#409eff', '#67c23a', '#FF9900']"
             @change="submitRating"
-          />
-        </el-card>
+        />
+      </el-card>
     </el-aside>
 
 
@@ -435,21 +426,21 @@ const isLoggedIn = computed(() => !!usernames.value);
           <h1 style="padding-left: 20px;font-size: 20px">
             <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
           </h1>
-  <el-sub-menu index="2-4" id="login">
-    <template #title>
-      {{ isLoggedIn ? `你好：${usernames}` : '登录' }}
-    </template>
-    <el-menu-item v-if="isLoggedIn" index="2-4-2">
-      <a href="#" style="text-decoration:none" @click.prevent="redirectToUserProfile">个人资料</a>
-    </el-menu-item>
-    <el-menu-item index="2-4-1">
-      <a href="" style="text-decoration:none" @click.prevent="redirectToRegister">注册</a>
-    </el-menu-item>
-  </el-sub-menu>
+          <el-sub-menu index="2-4" id="login">
+            <template #title>
+              {{ isLoggedIn ? `你好：${usernames}` : '登录' }}
+            </template>
+            <el-menu-item v-if="isLoggedIn" index="2-4-2">
+              <a href="#" style="text-decoration:none" @click.prevent="redirectToUserProfile">个人资料</a>
+            </el-menu-item>
+            <el-menu-item index="2-4-1">
+              <a href="" style="text-decoration:none" @click.prevent="redirectToRegister">注册</a>
+            </el-menu-item>
+          </el-sub-menu>
         </el-menu>
         <el-progress :percentage="readingProgress" :show-text="false"/>
       </el-header>
-      <el-main >
+      <el-main>
         <el-card style="margin-top: 5%; display: flex; justify-content: center;" v-if="!isLoading" pa>
           <div v-for="(item, index) in data.data" :key="index" class="text item">
             <div>
@@ -478,16 +469,15 @@ const isLoggedIn = computed(() => !!usernames.value);
           </div>
         </el-card>
         <el-skeleton :rows="5" animated v-else/>
-        <el-card  style="margin-top: 1%" >
-                  <u-comment :config="config" @submit="submit" @like="like">
-        </u-comment>
-          </el-card>
+        <el-card style="margin-top: 1%">
+          <u-comment :config="config" @submit="submit" @like="like">
+          </u-comment>
+        </el-card>
       </el-main>
 
     </el-container>
-    <el-backtop :right="100" :bottom="100" />
+    <el-backtop :right="100" :bottom="100"/>
   </el-container>
-
 
 
 </template>
@@ -513,8 +503,8 @@ const isLoggedIn = computed(() => !!usernames.value);
   z-index: 2;
 }
 
-#app .el-backtop{
- background-color: rgb(210, 109, 109);
+#app .el-backtop {
+  background-color: rgb(210, 109, 109);
 }
 
 </style>

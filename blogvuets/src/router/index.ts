@@ -22,7 +22,7 @@ const router = createRouter({
             component: BlogDetail,
             meta: {
                 cacheable: false,
-                title: '详情页'
+
             },
         },
         {
@@ -42,6 +42,12 @@ const router = createRouter({
             },
         },
     ]
+});
+router.beforeEach((to: any) =>{
+    if (to.meta.title){
+        document.title = to.meta.title;
+    }
+
 });
 
 export default router;
