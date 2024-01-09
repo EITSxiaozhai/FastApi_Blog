@@ -117,6 +117,7 @@ const VerseGetting = async () => {
   try {
     const response = await fetch('https://v1.jinrishici.com/rensheng/shiguang');
     const data = await response.json();
+
     return data.content
   } catch (error) {
     console.error('Error fetching data:', error);
