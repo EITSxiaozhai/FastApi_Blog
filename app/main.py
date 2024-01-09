@@ -18,6 +18,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from Fast_blog.middleware.backlist import  send_activation_email
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.model.models import Blog
+from oauth2client.service_account import ServiceAccountCredentials
+import httplib2
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -45,8 +47,31 @@ celery_command = "celery -A Fast_blog.middleware.backlist worker --loglevel=info
 subprocess.Popen(celery_command, shell=True)
 
 
+SCOPES = ["https://www.googleapis.com/auth/indexing"]
+ENDPOINT = "https://indexing.googleapis.com/v3/urlNotifications:publish"
+JSON_KEY_FILE = "E:\\pytest\\FastApi_Blog\\app\\google.json"
+@app.get('/googleoauth2')
+def publish_url_notification(url, notification_type="URL_UPDATED"):
+    # Load the credentials
+    credentials = ServiceAccountCredentials.from_json_keyfile_name(JSON_KEY_FILE, scopes=SCOPES)
+    http = credentials.authorize(httplib2.Http())
 
+    # Prepare the content as a JSON string
+    content = {
+        "url": url,
+        "type": notification_type
+    }
 
+    # Send the request
+    response, content = http.request(ENDPOINT, method="POST", body=str(content))
+    getinfo  = http.request(f"https://indexing.googleapis.com/v3/urlNotifications/metadata?url={url}", method="GET")
+    return getinfo
+
+@app.get('/googlesitemap')
+def sitemap_push():
+    url = "http://example.com/jobs/42"
+    response, content = publish_url_notification(url)
+    return response, content
 
 @app.get("/")
 async def root():
