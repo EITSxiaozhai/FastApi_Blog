@@ -1,5 +1,5 @@
 <script setup>
-import {ref, onBeforeMount, onMounted, onBeforeUnmount, computed} from 'vue';
+import {ref, onBeforeMount, nextTick, onMounted, onBeforeUnmount, computed} from 'vue';
 import {RouterLink, RouterView} from 'vue-router'
 import {useRoute} from "vue-router";
 import MarkdownIt from 'markdown-it';
@@ -36,9 +36,9 @@ const md = new MarkdownIt();
 
 const tableOfContents = ref([]);
 
-const convertMarkdown = (markdownText) => {
+const convertMarkdown = (markdownText, callback) => {
   let renderedContent = md.render(markdownText);
-
+  renderedContent = renderedContent.replace(/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/g, '<a$1href="$2"$3 style="color: blue; text-decoration: underline;">$4</a>');
   const codeBlocks = renderedContent.match(/<pre><code class="lang-(.*?)">([\s\S]*?)<\/code><\/pre>/gm);
   if (codeBlocks) {
     codeBlocks.forEach(codeBlock => {
@@ -56,7 +56,6 @@ const convertMarkdown = (markdownText) => {
       }
     });
   }
-
   // 解析目录
   const toc = [];
   const headers = renderedContent.match(/<h(.*?)>(.*?)<\/h\1>/gm);
@@ -78,7 +77,15 @@ const convertMarkdown = (markdownText) => {
   return renderedContent;
 };
 
+const handleStepClick = (index) => {
+  const anchor = `#anchor-${index}`;
+  const targetElement = document.querySelector(anchor);
 
+  if (targetElement) {
+    // 使用 smooth 滚动效果，如果不需要平滑滚动，可以去掉 options
+    targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
+  }
+};
 const getData = async () => {
   const blogId = route.params.blogId;
   try {
@@ -102,7 +109,6 @@ const generateTableOfContents = (markdownContent) => {
     // 如果 markdownContent 为空或不是字符串，直接返回
     return;
   }
-
   const toc = [];
   const headers = markdownContent.match(/<h([1-6])>(.*?)<\/h\1>/gm);
   if (headers) {
@@ -122,10 +128,7 @@ const generateTableOfContents = (markdownContent) => {
   tableOfContents.value = toc;
 };
 
-
 getData()
-
-
 const readingProgress = ref(0);
 let totalCharacters = 0;
 
@@ -140,10 +143,9 @@ const updateReadingProgress = () => {
   // 根据阅读进度计算当前标题索引
   const totalSteps = tableOfContents.value.length;
   const calculatedStep = Math.floor((scrollPercentage / 100) * totalSteps);
-
   // 更新currentStep
   currentStep.value = calculatedStep;
-  stepMarginTop.value = -calculatedStep * 25;
+  stepMarginTop.value = -calculatedStep * 27;
   readingProgress.value = scrollPercentage;
 };
 
@@ -156,10 +158,8 @@ const stepMarginTop = ref(); // 创建响应式变量来存储步骤条的 margi
 getData().then(() => {
   // 获取文章内容的总字符数，确保 data.data[0] 有值
   totalCharacters = data.data[0].content.length;
-
   // 监听滚动事件，更新阅读进度
-  window.addEventListener('scroll', updateReadingProgress);
-
+  window.addEventListener('scroll', updateReadingProgress)
 });
 
 
@@ -169,8 +169,7 @@ onBeforeUnmount(() => {
 });
 
 const fingerprint = ref(null);
-
-onMounted(() => {
+onMounted(async () => {
   // 使用Fingerprint2生成浏览器指纹
   const options = {
     excludes: {
@@ -180,14 +179,11 @@ onMounted(() => {
       // 更多排除选项可根据需求添加
     }
   };
-
   Fingerprint2.get(options, function (components) {
     const fingerprintId = Fingerprint2.x64hash128(components.map(function (pair) {
       return pair.value;
     }).join(), 31);  // 生成指纹ID
-
     fingerprint.value = fingerprintId;
-
     // 可以将 fingerprintId 发送到服务器或进行其他操作
   });
 });
@@ -401,9 +397,11 @@ const redirectToUserProfile = () => {
             direction="vertical"
             :active="currentStep"
             v-if="!isLoading"
+            @click="handleStepClick"
             :style="{ 'margin-top': stepMarginTop + 'px' }"
         >
-          <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"></el-step>
+          <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"
+                   @click="() => handleStepClick(index)"></el-step>
         </el-steps>
         <el-skeleton :rows="5" animated v-else/>
       </el-card>
@@ -455,7 +453,6 @@ const redirectToUserProfile = () => {
               </div>
             </div>
           </div>
-
         </el-card>
         <el-card v-else>
           <!-- 骨架屏 -->
@@ -463,13 +460,13 @@ const redirectToUserProfile = () => {
         </el-card>
         <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
           <div v-for="(item, index) in data.data" :key="index" class="text item">
-            <div class="card-header">
-              <div v-html="convertMarkdown(item.content)"></div>
+            <div >
+              <div  v-html="convertMarkdown(item.content)"></div>
             </div>
           </div>
         </el-card>
         <el-skeleton :rows="5" animated v-else/>
-        <el-card style="margin-top: 1%">
+        <el-card ref="comment" style="margin-top: 1%">
           <u-comment :config="config" @submit="submit" @like="like">
           </u-comment>
         </el-card>
