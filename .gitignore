@@ -4,4 +4,5 @@ celerybeat-schedule.bak
 celerybeat-schedule.dat
 celerybeat-schedule.dir
 /.env
+app/google.json
 

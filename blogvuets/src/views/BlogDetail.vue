@@ -78,12 +78,13 @@ const convertMarkdown = (markdownText, callback) => {
 };
 
 const handleStepClick = (index) => {
+
   const anchor = `#anchor-${index}`;
   const targetElement = document.querySelector(anchor);
 
   if (targetElement) {
-    // 使用 smooth 滚动效果，如果不需要平滑滚动，可以去掉 options
-    targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
+    // Use smooth scroll effect, remove options if you don't need smooth scrolling
+    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 };
 const getData = async () => {
@@ -145,7 +146,7 @@ const updateReadingProgress = () => {
   const calculatedStep = Math.floor((scrollPercentage / 100) * totalSteps);
   // 更新currentStep
   currentStep.value = calculatedStep;
-  stepMarginTop.value = -calculatedStep * 27;
+  stepMarginTop.value = -calculatedStep * 20;
   readingProgress.value = scrollPercentage;
 };
 
@@ -189,7 +190,6 @@ onMounted(async () => {
 });
 
 const vote = async () => {
-
   const blogId = route.params.blogId;
   const device_id = fingerprint.value;
   const ratingValue = value.value;
@@ -206,8 +206,13 @@ const vote = async () => {
     });
 
     const response = await backApi.post(`/blogs/${blogId}/ratings/?${queryParams.toString()}`);
+    const oldContent = data.data[0].content; // 保存投票前的内容
     data.data = response.data;
-    generateTableOfContents(response.data.content);
+
+    // 判断是否需要重新生成目录
+    if (oldContent !== data.data[0].content) {
+      generateTableOfContents(data.data.content);
+    }
   } catch (error) {
     console.error("Error in vote function:", error);
   }
@@ -392,7 +397,7 @@ const redirectToUserProfile = () => {
   <el-container>
 
     <el-aside style="width: 13%;">
-      <el-card style="height: 40%; position: fixed; width: 13%;margin-top: 10%">
+      <el-card style="height: 40%; position: fixed; width: 13%;margin-top: 10%;overflow-y: scroll;">
         <el-steps
             direction="vertical"
             :active="currentStep"
@@ -405,7 +410,7 @@ const redirectToUserProfile = () => {
         </el-steps>
         <el-skeleton :rows="5" animated v-else/>
       </el-card>
-      <el-card style="position: fixed; width: 13%;margin-top: 30%">
+      <el-card style="position: fixed; width: 13%;margin-top: 80vh">
         <h4>喜欢该文章吗？</h4>
         <el-rate
             v-model="value"
@@ -438,7 +443,7 @@ const redirectToUserProfile = () => {
         </el-menu>
         <el-progress :percentage="readingProgress" :show-text="false"/>
       </el-header>
-      <el-main>
+      <el-main style="margin-right:15%">
         <el-card style="margin-top: 5%; display: flex; justify-content: center;" v-if="!isLoading" pa>
           <div v-for="(item, index) in data.data" :key="index" class="text item">
             <div>
@@ -500,9 +505,7 @@ const redirectToUserProfile = () => {
   z-index: 2;
 }
 
-#app .el-backtop {
-  background-color: rgb(210, 109, 109);
-}
+
 
 </style>
 
