@@ -26,6 +26,7 @@ useHead({
   // ref (recommended)
   title,
   // computer getter (recommended)
+
   meta: [{ name: 'description', content: () => myPage.value.description },],
   // computed (not recommended)
 })
