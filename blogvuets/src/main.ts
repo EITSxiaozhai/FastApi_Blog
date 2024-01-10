@@ -6,8 +6,9 @@ import UndrawUi from 'undraw-ui'
 import 'undraw-ui/dist/style.css'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import { createHead } from '@unhead/vue'
 
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-createApp(App).use(store).use(router).use(UndrawUi).use(ElementPlus).mount('#app')
+createApp(App).use(store).use(router).use(UndrawUi).use(ElementPlus).use(createHead).mount('#app')

@@ -14,7 +14,7 @@
     "production": "vue-cli-service build --mode production && npm run serve -s dist"
   },
   "dependencies": {
-    "@unhead/vue": "^1.7.4",
+    "@unhead/vue": "^1.8.9",
     "@vitejs/plugin-vue": "^4.3.4",
     "axios": "^1.5.0",
     "core-js": "^3.8.3",
@@ -31,6 +31,7 @@
     "vite": "^4.4.9",
     "vue": "^3.2.25",
     "vue-jwt-decode": "^0.1.0",
+    "vue-meta": "^3.0.0-alpha.8",
     "vue-recaptcha": "^3.0.0-alpha.2",
     "vue-router": "^4.0.13",
     "vue3-recaptcha2": "^1.8.0",

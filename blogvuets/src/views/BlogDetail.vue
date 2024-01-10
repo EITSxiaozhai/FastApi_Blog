@@ -15,6 +15,24 @@ import {useStore} from 'vuex';
 import emoji from '@/assets/emoji'
 import {UToast, createObjectURL} from 'undraw-ui';
 import {ElNotification} from "element-plus";
+import { useHead } from '@unhead/vue'
+
+const myPage = ref({ description: 'This is my page' })
+const title = ref('title')
+
+
+
+useHead({
+  // ref (recommended)
+  title,
+  // computer getter (recommended)
+  meta: [{ name: 'description', content: () => myPage.value.description },],
+  // computed (not recommended)
+})
+
+
+
+
 
 const route = useRoute()
 const value = ref()
@@ -26,6 +44,8 @@ const router = useRouter()
 const data = reactive({
   data: []
 })
+
+
 
 
 const currentStep = ref(0); // 创建响应式变量用于跟踪当前标题索引
@@ -87,6 +107,7 @@ const handleStepClick = (index) => {
     targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 };
+
 const getData = async () => {
   const blogId = route.params.blogId;
   try {
@@ -278,6 +299,7 @@ const UpComments = async (str) => {
   }
 };
 
+
 onMounted(() => {
   getAverageRating();
   LoadComments();
@@ -395,7 +417,6 @@ const redirectToUserProfile = () => {
 
 <template>
   <el-container>
-
     <el-aside style="width: 13%;">
       <el-card style="height: 40%; position: fixed; width: 13%;margin-top: 10%;overflow-y: scroll;">
         <el-steps
