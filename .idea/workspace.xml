@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="SEO优化提交">
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/router/index.ts" afterDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="统一名称">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -551,7 +551,7 @@
       <workItem from="1704677919406" duration="460000" />
       <workItem from="1704690270626" duration="33287000" />
       <workItem from="1704796308315" duration="23195000" />
-      <workItem from="1704933405381" duration="6147000" />
+      <workItem from="1704933405381" duration="9988000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -896,7 +896,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="330" />
+    <option name="localTasksCounter" value="331" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -940,7 +940,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改无法build的bug" />
     <MESSAGE value="添加日志模块。删除未使用模块" />
     <MESSAGE value="删除无用警报" />
     <MESSAGE value="优化查找范围。" />
@@ -965,7 +964,8 @@
     <MESSAGE value="提交需求判断" />
     <MESSAGE value="Vue-SEO准备" />
     <MESSAGE value="SEO优化提交" />
-    <option name="LAST_COMMIT_MESSAGE" value="SEO优化提交" />
+    <MESSAGE value="统一名称" />
+    <option name="LAST_COMMIT_MESSAGE" value="统一名称" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
