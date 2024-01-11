@@ -13,7 +13,7 @@ const router = createRouter({
       name: 'home',
       meta: {
         cacheable: true,
-        title: 'Exploit的Blog',
+        title: 'Exp1oit的Blog',
         // description: 'Exploit的Blog',
         keepAlive: true,
       },
