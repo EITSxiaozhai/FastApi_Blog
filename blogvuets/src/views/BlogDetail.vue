@@ -101,7 +101,7 @@ const getData = async () => {
     data.data = response.data;
     isLoading.value = false;
     document.title = data.data[0].title
-    myPage.value.description = data.data[0].content.substring(0, 50);
+    myPage.value.description = data.data[0].content
     setTimeout(() => {
       hljs.highlightAll();
     }, 0);
