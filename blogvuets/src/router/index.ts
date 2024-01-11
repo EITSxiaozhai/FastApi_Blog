@@ -48,10 +48,10 @@ const router = createRouter({
   ]
 });
 
-// router.beforeEach((to:any) => {
-//   if (to.meta.title) {
-//     document.title = to.meta.title;
-//   }
-// });
+router.beforeEach((to:any) => {
+  if (to.meta.title) {
+    document.title = to.meta.title;
+  }
+});
 
 export default router;

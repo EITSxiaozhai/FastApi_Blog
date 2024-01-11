@@ -17,24 +17,6 @@ import {UToast, createObjectURL} from 'undraw-ui';
 import {ElNotification} from "element-plus";
 import { useHead } from '@unhead/vue'
 
-const myPage = ref({ description: 'This is my page' })
-const title = ref('title')
-
-
-
-useHead({
-  // ref (recommended)
-  title,
-  // computer getter (recommended)
-
-  meta: [{ name: 'description', content: () => myPage.value.description },],
-  // computed (not recommended)
-})
-
-
-
-
-
 const route = useRoute()
 const value = ref()
 const icons = [ChatRound, ChatLineRound, ChatDotRound]
@@ -59,15 +41,16 @@ const tableOfContents = ref([]);
 
 const convertMarkdown = (markdownText, callback) => {
   let renderedContent = md.render(markdownText);
+
   renderedContent = renderedContent.replace(/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/g, '<a$1href="$2"$3 style="color: blue; text-decoration: underline;">$4</a>');
   const codeBlocks = renderedContent.match(/<pre><code class="lang-(.*?)">([\s\S]*?)<\/code><\/pre>/gm);
+
   if (codeBlocks) {
     codeBlocks.forEach(codeBlock => {
       const langMatch = codeBlock.match(/<code class="lang-(.*?)">/);
       const lang = langMatch ? langMatch[1] : null;
       const codeMatch = codeBlock.match(/<code class="lang-.*?">([\s\S]*?)<\/code>/);
       const code = codeMatch ? codeMatch[1] : null;
-
       if (lang && code) {
         const highlightedCode = hljs.highlight(lang, code).value;
         renderedContent = renderedContent.replace(
@@ -95,7 +78,9 @@ const convertMarkdown = (markdownText, callback) => {
     });
   }
   tableOfContents.value = toc;
+
   return renderedContent;
+
 };
 
 const handleStepClick = (index) => {
@@ -116,16 +101,23 @@ const getData = async () => {
     data.data = response.data;
     isLoading.value = false;
     document.title = data.data[0].title
+    myPage.value.description = data.data[0].content.substring(0, 50);
     setTimeout(() => {
       hljs.highlightAll();
     }, 0);
-
     // 触发目录生成逻辑
     generateTableOfContents(response.data.content);
   } catch (error) {
     console.error(error);
   }
 };
+
+const myPage = ref({ description: ''})
+
+useHead({
+   meta: [{ name: 'description', content: () => myPage.value.description }]
+  // computed (not recommended)
+})
 
 const generateTableOfContents = (markdownContent) => {
   if (typeof markdownContent !== 'string' || markdownContent.trim() === '') {
