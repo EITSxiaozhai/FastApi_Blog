@@ -36,8 +36,8 @@ app.mount("/static", StaticFiles(directory="./Fast_blog/static"), name="static")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=["https://blog.exploit-db.xyz", "https://blogapi.exploitblog.eu.org", "http://127.0.0.1:5173", "http://192.168.0.6:5173","https://zpwl002.oss-cn-hangzhou.aliyuncs.com"],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -106,4 +106,5 @@ async def startup_event():
     handler = logging.handlers.RotatingFileHandler("api.log",mode="a",maxBytes = 100*1024, backupCount = 3)
     handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
     logger.addHandler(handler)
+
 
