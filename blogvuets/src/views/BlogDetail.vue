@@ -32,10 +32,6 @@ const data = reactive({
 })
 
 
-
-
-
-
 // 转换markdown操作代码高亮和目录生成
 const convertMarkdown = (markdownText, callback) => {
   let renderedContent = md.render(markdownText);
@@ -190,7 +186,7 @@ const fingerprint = ref(null);
 // 挂载时操作
 onMounted(async () => {
    const commentx= ref(null)
-    // let h = commentx.value.
+
   // 使用Fingerprint2生成浏览器指纹
   const options = {
     excludes: {
@@ -280,10 +276,7 @@ const UpComments = async (str) => {
   const blogId = route.params.blogId;
   const token = localStorage.getItem("token"); // 从本地存储获取 token
   try {
-    if (!token) {
-      router.push('/login'); // 跳转到登录页面
-      return; // 提前结束函数执行
-    }
+
     const UpComment = await backApi.post(`/generaluser/${blogId}/commentsave`, {
       content: str,
     }, {
@@ -293,12 +286,13 @@ const UpComments = async (str) => {
     });
     if (UpComment.data.code === 40002) {
       // Token 已过期
-      console.error('Token 已过期');
+      UToast({message: 'Token无效，请尝试重新登录', type: 'info'})
       localStorage.removeItem("token"); // 删除本地存储中的过期 Token
       return; // 提前结束函数执行
     } else if (UpComment.data.code === 40003) {
       // 无效的 Token
       console.error('无效的 Token');
+      UToast({message: 'Token无效，请尝试重新登录', type: 'info'})
       localStorage.removeItem("token"); // 删除本地存储中的过期 Token
       return; // 提前结束函数执行
     } else {
@@ -313,9 +307,9 @@ const UpComments = async (str) => {
 const commentx = ref()
 
 onMounted(() => {
+  store.commit('setLastVisitedRoute', route.params.blogId);
   getAverageRating();
   LoadComments();
-
 });
 
 
@@ -332,7 +326,6 @@ const submitRating = async () => {
 const store = useStore();
 const usernames = computed(() => store.getters.getUsername);
 const tokens = computed(() => store.getters.getToken);
-
 
 const config = reactive({
   user: {
@@ -372,6 +365,7 @@ const submit = async ({content, parentId, files, finish, reply}) => {
         router.push('/login'); // 跳转到登录页面
       },
     })
+    UToast({message: '未登录状态,评论将不会保存', type: 'info'})
     // 如果没有 token，阻止评论的提交并提示用户去登录
     return;
   }
@@ -405,7 +399,6 @@ const submit = async ({content, parentId, files, finish, reply}) => {
 }
 // 点赞按钮事件 将评论id返回后端判断是否点赞，然后在处理点赞状态
 const like = (id, finish) => {
-
   setTimeout(() => {
     finish()
   }, 200)

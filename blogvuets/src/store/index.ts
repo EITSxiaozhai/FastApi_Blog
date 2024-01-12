@@ -10,8 +10,12 @@ export default createStore({
   state: {
     token: '', // 初始状态为空令牌
     username: '', // 添加一个用于用户名的新属性
+    lastVisitedRoute: '',
   },
   mutations: {
+    setLastVisitedRoute(state, route) {
+      state.lastVisitedRoute = route;
+    },
     setTokenAndUsername(state, { token, username }) {
     state.token = token;
     state.username = username;
@@ -24,13 +28,14 @@ export default createStore({
     },
   },
   getters: {
+      getLastVisitedRoute: (state) => {
+    return state.lastVisitedRoute;
+  },
     getToken(state) {
-
       return state.token;
     },
     getUsername(state) {
       // Example getter
-
       return state.username
     },
   },

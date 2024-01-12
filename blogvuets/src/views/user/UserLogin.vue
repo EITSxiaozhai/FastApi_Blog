@@ -75,8 +75,13 @@ const login = async () => {
       store.commit('setTokenAndUsername', { token: newToken, username });
       // 更新 Vuex store 中的用户名
       store.commit('setUsername', username);
-      router.push('/blog'); // 使用router进行页面重定向
-
+      if (store.getters.getLastVisitedRoute){
+        const routepage = store.getters.getLastVisitedRoute
+        router.push(`/blog/${routepage}`);
+      }
+      else {
+        router.push(`/`);
+      }
       ElNotification({
     title: 'Success',
     message: '登录成功',
