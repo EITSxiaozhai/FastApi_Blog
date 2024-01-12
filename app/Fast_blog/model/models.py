@@ -148,7 +148,7 @@ class PowerMeters(Base):
         return dict(DataNum=self.DataNum, electricityNum=self.electricityNum, PowerConsumption=self.PowerConsumption,
                     AveragePower=self.AveragePower)
 
-
+@dataclass
 class BlogRating(Base):
     __tablename__ = "blog_ratings"
     id = Column(Integer, primary_key=True, index=True)
@@ -159,12 +159,23 @@ class BlogRating(Base):
     def to_dict(self):
         return dict(blog_id=self.blog_id, rating=self.rating, blog=self.blog)
 
-
+@dataclass
 class Vote(Base):
     __tablename__ = "votes"
-
     id = Column(Integer, primary_key=True, index=True)
     device_id = Column(String(255), index=True)  # 指定了长度为 255 字符
     blog_id = Column(String(255), index=True)
     vote_count = Column(Integer, default=0)
     __table_args__ = (UniqueConstraint('device_id', 'blog_id'),)
+
+@dataclass
+class ReptileInclusion(Base):
+    __tablename__ = "ReptileInclusion"
+    id = Column(Integer,primary_key=True, index=True)
+    blog_id = Column(Integer, ForeignKey("blogtable.BlogId"))
+    GoogleSubmissionStatus = Column(String(255))
+    BingSubmissionStatus = Column(String(255))
+    Submissiontime = Column(DateTime,default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+    def to_dict(self):
+        return dict(id=self.id, blog_id=self.blog_id, GoogleSubmissionStatus=self.googleSubmissionStatus, BingSubmissionStatus=self.bingSubmissionStatus, Submissiontime=self.Submissiontime)
