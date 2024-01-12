@@ -12,7 +12,8 @@ from sqlalchemy import select, update, delete
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import joinedload
 from starlette.background import BackgroundTasks
-
+from oauth2client.service_account import ServiceAccountCredentials
+import httplib2
 from app.Fast_blog.database.database import db_session
 from app.Fast_blog.middleware.backlist import Adminoauth2_scheme, aliOssUpload, verify_recaptcha
 from app.Fast_blog.model import models
@@ -454,3 +455,24 @@ async def BlogTagModify(blog_id: int, type: str, token: str = Depends(Adminoauth
             return {"data": "修改成功", "code": 20000}
         except Exception as e:
             print("我们遇到了下面的问题", {"data": str(e)})
+
+
+
+SCOPES = ["https://www.googleapis.com/auth/indexing"]
+ENDPOINT = "https://indexing.googleapis.com/v3/urlNotifications:publish"
+JSON_KEY_FILE = "C:\\Users\\admin\\Desktop\\google.json"
+
+@AdminApi.get('/googleoauth2')
+async def publish_url_notification(url, notification_type="URL_UPDATED"):
+    async with db_session() as session:
+        credentials = ServiceAccountCredentials.from_json_keyfile_name(JSON_KEY_FILE, scopes=SCOPES)
+        http = credentials.authorize(httplib2.Http())
+        # Prepare the content as a JSON string
+        content = {
+            "url": url,
+            "type": notification_type
+        }
+        # Send the request
+        response, content = http.request(ENDPOINT, method="POST", body=str(content))
+        getinfo  = http.request(f"https://indexing.googleapis.com/v3/urlNotifications/metadata?url={url}", method="GET")
+        return getinfo
