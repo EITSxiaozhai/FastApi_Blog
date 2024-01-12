@@ -49,7 +49,7 @@ subprocess.Popen(celery_command, shell=True)
 
 SCOPES = ["https://www.googleapis.com/auth/indexing"]
 ENDPOINT = "https://indexing.googleapis.com/v3/urlNotifications:publish"
-JSON_KEY_FILE = "E:\\pytest\\FastApi_Blog\\app\\google.json"
+JSON_KEY_FILE = "C:\\Users\\admin\\Desktop\\google.json"
 @app.get('/googleoauth2')
 def publish_url_notification(url, notification_type="URL_UPDATED"):
     # Load the credentials

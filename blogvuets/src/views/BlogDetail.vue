@@ -15,14 +15,17 @@ import {useStore} from 'vuex';
 import emoji from '@/assets/emoji'
 import {UToast, createObjectURL} from 'undraw-ui';
 import {ElNotification} from "element-plus";
-import { useHead } from '@unhead/vue'
+import {useHead} from '@unhead/vue'
 
+// 常用变量操作
 const route = useRoute()
 const value = ref()
 const icons = [ChatRound, ChatLineRound, ChatDotRound]
 const isLoading = ref(true); // 初始时，骨架屏可见
-
-
+const currentStep = ref(0); // 创建响应式变量用于跟踪当前标题索引
+// 创建Markdown渲染器实例
+const md = new MarkdownIt();
+const tableOfContents = ref([]);
 const router = useRouter()
 const data = reactive({
   data: []
@@ -31,14 +34,9 @@ const data = reactive({
 
 
 
-const currentStep = ref(0); // 创建响应式变量用于跟踪当前标题索引
 
 
-// 创建Markdown渲染器实例
-const md = new MarkdownIt();
-
-const tableOfContents = ref([]);
-
+// 转换markdown操作代码高亮和目录生成
 const convertMarkdown = (markdownText, callback) => {
   let renderedContent = md.render(markdownText);
 
@@ -78,22 +76,19 @@ const convertMarkdown = (markdownText, callback) => {
     });
   }
   tableOfContents.value = toc;
-
   return renderedContent;
-
 };
 
 const handleStepClick = (index) => {
-
   const anchor = `#anchor-${index}`;
   const targetElement = document.querySelector(anchor);
-
   if (targetElement) {
     // Use smooth scroll effect, remove options if you don't need smooth scrolling
-    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
   }
 };
 
+// 博客内容获取操作
 const getData = async () => {
   const blogId = route.params.blogId;
   try {
@@ -111,14 +106,16 @@ const getData = async () => {
     console.error(error);
   }
 };
-
-const myPage = ref({ description: ''})
-
+// 页面元数据变量
+const myPage = ref({description: ''})
+// 操作页面元数据
 useHead({
-   meta: [{ name: 'description', content: () => myPage.value.description }]
+  meta: [{name: 'description', content: () => myPage.value.description}]
   // computed (not recommended)
 })
 
+
+// Markdown格式话操作
 const generateTableOfContents = (markdownContent) => {
   if (typeof markdownContent !== 'string' || markdownContent.trim() === '') {
     // 如果 markdownContent 为空或不是字符串，直接返回
@@ -144,13 +141,16 @@ const generateTableOfContents = (markdownContent) => {
 };
 
 getData()
+
+// 阅读进度变量
 const readingProgress = ref(0);
 let totalCharacters = 0;
 
+// 获取阅读进度操作
 const updateReadingProgress = () => {
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
   const windowHeight = window.innerHeight;
-  const documentHeight = document.documentElement.scrollHeight;
+  const documentHeight = document.documentElement.scrollHeight - commentx.value;
   const scrollableDistance = documentHeight - windowHeight;
   const scrollPercentage = (scrollTop / scrollableDistance) * 100;
 
@@ -158,9 +158,10 @@ const updateReadingProgress = () => {
   // 根据阅读进度计算当前标题索引
   const totalSteps = tableOfContents.value.length;
   const calculatedStep = Math.floor((scrollPercentage / 100) * totalSteps);
+
   // 更新currentStep
   currentStep.value = calculatedStep;
-  stepMarginTop.value = -calculatedStep * 20;
+  stepMarginTop.value = -calculatedStep * 15;
   readingProgress.value = scrollPercentage;
 };
 
@@ -183,8 +184,13 @@ onBeforeUnmount(() => {
   window.removeEventListener('scroll', updateReadingProgress);
 });
 
+// 设备id变量
 const fingerprint = ref(null);
+
+// 挂载时操作
 onMounted(async () => {
+   const commentx= ref(null)
+    // let h = commentx.value.
   // 使用Fingerprint2生成浏览器指纹
   const options = {
     excludes: {
@@ -203,6 +209,9 @@ onMounted(async () => {
   });
 });
 
+
+
+// 投票方法操作
 const vote = async () => {
   const blogId = route.params.blogId;
   const device_id = fingerprint.value;
@@ -233,7 +242,9 @@ const vote = async () => {
 };
 
 
+// 平均分变量
 const averageRating = ref(0); // 创建一个 ref 来存储平均评分
+
 
 // 获取平均评分数据并设置到 averageRating
 const getAverageRating = async () => {
@@ -246,18 +257,25 @@ const getAverageRating = async () => {
   }
 };
 
+
+//加载评论操作
 const LoadComments = async () => {
   const blogId = route.params.blogId;
   try {
     const CommentList = await backApi.post(`/generaluser/${blogId}/commentlist`);
     config.comments = CommentList.data;
     console.log(config.comments)
+    //获取到评论后下个Tick才会读取评论区高度
+      nextTick(()=>{
+    commentx.value = commentx.value.offsetHeight;
+    console.log(commentx.value)
+  })
   } catch (error) {
     console.error(error);
   }
 };
 
-
+//提交评论操作
 const UpComments = async (str) => {
   const blogId = route.params.blogId;
   const token = localStorage.getItem("token"); // 从本地存储获取 token
@@ -292,11 +310,14 @@ const UpComments = async (str) => {
   }
 };
 
+const commentx = ref()
 
 onMounted(() => {
   getAverageRating();
   LoadComments();
+
 });
+
 
 const submitRating = async () => {
 
@@ -479,16 +500,18 @@ const redirectToUserProfile = () => {
         </el-card>
         <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
           <div v-for="(item, index) in data.data" :key="index" class="text item">
-            <div >
-              <div  v-html="convertMarkdown(item.content)"></div>
+            <div>
+              <div v-html="convertMarkdown(item.content)"></div>
             </div>
           </div>
         </el-card>
         <el-skeleton :rows="5" animated v-else/>
-        <el-card ref="comment" style="margin-top: 1%">
+        <div ref="commentx" >
+        <el-card  style="margin-top: 1%">
           <u-comment :config="config" @submit="submit" @like="like">
           </u-comment>
         </el-card>
+          </div>
       </el-main>
 
     </el-container>
@@ -518,7 +541,6 @@ const redirectToUserProfile = () => {
   top: 0;
   z-index: 2;
 }
-
 
 
 </style>

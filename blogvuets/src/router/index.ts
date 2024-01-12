@@ -54,4 +54,12 @@ router.beforeEach((to:any) => {
   }
 });
 
+router.beforeEach((to,from,next) => {
+  if (to.matched.length === 0){
+    from.path? next({path:from.path}) : next('/');
+  }else {
+    next();
+  }
+});
+
 export default router;

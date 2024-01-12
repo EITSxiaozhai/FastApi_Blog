@@ -24,6 +24,7 @@
     "jsonwebtoken": "^9.0.2",
     "markdown-it": "^13.0.1",
     "os": "^0.1.2",
+    "toc-creator": "^1.0.6",
     "typeit": "^8.7.1",
     "undraw-ui": "^1.0.2",
     "unplugin-auto-import": "^0.16.6",
