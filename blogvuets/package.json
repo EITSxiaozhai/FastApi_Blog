@@ -18,7 +18,7 @@
     "@vitejs/plugin-vue": "^4.3.4",
     "axios": "^1.5.0",
     "core-js": "^3.8.3",
-    "element-plus": "^2.3.14",
+    "element-plus": "^2.4.0",
     "fingerprintjs2": "^2.1.4",
     "grecaptcha": "^1.0.3",
     "jsonwebtoken": "^9.0.2",

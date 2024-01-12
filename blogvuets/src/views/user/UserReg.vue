@@ -1,17 +1,21 @@
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
+import {ref, reactive, watch, onBeforeMount, nextTick} from 'vue';
 import vueRecaptcha from 'vue3-recaptcha2';
-import { ElNotification } from 'element-plus';
+import { ElNotification,ElUpload,ElMessage } from 'element-plus';
 import backApi from "@/Api/backApi";
 import { Plus } from '@element-plus/icons-vue'
 import type { UploadProps } from 'element-plus'
-import {post} from "axios";
+import { useRouter } from 'vue-router';
+import type { FormInstance } from 'element-plus'
 
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
 
 const imageUrl = ref('')
+let router;
 
-
+onBeforeMount(() => {
+  router = useRouter(); // 在组件挂载之前获取路由器实例
+});
 
 const handleAvatarSuccess: UploadProps['onSuccess'] = (
   response,
@@ -35,9 +39,9 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
 const googleRecaptchaVerified = ref(false);
 
 // 回傳一組 token，並把 token 傳給後端驗證
-const recaptchaVerified = (res) => {
+const recaptchaVerified = (res:any) => {
   // 设置 googleRecaptchaVerified 为 true
-  RegisterUserForm.value.googlerecaptcha = res
+  RegisterUserForm.googlerecaptcha = res
   googleRecaptchaVerified.value = true;
 
 };
@@ -50,7 +54,7 @@ const recaptchaFailed = () => {
   // 失敗執行動作
 };
 
-const RegisterUserForm = ref({
+const RegisterUserForm = reactive({
   username: '',
   email: '',
   password: '',
@@ -62,64 +66,18 @@ const RegisterUserForm = ref({
 });
 
 
-const validatePassword = (rule, value, callback) => {
-
-  if (value === undefined) {
-    callback(new Error('密码不能为空'));
-  } else if (value === '') {
-    callback(new Error('请输入密码'));
-  } else if (value.length < 8) {
-    callback(new Error('密码长度不能小于 8 位'));
-  } else {
-    callback();
-  }
-};
-
-const validateConfirmPassword = (rule, value, callback) => {
-  if (value === '') {
-    callback(new Error('请再次输入密码'));
-  } else if (value !== RegisterUserForm.value.password) {
-    callback(new Error('两次输入密码不一致'));
-  } else {
-    callback();
-  }
-};
-
-const validateUsername = (rule, value, callback) => {
-
-
-  //匹配不包含空格和中文字符的用户名
-  const reg = /^[^\s\u4e00-\u9fa5]+$/;
-  if (!reg.test(value)) {
-    callback(new Error('用户名不能包含空格和中文字符'));
-  } else {
-    callback();
-  }
-};
-
-const validateEmail = (rule, value, callback) => {
-  const reg = /^[a-zA-Z0-9_-]*@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-  if (!reg.test(value)) {
-    callback(new Error('请输入正确的邮箱地址'));
-  } else {
-    callback();
-  }
-};
-
-
 const verificationCodeDisabled = ref(false);
 const verificationCodeButtonText = ref('获取验证码');
 
 const getVerificationCode = async () => {
   // 检查邮箱是否为空
-  if (!RegisterUserForm.value.email) {
+  if (!RegisterUserForm.email) {
     // 如果邮箱为空，不发送请求
     console.log("Email is empty. Request not sent.");
     return;
   }
-
   const response = await backApi.post('/generaluser/emailcod', {
-    email: RegisterUserForm.value.email,
+    email: RegisterUserForm.email,
   });
 
   // 在这里执行获取验证码的逻辑
@@ -140,18 +98,78 @@ const getVerificationCode = async () => {
   }, 1000);
 };
 
+
+const ruleFormRef = ref<FormInstance>()
+
+const validateUsername = (rule: any, value: any, callback: any) => {
+  const reg = /^[^\s\u4e00-\u9fa5]+$/;
+  if (!reg.test(value)) {
+    callback(new Error('用户名不能包含空格和中文字符'));
+  } else {
+    callback();
+  }
+};
+
+const validatePass = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('Please input the password'))
+  } else {
+    if (RegisterUserForm.confirmPassword !== '') {
+      if (!ruleFormRef.value) return
+      ruleFormRef.value.validateField('checkPass', () => null)
+    }
+    callback()
+  }
+}
+
+const validatePass2 = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('Please input the password again'))
+  } else if (value !== RegisterUserForm.password) {
+    callback(new Error("Two inputs don't match!"))
+  } else {
+    callback()
+  }
+}
+
+
+const validateEmail = (rule: any, value: any, callback: any) => {
+  const reg = /^[a-zA-Z0-9_-]*@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+  if (!reg.test(value)) {
+    callback(new Error('请输入正确的邮箱地址'));
+  } else {
+    callback();
+  }
+};
+
+const rules = reactive({
+  username: [
+    { validator: validateUsername, trigger: 'blur' }
+  ],
+  password: [
+    { validator: validatePass, trigger: 'blur' }
+  ],
+  confirmPassword: [
+    { validator: validatePass2, trigger: 'blur' }
+  ],
+  email: [
+    { validator: validateEmail, trigger: 'blur' }
+  ],
+});
+
+
 const register = async () => {
   try {
     // Check if Google reCAPTCHA is verified
     if (googleRecaptchaVerified.value) {
       // Perform registration logic
       const response = await backApi.post('/generaluser/reguser', {
-        username: RegisterUserForm.value.username,
-        password: RegisterUserForm.value.password,
-        confirmpassword: RegisterUserForm.value.confirmPassword,
-        email: RegisterUserForm.value.email,
-        googlerecaptcha : RegisterUserForm.value.googlerecaptcha,
-        EmailverificationCod: RegisterUserForm.value.EmailverificationCod,
+        username: RegisterUserForm.username,
+        password: RegisterUserForm.password,
+        confirmpassword: RegisterUserForm.confirmPassword,
+        email: RegisterUserForm.email,
+        googlerecaptcha : RegisterUserForm.googlerecaptcha,
+        EmailverificationCod: RegisterUserForm.EmailverificationCod,
 
         // Other registration fields
       });
@@ -165,9 +183,8 @@ const register = async () => {
           message: 'Registration successful',
           type: 'success',
         });
-
         // After successful registration, you may want to perform other actions, such as redirecting to the login page
-        this.router.push('/login');
+        router.push('/login');
       } else {
         // Registration failed
         console.error('Registration failed:', response.data.message);
@@ -191,6 +208,18 @@ const register = async () => {
 
   }
 };
+const uploadAvatarRef = ref(null);
+
+const ossUpload = async (param:any) => {
+  if (ElUpload.props.ref === 'uploadavatar') {
+    ElUpload.methods.clearFiles.call(ElUpload);
+  }
+  const formData = new FormData();
+  formData.append('file', param.file);
+  await backApi.post('/generaluser/putuser', formData);
+};
+
+
 </script>
 
 <template>
@@ -202,39 +231,40 @@ const register = async () => {
     v-model="RegisterUserForm"
     label-width="80px"
     class="register-form"
-    ref="registerForm"
+    ref="ruleFormRef"
+    :rules="rules"
     @submit.prevent="register"
 
   >
-<el-form-item label="用户名" prop="username" :rules="[{ validator: validateUsername, trigger: 'blur' }]">
-    <el-input  v-model="RegisterUserForm.username" placeholder="请输入用户名"></el-input>
+<el-form-item label="用户名" prop="username" :rules="rules.username">
+    <el-input  v-model.trim="RegisterUserForm.username" placeholder="请输入用户名"></el-input>
   </el-form-item>
 
-  <el-form-item label="密码" prop="password" :rules="[{ validator: validatePassword, trigger: 'blur' }]">
+  <el-form-item label="密码" prop="password" :rules="rules.password">
     <el-input
       type="password"
-      v-model="RegisterUserForm.password"
+      v-model.trim="RegisterUserForm.password"
       placeholder="请输入密码"
       :show-password="true"
     ></el-input>
   </el-form-item>
 
-  <el-form-item label="确认密码" prop="confirmPassword" :rules="[{ validator: validateConfirmPassword, trigger: 'blur' }]">
+  <el-form-item label="确认密码" prop="confirmPassword" :rules="rules.confirmPassword">
     <el-input
       type="password"
-      v-model="RegisterUserForm.confirmPassword"
+      v-model.trim="RegisterUserForm.confirmPassword"
       placeholder="请确认密码"
       :show-password="true"
     ></el-input>
   </el-form-item>
 
-  <el-form-item label="邮箱" prop="email" :rules="[{ validator: validateEmail, trigger: 'blur' }]">
-    <el-input  v-model="RegisterUserForm.email" placeholder="请输入邮箱"></el-input>
+  <el-form-item label="邮箱" prop="email" :rules="rules.email">
+    <el-input  v-model.trim="RegisterUserForm.email" placeholder="请输入邮箱"></el-input>
   </el-form-item>
 
     <el-form-item label="验证码" prop="verificationCode">
       <el-input
-        v-model="RegisterUserForm.EmailverificationCod"
+        v-model.trim="RegisterUserForm.EmailverificationCod"
         placeholder="请输入验证码"
       ></el-input>
       <el-button
@@ -259,12 +289,13 @@ const register = async () => {
 </vueRecaptcha>
       </div>
       </el-form-item>
-      <el-form-item>
+      <el-form-item label="你的头像" >
           <el-upload
     class="avatar-uploader"
-    action= "http://127.0.0.1:8000/api/generaluser/putuser"
+    action=#
+    ref="uploadavatar"
     :show-file-list="false"
-    method="post"
+    :http-request="ossUpload"
     :on-success="handleAvatarSuccess"
     :before-upload="beforeAvatarUpload"
   >
