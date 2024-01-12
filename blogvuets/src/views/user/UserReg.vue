@@ -123,11 +123,18 @@ const validatePass = (rule: any, value: any, callback: any) => {
 }
 
 const validatePass2 = (rule: any, value: any, callback: any) => {
+  console.log('Entered validatePass2:', RegisterUserForm);
   if (value === '') {
-    callback(new Error('Please input the password again'))
+    console.log('Empty value:', RegisterUserForm);
+    callback(new Error('请再次输入密码'))
+  } else if (RegisterUserForm.password === '') {
+    console.log('Empty password:', RegisterUserForm);
+    callback(new Error('请先输入密码'))
   } else if (value !== RegisterUserForm.password) {
-    callback(new Error("Two inputs don't match!"))
+    console.log('Mismatch:', RegisterUserForm);
+    callback(new Error("两次输入不一致"))
   } else {
+    console.log('Validation passed:', RegisterUserForm);
     callback()
   }
 }
@@ -231,7 +238,7 @@ const ossUpload = async (param:any) => {
     v-model="RegisterUserForm"
     label-width="80px"
     class="register-form"
-    ref="ruleFormRef"
+    :ref="ruleFormRef"
     :rules="rules"
     @submit.prevent="register"
 
@@ -240,23 +247,23 @@ const ossUpload = async (param:any) => {
     <el-input  v-model.trim="RegisterUserForm.username" placeholder="请输入用户名"></el-input>
   </el-form-item>
 
-  <el-form-item label="密码" prop="password" :rules="rules.password">
-    <el-input
-      type="password"
-      v-model.trim="RegisterUserForm.password"
-      placeholder="请输入密码"
-      :show-password="true"
-    ></el-input>
-  </el-form-item>
+<el-form-item label="密码" prop="password" :rules="rules.password">
+  <el-input
+    type="password"
+    v-model.trim="RegisterUserForm.password"
+    placeholder="请输入密码"
+    :show-password="true"
+  ></el-input>
+</el-form-item>
 
-  <el-form-item label="确认密码" prop="confirmPassword" :rules="rules.confirmPassword">
-    <el-input
-      type="password"
-      v-model.trim="RegisterUserForm.confirmPassword"
-      placeholder="请确认密码"
-      :show-password="true"
-    ></el-input>
-  </el-form-item>
+<el-form-item label="确认密码" prop="confirmPassword" :rules="rules.confirmPassword">
+  <el-input
+    type="password"
+    v-model.trim="RegisterUserForm.confirmPassword"
+    placeholder="请确认密码"
+    :show-password="true"
+  ></el-input>
+</el-form-item>
 
   <el-form-item label="邮箱" prop="email" :rules="rules.email">
     <el-input  v-model.trim="RegisterUserForm.email" placeholder="请输入邮箱"></el-input>
