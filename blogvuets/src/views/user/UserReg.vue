@@ -7,6 +7,7 @@ import {Plus} from '@element-plus/icons-vue'
 import type {UploadProps} from 'element-plus'
 import {useRouter} from 'vue-router';
 import type {FormInstance} from 'element-plus'
+import _ from 'lodash';
 import {valueOf} from "axios";
 
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
@@ -102,13 +103,29 @@ const getVerificationCode = async () => {
 
 const ruleFormRef = ref<FormInstance>()
 
-const validateUsername = (rule: any, value: any, callback: any) => {
-  console.log(value)
+const debouncedCheckUsername = _.debounce(async (username, callback) => {
+  try {
+    const response = await backApi.post('/generaluser/check-username', { username:username });
+    if (response.data.exists) {
+      callback(new Error('用户名已存在'));
+    } else {
+      callback();
+    }
+  } catch (error) {
+    console.error('Error checking username:', error);
+    callback(new Error('验证用户名时发生错误'));
+  }
+}, 500);  // 500毫秒的防抖延迟
+
+const validateUsername = (rule:any, value:any, callback:any) => {
+  console.log(value);
   const reg = /^[^\s\u4e00-\u9fa5]+$/;
+
   if (!reg.test(value)) {
     callback(new Error('用户名不能包含空格和中文字符'));
   } else {
-    callback();
+    // 使用防抖函数触发用户名检查
+    debouncedCheckUsername(value, callback);
   }
 };
 
@@ -155,7 +172,7 @@ const validateEmail = (rule: any, value: any, callback: any) => {
 
 const rules = reactive({
   username: [
-    {required: true, min: 6, max: 18, message: "必填,且长度在 6 到 18 个字符",validator: validateUsername,trigger: 'change'}
+    {required: true, min: 6, max: 18,validator: validateUsername,trigger: 'change'}
   ],
   password: [
     {required: true, message: "请填写你的密码", validator: validatePass, trigger: 'change'}
