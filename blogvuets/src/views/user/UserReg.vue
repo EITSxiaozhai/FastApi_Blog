@@ -237,7 +237,7 @@ const uploadAvatarRef = ref(null);
 
 const ossUpload = async (param: any) => {
   if (ElUpload.props.ref === 'uploadavatar') {
-      const clearFiles = this.$refs.upload.clearFiles();
+    // ElUpload.methods.clearFiles.call(ElUpload);
   }
   const formData = new FormData();
   formData.append('file', param.file);
