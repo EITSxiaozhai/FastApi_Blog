@@ -38,15 +38,18 @@ def UUID_crt(UuidApi):
     return UuidGenerator
 
 
-@UserApp.get("/getuser")
-async def GetUser(inputusername: str):
+@UserApp.post("/check-username")
+async def GetUser(request: Request):
     async with db_session() as session:
         try:
-            stmt = select(models.User).filter_by(username=inputusername)
+            icomeuser = await request.json()
+            stmt = select(models.User).filter_by(username=icomeuser['username'])
             result = await session.execute(stmt)
-            for row in result.scalars():
-                x = row.__dict__['username']
-                return ({"Username:": x})
+            row = result.scalars().first()
+            if row is None:
+                return {"exists": False, "data": "用户未存在"}  # 用户存在
+            else:
+                return {"exists": True, "data": "用户存在"}  # 用户不存在
         except Exception as e:
             print(e)
 
