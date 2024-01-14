@@ -9,7 +9,5 @@ import 'element-plus/dist/index.css'
 import { createHead } from '@unhead/vue'
 
 
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-createApp(App).use(store).use(router).use(UndrawUi).use(ElementPlus).use(createHead).mount('#app')
+const head = createHead()
+createApp(App).use(store).use(router).use(UndrawUi).use(ElementPlus).use(head).mount('#app')

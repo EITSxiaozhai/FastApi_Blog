@@ -9,6 +9,7 @@ import {useRouter} from 'vue-router';
 import type {FormInstance} from 'element-plus'
 import _ from 'lodash';
 
+
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
 
 const imageUrl = ref('')
@@ -244,7 +245,7 @@ const ossUpload = async (param: any) => {
   await backApi.post('/generaluser/putuser', formData);
 };
 
-
+          // :ref="RegisterUserForm"
 </script>
 
 <template>
@@ -258,7 +259,6 @@ const ossUpload = async (param: any) => {
           v-model="RegisterUserForm"
           label-width="80px"
           class="register-form"
-          :ref="RegisterUserForm"
           :rules="rules"
           @submit.prevent="register"
       >
