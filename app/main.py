@@ -43,17 +43,18 @@ app.add_middleware(
 )
 
 
-celery_command = "celery -A Fast_blog.middleware.backlist worker --loglevel=info -P eventlet"
-subprocess.Popen(celery_command, shell=True)
+# celery_command = "celery -A Fast_blog.middleware.backlist worker --loglevel=info -P eventlet"
+# subprocess.Popen(celery_command, shell=True)
+
+# @app.get('/googlesitemap')
+# def sitemap_push():
+#     url = "http://example.com/jobs/42"
+#     response, content = publish_url_notification(url)
+#     return response, content
 
 
 
 
-@app.get('/googlesitemap')
-def sitemap_push():
-    url = "http://example.com/jobs/42"
-    response, content = publish_url_notification(url)
-    return response, content
 
 @app.get("/")
 async def root():

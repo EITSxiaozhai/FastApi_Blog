@@ -4,9 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="删除无用包">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="优化提交sitemap">
+      <change afterPath="$PROJECT_DIR$/alembic/versions/3a2bcc686083_added_account_table.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alembic/versions/d976a2beb686_added_account_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/model/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -124,7 +128,7 @@
     "TODO_SCOPE": "All Places",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "D:/FastApi_Blog/blogvuets/public",
+    "last_opened_file_path": "E:/pytest/FastApi_Blog/alembic/versions",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -144,18 +148,18 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\pytest\FastApi_Blog\alembic\versions" />
       <recent name="D:\FastApi_Blog\blogvuets\public" />
       <recent name="D:\FastApi_Blog\blogvuets\src\views\pages" />
       <recent name="D:\项目备份\fast-api\blogvuets" />
       <recent name="D:\项目备份\fast-api\blogvuets\src\assets" />
-      <recent name="D:\项目备份\fast-api\blogvuets\public" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\pytest\FastApi_Blog\alembic\versions" />
       <recent name="D:\项目备份\fast-api\BlogIndex\src\assets" />
       <recent name="D:\项目备份\fast-api\vue-element-admin-master\src\views\admin\BlogPosts" />
       <recent name="D:\项目备份\fast-api\app\Fast_blog\apps\AdminApp" />
       <recent name="D:\项目备份\fast-api\vue-project\src\views" />
-      <recent name="D:\项目备份\fast-api\vue-project\src\views\index" />
     </key>
   </component>
   <component name="RunManager" selected="Python.1">
@@ -554,6 +558,7 @@
       <workItem from="1704796308315" duration="23195000" />
       <workItem from="1704933405381" duration="18841000" />
       <workItem from="1705019514993" duration="20307000" />
+      <workItem from="1705217294334" duration="4339000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -898,7 +903,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="339" />
+    <option name="localTasksCounter" value="340" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -942,7 +947,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="模块修改-评论时显示用户名" />
     <MESSAGE value="添加头像OSS" />
     <MESSAGE value="添加头像栏位" />
     <MESSAGE value="添加头像操作API" />
@@ -967,7 +971,8 @@
     <MESSAGE value="添加跨域判断" />
     <MESSAGE value="添加收录状态库" />
     <MESSAGE value="删除无用包" />
-    <option name="LAST_COMMIT_MESSAGE" value="删除无用包" />
+    <MESSAGE value="优化提交sitemap" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化提交sitemap" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

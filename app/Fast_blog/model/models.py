@@ -3,7 +3,7 @@ import datetime
 from typing import List
 
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, MetaData, LargeBinary, DATETIME, Float, \
-    UniqueConstraint
+    UniqueConstraint, Text
 from sqlalchemy.orm import relationship, Mapped
 from sqlalchemy_utils import EmailType, ChoiceType, PasswordType, Choice
 from app.Fast_blog.database.database import Base, engine
@@ -176,6 +176,7 @@ class ReptileInclusion(Base):
     GoogleSubmissionStatus = Column(String(255))
     BingSubmissionStatus = Column(String(255))
     Submissiontime = Column(DateTime,default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    ReturnLog = Column(Text)
 
     def to_dict(self):
         return dict(id=self.id, blog_id=self.blog_id, GoogleSubmissionStatus=self.googleSubmissionStatus, BingSubmissionStatus=self.bingSubmissionStatus, Submissiontime=self.Submissiontime)

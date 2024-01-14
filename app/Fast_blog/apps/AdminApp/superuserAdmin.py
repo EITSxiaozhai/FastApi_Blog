@@ -1,3 +1,4 @@
+import json
 import os
 import uuid
 import datetime
@@ -17,7 +18,7 @@ import httplib2
 from app.Fast_blog.database.database import db_session
 from app.Fast_blog.middleware.backlist import Adminoauth2_scheme, aliOssUpload, verify_recaptcha
 from app.Fast_blog.model import models
-from app.Fast_blog.model.models import AdminUser, UserPrivileges, Blog, BlogTag
+from app.Fast_blog.model.models import AdminUser, UserPrivileges, Blog, BlogTag, ReptileInclusion
 from app.Fast_blog.schemas.schemas import UserCredentials
 
 AdminApi = APIRouter()
@@ -460,19 +461,55 @@ async def BlogTagModify(blog_id: int, type: str, token: str = Depends(Adminoauth
 
 SCOPES = ["https://www.googleapis.com/auth/indexing"]
 ENDPOINT = "https://indexing.googleapis.com/v3/urlNotifications:publish"
-JSON_KEY_FILE = "C:\\Users\\admin\\Desktop\\google.json"
+JSON_KEY_FILE = "E:\\pytest\\FastApi_Blog\\app\\google.json"
 
 @AdminApi.get('/googleoauth2')
-async def publish_url_notification(url, notification_type="URL_UPDATED"):
+async def publish_url_notification(notification_type="URL_UPDATED"):
     async with db_session() as session:
-        credentials = ServiceAccountCredentials.from_json_keyfile_name(JSON_KEY_FILE, scopes=SCOPES)
-        http = credentials.authorize(httplib2.Http())
-        # Prepare the content as a JSON string
-        content = {
-            "url": url,
-            "type": notification_type
-        }
-        # Send the request
-        response, content = http.request(ENDPOINT, method="POST", body=str(content))
-        getinfo  = http.request(f"https://indexing.googleapis.com/v3/urlNotifications/metadata?url={url}", method="GET")
-        return getinfo
+        try:
+            # 异步执行查询
+            all_blog_ids = await session.execute(select(Blog.BlogId))
+
+            for blog_id in all_blog_ids.scalars():
+                # 构建博客的完整URL
+                blog_url = f"https://blog.exploit-db.xyz/blog/{blog_id}"
+
+                # 发送通知
+                credentials = ServiceAccountCredentials.from_json_keyfile_name(JSON_KEY_FILE, scopes=SCOPES)
+                http = credentials.authorize(httplib2.Http())
+                content = {
+                    "url": blog_url,
+                    "type": "URL_UPDATED"
+                }
+                response, response_content = http.request(ENDPOINT, method="POST", body=str(content))
+                get_info = http.request(f"https://indexing.googleapis.com/v3/urlNotifications/metadata?url={blog_url}",
+                                        method="GET")
+
+                # 更新或创建 ReptileInclusion 表的相应记录
+                status = response.get('status', '')
+
+                # 异步执行查询
+                reptile_inclusion = await session.execute(
+                    select(ReptileInclusion).filter(ReptileInclusion.blog_id == blog_id))
+
+                if reptile_inclusion.first() is not None:
+                    # 从异步查询结果中获取实际对象
+                    reptile_inclusion = reptile_inclusion.first().scalar()
+                    reptile_inclusion.GoogleSubmissionStatus = status
+                    reptile_inclusion.Submissiontime = datetime.datetime.now()
+                    reptile_inclusion.ReturnLog = response
+                else:
+                    # 记录不存在，创建新的记录
+                    new_reptile_inclusion = ReptileInclusion(blog_id=blog_id,
+                                                             GoogleSubmissionStatus=status,
+                                                             Submissiontime=datetime.datetime.now(),ReturnLog=response)
+                    session.add(new_reptile_inclusion)
+
+                # 提交异步事务
+                await session.commit()
+
+        except Exception as e:
+            print("发生错误:", e)
+
+
+
