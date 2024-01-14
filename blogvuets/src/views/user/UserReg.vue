@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import {ref, reactive, watch, onBeforeMount, nextTick} from 'vue';
 import vueRecaptcha from 'vue3-recaptcha2';
-import { ElNotification,ElUpload,ElMessage } from 'element-plus';
+import {ElNotification, ElUpload, ElMessage} from 'element-plus';
 import backApi from "@/Api/backApi";
-import { Plus } from '@element-plus/icons-vue'
-import type { UploadProps } from 'element-plus'
-import { useRouter } from 'vue-router';
-import type { FormInstance } from 'element-plus'
+import {Plus} from '@element-plus/icons-vue'
+import type {UploadProps} from 'element-plus'
+import {useRouter} from 'vue-router';
+import type {FormInstance} from 'element-plus'
+import {valueOf} from "axios";
 
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
 
@@ -18,8 +19,8 @@ onBeforeMount(() => {
 });
 
 const handleAvatarSuccess: UploadProps['onSuccess'] = (
-  response,
-  uploadFile
+    response,
+    uploadFile
 ) => {
   imageUrl.value = URL.createObjectURL(uploadFile.raw!)
 }
@@ -39,7 +40,7 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
 const googleRecaptchaVerified = ref(false);
 
 // 回傳一組 token，並把 token 傳給後端驗證
-const recaptchaVerified = (res:any) => {
+const recaptchaVerified = (res: any) => {
   // 设置 googleRecaptchaVerified 为 true
   RegisterUserForm.googlerecaptcha = res
   googleRecaptchaVerified.value = true;
@@ -60,8 +61,8 @@ const RegisterUserForm = reactive({
   password: '',
   confirmPassword: '',
   verificationCode: '',
-  googlerecaptcha:'',
-  EmailverificationCod:'',
+  googlerecaptcha: '',
+  EmailverificationCod: '',
 
 });
 
@@ -102,6 +103,7 @@ const getVerificationCode = async () => {
 const ruleFormRef = ref<FormInstance>()
 
 const validateUsername = (rule: any, value: any, callback: any) => {
+  console.log(value)
   const reg = /^[^\s\u4e00-\u9fa5]+$/;
   if (!reg.test(value)) {
     callback(new Error('用户名不能包含空格和中文字符'));
@@ -111,6 +113,7 @@ const validateUsername = (rule: any, value: any, callback: any) => {
 };
 
 const validatePass = (rule: any, value: any, callback: any) => {
+  console.log(value)
   if (value === '') {
     callback(new Error('Please input the password'))
   } else {
@@ -118,30 +121,31 @@ const validatePass = (rule: any, value: any, callback: any) => {
       if (!ruleFormRef.value) return
       ruleFormRef.value.validateField('checkPass', () => null)
     }
-    callback()
+    callback() // 添加这一行
   }
 }
 
 const validatePass2 = (rule: any, value: any, callback: any) => {
-  console.log('Entered validatePass2:', RegisterUserForm);
-  if (value === '') {
-    console.log('Empty value:', RegisterUserForm);
-    callback(new Error('请再次输入密码'))
-  } else if (RegisterUserForm.password === '') {
-    console.log('Empty password:', RegisterUserForm);
-    callback(new Error('请先输入密码'))
-  } else if (value !== RegisterUserForm.password) {
-    console.log('Mismatch:', RegisterUserForm);
-    callback(new Error("两次输入不一致"))
-  } else {
-    console.log('Validation passed:', RegisterUserForm);
-    callback()
-  }
-}
-
+  console.log(value)
+  nextTick(() => {
+    const passwordValue = RegisterUserForm.password;
+    const password2Value = value
+    if (value === '') {
+      callback(new Error('请再次输入密码'));
+    } else if (passwordValue === '') {
+      callback(new Error('请先输入密码'));
+    } else if (password2Value !== passwordValue) {
+      console.log(password2Value, passwordValue)
+      callback(new Error('两次输入不一致'));
+    } else {
+      callback();
+    }
+  });
+};
 
 const validateEmail = (rule: any, value: any, callback: any) => {
-  const reg = /^[a-zA-Z0-9_-]*@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+  console.log(value)
+  const reg = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   if (!reg.test(value)) {
     callback(new Error('请输入正确的邮箱地址'));
   } else {
@@ -151,17 +155,15 @@ const validateEmail = (rule: any, value: any, callback: any) => {
 
 const rules = reactive({
   username: [
-    { validator: validateUsername, trigger: 'blur' }
+    {required: true, min: 6, max: 18, message: "必填,且长度在 6 到 18 个字符",validator: validateUsername,trigger: 'change'}
   ],
   password: [
-    { validator: validatePass, trigger: 'blur' }
+    {required: true, message: "请填写你的密码", validator: validatePass, trigger: 'change'}
   ],
   confirmPassword: [
-    { validator: validatePass2, trigger: 'blur' }
+    {required: true, message: "请填写你的确认密码", validator: validatePass2, trigger: 'change'}
   ],
-  email: [
-    { validator: validateEmail, trigger: 'blur' }
-  ],
+  email: [{type: 'email', message: '请输入正确的邮箱地址', validator: validateEmail, trigger: 'change'}],
 });
 
 
@@ -175,7 +177,7 @@ const register = async () => {
         password: RegisterUserForm.password,
         confirmpassword: RegisterUserForm.confirmPassword,
         email: RegisterUserForm.email,
-        googlerecaptcha : RegisterUserForm.googlerecaptcha,
+        googlerecaptcha: RegisterUserForm.googlerecaptcha,
         EmailverificationCod: RegisterUserForm.EmailverificationCod,
 
         // Other registration fields
@@ -217,7 +219,7 @@ const register = async () => {
 };
 const uploadAvatarRef = ref(null);
 
-const ossUpload = async (param:any) => {
+const ossUpload = async (param: any) => {
   if (ElUpload.props.ref === 'uploadavatar') {
     ElUpload.methods.clearFiles.call(ElUpload);
   }
@@ -230,97 +232,100 @@ const ossUpload = async (param:any) => {
 </script>
 
 <template>
-  <el-container style="height: 100%;width: 100%;background-size: cover;background-image: url('https://api.vvhan.com/api/view');" >
+  <el-container
+      style="height: 100%;width: 100%;background-size: cover;background-image: url('https://api.vvhan.com/api/view');">
 
-  <el-main  >
-    <h1  style="padding-left:40%" >注册页面</h1>
-    <el-form
-    v-model="RegisterUserForm"
-    label-width="80px"
-    class="register-form"
-    :ref="ruleFormRef"
-    :rules="rules"
-    @submit.prevent="register"
-
-  >
-<el-form-item label="用户名" prop="username" :rules="rules.username">
-    <el-input  v-model.trim="RegisterUserForm.username" placeholder="请输入用户名"></el-input>
-  </el-form-item>
-
-<el-form-item label="密码" prop="password" :rules="rules.password">
-  <el-input
-    type="password"
-    v-model.trim="RegisterUserForm.password"
-    placeholder="请输入密码"
-    :show-password="true"
-  ></el-input>
-</el-form-item>
-
-<el-form-item label="确认密码" prop="confirmPassword" :rules="rules.confirmPassword">
-  <el-input
-    type="password"
-    v-model.trim="RegisterUserForm.confirmPassword"
-    placeholder="请确认密码"
-    :show-password="true"
-  ></el-input>
-</el-form-item>
-
-  <el-form-item label="邮箱" prop="email" :rules="rules.email">
-    <el-input  v-model.trim="RegisterUserForm.email" placeholder="请输入邮箱"></el-input>
-  </el-form-item>
-
-    <el-form-item label="验证码" prop="verificationCode">
-      <el-input
-        v-model.trim="RegisterUserForm.EmailverificationCod"
-        placeholder="请输入验证码"
-      ></el-input>
-      <el-button
-        class="get-verification-code"
-        @click="getVerificationCode"
-        :disabled="verificationCodeDisabled"
+    <el-main>
+      <h1 style="padding-left:40%">注册页面</h1>
+      <el-form
+          :model="RegisterUserForm"
+          v-model="RegisterUserForm"
+          label-width="80px"
+          class="register-form"
+          :ref="RegisterUserForm"
+          :rules="rules"
+          @submit.prevent="register"
       >
-        {{ verificationCodeButtonText }}
-      </el-button>
-    </el-form-item>
-      <el-form-item>
-              <div>
-  <vueRecaptcha
-  :sitekey="v2Sitekey"
-  size="normal"
-  theme="light"
-  hl="zh-CN"
-  @verify="recaptchaVerified"
-  @expire="recaptchaExpired"
-  @fail="recaptchaFailed"
-  >
-</vueRecaptcha>
-      </div>
-      </el-form-item>
-      <el-form-item label="你的头像" >
+        <el-form-item label="用户名" prop="username" :rules="rules.username">
+          <el-input v-model.trim="RegisterUserForm.username" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+
+        <el-form-item label="密码" prop="password" :rules="rules.password">
+          <el-input
+              type="password"
+              v-model.trim="RegisterUserForm.password"
+              placeholder="请输入密码"
+              :show-password="true"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item label="确认密码" prop="confirmPassword" :rules="rules.confirmPassword">
+          <el-input
+              type="password"
+              v-model.trim="RegisterUserForm.confirmPassword"
+              placeholder="请确认密码"
+              :show-password="true"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item label="邮箱" prop="email" :rules="rules.email">
+          <el-input v-model.trim="RegisterUserForm.email" placeholder="请输入邮箱"></el-input>
+        </el-form-item>
+
+        <el-form-item label="验证码" prop="verificationCode">
+          <el-input
+              v-model.trim="RegisterUserForm.EmailverificationCod"
+              placeholder="请输入验证码"
+          ></el-input>
+          <el-button
+              class="get-verification-code"
+              @click="getVerificationCode"
+              :disabled="verificationCodeDisabled"
+          >
+            {{ verificationCodeButtonText }}
+          </el-button>
+        </el-form-item>
+        <el-form-item>
+          <div>
+            <vueRecaptcha
+                :sitekey="v2Sitekey"
+                size="normal"
+                theme="light"
+                hl="zh-CN"
+                @verify="recaptchaVerified"
+                @expire="recaptchaExpired"
+                @fail="recaptchaFailed"
+            >
+            </vueRecaptcha>
+          </div>
+        </el-form-item>
+        <el-form-item label="你的头像">
           <el-upload
-    class="avatar-uploader"
-    action=#
-    ref="uploadavatar"
-    :show-file-list="false"
-    :http-request="ossUpload"
-    :on-success="handleAvatarSuccess"
-    :before-upload="beforeAvatarUpload"
-  >
-    <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-    <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-  </el-upload>
-      </el-form-item>
-    <el-form-item>
-      <el-button type="primary" native-type="submit">注册</el-button>
-      <el-button  type="primary" ><router-link  style="text-decoration: none" to="/login">登录</router-link></el-button>
-    </el-form-item>
+              class="avatar-uploader"
+              action=#
+              ref="uploadavatar"
+              :show-file-list="false"
+              :http-request="ossUpload"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar"/>
+            <el-icon v-else class="avatar-uploader-icon">
+              <Plus/>
+            </el-icon>
+          </el-upload>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" native-type="submit">注册</el-button>
+          <el-button type="primary">
+            <router-link style="text-decoration: none" to="/login">登录</router-link>
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-main>
 
-  </el-form>
-  </el-main>
-
-    </el-container>
+  </el-container>
 </template>
-
 
 
 <style scoped>
@@ -338,8 +343,8 @@ const ossUpload = async (param:any) => {
   cursor: not-allowed;
 }
 
-#app .el-main form{
- background-color:#faf9f9;
+#app .el-main form {
+  background-color: #faf9f9;
   opacity: 0.9;
 
 }
