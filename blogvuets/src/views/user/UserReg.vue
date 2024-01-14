@@ -8,7 +8,6 @@ import type {UploadProps} from 'element-plus'
 import {useRouter} from 'vue-router';
 import type {FormInstance} from 'element-plus'
 import _ from 'lodash';
-import {valueOf} from "axios";
 
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
 
@@ -238,7 +237,7 @@ const uploadAvatarRef = ref(null);
 
 const ossUpload = async (param: any) => {
   if (ElUpload.props.ref === 'uploadavatar') {
-    ElUpload.methods.clearFiles.call(ElUpload);
+      const clearFiles = this.$refs.upload.clearFiles();
   }
   const formData = new FormData();
   formData.append('file', param.file);
