@@ -487,10 +487,12 @@ const redirectToUserProfile = () => {
             </div>
           </div>
         </el-card>
+
         <el-card v-else>
           <!-- 骨架屏 -->
           <el-skeleton :rows="5" animated/>
         </el-card>
+
         <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
           <div v-for="(item, index) in data.data" :key="index" class="text item">
             <div>
@@ -498,7 +500,11 @@ const redirectToUserProfile = () => {
             </div>
           </div>
         </el-card>
-        <el-skeleton :rows="5" animated v-else/>
+
+        <el-card v-else>
+        <el-skeleton :rows="10" animated />
+        </el-card>
+
         <div ref="commentx" >
         <el-card  style="margin-top: 1%">
           <u-comment :config="config" @submit="submit" @like="like">
