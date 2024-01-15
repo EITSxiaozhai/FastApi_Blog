@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ref, reactive, watch, onBeforeMount, nextTick} from 'vue';
+import {ref, reactive, watch, onBeforeMount, nextTick, onMounted,defineProps} from 'vue';
 import vueRecaptcha from 'vue3-recaptcha2';
 import {ElNotification, ElUpload, ElMessage} from 'element-plus';
 import backApi from "@/Api/backApi";
@@ -17,6 +17,23 @@ let router;
 
 onBeforeMount(() => {
   router = useRouter(); // 在组件挂载之前获取路由器实例
+});
+
+//此处创建了一个Google验证码的prors.否则报错
+const props = defineProps({
+    hl: {
+            type: String,
+            required: false
+        },
+  })
+
+onMounted(() => {
+  //此处重写Google前端js的地址。使用国内地址就可以正常加载这个Google验证
+  const recaptchaUrl = `https://recaptcha.net/recaptcha/api.js?onload=recaptchaReady&render=explicit&hl=${props.hl}&_=${+new Date()}`
+  const scriptTag = document.createElement("script");
+  scriptTag.id = "recaptcha-script";
+  scriptTag.setAttribute("src", recaptchaUrl);
+  document.head.appendChild(scriptTag);
 });
 
 const handleAvatarSuccess: UploadProps['onSuccess'] = (
@@ -56,6 +73,7 @@ const recaptchaFailed = () => {
   // 失敗執行動作
 };
 
+const registerFormRef = ref(null);
 const RegisterUserForm = reactive({
   username: '',
   email: '',
@@ -175,12 +193,13 @@ const rules = reactive({
     {required: true, min: 6, max: 18,validator: validateUsername,trigger: 'change'}
   ],
   password: [
-    {required: true, message: "请填写你的密码", validator: validatePass, trigger: 'change'}
+    {required: true,type:'password',message: "请填写你的密码", validator: validatePass, trigger: 'change'}
   ],
   confirmPassword: [
-    {required: true, message: "请填写你的确认密码", validator: validatePass2, trigger: 'change'}
+    {required: true,type:'password',message: "请填写你的确认密码", validator: validatePass2, trigger: 'change'}
   ],
-  email: [{type: 'email', message: '请输入正确的邮箱地址', validator: validateEmail, trigger: 'change'}],
+  verificationCode: [{required: true,message: '请输入正确邮箱验证码',trigger: 'blur',min: 6, max: 6}],
+  email: [{required: true,type: 'email', message: '请输入正确的邮箱地址', validator: validateEmail, trigger: 'change'}],
 });
 
 
@@ -255,13 +274,13 @@ const ossUpload = async (param: any) => {
     <el-main>
       <h1 style="padding-left:40%">注册页面</h1>
       <el-form
-          :model="RegisterUserForm"
-          v-model="RegisterUserForm"
-          label-width="80px"
-          class="register-form"
-          :rules="rules"
-          @submit.prevent="register"
-      >
+            :model="RegisterUserForm"
+            label-width="80px"
+            class="register-form"
+            :rules="rules"
+            @submit.prevent="register"
+            ref="registerFormRef"
+        >
         <el-form-item label="用户名" prop="username" :rules="rules.username">
           <el-input v-model.trim="RegisterUserForm.username" placeholder="请输入用户名"></el-input>
         </el-form-item>
@@ -293,6 +312,7 @@ const ossUpload = async (param: any) => {
               v-model.trim="RegisterUserForm.EmailverificationCod"
               placeholder="请输入验证码"
           ></el-input>
+
           <el-button
               class="get-verification-code"
               @click="getVerificationCode"
