@@ -277,7 +277,7 @@ const UpComments = async (str) => {
   const token = localStorage.getItem("token"); // 从本地存储获取 token
   try {
 
-    const UpComment = await backApi.post(`/generaluser/${blogId}/commentsave`, {
+    const UpComment = await backApi.post(`/generaluser/commentsave/vueblogid=${blogId}`, {
       content: str,
     }, {
       headers: {

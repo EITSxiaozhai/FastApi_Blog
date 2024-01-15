@@ -253,12 +253,13 @@ async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
         return {"access_token": token, "token_type": 'Bearer', "token": token}
 
 
-@UserApp.post("/{vueblogid}/commentsave")
+@UserApp.post("/commentsave/vueblogid={vueblogid}")
 async def CommentSave(vueblogid: int, request: Request,token: str = Depends(Useroauth2_scheme)):
     async with db_session() as session:
         try:
             token = token.replace("Bearer", "").strip()
             # Verify and decode the token
+
             token_data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
             user = select(User).filter(User.username == token_data["username"])
             UserResult = await session.execute(user)
@@ -267,7 +268,7 @@ async def CommentSave(vueblogid: int, request: Request,token: str = Depends(User
                 if i:
                     sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
                     result = await session.execute(sql)
-                    if result.first() is not None:
+                    if result.first():
                         commentUp = Comment(
                             uid=  i.UserId,
                             content=x['content']['content'],
