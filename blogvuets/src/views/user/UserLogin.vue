@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onBeforeMount,nextTick,onActivated } from 'vue';
+import { ref, onMounted, onBeforeMount,nextTick,onActivated,defineProps} from 'vue';
 import backApi from "@/Api/backApi";
 import { useRouter } from 'vue-router'; // 导入useRouter函数
 import { ElNotification } from 'element-plus';
@@ -42,14 +42,39 @@ onBeforeMount(() => {
 
 const token = ref(''); // 创建一个ref变量来存储令牌
 
+//此处创建了一个Google验证码的prors.否则报错
+const props = defineProps({
+    hl: {
+            type: String,
+            required: false
+        },
+  })
+
 onMounted(() => {
-  // 在组件加载后从localStorage中加载令牌
+  //此处重写Google前端js的地址。使用国内地址就可以正常加载这个Google验证
+  const recaptchaUrl = `https://recaptcha.net/recaptcha/api.js?onload=recaptchaReady&render=explicit&hl=${props.hl}&_=${+new Date()}`
+  const scriptTag = document.createElement("script");
+  scriptTag.id = "recaptcha-script";
+  scriptTag.setAttribute("src", recaptchaUrl);
+  document.head.appendChild(scriptTag);
+// 在组件加载后从localStorage中加载令牌
   const storedToken = localStorage.getItem("token");
   if (storedToken) {
     token.value = storedToken;
   }
 
 });
+
+
+// // 动态设置 recaptchaUrl
+// const setRecaptchaUrl = async () => {
+//   const vueRecaptchaModule = await import('vue3-recaptcha2');
+//   const { vueRecaptcha } = vueRecaptchaModule.default;
+//
+//   // 修改 recaptchaUrl 属性
+//   const urlx = `https://recaptcha.net/recaptcha/api.js?onload=recaptchaReady&render=explicit&hl=zh-CN&_=${+new Date()}`
+//   vueRecaptcha.props.recaptchaUrl.default = urlx;
+// };
 
 
 const store = useStore();
