@@ -36,7 +36,7 @@ app.mount("/static", StaticFiles(directory="./Fast_blog/static"), name="static")
 app.add_middleware(
     CORSMiddleware,
     ##此处URL用来允许通过的域名。提高安全性，需要根据你的进行修改
-    allow_origins=["https://blog.exploit-db.xyz", "https://blogapi.exploitblog.eu.org",'http://127.0.0.1:8000/api',"http://192.168.0.6:5173", "http://192.168.0.6:9527","https://zpwl002.oss-cn-hangzhou.aliyuncs.com"],
+    allow_origins=["https://blog.exploit-db.xyz", "https://blogapi.exploitblog.eu.org",'http://127.0.0.1:8000/api',"http://192.168.0.6:5173","http://192.168.0.200:5173","http://192.168.0.6:9527","https://zpwl002.oss-cn-hangzhou.aliyuncs.com"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
