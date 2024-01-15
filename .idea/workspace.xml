@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="学习验证字段">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/components.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/components.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/UserReg.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserReg.vue" afterDir="false" />
-    </list>
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="重写Google验证码-修复验证字段bug" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -559,7 +553,7 @@
       <workItem from="1705061032452" duration="70000" />
       <workItem from="1705219892421" duration="1040000" />
       <workItem from="1705246457498" duration="3429000" />
-      <workItem from="1705296553008" duration="4912000" />
+      <workItem from="1705296553008" duration="5262000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -904,7 +898,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="337" />
+    <option name="localTasksCounter" value="340" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -948,9 +942,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="token持久化" />
-    <MESSAGE value="修复选择bug" />
-    <MESSAGE value="添加顶栏用户名" />
     <MESSAGE value="模块修改-评论时显示用户名" />
     <MESSAGE value="添加头像OSS" />
     <MESSAGE value="添加头像栏位" />
@@ -973,7 +964,10 @@
     <MESSAGE value="不存在页面重定向跳转" />
     <MESSAGE value="登录成功后跳转回到登录前页面" />
     <MESSAGE value="学习验证字段" />
-    <option name="LAST_COMMIT_MESSAGE" value="学习验证字段" />
+    <MESSAGE value="重写Google验证码" />
+    <MESSAGE value="添加本地IP地址" />
+    <MESSAGE value="重写Google验证码-修复验证字段bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="重写Google验证码-修复验证字段bug" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
