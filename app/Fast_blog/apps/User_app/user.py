@@ -265,7 +265,7 @@ async def CommentSave(vueblogid: int, request: Request,token: str = Depends(User
             x = await request.json()
             for i in UserResult.scalars().all():
                 if i:
-                    sql = select(models.Blog).filter(models.Blog.BlogId == vueblogid)
+                    sql = select(models.Blog).filter(Blog.BlogId == vueblogid)
                     result = await session.execute(sql)
                     if result.first():
                         commentUp = Comment(
