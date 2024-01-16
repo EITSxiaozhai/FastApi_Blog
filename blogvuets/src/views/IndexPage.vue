@@ -5,6 +5,8 @@ import TypeIt from 'typeit'
 import backApi from '../Api/backApi.ts';
 import 'element-plus/theme-chalk/display.css'
 import {useStore} from "vuex";
+import 'animate.css';
+import WOW from "wow.js";
 
 //自动布局修改适配手机端平板端屏幕
 const useXlLayout = () => {
@@ -75,6 +77,20 @@ if (response.data.length > 0) {
 };
 
 onMounted(() => {
+  const wow = new WOW({
+      boxClass: 'wow',
+      animateClass: 'animated',
+      offset: 0,
+      mobile: true,
+      live: false,
+      scrollContainer: null,
+      resetAnimation: true,
+      callback:     function(box) {
+      // the callback is fired every time an animation is started
+      // the argument that is passed in is the DOM node being animated
+    },
+  })
+  wow.init();
   loadData(currentPage.value);
 });
 
@@ -247,6 +263,12 @@ const isLoggedIn = computed(() => !!usernames.value);
       router.push('/user-profile');
     };
 
+const sendEmail = () => {
+      // 替换以下邮箱地址为你的目标邮箱
+      const emailAddress = 'watch.dog@qq.com';
+      // 使用window.location.href来触发mailto链接
+      window.location.href = `mailto:${emailAddress}`;
+    };
 
 </script>
 
@@ -255,7 +277,10 @@ const isLoggedIn = computed(() => !!usernames.value);
   <div class="background-container" :style="{ transform: `translateY(-${scrollY}px)` }" style="z-index: 3">
     <div class="background-image"></div>
     <h1 style=";position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" ref="text" class="msg"></h1>
+    <h2>V</h2>
   </div>
+
+
 
   <el-container id="left-my" style="margin-top: 3%;">
     <el-header id="top-mains" :class="{ 'hidden': isHeaderHidden }"
@@ -305,28 +330,28 @@ const isLoggedIn = computed(() => !!usernames.value);
 
     <!--个人介绍卡片-->
     <!--    文章介绍卡片-->
+  <section class="wow slideInLeft" data-wow-duration="2s" data-wow-delay="10s">进入div</section>
+    <section class="wow slideInLeft-leave" data-wow-duration="2s" data-wow-delay="10s">outside</section>
 
 
     <el-row :gutter="10" style=" justify-content: center; max-width: 100% ">
       <el-col xs="24" :sm="24" :md="6" :lg="4" :xl="3" class="hidden-lg-and-down;">
         <el-card>
-          <img
-              src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-              class="image"
-          />
           <div style="padding: 14px">
             <h1>Exp1oit</h1>
             <h1></h1>
           </div>
           <el-divider/>
-          <h1>联系我</h1>
+          <h4>联系我</h4>
           <el-container id="svg-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+            <a href="https://github.com/Eitsxiaozhai" target="_blank" rel="noopener noreferrer">
+            <svg  xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
                  class="bi bi-github" viewBox="0 0 16 16">
               <path
                   d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
             </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+            </a>
+            <svg  @click="sendEmail" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
                  class="bi bi-envelope" viewBox="0 0 16 16">
               <path
                   d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
@@ -341,7 +366,7 @@ const isLoggedIn = computed(() => !!usernames.value);
           </el-container>
 
           <el-divider/>
-          <h1>本站技术以及框架</h1>
+          <h4>本站技术以及框架</h4>
           <el-timeline>
             <el-timeline-item>
               Fastapi
@@ -351,9 +376,6 @@ const isLoggedIn = computed(() => !!usernames.value);
             </el-timeline-item>
             <el-timeline-item>
               Vue3+Vue2
-            </el-timeline-item>
-            <el-timeline-item>
-              vue-element-admin
             </el-timeline-item>
           </el-timeline>
           <el-divider/>
@@ -391,6 +413,7 @@ const isLoggedIn = computed(() => !!usernames.value);
                 <router-link :to="`/blog/${blog.BlogId}`">
                   <!-- 使用条件判断选择布局 -->
                   <template v-if="xlLayout ">
+
                     <el-card shadow="hover" id="main-boxcard" class="box-card" style="display: flex; flex-direction: column; height: 99%;">
   <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image" style="flex: 1 0 auto;">
 
@@ -400,6 +423,7 @@ const isLoggedIn = computed(() => !!usernames.value);
     <p>发布日期:{{ blog.created_at }}</p>
   </div>
 </el-card>
+
                   </template>
                   <template v-else>
                     <!-- 使用你的布局 -->
@@ -484,7 +508,7 @@ const isLoggedIn = computed(() => !!usernames.value);
               <p>欢迎来到我的博客，这里分享了各种有趣的技术和知识。</p>
             </el-col>
             <el-col :span="6">
-              <h3>联系我</h3>
+              <h4>联系我</h4>
               <p>Email: watch.dog@qq.com</p>
 
             </el-col>
@@ -514,13 +538,13 @@ const isLoggedIn = computed(() => !!usernames.value);
 
 
 <style>
-#app .background-image{
- filter: contrast(0.6);
-}
+
 
 
 #app .background-container h1{
- font-size:30px;
+ font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+ color:#eeeeee;
+ font-weight:300;
 }
 
 #footer {
@@ -688,14 +712,6 @@ const isLoggedIn = computed(() => !!usernames.value);
   display: none;
 }
 
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.5s; /* 过渡持续时间 */
-}
-
-.fade-enter, .fade-leave-to {
-  opacity: 0; /* 初始和结束状态的透明度 */
-}
-
-
 </style>
+
+<style src="wow.js/css/libs/animate.css"></style>
