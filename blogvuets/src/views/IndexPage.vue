@@ -82,12 +82,13 @@ onMounted(() => {
       animateClass: 'animated',
       offset: 0,
       mobile: true,
-      live: false,
+      live: true,
       scrollContainer: null,
       resetAnimation: true,
       callback:     function(box) {
-      // the callback is fired every time an animation is started
-      // the argument that is passed in is the DOM node being animated
+      if (box.classList.contains('slideInLeft')) {
+        box.style.opacity = '1'; // 设置透明度为1，淡入
+      }
     },
   })
   wow.init();
@@ -330,9 +331,6 @@ const sendEmail = () => {
 
     <!--个人介绍卡片-->
     <!--    文章介绍卡片-->
-  <section class="wow slideInLeft" data-wow-duration="2s" data-wow-delay="10s">进入div</section>
-    <section class="wow slideInLeft-leave" data-wow-duration="2s" data-wow-delay="10s">outside</section>
-
 
     <el-row :gutter="10" style=" justify-content: center; max-width: 100% ">
       <el-col xs="24" :sm="24" :md="6" :lg="4" :xl="3" class="hidden-lg-and-down;">
@@ -404,8 +402,10 @@ const sendEmail = () => {
 
         <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="10" class="maincaretest">
   <div class="content-container">
+
     <el-main id="maincare">
       <div class="about">
+
         <el-container v-for="(blog) in data.data" :key="blog.BlogId">
           <el-main>
             <keep-alive>
@@ -413,8 +413,7 @@ const sendEmail = () => {
                 <router-link :to="`/blog/${blog.BlogId}`">
                   <!-- 使用条件判断选择布局 -->
                   <template v-if="xlLayout ">
-
-                    <el-card shadow="hover" id="main-boxcard" class="box-card" style="display: flex; flex-direction: column; height: 99%;">
+                    <el-card class="wow animate__bounce bounceInDown box-card"  data-wow-duration="4s"  shadow="hover" id="main-boxcard"  style="display: flex; flex-direction: column; height: 99%;">
   <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image" style="flex: 1 0 auto;">
 
   <div style="flex: 0 0 auto; padding: 10px;">
@@ -427,7 +426,7 @@ const sendEmail = () => {
                   </template>
                   <template v-else>
                     <!-- 使用你的布局 -->
-                    <el-card shadow="hover" id="main-boxcard" class="box-card">
+                    <el-card shadow="hover" id="main-boxcard"  class="wow animate__bounce bounceInDown box-card"  data-wow-duration="4s">
                       <el-container>
                         <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image">
                         <el-main>
@@ -538,8 +537,6 @@ const sendEmail = () => {
 
 
 <style>
-
-
 
 #app .background-container h1{
  font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
