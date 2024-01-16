@@ -4,9 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="测试进出入动画">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="文章卡片添加动画">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -557,7 +558,7 @@
       <workItem from="1705219892421" duration="1040000" />
       <workItem from="1705246457498" duration="3429000" />
       <workItem from="1705296553008" duration="12655000" />
-      <workItem from="1705369980260" duration="16077000" />
+      <workItem from="1705369980260" duration="21430000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -902,7 +903,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="348" />
+    <option name="localTasksCounter" value="349" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -946,8 +947,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="添加头像操作API" />
-    <MESSAGE value="添加注册头像" />
     <MESSAGE value="sitemap提交" />
     <MESSAGE value="修改admin密钥错误" />
     <MESSAGE value="路由守卫自动修改标题" />
@@ -971,7 +970,9 @@
     <MESSAGE value="添加评论详细输出内容" />
     <MESSAGE value="修复评论判断bug" />
     <MESSAGE value="测试进出入动画" />
-    <option name="LAST_COMMIT_MESSAGE" value="测试进出入动画" />
+    <MESSAGE value="测试进出入动画&#10;&#10;Signed-off-by: EITSxiaozhai &lt;watch.dog@qq.com&gt;" />
+    <MESSAGE value="文章卡片添加动画" />
+    <option name="LAST_COMMIT_MESSAGE" value="文章卡片添加动画" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

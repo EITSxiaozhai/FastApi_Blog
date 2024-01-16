@@ -461,10 +461,10 @@ async def BlogTagModify(blog_id: int, type: str, token: str = Depends(Adminoauth
 
 SCOPES = ["https://www.googleapis.com/auth/indexing"]
 ENDPOINT = "https://indexing.googleapis.com/v3/urlNotifications:publish"
-JSON_KEY_FILE = "E:\\pytest\\FastApi_Blog\\app\\google.json"
+JSON_KEY_FILE = "C:\\Users\\admin\\Desktop\\google.json"
 
 @AdminApi.get('/googleoauth2')
-async def publish_url_notification(notification_type="URL_UPDATED"):
+async def publish_url_notification(notification_type="URL_UPDATED", token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
             # 异步执行查询
@@ -489,20 +489,31 @@ async def publish_url_notification(notification_type="URL_UPDATED"):
                 status = response.get('status', '')
 
                 # 异步执行查询
-                reptile_inclusion = await session.execute(
+
+                reptile_inclusion_query = await session.execute(
                     select(ReptileInclusion).filter(ReptileInclusion.blog_id == blog_id))
 
-                if reptile_inclusion.first() is not None:
-                    # 从异步查询结果中获取实际对象
-                    reptile_inclusion = reptile_inclusion.first().scalar()
-                    reptile_inclusion.GoogleSubmissionStatus = status
-                    reptile_inclusion.Submissiontime = datetime.datetime.now()
-                    reptile_inclusion.ReturnLog = response
+                reptile_inclusion = reptile_inclusion_query.scalar()
+
+                if reptile_inclusion is not None:
+                    existing_reptile_inclusion = reptile_inclusion
+
+                    # 创建一个新的 ReptileInclusion 对象，将其标识符设置为与现有对象相同
+                    updated_reptile_inclusion = ReptileInclusion(
+                        blog_id=existing_reptile_inclusion.blog_id,
+                        GoogleSubmissionStatus=status,
+                        Submissiontime=datetime.datetime.now(),
+                        ReturnLog=response
+                    )
+
+                    # 使用当前会话将新对象添加到数据库
+                    session.add(updated_reptile_inclusion)
                 else:
                     # 记录不存在，创建新的记录
                     new_reptile_inclusion = ReptileInclusion(blog_id=blog_id,
                                                              GoogleSubmissionStatus=status,
-                                                             Submissiontime=datetime.datetime.now(),ReturnLog=response)
+                                                             Submissiontime=datetime.datetime.now(),
+                                                             ReturnLog=response)
                     session.add(new_reptile_inclusion)
 
                 # 提交异步事务
