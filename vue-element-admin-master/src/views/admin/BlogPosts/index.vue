@@ -13,6 +13,9 @@
         <el-col :span="6">
           <el-button type="primary" @click="createItem">增加文章</el-button>
         </el-col>
+        <el-col :span="6">
+          <el-button type="primary" @click="Crawlerrequestsent">文章爬虫提交</el-button>
+        </el-col>
       </el-row>
     </el-header>
     <el-main>
@@ -50,6 +53,7 @@
 
 <script>
 import { Postlist, DeletePost, Updatehomepageimage } from '@/api/admin/BlogPosts/BlogPosts'
+import { Crawlersubmitbutton } from '@/api/admin/CrawlerSubmission'
 import { MessageBox } from 'element-ui'
 import PostEdit from '@/views/admin/BlogPosts/PostEdit.vue'
 
@@ -162,6 +166,19 @@ export default {
         this.$router.push({ name: 'CreateArticle', query: { blog_id: newId }})
       } catch (error) {
         console.error('Create error:', error)
+      }
+    },
+    async Crawlerrequestsent() {
+      try {
+        // 调用后端接口
+        const response = await Crawlersubmitbutton()
+        // 处理成功响应
+        console.log('请求成功:', response)
+        // 在这里可以根据后端返回的数据进行相应的处理
+      } catch (error) {
+        // 处理请求失败
+        console.error('请求失败:', error)
+        // 在这里可以根据错误信息进行相应的处理
       }
     },
     async deleteItem(item) {

@@ -16,11 +16,10 @@ from starlette.background import BackgroundTasks
 from oauth2client.service_account import ServiceAccountCredentials
 import httplib2
 from app.Fast_blog.database.database import db_session
-from app.Fast_blog.middleware.backlist import Adminoauth2_scheme, aliOssUpload, verify_recaptcha
+from app.Fast_blog.middleware.backlist import Adminoauth2_scheme,aliOssPrivateDocument,aliOssUpload, verify_recaptcha
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import AdminUser, UserPrivileges, Blog, BlogTag, ReptileInclusion
 from app.Fast_blog.schemas.schemas import UserCredentials
-
 AdminApi = APIRouter()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -459,12 +458,22 @@ async def BlogTagModify(blog_id: int, type: str, token: str = Depends(Adminoauth
 
 
 
-SCOPES = ["https://www.googleapis.com/auth/indexing"]
-ENDPOINT = "https://indexing.googleapis.com/v3/urlNotifications:publish"
-JSON_KEY_FILE = "C:\\Users\\admin\\Desktop\\google.json"
+# SCOPES = ['https://www.googleapis.com/auth/indexing']
+# ENDPOINT = "https://indexing.googleapis.com/v3/urlNotifications:publish"
+# JSON_KEY_FILE = "C:\\Users\\admin\\Desktop\\google.json"
+
+aliOssPrivateDocument = aliOssPrivateDocument()
+
 
 @AdminApi.get('/googleoauth2')
-async def publish_url_notification(notification_type="URL_UPDATED", token: str = Depends(Adminoauth2_scheme)):
+async def url_sent(background_tasks: BackgroundTasks,token: str = Depends(Adminoauth2_scheme)):
+    try:
+        background_tasks.add_task(publish_url_notification)
+        return {"data": "请求已经发送", "code": 20000}
+    except Exception as e:
+        print("我们遇到了下面的问题", {"data": str(e)})
+
+async def publish_url_notification(notification_type="URL_UPDATED"):
     async with db_session() as session:
         try:
             # 异步执行查询
@@ -475,7 +484,13 @@ async def publish_url_notification(notification_type="URL_UPDATED", token: str =
                 blog_url = f"https://blog.exploit-db.xyz/blog/{blog_id}"
 
                 # 发送通知
-                credentials = ServiceAccountCredentials.from_json_keyfile_name(JSON_KEY_FILE, scopes=SCOPES)
+                JSON_KEY_FILE = aliOssPrivateDocument.CrawlerKeyAcquisition()
+                JSON_KEY_FILE_str = JSON_KEY_FILE.decode('utf-8')
+                JSON_KEY_FILE = json.loads(JSON_KEY_FILE_str.replace("'",'"').replace('\r\n', '\\r\\n'), strict=False)
+                SCOPES = ['https://www.googleapis.com/auth/indexing']
+                ENDPOINT = "https://indexing.googleapis.com/v3/urlNotifications:publish"
+                print(SCOPES)
+                credentials = ServiceAccountCredentials.from_json_keyfile_dict(JSON_KEY_FILE,scopes=SCOPES)
                 http = credentials.authorize(httplib2.Http())
                 content = {
                     "url": blog_url,

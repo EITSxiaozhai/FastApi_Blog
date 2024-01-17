@@ -187,3 +187,16 @@ class aliOssUpload():
         return image_url
 
 
+class aliOssPrivateDocument():
+    def __init__(self):
+        access_key_id = os.getenv('ACCESS_KEY_ID')
+        access_key_secret = os.getenv('ACCESS_KEY_SECRET')
+        # 填写自己的 Bucket 名称和地址
+        self.bucket_name = 'privatedocument'
+        self.upload_path = '/'
+        auth = oss2.Auth(access_key_id, access_key_secret)
+        self.bucket = oss2.Bucket(auth, 'http://oss-cn-hangzhou.aliyuncs.com', self.bucket_name)
+    def CrawlerKeyAcquisition(self):
+        result = self.bucket.get_object('google.json')
+        return result.read()
+
