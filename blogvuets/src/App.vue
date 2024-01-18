@@ -56,17 +56,20 @@ useHead({
 
 
 
-html, body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  background: rgb(233, 233, 235);
+//html, body {
+//  height: 100%;
+//  width: 100%;
+//  margin: 0;
+//  padding: 0;
+//  background: rgb(233, 233, 235);
+//  font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+//}
+//
+#app,body{
   font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
-}
-
-#app {
-font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
   height: 100%; /* 使#app占满全屏高度 */
+  padding: 0;
+  margin: 0;
+  width: 100%;
 }
 </style>

@@ -634,6 +634,9 @@ const sendEmail = () => {
   text-decoration: none;
 }
 
+body{
+  background: rgb(233, 233, 235);
+}
 
 #blog-image {
   display: inline-block;
