@@ -24,7 +24,13 @@ const icons = [ChatRound, ChatLineRound, ChatDotRound]
 const isLoading = ref(true); // 初始时，骨架屏可见
 const currentStep = ref(0); // 创建响应式变量用于跟踪当前标题索引
 // 创建Markdown渲染器实例
-const md = new MarkdownIt();
+// const md =  MarkdownIt();
+const md = new MarkdownIt({
+  langPrefix:   'language-',
+  html: true,
+  linkify: true,
+  typographer: true
+})
 const tableOfContents = ref([]);
 const router = useRouter()
 const data = reactive({
