@@ -286,7 +286,7 @@ async def CommentSave(vueblogid: int, request: Request,token: str = Depends(User
         except Exception as e:
             # 处理异常
             print(str(e))
-            return {"data": "评论添加失败"}
+            return {"data": "评论添加失败","code":40002}
             # 如果用户未经过身份验证或凭据无效
         except jwt.ExpiredSignatureError:
             return {"code": 40002, "message": "Token已过期"}

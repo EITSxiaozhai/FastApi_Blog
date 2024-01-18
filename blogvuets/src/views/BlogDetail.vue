@@ -276,7 +276,6 @@ const UpComments = async (str) => {
   const blogId = route.params.blogId;
   const token = localStorage.getItem("token"); // 从本地存储获取 token
   try {
-
     const UpComment = await backApi.post(`/generaluser/commentsave/vueblogid=${blogId}`, {
       content: str,
     }, {
@@ -288,12 +287,14 @@ const UpComments = async (str) => {
       // Token 已过期
       UToast({message: 'Token无效，请尝试重新登录', type: 'info'})
       localStorage.removeItem("token"); // 删除本地存储中的过期 Token
+      localStorage.removeItem("vuex")
       return; // 提前结束函数执行
     } else if (UpComment.data.code === 40003) {
       // 无效的 Token
       console.error('无效的 Token');
       UToast({message: 'Token无效，请尝试重新登录', type: 'info'})
       localStorage.removeItem("token"); // 删除本地存储中的过期 Token
+      localStorage.removeItem("vuex")
       return; // 提前结束函数执行
     } else {
       // 其他错误状态码的处理

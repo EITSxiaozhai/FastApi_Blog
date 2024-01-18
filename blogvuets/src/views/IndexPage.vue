@@ -299,8 +299,8 @@ const sendEmail = () => {
                 class="w-50 m-2"
                 size="large"
                 placeholder="请输入"
-
                 @click.stop="toggleFloatingWindow"
+                style="font-size: 10px;font-family: "
             >搜索你感兴趣的文章
             </el-button>
 
@@ -502,14 +502,9 @@ const sendEmail = () => {
     <el-footer style="margin-top: 10%">
         <div id="footer">
           <el-row class="footer-content">
-            <el-col :span="6" class="left-align">
-              <h3>关于本站</h3>
-              <p>欢迎来到我的博客，这里分享了各种有趣的技术和知识。</p>
-            </el-col>
             <el-col :span="6">
               <h4>联系我</h4>
               <p>Email: watch.dog@qq.com</p>
-
             </el-col>
           </el-row>
           <el-row class="footer-bottom">
@@ -545,6 +540,7 @@ const sendEmail = () => {
 }
 
 #footer {
+  font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
   background-color: #333; /* 设置背景颜色 */
   color: #fff; /* 设置文本颜色 */
   padding: 10px 0; /* 减小上下边距 */
@@ -552,6 +548,7 @@ const sendEmail = () => {
 
 /* 脚注内容的样式 */
 .footer-content {
+
   max-width: 1200px; /* 设置最大宽度，根据需要调整 */
   margin: 0 auto; /* 居中对齐 */
 }
@@ -649,7 +646,9 @@ const sendEmail = () => {
 
 
 #footer {
-  background: rgb(160, 207, 255);
+  background: rgba(192, 192, 213, 0.73);
+  font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+
   position: absolute;
   left: 0;
   right: 0;
