@@ -49,7 +49,7 @@ useHead({
     //雪花移动目标点 -70后是负数 这样雪花会向左下方飘落
     --end: #{random(20) - 70}vw;
     left: #{random(150)}vw;
-    animation: snowfall #{30 + random(8)}s linear infinite;
+    animation: snowfall #{10 + random(10)}s linear infinite;
     animation-delay: -#{random(10)}s;
   }
 }
