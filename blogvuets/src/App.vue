@@ -26,7 +26,7 @@ useHead({
 
 <style lang="scss">
 .snowflake {
-  --size: 5vw;
+  --size: 0vw;
   width: var(--size);
   height: var(--size);
   background: url("../static/img/xuehua.png") no-repeat;
