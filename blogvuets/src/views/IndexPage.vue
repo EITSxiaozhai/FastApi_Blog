@@ -1,4 +1,4 @@
-<script setup >
+<script setup>
 import {useRouter} from 'vue-router';
 import {reactive, ref, onMounted, onBeforeUnmount, watchEffect, watch, onUnmounted, toRefs, computed} from 'vue';
 import TypeIt from 'typeit'
@@ -29,7 +29,7 @@ const useXlLayout = () => {
   };
 };
 
-const { xlLayout } = useXlLayout();
+const {xlLayout} = useXlLayout();
 
 
 const input1 = ref('');
@@ -58,19 +58,19 @@ const loadedCards = ref(pageSize);
 const loadData = async (page = 0) => {
   try {
     const response = await backApi.get(`/blog/BlogIndex?initialLoad=false&page=${page}&pageSize=${pageSize}`);
-if (response.data.length > 0) {
-  response.data.forEach(blog => {
-    // 判断博客是否已加载，根据 BlogID 判断
-    const isBlogLoaded = data.data.some(loadedBlog => loadedBlog.BlogId === blog.BlogId);
+    if (response.data.length > 0) {
+      response.data.forEach(blog => {
+        // 判断博客是否已加载，根据 BlogID 判断
+        const isBlogLoaded = data.data.some(loadedBlog => loadedBlog.BlogId === blog.BlogId);
 
-    if (!isBlogLoaded) {
-      // 如果博客未加载，则将其推入数据数组
-      data.data.push(blog);
-      // 可选：如果你想要跟踪已加载的 BlogID，可以将其添加到集合中
-      // loadedBlogIds.value.add(blog.BlogId);
+        if (!isBlogLoaded) {
+          // 如果博客未加载，则将其推入数据数组
+          data.data.push(blog);
+          // 可选：如果你想要跟踪已加载的 BlogID，可以将其添加到集合中
+          // loadedBlogIds.value.add(blog.BlogId);
+        }
+      });
     }
-  });
-}
   } catch (error) {
     console.error(error);
   }
@@ -78,14 +78,14 @@ if (response.data.length > 0) {
 
 onMounted(() => {
   const wow = new WOW({
-      boxClass: 'wow',
-      animateClass: 'animated',
-      offset: 0,
-      mobile: true,
-      live: true,
-      scrollContainer: null,
-      resetAnimation: true,
-      callback:     function(box) {
+    boxClass: 'wow',
+    animateClass: 'animated',
+    offset: 0,
+    mobile: true,
+    live: true,
+    scrollContainer: null,
+    resetAnimation: true,
+    callback: function (box) {
       if (box.classList.contains('slideInLeft')) {
         box.style.opacity = '1'; // 设置透明度为1，淡入
       }
@@ -96,13 +96,10 @@ onMounted(() => {
 });
 
 
-
-
 const loadMoreCards = () => {
   currentPage++;
   loadedCards.value = pageSize * currentPage;
   loadData(currentPage);
-
 };
 
 
@@ -116,19 +113,7 @@ const toggleFloatingWindow = () => {
   showFloatingWindow.value = !showFloatingWindow.value;
 };
 
-const closeFloatingWindow = () => {
-  showFloatingWindow.value = false;
-};
 
-const handleGlobalClick = (event) => {
-  if (!event.target.closest('.floating-window')) {
-    closeFloatingWindow();
-  }
-};
-
-onMounted(() => {
-  document.addEventListener('click', handleGlobalClick);
-});
 
 const VerseGetting = async () => {
   try {
@@ -194,7 +179,7 @@ watch(scrollDirection, (newDirection, oldDirection) => {
     isHeaderHidden.value = true;
   }
 });
-const siteCreationTime = ref({ value: new Date('2023-10-04') });
+const siteCreationTime = ref({value: new Date('2023-10-04')});
 const timeElapsed = ref({
   years: 0,
   months: 0,
@@ -252,24 +237,24 @@ const usernames = computed(() => store.getters.getUsername);
 const tokens = computed(() => store.getters.getToken);
 const isLoggedIn = computed(() => !!usernames.value);
 
-    // 跳转到注册页面
-    const redirectToRegister = () => {
-      // 在这里编写跳转逻辑
-      router.push('/register');
-    };
+// 跳转到注册页面
+const redirectToRegister = () => {
+  // 在这里编写跳转逻辑
+  router.push('/register');
+};
 
-    // 跳转到用户个人资料页面
-    const redirectToUserProfile = () => {
-      // 在这里编写跳转逻辑
-      router.push('/user-profile');
-    };
+// 跳转到用户个人资料页面
+const redirectToUserProfile = () => {
+  // 在这里编写跳转逻辑
+  router.push('/user-profile');
+};
 
 const sendEmail = () => {
-      // 替换以下邮箱地址为你的目标邮箱
-      const emailAddress = 'watch.dog@qq.com';
-      // 使用window.location.href来触发mailto链接
-      window.location.href = `mailto:${emailAddress}`;
-    };
+  // 替换以下邮箱地址为你的目标邮箱
+  const emailAddress = 'watch.dog@qq.com';
+  // 使用window.location.href来触发mailto链接
+  window.location.href = `mailto:${emailAddress}`;
+};
 
 </script>
 
@@ -279,7 +264,6 @@ const sendEmail = () => {
     <div class="background-image"></div>
     <h1 style=";position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" ref="text" class="msg"></h1>
   </div>
-
 
 
   <el-container id="left-my" style="margin-top: 3%;">
@@ -293,37 +277,24 @@ const sendEmail = () => {
             <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
           </h1>
           <div class="search-container">
-            <el-button
-                v-model="input1"
-                class="w-50 m-2"
-                size="large"
-                placeholder="请输入"
-                @click.stop="toggleFloatingWindow"
-                style="font-size: 10px;"
-            >搜索你感兴趣的文章
-            </el-button>
-
-            <!-- 浮动窗口 -->
-            <transition name="el-fade-in-linear">
-              <div v-show=showFloatingWindow class="floating-window" :class="{ show: showFloatingWindow }"
-                   @mouseleave="closeFloatingWindow">
-                <el-input v-model="input1" placeholder="请输入" clearable/>
-                <el-button>搜索</el-button>
-              </div>
-            </transition>
+            <el-autocomplete
+                v-model="state"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="Please input"
+                @select="handleSelect"
+            />
           </div>
-
-  <el-sub-menu index="2-4" id="login">
-    <template #title>
-      {{ isLoggedIn ? `你好：${usernames}` : '登录' }}
-    </template>
-    <el-menu-item v-if="isLoggedIn" index="2-4-2">
-      <a href="#" style="text-decoration:none" @click.prevent="redirectToUserProfile">个人资料</a>
-    </el-menu-item>
-    <el-menu-item index="2-4-1">
-      <a href="" style="text-decoration:none" @click.prevent="redirectToRegister">注册</a>
-    </el-menu-item>
-  </el-sub-menu>
+          <el-sub-menu index="2-4" id="login">
+            <template #title>
+              {{ isLoggedIn ? `你好：${usernames}` : '登录' }}
+            </template>
+            <el-menu-item v-if="isLoggedIn" index="2-4-2">
+              <a href="#" style="text-decoration:none" @click.prevent="redirectToUserProfile">个人资料</a>
+            </el-menu-item>
+            <el-menu-item index="2-4-1">
+              <a href="" style="text-decoration:none" @click.prevent="redirectToRegister">注册</a>
+            </el-menu-item>
+          </el-sub-menu>
         </el-menu>
       </transition>
     </el-header>
@@ -333,7 +304,7 @@ const sendEmail = () => {
 
     <el-row :gutter="10" style=" justify-content: center; max-width: 100% ">
       <el-col xs="24" :sm="24" :md="6" :lg="4" :xl="3" class="hidden-lg-and-down;">
-        <el-card class="wow animate__bounce bounceInLeft box-card"  data-wow-duration="2s">
+        <el-card class="wow animate__bounce bounceInLeft box-card" data-wow-duration="2s">
           <div style="padding: 14px">
             <h1>Exp1oit</h1>
             <h1></h1>
@@ -342,13 +313,13 @@ const sendEmail = () => {
           <h4>联系我</h4>
           <el-container id="svg-icon">
             <a href="https://github.com/Eitsxiaozhai" target="_blank" rel="noopener noreferrer">
-            <svg  xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                 class="bi bi-github" viewBox="0 0 16 16">
-              <path
-                  d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-            </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                   class="bi bi-github" viewBox="0 0 16 16">
+                <path
+                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+              </svg>
             </a>
-            <svg  @click="sendEmail" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+            <svg @click="sendEmail" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
                  class="bi bi-envelope" viewBox="0 0 16 16">
               <path
                   d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
@@ -400,63 +371,67 @@ const sendEmail = () => {
       <transition name="el-fade-in-fast">
 
         <el-col :xs="24" :sm="24" :md="12" :lg="12" :xl="10" class="maincaretest">
-  <div class="content-container">
+          <div class="content-container">
 
-    <el-main id="maincare">
-      <div class="about">
+            <el-main id="maincare">
+              <div class="about">
 
-        <el-container v-for="(blog) in data.data" :key="blog.BlogId">
-          <el-main>
-            <keep-alive>
-              <transition name="el-fade-in-linear">
-                <router-link style="text-decoration: none"  :to="`/blog/${blog.BlogId}`">
-                  <!-- 使用条件判断选择布局 -->
-                  <template v-if="xlLayout ">
-                    <el-card class="wow animate__bounce bounceInDown box-card"  data-wow-duration="2s"  shadow="hover" id="main-boxcard"  style="display: flex; flex-direction: column; height: 99%;">
-  <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image" style="flex: 1 0 auto;">
+                <el-container v-for="(blog) in data.data" :key="blog.BlogId">
+                  <el-main>
+                    <keep-alive>
+                      <transition name="el-fade-in-linear">
+                        <router-link style="text-decoration: none" :to="`/blog/${blog.BlogId}`">
+                          <!-- 使用条件判断选择布局 -->
+                          <template v-if="xlLayout ">
+                            <el-card class="wow animate__bounce bounceInDown box-card" data-wow-duration="2s"
+                                     shadow="hover" id="main-boxcard"
+                                     style="display: flex; flex-direction: column; height: 99%;">
+                              <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image"
+                                   style="flex: 1 0 auto;">
 
-  <div style="flex: 0 0 auto; padding: 10px;">
-    <h1 style="font-size: 25px;">{{ blog.title }}</h1>
-    <p>作者:{{ blog.author }}</p>
-    <p>发布日期:{{ blog.created_at }}</p>
-  </div>
-</el-card>
+                              <div style="flex: 0 0 auto; padding: 10px;">
+                                <h1 style="font-size: 25px;">{{ blog.title }}</h1>
+                                <p>作者:{{ blog.author }}</p>
+                                <p>发布日期:{{ blog.created_at }}</p>
+                              </div>
+                            </el-card>
 
-                  </template>
-                  <template v-else>
-                    <!-- 使用你的布局 -->
-                    <el-card shadow="hover" id="main-boxcard"  class="wow animate__bounce bounceInDown box-card"  data-wow-duration="2s">
-                      <el-container>
-                        <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image">
-                        <el-main>
-                          <h1 style="font-size: 25px;">{{ blog.title }}</h1>
-                          <p>作者:{{ blog.author }}</p>
-                          <p>发布日期:{{ blog.created_at }}</p>
-                        </el-main>
-                      </el-container>
-                    </el-card>
-                  </template>
-                </router-link>
-              </transition>
-            </keep-alive>
-          </el-main>
-          <div>
-            <el-backtop :right="100" :bottom="100"/>
+                          </template>
+                          <template v-else>
+                            <!-- 使用你的布局 -->
+                            <el-card shadow="hover" id="main-boxcard" class="wow animate__bounce bounceInDown box-card"
+                                     data-wow-duration="2s">
+                              <el-container>
+                                <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image">
+                                <el-main>
+                                  <h1 style="font-size: 25px;">{{ blog.title }}</h1>
+                                  <p>作者:{{ blog.author }}</p>
+                                  <p>发布日期:{{ blog.created_at }}</p>
+                                </el-main>
+                              </el-container>
+                            </el-card>
+                          </template>
+                        </router-link>
+                      </transition>
+                    </keep-alive>
+                  </el-main>
+                  <div>
+                    <el-backtop :right="100" :bottom="100"/>
+                  </div>
+                </el-container>
+              </div>
+              <div class="bt_container" style="display: flex; justify-content: center;">
+                <el-button
+                    type="primary"
+                    @click="loadMoreCards"
+                    v-if="data.data.length % pageSize === 0 && !loading">
+                  查看更多
+                </el-button>
+                <p v-else>没有更多文章可以查看了</p>
+              </div>
+            </el-main>
           </div>
-        </el-container>
-      </div>
-      <div class="bt_container" style="display: flex; justify-content: center;">
-        <el-button
-          type="primary"
-          @click="loadMoreCards"
-          v-if="data.data.length % pageSize === 0 && !loading">
-          查看更多
-        </el-button>
-        <p v-else>没有更多文章可以查看了</p>
-      </div>
-    </el-main>
-  </div>
-</el-col>
+        </el-col>
 
       </transition>
 
@@ -464,33 +439,33 @@ const sendEmail = () => {
       <el-col :xs="24" :sm="24" :md="6" :lg="5" :xl="3" id="left2">
         <div style="position: sticky; top: 62px;">
 
-          <el-card class="wow animate__bounce animate__rollIn box-card"  data-wow-duration="2s" style="margin-top: 20px">
+          <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
             文章分类
           </el-card>
 
-          <el-card class="wow animate__bounce animate__rollIn box-card"  data-wow-duration="2s" style="margin-top: 20px">
+          <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
             资源链接
           </el-card>
 
-          <el-card class="wow animate__bounce animate__rollIn box-card"  data-wow-duration="2s" style="margin-top: 20px">
+          <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
             文章标签
           </el-card>
 
-          <el-card class="wow animate__bounce animate__rollIn box-card"  data-wow-duration="2s" style="margin-top: 20px">
+          <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
 
             <el-row>
-    <el-col :span="6">
-      <el-statistic title="浏览用户" :value="1234" />
-    </el-col>
-                  <el-col :span="6">
-      <el-statistic title="注册用户" :value="2" />
-    </el-col>
               <el-col :span="6">
-      <el-statistic title="评论数量" :value="12" />
-    </el-col>
-                            <el-col :span="6">
-      <el-statistic title="文章数" :value="2" />
-    </el-col>
+                <el-statistic title="浏览用户" :value="1234"/>
+              </el-col>
+              <el-col :span="6">
+                <el-statistic title="注册用户" :value="2"/>
+              </el-col>
+              <el-col :span="6">
+                <el-statistic title="评论数量" :value="12"/>
+              </el-col>
+              <el-col :span="6">
+                <el-statistic title="文章数" :value="2"/>
+              </el-col>
             </el-row>
           </el-card>
         </div>
@@ -499,30 +474,30 @@ const sendEmail = () => {
     </el-row>
 
     <el-footer style="margin-top: 10%">
-        <div id="footer">
-          <el-row class="footer-content">
-            <el-col :span="6">
-              <h4>联系我</h4>
-              <p>Email: watch.dog@qq.com</p>
-            </el-col>
-          </el-row>
-          <el-row class="footer-bottom">
-            <el-col :span="12">
-              <p>&copy; 2023 My Blog. All Rights Reserved.</p>
-            </el-col>
-            <el-col :span="12">
-              <p>
-  建站时间:
-  {{ timeElapsed.years }}年
-  {{ timeElapsed.months }}月
-  {{ timeElapsed.days }}天
-  {{ timeElapsed.hours }}小时
-  {{ timeElapsed.minutes }}分钟
-  {{ timeElapsed.seconds }}秒
-</p>
-            </el-col>
-          </el-row>
-        </div>
+      <div id="footer">
+        <el-row class="footer-content">
+          <el-col :span="6">
+            <h4>联系我</h4>
+            <p>Email: watch.dog@qq.com</p>
+          </el-col>
+        </el-row>
+        <el-row class="footer-bottom">
+          <el-col :span="12">
+            <p>&copy; 2023 My Blog. All Rights Reserved.</p>
+          </el-col>
+          <el-col :span="12">
+            <p>
+              建站时间:
+              {{ timeElapsed.years }}年
+              {{ timeElapsed.months }}月
+              {{ timeElapsed.days }}天
+              {{ timeElapsed.hours }}小时
+              {{ timeElapsed.minutes }}分钟
+              {{ timeElapsed.seconds }}秒
+            </p>
+          </el-col>
+        </el-row>
+      </div>
     </el-footer>
 
   </el-container>
@@ -532,14 +507,14 @@ const sendEmail = () => {
 
 <style>
 
-#app .background-container h1{
- font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
- color:#eeeeee;
- font-weight:300;
+#app .background-container h1 {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+  color: #eeeeee;
+  font-weight: 300;
 }
 
 #footer {
-  font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
   background-color: #333; /* 设置背景颜色 */
   color: #fff; /* 设置文本颜色 */
   padding: 10px 0; /* 减小上下边距 */
@@ -587,7 +562,6 @@ const sendEmail = () => {
 }
 
 
-
 .el-footer {
   padding-top: 100px;
   display: flex;
@@ -629,7 +603,7 @@ const sendEmail = () => {
   text-decoration: none;
 }
 
-body{
+body {
   background: rgb(233, 233, 235);
 }
 
@@ -645,14 +619,12 @@ body{
 
 #footer {
   background: rgba(192, 192, 213, 0.73);
-  font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
 
   position: absolute;
   left: 0;
   right: 0;
 }
-
-
 
 
 .floating-window {
@@ -672,7 +644,6 @@ body{
 .floating-window.show {
   display: block; /* 当 "showFloatingWindow" 为 true 时显示 */
 }
-
 
 
 .background-container {
