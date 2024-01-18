@@ -38,6 +38,7 @@ const convertMarkdown = (markdownText, callback) => {
 
   renderedContent = renderedContent.replace(/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/g, '<a$1href="$2"$3 style="color: blue; text-decoration: underline;">$4</a>');
   const codeBlocks = renderedContent.match(/<pre><code class="lang-(.*?)">([\s\S]*?)<\/code><\/pre>/gm);
+  renderedContent = renderedContent.replace(/<img(.*?)src="(.*?)"(.*?)>/g, '<img$1src="$2"$3 class="markdown-image">');
 
   if (codeBlocks) {
     codeBlocks.forEach(codeBlock => {
@@ -524,6 +525,10 @@ const redirectToUserProfile = () => {
 
 <style>
 
+.markdown-image {
+  max-width: 100%; /* Ensure images don't exceed the container width */
+  height: auto;    /* Maintain the aspect ratio */
+}
 .common-layout div .el-aside {
   top: 60px;
   position: sticky;
