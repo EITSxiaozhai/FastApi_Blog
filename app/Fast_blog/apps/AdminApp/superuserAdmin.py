@@ -465,7 +465,7 @@ async def BlogTagModify(blog_id: int, type: str, token: str = Depends(Adminoauth
 aliOssPrivateDocument = aliOssPrivateDocument()
 
 
-@AdminApi.get('/googleoauth2')
+@AdminApi.get('/blogseo/googleoauth2')
 async def url_sent(background_tasks: BackgroundTasks,token: str = Depends(Adminoauth2_scheme)):
     try:
         background_tasks.add_task(publish_url_notification)
