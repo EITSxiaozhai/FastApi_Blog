@@ -4,7 +4,7 @@ import {RouterLink, RouterView} from 'vue-router'
 import {useRoute} from "vue-router";
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/default.css'; // Import the style you prefer
+import 'highlight.js/styles/atom-one-dark-reasonable.css'; // Import the style you prefer
 import {useRouter} from "vue-router";
 import {reactive} from "vue";
 import backApi from '../Api/backApi.ts';
