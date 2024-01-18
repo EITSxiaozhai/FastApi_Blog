@@ -334,7 +334,7 @@ const sendEmail = () => {
 
     <el-row :gutter="10" style=" justify-content: center; max-width: 100% ">
       <el-col xs="24" :sm="24" :md="6" :lg="4" :xl="3" class="hidden-lg-and-down;">
-        <el-card>
+        <el-card class="wow animate__bounce bounceInLeft box-card"  data-wow-duration="2s">
           <div style="padding: 14px">
             <h1>Exp1oit</h1>
             <h1></h1>
@@ -413,7 +413,7 @@ const sendEmail = () => {
                 <router-link style="text-decoration: none"  :to="`/blog/${blog.BlogId}`">
                   <!-- 使用条件判断选择布局 -->
                   <template v-if="xlLayout ">
-                    <el-card class="wow animate__bounce bounceInDown box-card"  data-wow-duration="4s"  shadow="hover" id="main-boxcard"  style="display: flex; flex-direction: column; height: 99%;">
+                    <el-card class="wow animate__bounce bounceInDown box-card"  data-wow-duration="2s"  shadow="hover" id="main-boxcard"  style="display: flex; flex-direction: column; height: 99%;">
   <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image" style="flex: 1 0 auto;">
 
   <div style="flex: 0 0 auto; padding: 10px;">
@@ -426,7 +426,7 @@ const sendEmail = () => {
                   </template>
                   <template v-else>
                     <!-- 使用你的布局 -->
-                    <el-card shadow="hover" id="main-boxcard"  class="wow animate__bounce bounceInDown box-card"  data-wow-duration="4s">
+                    <el-card shadow="hover" id="main-boxcard"  class="wow animate__bounce bounceInDown box-card"  data-wow-duration="2s">
                       <el-container>
                         <img :src="blog.BlogIntroductionPicture" alt="图像描述" id="blog-image">
                         <el-main>
@@ -465,19 +465,19 @@ const sendEmail = () => {
       <el-col :xs="24" :sm="24" :md="6" :lg="5" :xl="3" id="left2">
         <div style="position: sticky; top: 62px;">
 
-          <el-card style="margin-top: 20px">
+          <el-card class="wow animate__bounce animate__rollIn box-card"  data-wow-duration="2s" style="margin-top: 20px">
             文章分类
           </el-card>
 
-          <el-card style="margin-top: 20px">
+          <el-card class="wow animate__bounce animate__rollIn box-card"  data-wow-duration="2s" style="margin-top: 20px">
             资源链接
           </el-card>
 
-          <el-card style="margin-top: 20px">
+          <el-card class="wow animate__bounce animate__rollIn box-card"  data-wow-duration="2s" style="margin-top: 20px">
             文章标签
           </el-card>
 
-          <el-card style="margin-top: 20px">
+          <el-card class="wow animate__bounce animate__rollIn box-card"  data-wow-duration="2s" style="margin-top: 20px">
 
             <el-row>
     <el-col :span="6">
