@@ -278,7 +278,6 @@ const sendEmail = () => {
   <div class="background-container" :style="{ transform: `translateY(-${scrollY}px)` }" style="z-index: 3">
     <div class="background-image"></div>
     <h1 style=";position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" ref="text" class="msg"></h1>
-    <h2>V</h2>
   </div>
 
 
@@ -587,11 +586,7 @@ const sendEmail = () => {
   margin-top: 10px; /* 设置最后一个段落的上外边距 */
 }
 
-.app {
-  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
-  'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 
-}
 
 .el-footer {
   padding-top: 100px;
@@ -658,14 +653,6 @@ body{
 }
 
 
-
-.particles-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
 
 
 .floating-window {
