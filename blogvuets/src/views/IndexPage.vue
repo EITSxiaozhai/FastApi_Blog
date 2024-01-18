@@ -300,7 +300,7 @@ const sendEmail = () => {
                 size="large"
                 placeholder="请输入"
                 @click.stop="toggleFloatingWindow"
-                style="font-size: 10px;font-family: "
+                style="font-size: 10px;"
             >搜索你感兴趣的文章
             </el-button>
 
