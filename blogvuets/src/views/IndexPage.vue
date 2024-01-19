@@ -48,7 +48,6 @@ function getData() {
       .catch(error => {
         console.error(error);
       });
-
 }
 
 const pageSize = 4;
@@ -112,7 +111,6 @@ const showFloatingWindow = ref(false);
 const toggleFloatingWindow = () => {
   showFloatingWindow.value = !showFloatingWindow.value;
 };
-
 
 
 const VerseGetting = async () => {

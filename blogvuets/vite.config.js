@@ -29,10 +29,10 @@ export default defineConfig({
         host: '0.0.0.0'
     },
     build: {
-    // 将.env.production中的变量注入到构建中
-    envDir: process.cwd(),
+        // 将.env.production中的变量注入到构建中
+        envDir: process.cwd(),
     },
     optimizeDeps: {
-    exclude: ['@unhead/vue'],
-  },
+        exclude: ['@unhead/vue'],
+    },
 })

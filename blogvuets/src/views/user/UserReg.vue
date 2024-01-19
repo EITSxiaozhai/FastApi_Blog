@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {ref, reactive, watch, onBeforeMount, nextTick, onMounted,defineProps} from 'vue';
+import {ref, reactive, watch, onBeforeMount, nextTick, onMounted, defineProps} from 'vue';
 import vueRecaptcha from 'vue3-recaptcha2';
 import {ElNotification, ElUpload, ElMessage} from 'element-plus';
 import backApi from "@/Api/backApi";
@@ -21,11 +21,11 @@ onBeforeMount(() => {
 
 //此处创建了一个Google验证码的prors.否则报错
 const props = defineProps({
-    hl: {
-            type: String,
-            required: false
-        },
-  })
+  hl: {
+    type: String,
+    required: false
+  },
+})
 
 onMounted(() => {
   //此处重写Google前端js的地址。使用国内地址就可以正常加载这个Google验证
@@ -123,7 +123,7 @@ const ruleFormRef = ref<FormInstance>()
 
 const debouncedCheckUsername = _.debounce(async (username, callback) => {
   try {
-    const response = await backApi.post('/generaluser/check-username', { username:username });
+    const response = await backApi.post('/generaluser/check-username', {username: username});
     if (response.data.exists) {
       callback(new Error('用户名已存在'));
     } else {
@@ -135,7 +135,7 @@ const debouncedCheckUsername = _.debounce(async (username, callback) => {
   }
 }, 500);  // 500毫秒的防抖延迟
 
-const validateUsername = (rule:any, value:any, callback:any) => {
+const validateUsername = (rule: any, value: any, callback: any) => {
   console.log(value);
   const reg = /^[^\s\u4e00-\u9fa5]+$/;
 
@@ -190,16 +190,22 @@ const validateEmail = (rule: any, value: any, callback: any) => {
 
 const rules = reactive({
   username: [
-    {required: true, min: 6, max: 18,validator: validateUsername,trigger: 'change'}
+    {required: true, min: 6, max: 18, validator: validateUsername, trigger: 'change'}
   ],
   password: [
-    {required: true,type:'password',message: "请填写你的密码", validator: validatePass, trigger: 'change'}
+    {required: true, type: 'password', message: "请填写你的密码", validator: validatePass, trigger: 'change'}
   ],
   confirmPassword: [
-    {required: true,type:'password',message: "请填写你的确认密码", validator: validatePass2, trigger: 'change'}
+    {required: true, type: 'password', message: "请填写你的确认密码", validator: validatePass2, trigger: 'change'}
   ],
-  verificationCode: [{required: true,message: '请输入正确邮箱验证码',trigger: 'blur',min: 6, max: 6}],
-  email: [{required: true,type: 'email', message: '请输入正确的邮箱地址', validator: validateEmail, trigger: 'change'}],
+  verificationCode: [{required: true, message: '请输入正确邮箱验证码', trigger: 'blur', min: 6, max: 6}],
+  email: [{
+    required: true,
+    type: 'email',
+    message: '请输入正确的邮箱地址',
+    validator: validateEmail,
+    trigger: 'change'
+  }],
 });
 
 
@@ -264,7 +270,7 @@ const ossUpload = async (param: any) => {
   await backApi.post('/generaluser/putuser', formData);
 };
 
-          // :ref="RegisterUserForm"
+// :ref="RegisterUserForm"
 </script>
 
 <template>
@@ -274,13 +280,13 @@ const ossUpload = async (param: any) => {
     <el-main>
       <h1 style="padding-left:40%">注册页面</h1>
       <el-form
-            :model="RegisterUserForm"
-            label-width="80px"
-            class="register-form"
-            :rules="rules"
-            @submit.prevent="register"
-            ref="registerFormRef"
-        >
+          :model="RegisterUserForm"
+          label-width="80px"
+          class="register-form"
+          :rules="rules"
+          @submit.prevent="register"
+          ref="registerFormRef"
+      >
         <el-form-item label="用户名" prop="username" :rules="rules.username">
           <el-input v-model.trim="RegisterUserForm.username" placeholder="请输入用户名"></el-input>
         </el-form-item>

@@ -1,10 +1,10 @@
 <script setup>
-import { ref, onMounted, onBeforeMount,nextTick,onActivated,defineProps} from 'vue';
+import {ref, onMounted, onBeforeMount, nextTick, onActivated, defineProps} from 'vue';
 import backApi from "@/Api/backApi";
-import { useRouter } from 'vue-router'; // 导入useRouter函数
-import { ElNotification } from 'element-plus';
+import {useRouter} from 'vue-router'; // 导入useRouter函数
+import {ElNotification} from 'element-plus';
 import vueRecaptcha from 'vue3-recaptcha2';
-import { useStore } from 'vuex';
+import {useStore} from 'vuex';
 import VueJwtDecode from 'vue-jwt-decode';
 
 
@@ -39,16 +39,15 @@ onBeforeMount(() => {
 });
 
 
-
 const token = ref(''); // 创建一个ref变量来存储令牌
 
 //此处创建了一个Google验证码的prors.否则报错
 const props = defineProps({
-    hl: {
-            type: String,
-            required: false
-        },
-  })
+  hl: {
+    type: String,
+    required: false
+  },
+})
 
 onMounted(() => {
   //此处重写Google前端js的地址。使用国内地址就可以正常加载这个Google验证
@@ -85,7 +84,7 @@ const login = async () => {
     const response = await backApi.post('/generaluser/login', {
       username: LoginUserForm.value.username,
       password: LoginUserForm.value.password,
-      googlerecaptcha : LoginUserForm.value.googlerecaptcha
+      googlerecaptcha: LoginUserForm.value.googlerecaptcha
     });
 
     if (response.data.success) {
@@ -97,76 +96,76 @@ const login = async () => {
       const decodedToken = VueJwtDecode.decode(newToken);
       const username = decodedToken.username;
       // 调用 Vuex mutation 设置 token 和用户名
-      store.commit('setTokenAndUsername', { token: newToken, username });
+      store.commit('setTokenAndUsername', {token: newToken, username});
       // 更新 Vuex store 中的用户名
       store.commit('setUsername', username);
-      if (store.getters.getLastVisitedRoute){
+      if (store.getters.getLastVisitedRoute) {
         const routepage = store.getters.getLastVisitedRoute
         router.push(`/blog/${routepage}`);
-      }
-      else {
+      } else {
         router.push(`/`);
       }
       ElNotification({
-    title: 'Success',
-    message: '登录成功',
-    type: 'success',
-  })
+        title: 'Success',
+        message: '登录成功',
+        type: 'success',
+      })
     } else {
-        ElNotification({
-    title: 'Warning',
-    message: '登录失败',
-    type: 'warning',
-  })
+      ElNotification({
+        title: 'Warning',
+        message: '登录失败',
+        type: 'warning',
+      })
       console.error('登录失败:', response.data.message);
     }
   } catch (error) {
-      ElNotification({
-    title: 'Warning',
-    message: '登录失败',
-    type: 'warning',
-  })
+    ElNotification({
+      title: 'Warning',
+      message: '登录失败',
+      type: 'warning',
+    })
     console.error('登录失败:', error);
   }
 };
 
 
-
-
 </script>
 
 <template>
-  <el-container style="height: 100%;width: 100%;background-size: cover;background-image: url('https://api.vvhan.com/api/view');" >
+  <el-container
+      style="height: 100%;width: 100%;background-size: cover;background-image: url('https://api.vvhan.com/api/view');">
     <el-main>
 
-       <el-form  :model="LoginUserForm" label-width="80px" class="login-form">
-    <el-form-item label="用户名" prop="username">
-      <el-input  v-model="LoginUserForm.username" placeholder="请输入用户名"></el-input>
-    </el-form-item>
-    <el-form-item label="密码" prop="password">
-      <el-input type="password" v-model="LoginUserForm.password"
-                placeholder="请输入密码"></el-input>
-    </el-form-item>
+      <el-form :model="LoginUserForm" label-width="80px" class="login-form">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="LoginUserForm.username" placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="LoginUserForm.password"
+                    placeholder="请输入密码"></el-input>
+        </el-form-item>
 
-    <el-form-item>
-      <div>
-  <vueRecaptcha
-  :sitekey="v2Sitekey"
-  size="normal"
-  theme="light"
-  hl="zh-CN"
-  @verify="recaptchaVerified"
-  @expire="recaptchaExpired"
-  @fail="recaptchaFailed"
-  >
-</vueRecaptcha>
-      </div>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="login" :disabled="isLoginButtonDisabled">登录</el-button>
-      <el-button  type="primary" ><router-link  style="text-decoration: none" to="/reg">注册</router-link></el-button>
-    </el-form-item>
-  </el-form>
+        <el-form-item>
+          <div>
+            <vueRecaptcha
+                :sitekey="v2Sitekey"
+                size="normal"
+                theme="light"
+                hl="zh-CN"
+                @verify="recaptchaVerified"
+                @expire="recaptchaExpired"
+                @fail="recaptchaFailed"
+            >
+            </vueRecaptcha>
+          </div>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="login" :disabled="isLoginButtonDisabled">登录</el-button>
+          <el-button type="primary">
+            <router-link style="text-decoration: none" to="/reg">注册</router-link>
+          </el-button>
+        </el-form-item>
+      </el-form>
 
     </el-main>
 
@@ -184,8 +183,8 @@ const login = async () => {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-#app .el-main form{
- background-color:#faf9f9;
+#app .el-main form {
+  background-color: #faf9f9;
   opacity: 0.9;
 
 }

@@ -26,7 +26,7 @@ const currentStep = ref(0); // 创建响应式变量用于跟踪当前标题索�
 // 创建Markdown渲染器实例
 // const md =  MarkdownIt();
 const md = new MarkdownIt({
-  langPrefix:   'language-',
+  langPrefix: 'language-',
   html: true,
   linkify: true,
   typographer: true
@@ -192,7 +192,7 @@ const fingerprint = ref(null);
 
 // 挂载时操作
 onMounted(async () => {
-   const commentx= ref(null)
+  const commentx = ref(null)
 
   // 使用Fingerprint2生成浏览器指纹
   const options = {
@@ -211,7 +211,6 @@ onMounted(async () => {
     // 可以将 fingerprintId 发送到服务器或进行其他操作
   });
 });
-
 
 
 // 投票方法操作
@@ -269,10 +268,10 @@ const LoadComments = async () => {
     config.comments = CommentList.data;
     console.log(config.comments)
     //获取到评论后下个Tick才会读取评论区高度
-      nextTick(()=>{
-    commentx.value = commentx.value.offsetHeight;
-    console.log(commentx.value)
-  })
+    nextTick(() => {
+      commentx.value = commentx.value.offsetHeight;
+      console.log(commentx.value)
+    })
   } catch (error) {
     console.error(error);
   }
@@ -510,15 +509,15 @@ const redirectToUserProfile = () => {
         </el-card>
 
         <el-card v-else>
-        <el-skeleton :rows="10" animated />
+          <el-skeleton :rows="10" animated/>
         </el-card>
 
-        <div ref="commentx" >
-        <el-card  style="margin-top: 1%">
-          <u-comment :config="config" @submit="submit" @like="like">
-          </u-comment>
-        </el-card>
-          </div>
+        <div ref="commentx">
+          <el-card style="margin-top: 1%">
+            <u-comment :config="config" @submit="submit" @like="like">
+            </u-comment>
+          </el-card>
+        </div>
       </el-main>
 
     </el-container>
@@ -530,16 +529,17 @@ const redirectToUserProfile = () => {
 
 
 <style>
-body{
+body {
   background: rgb(233, 233, 235);
 }
 
 .markdown-image {
   max-width: 100%; /* Ensure images don't exceed the container width */
-  height: auto;    /* Maintain the aspect ratio */
+  height: auto; /* Maintain the aspect ratio */
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
 .common-layout div .el-aside {
   top: 60px;
   position: sticky;

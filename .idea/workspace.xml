@@ -4,10 +4,25 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="删除无用字体">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="删除无用组件">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/components.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/components.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/.eslintrc.js" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/.eslintrc.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/babel.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/babel.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/assets/comment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/assets/comment.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/assets/emoji.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/assets/emoji.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/components/HelloWorld.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/components/HelloWorld.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/router/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/shims-vue.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/shims-vue.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/store/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/store/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/UserReg.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserReg.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,12 +34,12 @@
       <list>
         <option value="Vue Single File Component" />
         <option value="CSS File" />
-        <option value="TypeScript File" />
         <option value="Dockerfile" />
         <option value="Python Script" />
         <option value="Vue Options API Component" />
         <option value="Vue Composition API Component" />
         <option value="JavaScript File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -559,7 +574,8 @@
       <workItem from="1705246457498" duration="3429000" />
       <workItem from="1705296553008" duration="12655000" />
       <workItem from="1705369980260" duration="36526000" />
-      <workItem from="1705549106816" duration="14067000" />
+      <workItem from="1705549106816" duration="14543000" />
+      <workItem from="1705627854602" duration="1816000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -904,7 +920,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="366" />
+    <option name="localTasksCounter" value="367" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -948,7 +964,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改描述" />
     <MESSAGE value="不存在页面重定向跳转" />
     <MESSAGE value="登录成功后跳转回到登录前页面" />
     <MESSAGE value="学习验证字段" />
@@ -973,7 +988,8 @@
     <MESSAGE value="优化背景飘落" />
     <MESSAGE value="修改雪花速度" />
     <MESSAGE value="删除无用字体" />
-    <option name="LAST_COMMIT_MESSAGE" value="删除无用字体" />
+    <MESSAGE value="删除无用组件" />
+    <option name="LAST_COMMIT_MESSAGE" value="删除无用组件" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
