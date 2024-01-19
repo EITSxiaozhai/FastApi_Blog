@@ -13,6 +13,7 @@ import '@toast-ui/editor/dist/toastui-editor.css' // Editor's Style
 // import Editor from 'tui-editor'
 import Editor from '@toast-ui/editor'
 import defaultOptions from './default-options'
+import { uploadImg } from '@/api/admin/upload'
 
 export default {
   name: 'MarkdownEditor',
@@ -98,6 +99,7 @@ export default {
       this.editor.on('change', () => {
         this.$emit('input', this.editor.getMarkdown())
       })
+      this.uploadImg()
     },
     destroyEditor() {
       if (!this.editor) return
@@ -115,6 +117,20 @@ export default {
     },
     getHtml() {
       return this.editor.getHtml()
+    },
+    uploadImg() {
+      this.editor.removeHook('addImageBlobHook')
+      this.editor.on('addImageBlobHook', (_file, cb) => {
+        const file = new FormData()
+        file.append('file', _file)
+        const result = uploadImg(file)
+        result.then(({ code, msg, url }) => {
+          if (code === 0) {
+            this.$message.success(msg)
+            cb(url, file.name)
+          }
+        })
+      })
     }
   }
 }
