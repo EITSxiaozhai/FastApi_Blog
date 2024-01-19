@@ -149,31 +149,37 @@ class aliOssUpload():
         access_key_id = os.getenv('ACCESS_KEY_ID')
         access_key_secret = os.getenv('ACCESS_KEY_SECRET')
 
+
         # 填写自己的 Bucket 名称和上传地址
         self.bucket_name = 'zpwl002'
         self.upload_path = 'blog/maincare/'
+
 
         # 创建 OSS 链接
         auth = oss2.Auth(access_key_id, access_key_secret)
         self.bucket = oss2.Bucket(auth, 'http://oss-cn-hangzhou.aliyuncs.com', self.bucket_name)
 
+    # 二进制上传博客首页
     def upload_bitsfile(self, blogid, bitsfile):
         self.bucket.put_object(f'{self.upload_path}{blogid}-maincard.jpg', bitsfile)
 
+    # 二进制上传博客首页
     async def Binaryfileupload(self, blogid, bitsfile):
         await asyncio.to_thread(self.upload_bitsfile, blogid, bitsfile)
         image_url = f"http://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}{blogid}-maincard.jpg"
         return image_url
 
+    #二进制上传头像
     def upload_bitsfileAvatar(self,bitsfile):
         self.bucket.put_object(f'{self.upload_path}-avatar.jpg', bitsfile)
 
+    #二进制上传头像
     async def Binaryfileuploadavatar(self, bitsfile):
         await asyncio.to_thread(self.upload_bitsfileAvatar,  bitsfile)
         image_url = f"http://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}-avatar.jpg"
         return image_url
 
-
+    #普通上传文件地址
     def oss_upload_file(self, file_path):
         # 构造上传路径
         file_name = os.path.basename(file_path)
@@ -200,5 +206,28 @@ class aliOssPrivateDocument():
         result = self.bucket.get_object('google.json')
         return result.read()
 
+##markdown图片地址
 class aliOssBlogMarkdownimg():
-    pass
+    def __init__(self):
+        access_key_id = os.getenv('ACCESS_KEY_ID')
+        access_key_secret = os.getenv('ACCESS_KEY_SECRET')
+
+
+        # 填写自己的 Bucket 名称和上传地址
+        self.bucket_name = 'blogmarkdown'
+        self.upload_path = 'blogimg/'
+        self.blogimgconunt = 1
+
+        # 创建 OSS 链接
+        auth = oss2.Auth(access_key_id, access_key_secret)
+        self.bucket = oss2.Bucket(auth, 'http://oss-cn-shanghai.aliyuncs.com', self.bucket_name)
+
+
+    def upload_bitsfileMarkdownimg(self, bitsfile):
+        self.bucket.put_object(f'{self.upload_path}{self.blogimgconunt+1}.jpg', bitsfile)
+
+        # 二进制上传博客图片
+    async def Binaryfileuploadmarkdownimg(self, bitsfile):
+        await asyncio.to_thread(self.upload_bitsfileMarkdownimg,bitsfile)
+        image_url = f"http://{self.bucket_name}.oss-cn-shanghai.aliyuncs.com/{self.upload_path}{self.blogimgconunt+1}.jpg"
+        return image_url

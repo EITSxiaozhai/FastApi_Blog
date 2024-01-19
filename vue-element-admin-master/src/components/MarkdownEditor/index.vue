@@ -125,7 +125,7 @@ export default {
         file.append('file', _file)
         const result = uploadImg(file)
         result.then(({ code, msg, url }) => {
-          if (code === 0) {
+          if (code === 20000) {
             this.$message.success(msg)
             cb(url, file.name)
           }

@@ -4,10 +4,10 @@ import uuid
 import datetime
 
 import requests
-from fastapi import HTTPException, FastAPI
+from fastapi import HTTPException, FastAPI, UploadFile
 
 import jwt
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request, Depends,File
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import EmailStr
 from sqlalchemy import select, update, delete
@@ -17,7 +17,8 @@ from starlette.background import BackgroundTasks
 from oauth2client.service_account import ServiceAccountCredentials
 import httplib2
 from app.Fast_blog.database.database import db_session
-from app.Fast_blog.middleware.backlist import Adminoauth2_scheme,aliOssPrivateDocument,aliOssUpload, verify_recaptcha
+from app.Fast_blog.middleware.backlist import Adminoauth2_scheme, aliOssPrivateDocument, aliOssUpload, verify_recaptcha, \
+    aliOssBlogMarkdownimg
 from app.Fast_blog.model import models
 from app.Fast_blog.model.models import AdminUser, UserPrivileges, Blog, BlogTag, ReptileInclusion
 from app.Fast_blog.schemas.schemas import UserCredentials
@@ -562,5 +563,8 @@ async def publish_url_notification(notification_type="URL_UPDATED"):
             print("发生错误:", e)
 
 @AdminApi.post('/markdown/uploadimg/')
-async def markdown_img_upload(token: str = Depends(Adminoauth2_scheme)):
-    pass
+async def markdown_img_upload(file: UploadFile = File(...),token: str = Depends(Adminoauth2_scheme)):
+    waitmarkdownimg = await file.read()
+    image_url = await aliOssBlogMarkdownimg().Binaryfileuploadmarkdownimg(bitsfile=waitmarkdownimg)
+    print(image_url)
+    return {"code": 20000,"msg":"图片上传成功","file": file.filename,"url": image_url}
