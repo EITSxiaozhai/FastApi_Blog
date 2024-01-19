@@ -186,7 +186,7 @@ class aliOssUpload():
         print(image_url)
         return image_url
 
-
+##私有私有密钥类下载读取
 class aliOssPrivateDocument():
     def __init__(self):
         access_key_id = os.getenv('ACCESS_KEY_ID')
@@ -200,3 +200,5 @@ class aliOssPrivateDocument():
         result = self.bucket.get_object('google.json')
         return result.read()
 
+class aliOssBlogMarkdownimg():
+    pass
