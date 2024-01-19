@@ -216,18 +216,17 @@ class aliOssBlogMarkdownimg():
         # 填写自己的 Bucket 名称和上传地址
         self.bucket_name = 'blogmarkdown'
         self.upload_path = 'blogimg/'
-        self.blogimgconunt = 1
 
         # 创建 OSS 链接
         auth = oss2.Auth(access_key_id, access_key_secret)
         self.bucket = oss2.Bucket(auth, 'http://oss-cn-shanghai.aliyuncs.com', self.bucket_name)
 
 
-    def upload_bitsfileMarkdownimg(self, bitsfile):
-        self.bucket.put_object(f'{self.upload_path}{self.blogimgconunt+1}.jpg', bitsfile)
+    def upload_bitsfileMarkdownimg(self,bitsfile,current_blogimgconunt):
+        self.bucket.put_object(f'{self.upload_path}{current_blogimgconunt}.jpg', bitsfile)
 
         # 二进制上传博客图片
-    async def Binaryfileuploadmarkdownimg(self, bitsfile):
-        await asyncio.to_thread(self.upload_bitsfileMarkdownimg,bitsfile)
-        image_url = f"http://{self.bucket_name}.oss-cn-shanghai.aliyuncs.com/{self.upload_path}{self.blogimgconunt+1}.jpg"
+    async def Binaryfileuploadmarkdownimg(self,bitsfile,current_blogimgconunt):
+        await asyncio.to_thread(self.upload_bitsfileMarkdownimg,bitsfile,current_blogimgconunt)
+        image_url = f"http://{self.bucket_name}.oss-cn-shanghai.aliyuncs.com/{self.upload_path}{current_blogimgconunt}.jpg"
         return image_url
