@@ -3,6 +3,7 @@ import os
 import uuid
 import datetime
 
+import requests
 from fastapi import HTTPException, FastAPI
 
 import jwt
@@ -469,9 +470,32 @@ aliOssPrivateDocument = aliOssPrivateDocument()
 async def url_sent(background_tasks: BackgroundTasks,token: str = Depends(Adminoauth2_scheme)):
     try:
         background_tasks.add_task(publish_url_notification)
+
         return {"data": "请求已经发送", "code": 20000}
     except Exception as e:
         print("我们遇到了下面的问题", {"data": str(e)})
+
+@AdminApi.get('/blogseo/bingtest')
+async def bing_url_notfication():
+    url = "https://api.indexnow.org/indexnow"
+
+    headers = {
+        "Content-Type": "application/json; charset=utf-8",
+    }
+
+    payload = {
+        "host": "blog.exploit-db.xyz",
+        "key": "key",
+        "keyLocation": "key",
+        "urlList": ["https://blog.exploit-db.xyz"]
+    }
+    # 将payload转换为JSON格式
+    json_payload = json.dumps(payload)
+    # 发送POST请求
+    response = requests.post(url, headers=headers, data=json_payload)
+    # 打印响应
+    print(response.url)
+    return response.status_code
 
 async def publish_url_notification(notification_type="URL_UPDATED"):
     async with db_session() as session:
