@@ -561,5 +561,6 @@ async def publish_url_notification(notification_type="URL_UPDATED"):
         except Exception as e:
             print("发生错误:", e)
 
-
-
+@AdminApi.post('/markdown/uploadimg/')
+async def markdown_img_upload(token: str = Depends(Adminoauth2_scheme)):
+    pass
