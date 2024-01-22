@@ -177,6 +177,7 @@ export default {
         this.$message.error('标题和内容不能为空')
         return
       }
+      this.post.tags = this.value
       try {
         // 发送创建文章请求到后端
         const response = await CreateContent(this.post)

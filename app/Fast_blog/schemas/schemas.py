@@ -139,3 +139,10 @@ class CommentDTO(BaseModel):
     articleId: int
     content: str
     parentId: int
+
+class BlogCreate(BaseModel):
+    title: str
+    content: str
+    BlogIntroductionPicture: str
+    author: str
+    tags: List[str]

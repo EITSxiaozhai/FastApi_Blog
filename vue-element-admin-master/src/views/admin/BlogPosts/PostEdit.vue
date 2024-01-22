@@ -109,7 +109,13 @@ export default {
   },
   data() {
     return {
-      post: {},
+      post: {
+        title: '',
+        content: '',
+        BlogIntroductionPicture: '',
+        author: '',
+        tags: ''
+      },
       editMode: false,
       value1: '',
       title: '',
@@ -213,16 +219,18 @@ export default {
     },
     async savePost() {
       // Prepare the data to be sent to the API
-      const postData = {
-        blog_id: this.post.BlogId,
-        title: this.post.title,
-        content: this.post.content
-        // ... include other fields you want to send
-      }
-
+      // const postData = {
+      //   blog_id: this.post.BlogId,
+      //   title: this.post.title,
+      //   content: this.post.content,
+      //   author: 'test',
+      //   tags = ''
+      //   // ... include other fields you want to send
+      // }
+      this.post.tags = this.value
       try {
         // Send the data to the API using Axios or any other HTTP library
-        const response = await BlogDetailsedit(this.post.BlogId, postData)
+        const response = await BlogDetailsedit(this.post.BlogId, this.post)
         // Handle the response, update state or perform any other actions
         console.log('API response:', response.data)
 

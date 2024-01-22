@@ -1,6 +1,6 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
-
+from sqlalchemy.exc import IntegrityError
 import os
 import pickle
 from typing import Union
@@ -17,7 +17,8 @@ from fastapi import HTTPException
 
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.middleware.backlist import BlogCache, Adminoauth2_scheme, aliOssUpload
-from app.Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User
+from app.Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag
+from app.Fast_blog.schemas.schemas import BlogCreate
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -183,21 +184,33 @@ async def AdminBlogidADDimg(blog_id: int, file: UploadFile = File(...), token: s
 
 @BlogApp.post("/blog/Blogedit")
 ##博客对应ID编辑
-async def AdminBlogidedit(blog_id: int, request_data: dict = Body(...), token: str = Depends(Adminoauth2_scheme)):
+async def AdminBlogidedit(blog_id: int, blog_edit: BlogCreate, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
+            # 提取标签信息
+            tags = blog_edit.tags
 
             # 根据 BlogId 查询相应的博客
-            blog = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
-            blog_entry = blog.scalar_one()
+            result = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
+            blog_entry = result.scalar_one()
+
             # 更新博客内容
-            for key, value in request_data.items():
+            for key, value in blog_edit.dict().items():
                 if key == 'content':
                     # 编码字符串为二进制
                     setattr(blog_entry, key, bytes(value, encoding='utf-8'))
                 else:
                     setattr(blog_entry, key, value)
+
             # 提交事务
+            await session.flush()
+
+            blog_id = blog_entry.BlogId
+            # 创建对应的博客标签
+            for tag in tags:
+                blog_tag = BlogTag(Article_Type=tag, blog_id=blog_id)
+                session.add(blog_tag)
+
             await session.commit()
             return {"code": 20000, "message": "更新成功"}
         except Exception as e:
@@ -205,8 +218,6 @@ async def AdminBlogidedit(blog_id: int, request_data: dict = Body(...), token: s
             print(e)
             await session.rollback()  # 发生错误时回滚事务
             return {"code": 50000, "message": "更新失败"}
-
-
 ## 将数据存入数据库
 @BlogApp.post("/blogs/{blog_id}/ratings/")
 async def rate_blog(blog_id: str, rating: int, device_id: str):
@@ -282,24 +293,39 @@ async def SubmitComments(blog_id: int, comment: Comment):
 
 
 @BlogApp.post("/blog/BlogCreate")
-##博客Admin创建问斩
-async def AdminBlogCreate(request_data: dict, token: str = Depends(Adminoauth2_scheme)):
+##博客Admin创建文章
+async def AdminBlogCreate(blog_create: BlogCreate, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
-            content = request_data.get('content').encode('utf-8')  # 将content字段转换为字节
-            request_data['content'] = content  # 更新request_data中的content值
+            content = blog_create.content.encode('utf-8')  # 将content字段转换为字节
+            blog_create.content = content  # 更新blog_create中的content值
 
-            blog = Blog(**request_data)
+            # 提取标签信息
+            tags = blog_create.tags
 
+            # 创建博客文章
+            blog_data = blog_create.dict(exclude={'tags'})  # 排除'tags'字段
+            blog = Blog(**blog_data)
             session.add(blog)
+            await session.flush()  # 获取插入记录后的自增值
+            blog_id = blog.BlogId
+
+            # 创建对应的博客标签
+            for tag in tags:
+                blog_tag = BlogTag(Article_Type=tag, blog_id=blog_id)
+                session.add(blog_tag)
+
             await session.commit()
 
             return {"code": 20000, "message": "更新成功"}
+        except IntegrityError as e:
+            # 处理标签重复或其他数据库完整性错误
+            print("数据库完整性错误:", e)
+            return {"code": 40001, "message": "标签重复或其他数据库完整性错误"}
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
             return {"code": 50000, "message": "服务器错误"}
-
 
 @BlogApp.post("/blog/BlogDel")
 ##博客Admin删除
