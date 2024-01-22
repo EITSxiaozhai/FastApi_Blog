@@ -8,8 +8,23 @@
             v-model="post.title"
             type="textarea"
             autosize
-            placeholder="请输入内容"
+            placeholder="请输入标题"
           />
+          <el-select
+            v-model="value"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            placeholder="请选择文章标签"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
           <el-row :gutter="10" style="margin-top: 20px">
             <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
               <div class="grid-content bg-purple" />
@@ -84,7 +99,7 @@
 </template>
 
 <script>
-import { BlogDetails, BlogDetailsedit, Updatehomepageimage } from '@/api/admin/BlogPosts/BlogPosts'
+import { BlogDetails, BlogDetailsedit, Updatehomepageimage, BlogTagget } from '@/api/admin/BlogPosts/BlogPosts'
 import MarkdownEditor from '@/components/MarkdownEditor'
 
 export default {
@@ -101,13 +116,38 @@ export default {
       dialogImageUrl: '',
       dialogVisible: false,
       disabled: false,
-      fileList: []
+      fileList: [],
+      options: [
+        {
+          value: 'HTML',
+          label: 'HTML'
+        }, {
+          value: 'CSS',
+          label: 'CSS'
+        }, {
+          value: 'JavaScript',
+          label: 'JavaScript'
+        }],
+      value: []
     }
   },
   created() {
+    this.fetchArticleCategories()
     this.loadPostDetail(this.$route.query.blog_id)
   },
   methods: {
+    async fetchArticleCategories() {
+      try {
+        // 向API发送请求以获取文章分类
+        const response = await BlogTagget()
+        this.options = response.data.map(item => ({
+          value: item.Article_Type,
+          label: item.Article_Type
+        }))
+      } catch (error) {
+        console.error('获取文章分类时出错：', error)
+      }
+    },
     beforeUpload(file) {
       const blogId = this.post.BlogId
       const formData = new FormData()

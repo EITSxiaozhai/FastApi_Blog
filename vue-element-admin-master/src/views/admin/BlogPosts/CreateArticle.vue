@@ -7,6 +7,21 @@
           <h1>
             <el-input v-model="post.title" placeholder="请输入标题" />
           </h1>
+          <el-select
+            v-model="value"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            placeholder="请选择文章标签"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
           <div style="padding-top: 20px" />
           <markdown-editor v-model="post.content" style="height: 1500px" />
           <div style="padding-top: 20px">
@@ -67,7 +82,7 @@
 </template>
 
 <script>
-import { CreateContent, Updatehomepageimage } from '@/api/admin/BlogPosts/BlogPosts'
+import { CreateContent, Updatehomepageimage, BlogTagget } from '@/api/admin/BlogPosts/BlogPosts'
 import MarkdownEditor from '@/components/MarkdownEditor'
 import Cookies from 'js-cookie'
 
@@ -88,10 +103,37 @@ export default {
       dialogVisible: false,
       disabled: false,
       editMode: false,
-      fileList: []
+      fileList: [],
+      options: [
+        {
+          value: 'HTML',
+          label: 'HTML'
+        }, {
+          value: 'CSS',
+          label: 'CSS'
+        }, {
+          value: 'JavaScript',
+          label: 'JavaScript'
+        }],
+      value: []
     }
   },
+  created() {
+    this.fetchArticleCategories()
+  },
   methods: {
+    async fetchArticleCategories() {
+      try {
+        // 向API发送请求以获取文章分类
+        const response = await BlogTagget()
+        this.options = response.data.map(item => ({
+          value: item.Article_Type,
+          label: item.Article_Type
+        }))
+      } catch (error) {
+        console.error('获取文章分类时出错：', error)
+      }
+    },
     updateAuthor() {
       this.post.author = Cookies.get('username')
     },
