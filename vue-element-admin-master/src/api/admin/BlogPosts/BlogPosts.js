@@ -63,3 +63,12 @@ export function BlogTagCreate(data) {
     data
   })
 }
+
+export function BlogTagget(data) {
+  return request({
+    url: `/blog/Blogtagget`,
+    method: 'post',
+    data
+  })
+}
+
