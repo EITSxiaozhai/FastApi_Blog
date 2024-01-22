@@ -569,3 +569,12 @@ async def markdown_img_upload(file: UploadFile = File(...), token: str = Depends
     waitmarkdownimg = await file.read()
     image_url = await aliOssBlogMarkdownimg().Binaryfileuploadmarkdownimg(bitsfile=waitmarkdownimg, current_blogimgconunt=x)
     return {"code": 20000, "msg": "图片上传成功", "file": file.filename, "url": image_url}
+
+@AdminApi.post("/blog/Blogtagget")
+##博客Admin删除
+async def AdminBlogTagget(token: str = Depends(Adminoauth2_scheme)):
+    async with db_session() as session:
+        sql = select(models.BlogTag)
+        result = await session.execute(sql)
+        tags = result.scalars().all()
+        return {"code": 20000, "data":tags}
