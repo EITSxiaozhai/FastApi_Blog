@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="重写markdown上传进入阿里云">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加阿里云markdown接口">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/backlist.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/backlist.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,7 +131,7 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.grazie&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;E:\\pytest\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -560,8 +559,8 @@
       <workItem from="1705296553008" duration="12655000" />
       <workItem from="1705369980260" duration="36526000" />
       <workItem from="1705549106816" duration="14543000" />
-      <workItem from="1705627854602" duration="12862000" />
-      <workItem from="1705673123811" duration="7153000" />
+      <workItem from="1705627854602" duration="13441000" />
+      <workItem from="1705668859235" duration="1402000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -906,7 +905,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="371" />
+    <option name="localTasksCounter" value="372" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -950,7 +949,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="添加本地IP地址" />
     <MESSAGE value="重写Google验证码-修复验证字段bug" />
     <MESSAGE value="添加评论详细输出内容" />
     <MESSAGE value="修复评论判断bug" />
@@ -974,8 +972,9 @@
     <MESSAGE value="格式化代码" />
     <MESSAGE value="添加bing爬虫api" />
     <MESSAGE value="重写图片上传到阿里云" />
-    <MESSAGE value="重写markdown上传进入阿里云" />
-    <option name="LAST_COMMIT_MESSAGE" value="重写markdown上传进入阿里云" />
+    <MESSAGE value="准备添加阿里云oss博客内容图片" />
+    <MESSAGE value="添加阿里云markdown接口" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加阿里云markdown接口" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

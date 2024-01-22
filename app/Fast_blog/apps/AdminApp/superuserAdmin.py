@@ -563,16 +563,9 @@ async def publish_url_notification(notification_type="URL_UPDATED"):
             print("发生错误:", e)
 
 
-current_blogimgconunt = 0
-
-async def imgcount():
-    global current_blogimgconunt
-    current_blogimgconunt += 1
-    return current_blogimgconunt
-
 @AdminApi.post('/markdown/uploadimg/')
 async def markdown_img_upload(file: UploadFile = File(...), token: str = Depends(Adminoauth2_scheme)):
-    x = await imgcount()
+    x = datetime.datetime.now().strftime("%Y-%m-%d,%H:%M:%S")
     waitmarkdownimg = await file.read()
     image_url = await aliOssBlogMarkdownimg().Binaryfileuploadmarkdownimg(bitsfile=waitmarkdownimg, current_blogimgconunt=x)
     return {"code": 20000, "msg": "图片上传成功", "file": file.filename, "url": image_url}
