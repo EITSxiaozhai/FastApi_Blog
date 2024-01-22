@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加文章标签获取api接口">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="博客文章Tag修改增加">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/CreateArticle.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/CreateArticle.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/PostEdit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/PostEdit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -564,7 +562,7 @@
       <workItem from="1705369980260" duration="36526000" />
       <workItem from="1705549106816" duration="14543000" />
       <workItem from="1705627854602" duration="13441000" />
-      <workItem from="1705668859235" duration="18065000" />
+      <workItem from="1705668859235" duration="20479000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -909,7 +907,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="376" />
+    <option name="localTasksCounter" value="377" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -953,7 +951,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="测试进出入动画" />
     <MESSAGE value="测试进出入动画&#10;&#10;Signed-off-by: EITSxiaozhai &lt;watch.dog@qq.com&gt;" />
     <MESSAGE value="文章卡片添加动画" />
     <MESSAGE value="修复爬虫提交bug" />
@@ -978,7 +975,8 @@
     <MESSAGE value="阿里云存储修改为为时间存取" />
     <MESSAGE value="文章标签获取" />
     <MESSAGE value="添加文章标签获取api接口" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加文章标签获取api接口" />
+    <MESSAGE value="博客文章Tag修改增加" />
+    <option name="LAST_COMMIT_MESSAGE" value="博客文章Tag修改增加" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
