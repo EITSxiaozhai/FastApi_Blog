@@ -31,7 +31,7 @@ app.include_router(AdminApp.AdminApi, prefix='/api', tags=["超级用户管理�
 app.include_router(Power_Crawl.PowerApp, prefix='/api/power', tags=["电力爬虫页面"])
 app.include_router(SystemMonitoring.MonitoringApp, prefix='/api/monitoring', tags=["系统监控页面"])
 
-app.mount("/static", StaticFiles(directory="./Fast_blog/static"), name="static")
+
 
 app.add_middleware(
     CORSMiddleware,
