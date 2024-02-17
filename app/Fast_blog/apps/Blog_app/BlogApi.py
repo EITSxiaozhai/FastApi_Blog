@@ -335,7 +335,7 @@ async def AdminBlogDel(blog_id: int, token: str = Depends(Adminoauth2_scheme)):
             try:
                 result = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
                 original = result.scalars().first()
-                await    session.delete(original)
+                await session.delete(original)
                 return {"code": 20000, "message": "删除成功", "success": True}
             except Exception as e:
                 print("我们遇到了下面的问题")
