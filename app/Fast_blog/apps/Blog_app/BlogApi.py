@@ -27,8 +27,8 @@ BlogApp = APIRouter()
 
 
 
-static_folder_path = os.path.join(os.getcwd(), "Fast_blog", "static")
-BlogApp.mount("/static", StaticFiles(directory=static_folder_path), name="static")
+
+
 
 uploadoss = aliOssUpload()
 ## 博客游客用户主页显示

@@ -50,28 +50,7 @@ app.add_middleware(
 async def root():
     return {"message": "Hello world"}
 
-# @app.get("/sitemap.xml")
-# async def generate_sitemap():
-#     async with db_session() as session:
-#         my_sitemap = """<?xml version="1.0" encoding="UTF-8"?>
-#                     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">"""
-#         id = select(Blog)
-#         id = await session.execute(id)
-#         urls = []
-#         id = id.scalars().all()
-#         for blog in id:
-#             urls.append(f"""<url>
-#                   <loc>https://www.exploit-db.xyz/blog/{blog.BlogId}</loc>
-#                   <lastmod>{blog.created_at.strftime('%Y-%m-%dT%H:%M:%S+00:00')}</lastmod>
-#                   <changefreq>weekly</changefreq>
-#                   <priority>1</priority>
-#               </url>""")
-#
-#         my_sitemap += "\n".join(urls)
-#         my_sitemap += """</urlset>"""
-#
-#         return Response(content=my_sitemap, media_type="application/xml")
-#
+
 
 @app.on_event("startup")
 async def startup_event():

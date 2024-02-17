@@ -4,16 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加新功能配置">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/static/uploadimages/1.jpeg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/static/uploadimages/Screenshot 2023-05-17 211004.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/static/uploadimages/Screenshot 2023-06-28 211922.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/static/uploadimages/Screenshot 2023-07-11 155612.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/static/uploadimages/giao.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/static/uploadimages/ssss.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/static/uploadimages/sssss.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/static/uploadimages/swap.png" beforeDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="删除测试图片">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -573,7 +567,7 @@
       <workItem from="1705914905220" duration="1955000" />
       <workItem from="1706681963688" duration="1390000" />
       <workItem from="1706683390551" duration="1269000" />
-      <workItem from="1708139521096" duration="368000" />
+      <workItem from="1708139521096" duration="2357000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -918,7 +912,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="383" />
+    <option name="localTasksCounter" value="385" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -962,7 +956,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="添加Google爬虫提交收录功能" />
     <MESSAGE value="优化首页CSS" />
     <MESSAGE value="修复toekn判断-增加失效token移除" />
     <MESSAGE value="修复爬虫seobug" />
@@ -987,7 +980,8 @@
     <MESSAGE value="删除无用代码" />
     <MESSAGE value="优化代码。添加新的功能分区" />
     <MESSAGE value="添加新功能配置" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加新功能配置" />
+    <MESSAGE value="删除测试图片" />
+    <option name="LAST_COMMIT_MESSAGE" value="删除测试图片" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -996,6 +990,10 @@
           <url>file://$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py</url>
           <line>2</line>
           <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/main.py</url>
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
