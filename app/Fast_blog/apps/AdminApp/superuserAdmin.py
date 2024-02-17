@@ -61,57 +61,12 @@ async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
         getpassword = Incoming.password
         if not await verify_password(getusername, getpassword):
             raise HTTPException(status_code=401, detail="验证未通过")
-        # print(getusername)
-        # results = await session.execute(select(AdminUser).filter(AdminUser.username == getusername))
-        # user = results.scalar_one_or_none()
-        # if user is None:
-        #     # 用户名不存在
-        #     raise HTTPException(status_code=401, detail="验证未通过")
-        # elif user.userpassword != getpassword:
-        #     # 密码不匹配
-        #     raise HTTPException(status_code=401, detail="验证未通过")
-        # else:
         token_data = {
             "username": Incoming.username,
             "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
         }
         token = create_jwt_token(data=token_data)
         return {"access_token": token, "token_type": 'Bearer', "token": token}
-
-
-# "https://recaptcha.net/recaptcha/api/siteverify",
-# {
-#   params: {
-#     secret: "6LdFp74UXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXX",
-#     response: ctx.query.token
-# }
-
-
-
-# async def verify_recaptcha(UserreCAPTCHA):
-#     # 向Google reCAPTCHA验证端点发送POST请求来验证令牌
-#     async with httpx.AsyncClient() as client:
-#         response = await client.post(
-#             "https://recaptcha.net/recaptcha/api/siteverify",
-#             data={
-#                 "secret": RECAPTCHA_SECRET_KEY,
-#                 "response": UserreCAPTCHA,
-#             },
-#         )
-#
-#     # 检查验证响应
-#     if response.status_code != 200:
-#         raise HTTPException(status_code=500, detail="reCAPTCHA验证失败")
-#
-#     # 解析验证响应
-#     verification_result = response.json()
-#
-#     # 检查reCAPTCHA验证是否成功
-#     if not verification_result.get("success"):
-#         raise HTTPException(status_code=400, detail="reCAPTCHA验证失败")
-#
-#     return {"message": response.json()}
-
 
 @AdminApi.post("/user/login")
 ##博客登录
