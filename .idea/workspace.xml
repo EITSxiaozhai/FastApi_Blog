@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改危险包模块">
-      <change afterPath="$PROJECT_DIR$/app/Fast_blog/schemas/RequestInterception.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/fast-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fast-api.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/AdminApp/superuserAdmin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/apps/Blog_app/BlogApi.py" afterDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加新功能配置">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/static/uploadimages/1.jpeg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/static/uploadimages/Screenshot 2023-05-17 211004.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/static/uploadimages/Screenshot 2023-06-28 211922.png" beforeDir="false" />
@@ -18,7 +14,6 @@
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/static/uploadimages/ssss.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/static/uploadimages/sssss.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/static/uploadimages/swap.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,32 +122,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.1.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/FastApi_Blog/blogvuets/public&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;D:\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.1.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "TODO_SCOPE": "All Places",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "D:/FastApi_Blog/blogvuets/public",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "D:\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;vue.recent.templates&quot;: [
-      &quot;Vue Options API Component&quot;,
-      &quot;Vue Composition API Component&quot;
+  "keyToStringList": {
+    "vue.recent.templates": [
+      "Vue Options API Component",
+      "Vue Composition API Component"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\FastApi_Blog\blogvuets\public" />
@@ -301,12 +297,12 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="FastAPI.Unnamed" />
       <item itemvalue="Python.1" />
       <item itemvalue="Python.backlist (1)" />
       <item itemvalue="Python.backlist" />
       <item itemvalue="Python.main" />
       <item itemvalue="Python.user" />
-      <item itemvalue="FastAPI.Unnamed" />
     </list>
     <recent_temporary>
       <list>
@@ -577,6 +573,7 @@
       <workItem from="1705914905220" duration="1955000" />
       <workItem from="1706681963688" duration="1390000" />
       <workItem from="1706683390551" duration="1269000" />
+      <workItem from="1708139521096" duration="368000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -921,7 +918,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="378" />
+    <option name="localTasksCounter" value="383" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -965,9 +962,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="文章卡片添加动画" />
-    <MESSAGE value="修复爬虫提交bug" />
-    <MESSAGE value="去除链接下划线" />
     <MESSAGE value="添加Google爬虫提交收录功能" />
     <MESSAGE value="优化首页CSS" />
     <MESSAGE value="修复toekn判断-增加失效token移除" />
@@ -990,7 +984,10 @@
     <MESSAGE value="添加文章标签获取api接口" />
     <MESSAGE value="博客文章Tag修改增加" />
     <MESSAGE value="修改危险包模块" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改危险包模块" />
+    <MESSAGE value="删除无用代码" />
+    <MESSAGE value="优化代码。添加新的功能分区" />
+    <MESSAGE value="添加新功能配置" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加新功能配置" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
