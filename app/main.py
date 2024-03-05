@@ -18,7 +18,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from Fast_blog.middleware.backlist import  send_activation_email
 from app.Fast_blog.database.database import engine, db_session
 from app.Fast_blog.model.models import Blog
-
+from elasticsearch import Elasticsearch
+from logstash_async.handler import AsynchronousLogstashHandler
+import time
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -43,8 +45,8 @@ app.add_middleware(
 )
 
 
-# celery_command = "celery -A Fast_blog.middleware.backlist worker --loglevel=info -P eventlet"
-# subprocess.Popen(celery_command, shell=True)
+celery_command = "celery -A Fast_blog.middleware.backlist worker --loglevel=info -P eventlet"
+subprocess.Popen(celery_command, shell=True)
 
 @app.get("/")
 async def root():
@@ -54,9 +56,6 @@ async def root():
 
 @app.on_event("startup")
 async def startup_event():
-    logger = logging.getLogger("uvicorn.access")
-    handler = logging.handlers.RotatingFileHandler("api.log",mode="a",maxBytes = 100*1024, backupCount = 3)
-    handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
-    logger.addHandler(handler)
+    pass
 
 
