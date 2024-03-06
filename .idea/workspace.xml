@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="调整背景api接口地址">
-      <change afterPath="$PROJECT_DIR$/app/Fast_blog/apps/LogToElk/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="后台运行邮件接口" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -570,7 +566,7 @@
       <workItem from="1708139521096" duration="3858000" />
       <workItem from="1708168235976" duration="2422000" />
       <workItem from="1708996250059" duration="392000" />
-      <workItem from="1709545462699" duration="12202000" />
+      <workItem from="1709545462699" duration="13038000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -915,7 +911,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="388" />
+    <option name="localTasksCounter" value="389" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -959,7 +955,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修复爬虫seobug" />
     <MESSAGE value="markdown 图片宽度自适应" />
     <MESSAGE value="更换高亮模板" />
     <MESSAGE value="添加雪花背景飘落" />
@@ -984,7 +979,8 @@
     <MESSAGE value="删除测试图片" />
     <MESSAGE value="删除静态文件路径" />
     <MESSAGE value="调整背景api接口地址" />
-    <option name="LAST_COMMIT_MESSAGE" value="调整背景api接口地址" />
+    <MESSAGE value="后台运行邮件接口" />
+    <option name="LAST_COMMIT_MESSAGE" value="后台运行邮件接口" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
