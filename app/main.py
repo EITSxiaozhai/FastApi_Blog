@@ -1,29 +1,29 @@
-import datetime
-import logging
-import subprocess
-
-from fastapi import FastAPI, Response
-from fastapi import FastAPI
-from sqlalchemy import select
-from starlette.responses import JSONResponse
-from Fast_blog.database.database import engine
 from sqlalchemy.orm import sessionmaker
-from fastapi.staticfiles import StaticFiles
-from app.Fast_blog.apps import AdminApp
+from Fast_blog.apps import AdminApp
 from Fast_blog.apps import User_app
 from Fast_blog.apps import Blog_app
 from Fast_blog.apps import Power_Crawl
 from Fast_blog.apps import SystemMonitoring
 from fastapi.middleware.cors import CORSMiddleware
-from Fast_blog.middleware.backlist import  send_activation_email
-from app.Fast_blog.database.database import engine, db_session
-from app.Fast_blog.model.models import Blog
+from Fast_blog.middleware.exception import ExceptionHandlerMiddleware
+
+from Fast_blog.database.databaseconnection import engine
+
+from fastapi import FastAPI
+from elasticapm.contrib.starlette import make_apm_client, ElasticAPM
+import logging
+from logstash_async.handler import AsynchronousLogstashHandler
 
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
 
+#准备添加APM监控
+apm = make_apm_client()
 app = FastAPI()
+
+app.add_middleware(ExceptionHandlerMiddleware)
+app.add_middleware(ElasticAPM, client=apm)
 
 app.include_router(User_app.UserApp, prefix='/api/generaluser', tags=["普通用户页面"])
 app.include_router(Blog_app.BlogApp, prefix='/api', tags=["博客游客浏览页面"])
@@ -51,12 +51,9 @@ async def root():
     return {"message": "Hello world"}
 
 
-
+#设置日志通过logstash去发送到后端ELK集群上去
 @app.on_event("startup")
 async def startup_event():
     logger = logging.getLogger("uvicorn.access")
-    handler = logging.handlers.RotatingFileHandler("api.log",mode="a",maxBytes = 100*1024, backupCount = 3)
-    handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(message)s"))
-    logger.addHandler(handler)
-
-
+    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    logger.addHandler(AsynchronousLogstashHandler(host='127.0.0.1', port=5000, database_path=None, formatter=formatter))
