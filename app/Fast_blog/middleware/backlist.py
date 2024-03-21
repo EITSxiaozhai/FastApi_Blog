@@ -2,11 +2,10 @@
 # author: YAO XU time:
 import asyncio
 from datetime import datetime
-from http.client import HTTPException
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from random import random
+
 
 import httpx
 import oss2
