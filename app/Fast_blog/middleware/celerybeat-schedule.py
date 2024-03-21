@@ -1,5 +1,5 @@
-import sys
 from datetime import timedelta
+
 from .backlist import celery_app
 
 celery_app.conf.beat_schedule = {

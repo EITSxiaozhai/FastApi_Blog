@@ -1,11 +1,10 @@
 import asyncio
 import datetime
-import time
 from typing import List
 
+import psutil  # 用于获取系统信息
 from fastapi import APIRouter
 from fastapi import WebSocket
-import psutil  # 用于获取系统信息
 
 MonitoringApp = APIRouter()
 

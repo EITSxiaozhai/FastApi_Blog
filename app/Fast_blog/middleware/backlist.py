@@ -1,24 +1,21 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
 import asyncio
-from datetime import datetime
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-
-
-import httpx
-import oss2
 import os
+import smtplib
+from datetime import datetime
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import httpx
 import jwt
-from celery import Celery
+import oss2
 import redis
+from celery import Celery
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
 
-
-
 load_dotenv()
+
 
 db_password = os.getenv("REDIS_DB_PASSWORD")
 redis_host = os.getenv("REDIS_DB_HOSTNAME")
@@ -48,7 +45,6 @@ ALGORITHM = "HS256"
 
 celery_app = Celery('tasks', broker=f'amqp://{mq_username}:{mq_password}@{mq_host}:{mq_port}/{mq_dbname}',
                     backend=f'redis://:{db_password}@{redis_host}:{redis_port}/{redis_db}')
-
 
 
 @celery_app.task(name="middleware/backlist")
@@ -82,7 +78,6 @@ def send_activation_email(email, activation_code):
 ##token缓存到redis中
 class TokenManager():
     def __init__(self, secret_key=secret_key):
-
         self.secret_key = secret_key
         self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, username=redis_user,
                                               password=db_password)
@@ -104,6 +99,7 @@ class TokenManager():
             return True
 
         return False
+
 
 async def verify_recaptcha(UserreCAPTCHA, SecretKeyTypology):
     if SecretKeyTypology == "admin":
@@ -130,8 +126,6 @@ async def verify_recaptcha(UserreCAPTCHA, SecretKeyTypology):
         return {"message": response.json()}
 
 
-
-
 ###将命中率高的数据同步到redis中
 class BlogCache:
     def __init__(self):
@@ -142,17 +136,16 @@ class BlogCache:
 Adminoauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
 Useroauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/generaluser/token")
 
+
 ## 阿里云文件上传
 class aliOssUpload():
     def __init__(self):
         access_key_id = os.getenv('ACCESS_KEY_ID')
         access_key_secret = os.getenv('ACCESS_KEY_SECRET')
 
-
         # 填写自己的 Bucket 名称和上传地址
         self.bucket_name = 'zpwl002'
         self.upload_path = 'blog/maincare/'
-
 
         # 创建 OSS 链接
         auth = oss2.Auth(access_key_id, access_key_secret)
@@ -168,17 +161,17 @@ class aliOssUpload():
         image_url = f"http://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}{blogid}-maincard.jpg"
         return image_url
 
-    #二进制上传头像
-    def upload_bitsfileAvatar(self,bitsfile):
+    # 二进制上传头像
+    def upload_bitsfileAvatar(self, bitsfile):
         self.bucket.put_object(f'{self.upload_path}-avatar.jpg', bitsfile)
 
-    #二进制上传头像
+    # 二进制上传头像
     async def Binaryfileuploadavatar(self, bitsfile):
-        await asyncio.to_thread(self.upload_bitsfileAvatar,  bitsfile)
+        await asyncio.to_thread(self.upload_bitsfileAvatar, bitsfile)
         image_url = f"http://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}-avatar.jpg"
         return image_url
 
-    #普通上传文件地址
+    # 普通上传文件地址
     def oss_upload_file(self, file_path):
         # 构造上传路径
         file_name = os.path.basename(file_path)
@@ -191,6 +184,7 @@ class aliOssUpload():
         print(image_url)
         return image_url
 
+
 ##私有私有密钥类下载读取
 class aliOssPrivateDocument():
     def __init__(self):
@@ -201,16 +195,17 @@ class aliOssPrivateDocument():
         self.upload_path = '/'
         auth = oss2.Auth(access_key_id, access_key_secret)
         self.bucket = oss2.Bucket(auth, 'http://oss-cn-hangzhou.aliyuncs.com', self.bucket_name)
+
     def CrawlerKeyAcquisition(self):
         result = self.bucket.get_object('google.json')
         return result.read()
+
 
 ##markdown图片地址
 class aliOssBlogMarkdownimg():
     def __init__(self):
         access_key_id = os.getenv('ACCESS_KEY_ID')
         access_key_secret = os.getenv('ACCESS_KEY_SECRET')
-
 
         # 填写自己的 Bucket 名称和上传地址
         self.bucket_name = 'blogmarkdown'
@@ -220,12 +215,12 @@ class aliOssBlogMarkdownimg():
         auth = oss2.Auth(access_key_id, access_key_secret)
         self.bucket = oss2.Bucket(auth, 'http://oss-cn-shanghai.aliyuncs.com', self.bucket_name)
 
-
-    def upload_bitsfileMarkdownimg(self,bitsfile,current_blogimgconunt):
+    def upload_bitsfileMarkdownimg(self, bitsfile, current_blogimgconunt):
         self.bucket.put_object(f'{self.upload_path}{current_blogimgconunt}.jpg', bitsfile)
 
         # 二进制上传博客图片
-    async def Binaryfileuploadmarkdownimg(self,bitsfile,current_blogimgconunt):
-        await asyncio.to_thread(self.upload_bitsfileMarkdownimg,bitsfile,current_blogimgconunt)
+
+    async def Binaryfileuploadmarkdownimg(self, bitsfile, current_blogimgconunt):
+        await asyncio.to_thread(self.upload_bitsfileMarkdownimg, bitsfile, current_blogimgconunt)
         image_url = f"http://{self.bucket_name}.oss-cn-shanghai.aliyuncs.com/{self.upload_path}{current_blogimgconunt}.jpg"
         return image_url

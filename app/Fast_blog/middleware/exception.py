@@ -1,9 +1,11 @@
 import logging
+
 from fastapi import Request, HTTPException
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 logger = logging.getLogger(__name__)
+
 
 class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):

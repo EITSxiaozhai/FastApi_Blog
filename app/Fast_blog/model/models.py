@@ -1,13 +1,11 @@
-import asyncio
 import datetime
-from typing import List
+from dataclasses import dataclass
 
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey,  LargeBinary,  Float, \
+from Fast_blog.database.databaseconnection import Base
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinary, Float, \
     UniqueConstraint, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import EmailType, ChoiceType, PasswordType
-from Fast_blog.database.databaseconnection import Base
-from dataclasses import dataclass
 
 
 @dataclass
@@ -46,7 +44,8 @@ class User(Base):
 
     def to_dict(self):
         return dict(UserId=self.UserId, username=self.username, userpassword=self.userpassword,
-                    UserEmail=self.UserEmail, UserUuid=self.UserUuid,ActivationCode=self.ActivationCode, ActivationState=self.ActivationState)
+                    UserEmail=self.UserEmail, UserUuid=self.UserUuid, ActivationCode=self.ActivationCode,
+                    ActivationState=self.ActivationState)
 
 
 @dataclass
@@ -148,6 +147,7 @@ class PowerMeters(Base):
         return dict(DataNum=self.DataNum, electricityNum=self.electricityNum, PowerConsumption=self.PowerConsumption,
                     AveragePower=self.AveragePower)
 
+
 @dataclass
 class BlogRating(Base):
     __tablename__ = "blog_ratings"
@@ -159,6 +159,7 @@ class BlogRating(Base):
     def to_dict(self):
         return dict(blog_id=self.blog_id, rating=self.rating, blog=self.blog)
 
+
 @dataclass
 class Vote(Base):
     __tablename__ = "votes"
@@ -168,15 +169,17 @@ class Vote(Base):
     vote_count = Column(Integer, default=0)
     __table_args__ = (UniqueConstraint('device_id', 'blog_id'),)
 
+
 @dataclass
 class ReptileInclusion(Base):
     __tablename__ = "ReptileInclusion"
-    id = Column(Integer,primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)
     blog_id = Column(Integer, ForeignKey("blogtable.BlogId"))
     GoogleSubmissionStatus = Column(String(255))
     BingSubmissionStatus = Column(String(255))
-    Submissiontime = Column(DateTime,default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    Submissiontime = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     ReturnLog = Column(Text)
 
     def to_dict(self):
-        return dict(id=self.id, blog_id=self.blog_id, GoogleSubmissionStatus=self.googleSubmissionStatus, BingSubmissionStatus=self.bingSubmissionStatus, Submissiontime=self.Submissiontime)
+        return dict(id=self.id, blog_id=self.blog_id, GoogleSubmissionStatus=self.googleSubmissionStatus,
+                    BingSubmissionStatus=self.bingSubmissionStatus, Submissiontime=self.Submissiontime)

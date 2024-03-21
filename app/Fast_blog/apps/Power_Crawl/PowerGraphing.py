@@ -1,18 +1,17 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
-from fastapi import APIRouter
-import bs4
-import requests
 import datetime
 
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from Fast_blog.database.databaseconnection import engine
+import bs4
+import requests
 from Fast_blog.database.databaseconnection import db_session
+from Fast_blog.database.databaseconnection import engine
 from Fast_blog.middleware import celery_app
 from Fast_blog.model import models
 from Fast_blog.model.models import PowerMeters
+from fastapi import APIRouter
 from sqlalchemy import select, func, desc
+from sqlalchemy.ext.asyncio import AsyncSession
 
 PowerApp = APIRouter()
 

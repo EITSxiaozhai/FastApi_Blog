@@ -1,14 +1,13 @@
 import os
-from urllib import parse
 from asyncio import current_task
-
+from urllib import parse
 from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+import sys
 
-
-
+sys.path.append('../')
 load_dotenv()
 
 # 从环境变量中获取值

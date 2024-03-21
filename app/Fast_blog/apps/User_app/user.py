@@ -2,31 +2,30 @@
 # author: YAO XU time:
 import datetime
 import os
+import random
 import uuid
 
 import jwt
-from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy import select, update
-from sqlalchemy.orm import sessionmaker
-from fastapi import APIRouter, Request, HTTPException, Depends, UploadFile, File
-import random
-
 from Fast_blog.database.databaseconnection import engine, db_session
 from Fast_blog.middleware.backlist import TokenManager, Useroauth2_scheme, verify_recaptcha, send_activation_email, \
     aliOssUpload
 from Fast_blog.model import models
 from Fast_blog.model.models import User, Comment, Blog
-from Fast_blog.schemas.schemas import  UserCredentials, UserRegCredentials
+from Fast_blog.schemas.schemas import UserCredentials, UserRegCredentials
+from fastapi import APIRouter, Request, HTTPException, Depends, UploadFile, File
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy import select, update
+from sqlalchemy.orm import sessionmaker
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Session = SessionLocal()
 
 UserApp = APIRouter()
 
-
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
+
 
 def UUID_crt(UuidApi):
     UuidGenerator = uuid.uuid5(uuid.NAMESPACE_DNS, UuidApi)
@@ -49,12 +48,10 @@ async def GetUser(request: Request):
             print(e)
 
 
-
-
-
 def create_jwt_token(data: dict) -> str:
     token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
     return token
+
 
 async def verify_password(username: str, password: str) -> bool:
     async with db_session() as session:
@@ -74,6 +71,8 @@ async def verify_password(username: str, password: str) -> bool:
     # 返回 True 或 False
     # ...
     return True  # 示例中直接返回 True，您需要根据实际情况进行验证
+
+
 @UserApp.post("/putuser")
 async def PutUser(file: UploadFile = File(...)):
     async with db_session() as session:
@@ -83,10 +82,11 @@ async def PutUser(file: UploadFile = File(...)):
             image_url = await aliOssUpload().Binaryfileuploadavatar(bitsfile=contents)
             # Respond with any necessary data
             print(image_url)
-            return {"file_name": file.filename, "content_type": file.content_type,"image_url":image_url}
+            return {"file_name": file.filename, "content_type": file.content_type, "image_url": image_url}
         except Exception as e:
             print(f"An error occurred: {e}")
             return {"error": str(e)}
+
 
 @UserApp.post("/reguser")
 async def RegUser(reg: UserRegCredentials):
@@ -101,29 +101,29 @@ async def RegUser(reg: UserRegCredentials):
                 existing_user = result.scalar()
                 if existing_user:
                     # 用户名已存在
-                    return {"message": "用户名已存在","success": False}
+                    return {"message": "用户名已存在", "success": False}
                 else:
                     sql_verification_code = select(User).filter(User.ActivationCode == reg.EmailverificationCod)
                     result_verification_code = await session.execute(sql_verification_code)
                     existing_verification_code_user = result_verification_code.scalar()
                     if existing_verification_code_user:
-                        sql = update(User).where(User.ActivationCode == reg.EmailverificationCod).values(username =reg.username,UserUuid=UUID_crt(UuidApi=reg.username),userpassword= reg.password,UserEmail= reg.email,ActivationState=0)
+                        sql = update(User).where(User.ActivationCode == reg.EmailverificationCod).values(
+                            username=reg.username, UserUuid=UUID_crt(UuidApi=reg.username), userpassword=reg.password,
+                            UserEmail=reg.email, ActivationState=0)
                         await session.execute(sql)
                         await session.commit()
-                        return {"message": "用户已经创建","success": True}
+                        return {"message": "用户已经创建", "success": True}
             else:
-                return {"message": "reCAPTCHA 验证失败","success": False}
+                return {"message": "reCAPTCHA 验证失败", "success": False}
         except Exception as e:
-            print("发生了下面的错误:",{e})
-
-
+            print("发生了下面的错误:", {e})
 
 
 @UserApp.post("/login")
 async def UserLogin(x: UserCredentials):
     async with db_session() as session:
         try:
-            RecaptchaResponse = await verify_recaptcha(UserreCAPTCHA=x.googlerecaptcha,SecretKeyTypology="user")
+            RecaptchaResponse = await verify_recaptcha(UserreCAPTCHA=x.googlerecaptcha, SecretKeyTypology="user")
             if RecaptchaResponse["message"]["success"]:
                 sql = select(User).filter(User.username == x.username)
                 result = await session.execute(sql)
@@ -153,6 +153,7 @@ def generate_numeric_verification_code(length=6):
     # 生成指定长度的随机整数验证码
     return ''.join(str(random.randint(0, 9)) for _ in range(length))
 
+
 ##查询全部用户名
 @UserApp.post("/emailcod")
 async def CAPTCHAByEmail(request: Request):
@@ -166,14 +167,13 @@ async def CAPTCHAByEmail(request: Request):
             update_sql = update(User).where(User.UserEmail == x["email"]).values(ActivationCode=verification_code)
             result = await session.execute(update_sql)
             await session.commit()
-            send_activation_email.delay(email=x["email"],activation_code=verification_code)
+            send_activation_email.delay(email=x["email"], activation_code=verification_code)
             return {"data": 'Notification sent'}
         else:
             new_user = User(UserEmail=x["email"], ActivationCode=verification_code)
             session.add(new_user)
             await session.commit()
             return {"data": 'User added'}
-
 
 
 ##查询全部用户名
@@ -187,12 +187,14 @@ async def AllUser():
             print(i.__dict__['username'], i.__dict__['UserUuid'])
     return ("查询全部用户")
 
+
 async def CommentListUserNameGet(user):
     async with db_session() as session:
         sql = select(User).filter(User.UserId == user)
         result = await session.execute(sql)
         for i in result.first():
             return i.username
+
 
 @UserApp.post("/{vueblogid}/commentlist")
 async def CommentList(vueblogid: int):
@@ -203,7 +205,7 @@ async def CommentList(vueblogid: int):
             comment_dict = {}
             for i in result.scalars().all():
                 x = i.__dict__['uid']
-                user =  await CommentListUserNameGet(user = x)
+                user = await CommentListUserNameGet(user=x)
                 comment_data = {
                     'id': i.__dict__['id'],
                     'parentId': i.__dict__['parentId'],
@@ -232,7 +234,6 @@ async def CommentList(vueblogid: int):
             return {"error": f"commentlist {e}"}
 
 
-
 @UserApp.post("/token")
 async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
     async with db_session() as session:
@@ -249,7 +250,7 @@ async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
 
 
 @UserApp.post("/commentsave/vueblogid={vueblogid}")
-async def CommentSave(vueblogid: int, request: Request,token: str = Depends(Useroauth2_scheme)):
+async def CommentSave(vueblogid: int, request: Request, token: str = Depends(Useroauth2_scheme)):
     async with db_session() as session:
         try:
             token = token.replace("Bearer", "").strip()
@@ -264,7 +265,7 @@ async def CommentSave(vueblogid: int, request: Request,token: str = Depends(User
                     result = await session.execute(sql)
                     if result.first():
                         commentUp = Comment(
-                            uid=  i.UserId,
+                            uid=i.UserId,
                             content=x['content']['content'],
                             createTime=datetime.datetime.now(),
                             parentId=x['content']['parentId'],
@@ -273,7 +274,7 @@ async def CommentSave(vueblogid: int, request: Request,token: str = Depends(User
                         session.add(commentUp)
                         await session.flush()
                         await session.commit()
-                        return {"data":'评论添加成功'}
+                        return {"data": '评论添加成功'}
                     else:
                         return {"data": "评论添加失败", "reason": "找不到对应的博客"}
                 else:
@@ -281,7 +282,7 @@ async def CommentSave(vueblogid: int, request: Request,token: str = Depends(User
         except Exception as e:
             # 处理异常
             print(str(e))
-            return {"data": "评论添加失败","code":40002}
+            return {"data": "评论添加失败", "code": 40002}
             # 如果用户未经过身份验证或凭据无效
         except jwt.ExpiredSignatureError:
             return {"code": 40002, "message": "Token已过期"}

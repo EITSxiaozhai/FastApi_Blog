@@ -1,27 +1,27 @@
+import datetime
 import json
 import os
 import uuid
-import datetime
 
-import requests
-from fastapi import HTTPException, UploadFile
-
+import httplib2
 import jwt
+import requests
+from Fast_blog.database.databaseconnection import db_session
+from Fast_blog.middleware.backlist import Adminoauth2_scheme, aliOssPrivateDocument, verify_recaptcha, \
+    aliOssBlogMarkdownimg
+from Fast_blog.model import models
+from Fast_blog.model.models import AdminUser, UserPrivileges, Blog, ReptileInclusion
+from Fast_blog.schemas.schemas import UserCredentials
 from fastapi import APIRouter, Request, Depends, File
+from fastapi import HTTPException, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
+from oauth2client.service_account import ServiceAccountCredentials
 from pydantic import EmailStr
 from sqlalchemy import select, update
 from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import joinedload
 from starlette.background import BackgroundTasks
-from oauth2client.service_account import ServiceAccountCredentials
-import httplib2
-from Fast_blog.database.databaseconnection import db_session
-from Fast_blog.middleware.backlist import Adminoauth2_scheme, aliOssPrivateDocument, aliOssUpload, verify_recaptcha, \
-    aliOssBlogMarkdownimg
-from Fast_blog.model import models
-from Fast_blog.model.models import AdminUser, UserPrivileges, Blog, BlogTag, ReptileInclusion
-from Fast_blog.schemas.schemas import UserCredentials
+
 AdminApi = APIRouter()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -68,8 +68,9 @@ async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
         token = create_jwt_token(data=token_data)
         return {"access_token": token, "token_type": 'Bearer', "token": token}
 
+
 @AdminApi.post("/user/login")
-#博客登录
+# 博客登录
 async def UserLogin(x: UserCredentials, request: Request):
     try:
         RecaptchaResponse = await verify_recaptcha(UserreCAPTCHA=x.googlerecaptcha, SecretKeyTypology="admin")
@@ -414,7 +415,6 @@ async def BlogTagModify(blog_id: int, type: str, token: str = Depends(Adminoauth
             print("我们遇到了下面的问题", {"data": str(e)})
 
 
-
 # SCOPES = ['https://www.googleapis.com/auth/indexing']
 # ENDPOINT = "https://indexing.googleapis.com/v3/urlNotifications:publish"
 # JSON_KEY_FILE = "C:\\Users\\admin\\Desktop\\google.json"
@@ -423,13 +423,14 @@ aliOssPrivateDocument = aliOssPrivateDocument()
 
 
 @AdminApi.get('/blogseo/googleoauth2')
-async def url_sent(background_tasks: BackgroundTasks,token: str = Depends(Adminoauth2_scheme)):
+async def url_sent(background_tasks: BackgroundTasks, token: str = Depends(Adminoauth2_scheme)):
     try:
         background_tasks.add_task(publish_url_notification)
 
         return {"data": "请求已经发送", "code": 20000}
     except Exception as e:
         print("我们遇到了下面的问题", {"data": str(e)})
+
 
 @AdminApi.get('/blogseo/bingtest')
 async def bing_url_notfication():
@@ -453,6 +454,7 @@ async def bing_url_notfication():
     print(response.url)
     return response.status_code
 
+
 async def publish_url_notification(notification_type="URL_UPDATED"):
     async with db_session() as session:
         try:
@@ -466,7 +468,7 @@ async def publish_url_notification(notification_type="URL_UPDATED"):
                 # 发送通知
                 JSON_KEY_FILE = aliOssPrivateDocument.CrawlerKeyAcquisition()
                 JSON_KEY_FILE_str = JSON_KEY_FILE.decode('utf-8')
-                JSON_KEY_FILE = json.loads(JSON_KEY_FILE_str.replace("'" , '"').replace('\r\n', '\\r\\n'), strict=False)
+                JSON_KEY_FILE = json.loads(JSON_KEY_FILE_str.replace("'", '"').replace('\r\n', '\\r\\n'), strict=False)
                 SCOPES = ['https://www.googleapis.com/auth/indexing']
                 ENDPOINT = "https://indexing.googleapis.com/v3/urlNotifications:publish"
                 print(SCOPES)
@@ -526,11 +528,12 @@ async def markdown_img_upload(file: UploadFile = File(...), token: str = Depends
                        (bitsfile=waitmarkdownimg, current_blogimgconunt=x))
     return {"code": 20000, "msg": "图片上传成功", "file": file.filename, "url": image_url}
 
+
 @AdminApi.post("/blog/Blogtagget")
-#博客Admin删除
+# 博客Admin删除
 async def AdminBlogTagget(token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         sql = select(models.BlogTag)
         result = await session.execute(sql)
         tags = result.scalars().all()
-        return {"code:": 20000, "data:":tags}
+        return {"code:": 20000, "data:": tags}

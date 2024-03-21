@@ -1,8 +1,6 @@
 from datetime import datetime
-from pydantic import BaseModel, EmailStr,FileUrl
 from typing import Optional
-import sys
-
+from pydantic import BaseModel, EmailStr, FileUrl
 
 
 class UserCredentials(BaseModel):
@@ -10,15 +8,15 @@ class UserCredentials(BaseModel):
     password: str
     googlerecaptcha: str
 
+
 class UserRegCredentials(BaseModel):
     username: str
     password: str
-    confirmpassword : str
+    confirmpassword: str
     googlerecaptcha: str
     email: EmailStr
-    EmailverificationCod : int
+    EmailverificationCod: int
     UserAvatar: FileUrl
-
 
 
 class Token(BaseModel):
@@ -64,7 +62,6 @@ class UserModel(BaseModel):
 class CommentModel(BaseModel):
     id: int
     parentId: Optional[int]
-
     uid: int
     blog_id: int
     address: str
@@ -131,11 +128,11 @@ class BlogTagModel(BaseModel):
     tag_created_at: datetime
 
 
-
 class CommentDTO(BaseModel):
     articleId: int
     content: str
     parentId: int
+
 
 class BlogCreate(BaseModel):
     title: str
