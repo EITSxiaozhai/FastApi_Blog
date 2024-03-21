@@ -1,6 +1,5 @@
 import os
 from urllib import parse
-import sys
 from asyncio import current_task
 
 from dotenv import load_dotenv
@@ -8,7 +7,7 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_scop
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-sys.path.append('../')
+
 
 load_dotenv()
 

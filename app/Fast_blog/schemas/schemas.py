@@ -1,11 +1,8 @@
 from datetime import datetime
-
-from fastapi import UploadFile
 from pydantic import BaseModel, EmailStr,FileUrl
 from typing import Optional
 import sys
 
-sys.path.append('../')
 
 
 class UserCredentials(BaseModel):

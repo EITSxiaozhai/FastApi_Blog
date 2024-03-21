@@ -2,11 +2,11 @@ import asyncio
 import datetime
 from typing import List
 
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, MetaData, LargeBinary, DATETIME, Float, \
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey,  LargeBinary,  Float, \
     UniqueConstraint, Text
-from sqlalchemy.orm import relationship, Mapped
-from sqlalchemy_utils import EmailType, ChoiceType, PasswordType, Choice
-from app.Fast_blog.database.database import Base, engine
+from sqlalchemy.orm import relationship
+from sqlalchemy_utils import EmailType, ChoiceType, PasswordType
+from Fast_blog.database.databaseconnection import Base
 from dataclasses import dataclass
 
 

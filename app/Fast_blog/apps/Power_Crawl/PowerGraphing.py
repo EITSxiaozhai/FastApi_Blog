@@ -7,11 +7,11 @@ import datetime
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.Fast_blog.database.database import engine
-from app.Fast_blog.database.database import db_session
-from app.Fast_blog.middleware import celery_app
-from app.Fast_blog.model import models
-from app.Fast_blog.model.models import PowerMeters
+from Fast_blog.database.databaseconnection import engine
+from Fast_blog.database.databaseconnection import db_session
+from Fast_blog.middleware import celery_app
+from Fast_blog.model import models
+from Fast_blog.model.models import PowerMeters
 from sqlalchemy import select, func, desc
 
 PowerApp = APIRouter()

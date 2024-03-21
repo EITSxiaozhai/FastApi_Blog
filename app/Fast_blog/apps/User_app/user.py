@@ -5,23 +5,18 @@ import os
 import uuid
 
 import jwt
-import requests
 from fastapi.security import OAuth2PasswordRequestForm
-from pydantic import EmailStr
 from sqlalchemy import select, update
-
 from sqlalchemy.orm import sessionmaker
-
 from fastapi import APIRouter, Request, HTTPException, Depends, UploadFile, File
-from sqlalchemy.sql.functions import current_user
 import random
 
-from app.Fast_blog.database.database import engine, db_session
-from app.Fast_blog.middleware.backlist import TokenManager, Useroauth2_scheme, verify_recaptcha, send_activation_email, \
+from Fast_blog.database.databaseconnection import engine, db_session
+from Fast_blog.middleware.backlist import TokenManager, Useroauth2_scheme, verify_recaptcha, send_activation_email, \
     aliOssUpload
-from app.Fast_blog.model import models
-from app.Fast_blog.model.models import User, Comment, Blog
-from app.Fast_blog.schemas.schemas import CommentDTO, UserCredentials, UserRegCredentials
+from Fast_blog.model import models
+from Fast_blog.model.models import User, Comment, Blog
+from Fast_blog.schemas.schemas import  UserCredentials, UserRegCredentials
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Session = SessionLocal()
