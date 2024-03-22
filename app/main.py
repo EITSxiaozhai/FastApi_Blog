@@ -1,4 +1,7 @@
 import logging
+import os
+
+from dotenv import load_dotenv
 from elasticapm.contrib.starlette import make_apm_client, ElasticAPM
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -17,7 +20,6 @@ session = SessionLocal()
 
 # 准备添加APM监控
 app = FastAPI()
-
 app.add_middleware(ExceptionHandlerMiddleware)
 
 
@@ -48,9 +50,11 @@ async def root():
     return {"message": "Hello world"}
 
 
+load_dotenv()
+LogStash_ip = os.getenv("LogStathIP")
 # 设置日志通过logstash去发送到后端ELK集群上去
 @app.on_event("startup")
 async def startup_event():
     logger = logging.getLogger("uvicorn.access")
     formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    logger.addHandler(AsynchronousLogstashHandler(host='127.0.0.1', port=5000, database_path=None, formatter=formatter))
+    logger.addHandler(AsynchronousLogstashHandler(host=LogStash_ip, port=5044, database_path=None, formatter=formatter))
