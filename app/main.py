@@ -1,5 +1,6 @@
 import logging
 import os
+import subprocess
 
 from dotenv import load_dotenv
 from elasticapm.contrib.starlette import make_apm_client, ElasticAPM
@@ -42,8 +43,8 @@ app.add_middleware(
 )
 
 
-# celery_command = "celery -A Fast_blog.middleware.backlist worker --loglevel=info -P eventlet"
-# subprocess.Popen(celery_command, shell=True)
+celery_command = "celery -A Fast_blog.middleware.backlist worker --loglevel=info -P eventlet"
+subprocess.Popen(celery_command, shell=True)
 
 @app.get("/")
 async def root():
