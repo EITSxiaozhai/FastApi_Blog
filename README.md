@@ -1,4 +1,4 @@
-# Fastapi + Vue3/2 的全栈练习项目
+# Fastapi + Vue3/2 的全栈项目
 
 # 基本实现功能
 
