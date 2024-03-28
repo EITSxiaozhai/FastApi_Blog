@@ -59,7 +59,7 @@ service.interceptors.response.use(
       })
 
       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;  50015: refresh_token过期
-      if (res.code === 791897) {
+      if (res.code === 50008 || res.code === 50012 || res.code === 50015) {
         // 请自行在引入 MessageBox
         // import { Message, MessageBox } from 'element-ui'
         console.log(' refresh_token过期 超时......')
@@ -100,7 +100,7 @@ service.interceptors.response.use(
       return
     }
 
-    if (error.response.data.code === 50012) {
+    if (error.response.status === 401 && error.response.data.code === 50014) {
       // Message({
       //   message: 'access_token过期,自动续期',
       //   type: 'error',
@@ -109,7 +109,7 @@ service.interceptors.response.use(
       return againRequest(error)
     }
 
-    if (error.response.status === 403 && error.response.data.code === 50014) {
+    if (error.response.status === 401 && error.response.data.code === 50015) {
       // Message({
       //   message: 'refresh_token过期,重定向登录',
       //   type: 'error',

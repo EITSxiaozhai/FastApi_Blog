@@ -59,7 +59,7 @@ import { Postlist, DeletePost, Updatehomepageimage } from '@/api/admin/BlogPosts
 import { Crawlersubmitbutton } from '@/api/admin/CrawlerSubmission'
 import { MessageBox } from 'element-ui'
 import PostEdit from '@/views/admin/BlogPosts/PostEdit.vue'
-import { checkRefreshToken } from '@/api/login'
+import store from '@/store'
 
 export default {
   components: {
@@ -152,8 +152,7 @@ export default {
     },
     async tokenforcedrefresh() {
       try {
-        const response = await checkRefreshToken()
-        console.log(response.data)
+        await store.dispatch('user/handleCheckRefreshToken')
       } catch (error) {
         console.error('Create error:', error)
       }

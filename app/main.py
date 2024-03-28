@@ -4,6 +4,7 @@ import subprocess
 
 from dotenv import load_dotenv
 from elasticapm.contrib.starlette import make_apm_client, ElasticAPM
+import subprocess
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from logstash_async.handler import AsynchronousLogstashHandler
@@ -35,7 +36,7 @@ app.add_middleware(
     ##此处URL用来允许通过的域名。提高安全性，需要根据你的进行修改
     allow_origins=["https://blog.exploit-db.xyz", "https://blogapi.exploitblog.eu.org", 'http://192.168.0.149:9527',
                    'http://127.0.0.1:8000/api', 'http://192.168.0.13:9527',
-                   "https://zpwl002.oss-cn-hangzhou.aliyuncs.com"],
+                   "https://zpwl002.oss-cn-hangzhou.aliyuncs.com","https://static.cloudflareinsights.com"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -58,3 +59,4 @@ async def startup_event():
     logger = logging.getLogger("uvicorn.access")
     formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     logger.addHandler(AsynchronousLogstashHandler(host=LogStash_ip, port=5000, database_path=None, formatter=formatter))
+

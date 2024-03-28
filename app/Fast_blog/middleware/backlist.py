@@ -102,28 +102,32 @@ class TokenManager():
 
 
 async def verify_recaptcha(UserreCAPTCHA, SecretKeyTypology):
-    if SecretKeyTypology == "admin":
-        # 向Google reCAPTCHA验证端点发送POST请求来验证令牌
-        async with httpx.AsyncClient() as client:
-            response = await client.post(
-                "https://recaptcha.net/recaptcha/api/siteverify",
-                data={
-                    "secret": ADMIN_RECAPTCHA_SECRET_KEY,
-                    "response": UserreCAPTCHA,
-                },
-            )
-        return {"message": response.json()}
-    elif SecretKeyTypology == "user":
-        # 向Google reCAPTCHA验证端点发送POST请求来验证令牌
-        async with httpx.AsyncClient() as client:
-            response = await client.post(
-                "https://recaptcha.net/recaptcha/api/siteverify",
-                data={
-                    "secret": GENERAL_USER_RECAPTCHA_SECRET_KEY,
-                    "response": UserreCAPTCHA,
-                },
-            )
-        return {"message": response.json()}
+    try:
+        if SecretKeyTypology == "admin":
+            # 向Google reCAPTCHA验证端点发送POST请求来验证令牌
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    "https://recaptcha.net/recaptcha/api/siteverify",
+                    data={
+                        "secret": ADMIN_RECAPTCHA_SECRET_KEY,
+                        "response": UserreCAPTCHA,
+                    },
+                )
+            return {"message": response.json()}
+        elif SecretKeyTypology == "user":
+            # 向Google reCAPTCHA验证端点发送POST请求来验证令牌
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    "https://recaptcha.net/recaptcha/api/siteverify",
+                    data={
+                        "secret": GENERAL_USER_RECAPTCHA_SECRET_KEY,
+                        "response": UserreCAPTCHA,
+                    },
+                )
+            return {"message": response.json()}
+    except Exception as e:
+        print( f"ERROR: {e}")
+        return {"message": "服务器遇到了问题"}
 
 
 ###将命中率高的数据同步到redis中

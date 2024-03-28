@@ -46,7 +46,7 @@ def verify_token(token,typology):
             # 获取过期时间（exp 字段）
             exp_timestamp = payload['exp']
             # 获取当前时间戳
-            current_timestamp = datetime.utcnow().timestamp()
+            current_timestamp = datetime.datetime.utcnow().timestamp()
             # 检查是否过期
             if current_timestamp > exp_timestamp:
                 print("Token 已过期")
@@ -154,15 +154,13 @@ async  def Refreshtoken(request:Request):
         Refreshtoken_verification = verify_token(token=token,typology="refresh_token")
         if Refreshtoken_verification["expired"] == True and Refreshtoken_verification["username"] != "":
             token = create_jwt_token(data={"username":Refreshtoken_verification["username"],"exp": datetime.datetime.utcnow() + datetime.timedelta(seconds=20)},typology="main_token")
-            refresh_token = create_jwt_token(data={"username":Refreshtoken_verification["username"],"exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=20)},typology="refresh_token")
+            refresh_token = create_jwt_token(data={"username":Refreshtoken_verification["username"],"exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60)},typology="refresh_token")
             return \
                 {
-                    "status": 200,
-                    "message": "token刷新成功",
+                "code": 20000,
                     "data":
                     {
-                        "code": 50012,
-                        "token":token,
+                        "token": token,
                         "refresh_token":refresh_token,
                     }
                 }
@@ -196,7 +194,7 @@ async def Userinfo(request: Request, token: str = Depends(Adminoauth2_scheme)):
                                 }
             return {"code": 20001, "message": "用户未找到"}
         except jwt.ExpiredSignatureError:
-            return {"data":{"code": 50012},"message": "Token已过期"}
+            return {"code": 50012,"message": "Token已过期","error":"Token已经过期"}
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
@@ -231,7 +229,7 @@ async def Userinfo(token: str = Depends(Adminoauth2_scheme)):
                                 }
             return {"code": 20001, "message": "用户未找到"}
         except jwt.ExpiredSignatureError:
-            return {"data": {"code": 50012}, "message": "Token已过期"}
+            return {"code": 50012,"message": "Token已过期","error":"Token已经过期"}
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
@@ -261,7 +259,7 @@ async def AllAdminUser(token: str = Depends(Adminoauth2_scheme)):
                         modified_data.append(item_dict)
                 return {"code": 20000, "data": modified_data}
         except jwt.ExpiredSignatureError:
-            return {"data":{"code": 50012},"message": "Token已过期"}
+            return {"code": 50012,"message": "Token已过期","error":"Token已经过期"}
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
@@ -301,7 +299,7 @@ async def query(inputname: str, inpassword: str, inEmail: EmailStr, ingender: bo
                 print("用户添加成功")
                 return ({"用户添加成功,你的用户名为:": inputname})
         except jwt.ExpiredSignatureError:
-            return {"data": {"code": 50012}, "message": "Token已过期"}
+            return {"code": 50012,"message": "Token已过期","error":"Token已经过期"}
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
@@ -347,7 +345,7 @@ async def UpdateUser(request: Request, token: str = Depends(Adminoauth2_scheme))
             else:
                 return {"data": "User not found"}
         except jwt.ExpiredSignatureError:
-            return {"data": {"code": 50012}, "message": "Token已过期"}
+            return {"code": 50012, "message": "Token已过期"}
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
@@ -401,39 +399,6 @@ async def UserloginOut():
             print(e)
         return 0
 
-
-# ## Admin页面博客添加
-# @AdminApi.post('/blogadd')
-# async def BlogAdd(Addtitle: str, Addcontent: str, Addauthor: str, file_path: str, background_tasks: BackgroundTasks,
-#                   request: Request, token: str = Depends(Adminoauth2_scheme)):
-#     async with db_session() as session:
-#         try:
-#             # 将文件保存到磁盘
-#             # file_path = os.path.join(static_folder_path, "uploadimages", file.filename)
-#             # with open(file_path, "wb") as f:
-#             #     shutil.copyfileobj(file.file, f)
-#             content_binary = Addcontent.encode("utf-8")
-#             image_url = aliOssUpload().oss_upload_file(file_path)
-#
-#             # base_url = str(request.base_url)
-#             # 构建完整的URL地址
-#             # image_url = f"{base_url.rstrip('/')}/static/uploadimages/{file.filename}"
-#             # 构建参数值字典
-#             new_blog_entry = Blog(
-#                 title=Addtitle,
-#                 content=content_binary,
-#                 BlogIntroductionPicture=image_url,
-#                 author=Addauthor,
-#                 created_at=datetime.datetime.now(),
-#             )
-#             session.add(new_blog_entry)
-#             await session.commit()
-#             return {'message': '文章已经添加到对应数据库', 'image_url': image_url}
-#
-#         except Exception as e:
-#             print("我们遇到了下面的问题", {"data": e})
-
-
 @AdminApi.post('/Blogtaglist')
 async def BlogTagList(token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
@@ -453,7 +418,7 @@ async def BlogTagList(token: str = Depends(Adminoauth2_scheme)):
                         }
             return {"data": enddata, "code": 20000}
         except jwt.ExpiredSignatureError:
-            return {"data": {"code": 50012}, "message": "Token已过期"}
+            return {"code": 50012, "message": "Token已过期"}
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
@@ -468,7 +433,7 @@ async def BlogTagcreate(type: str, blog_id: int, token: str = Depends(Adminoauth
             await session.commit()
             return {"data": new_type, "code": 20000}
         except jwt.ExpiredSignatureError:
-            return {"data": {"code": 50012}, "message": "Token已过期"}
+            return {"code": 50012, "message": "Token已过期"}
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
@@ -618,7 +583,17 @@ async def markdown_img_upload(file: UploadFile = File(...), token: str = Depends
 # 博客Admin删除
 async def AdminBlogTagget(token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
-        sql = select(models.BlogTag)
-        result = await session.execute(sql)
-        tags = result.scalars().all()
-        return {"code:": 20000, "data:": tags}
+        try:
+            if verify_token(token=token,typology="main_token"):
+                sql = select(models.BlogTag)
+                result = await session.execute(sql)
+                tags = result.scalars().all()
+                return {"code:": 20000, "data:": tags}
+            else:
+                return {"code": 50012, "message": "Token已过期"}
+        except jwt.ExpiredSignatureError:
+            return {"code": 50012, "message": "Token已过期"}
+        except jwt.InvalidTokenError:
+            return {"code": 40003, "message": "无效的Token"}
+        except Exception as e:
+            return {"code": 50000, "message": "内部服务器错误"}

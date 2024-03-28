@@ -15,6 +15,7 @@ from sqlalchemy import select
 from sqlalchemy import update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
+from app.Fast_blog.apps.AdminApp.superuserAdmin import verify_token
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -72,7 +73,7 @@ async def AdminBlogIndex(token: str = Depends(Adminoauth2_scheme)):
             if results is not None:
                 data = results.scalars().all()
                 data = [item.to_dict() for item in data]
-                print(data)
+
                 return {"code": 20000, "data": data}
             else:
                 return {"code": 20001, "message": "未找到数据"}
@@ -311,6 +312,10 @@ async def AdminBlogCreate(blog_create: BlogCreate, token: str = Depends(Adminoau
             await session.commit()
 
             return {"code": 20000, "message": "更新成功"}
+        except jwt.ExpiredSignatureError:
+            return {"code": 50012,"message": "Token已过期","error":"Token已经过期"}
+        except jwt.InvalidTokenError:
+            return {"code": 40003, "message": "无效的Token"}
         except IntegrityError as e:
             # 处理标签重复或其他数据库完整性错误
             print("数据库完整性错误:", e)
@@ -327,12 +332,15 @@ async def AdminBlogDel(blog_id: int, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         async with session.begin():
             try:
-                result = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
-                original = result.scalars().first()
-                await session.delete(original)
-                return {"code": 20000, "message": "删除成功", "success": True}
+                if verify_token(token=token, typology="main_token" ):
+                    result = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
+                    original = result.scalars().first()
+                    await session.delete(original)
+                    return {"code": 20000, "message": "删除成功", "success": True}
+                else:
+                    return {"code": 50014,"status":401}
             except jwt.ExpiredSignatureError:
-                return {"data": {"code": 50012}, "message": "Token已过期"}
+                return {"code": 50012, "message": "Token已过期"}
             except jwt.InvalidTokenError:
                 return {"code": 40003, "message": "无效的Token"}
             except Exception as e:
