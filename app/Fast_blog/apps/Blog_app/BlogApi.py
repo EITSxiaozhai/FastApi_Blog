@@ -2,7 +2,7 @@
 # author: YAO XU time:
 import pickle
 from typing import Union
-
+import jwt
 from Fast_blog.database.databaseconnection import engine, db_session
 from Fast_blog.middleware.backlist import BlogCache, Adminoauth2_scheme, aliOssUpload
 from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag
@@ -331,7 +331,9 @@ async def AdminBlogDel(blog_id: int, token: str = Depends(Adminoauth2_scheme)):
                 original = result.scalars().first()
                 await session.delete(original)
                 return {"code": 20000, "message": "删除成功", "success": True}
+            except jwt.ExpiredSignatureError:
+                return {"data": {"code": 50012}, "message": "Token已过期"}
+            except jwt.InvalidTokenError:
+                return {"code": 40003, "message": "无效的Token"}
             except Exception as e:
-                print("我们遇到了下面的问题")
-                print(e)
-                return {"code": 50000, "message": "服务器错误", "success": False}
+                return {"code": 50000, "message": "内部服务器错误"}

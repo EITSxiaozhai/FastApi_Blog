@@ -34,8 +34,7 @@ app.add_middleware(
     CORSMiddleware,
     ##此处URL用来允许通过的域名。提高安全性，需要根据你的进行修改
     allow_origins=["https://blog.exploit-db.xyz", "https://blogapi.exploitblog.eu.org", 'http://192.168.0.149:9527',
-                   'http://127.0.0.1:8000/api', "http://192.168.0.6:5173", "http://192.168.0.200:5173",
-                   "http://192.168.0.200:9527", "http://192.168.0.6:9527",
+                   'http://127.0.0.1:8000/api', 'http://192.168.0.13:9527',
                    "https://zpwl002.oss-cn-hangzhou.aliyuncs.com"],
     allow_credentials=False,
     allow_methods=["*"],
@@ -43,8 +42,8 @@ app.add_middleware(
 )
 
 
-celery_command = "celery -A Fast_blog.middleware.backlist worker --loglevel=info -P eventlet"
-subprocess.Popen(celery_command, shell=True)
+#celery_command = "celery -A Fast_blog.middleware.backlist worker --loglevel=info -P eventlet"
+#subprocess.Popen(celery_command, shell=True)
 
 @app.get("/")
 async def root():
@@ -58,4 +57,4 @@ LogStash_ip = os.getenv("LogStathIP")
 async def startup_event():
     logger = logging.getLogger("uvicorn.access")
     formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    logger.addHandler(AsynchronousLogstashHandler(host=LogStash_ip, port=5044, database_path=None, formatter=formatter))
+    logger.addHandler(AsynchronousLogstashHandler(host=LogStash_ip, port=5000, database_path=None, formatter=formatter))

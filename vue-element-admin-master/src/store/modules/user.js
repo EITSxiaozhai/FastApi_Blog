@@ -1,9 +1,10 @@
 import { login, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, getRefreshToken, setRefreshToken, removeRefreshToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
-
+import { checkRefreshToken } from '@/api/login'
 const state = {
   token: getToken(),
+  refresh_token: getRefreshToken(),
   name: '',
   avatar: '',
   introduction: '',
@@ -13,6 +14,9 @@ const state = {
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
+  },
+  SET_REFRESH_TOKEN: (state, token) => {
+    state.refresh_token = token
   },
   SET_INTRODUCTION: (state, introduction) => {
     state.introduction = introduction
@@ -36,7 +40,9 @@ const actions = {
       login({ username: username.trim(), password: password, googlerecaptcha: googlerecaptcha }).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.token)
+        commit('SET_REFRESH_TOKEN', data.refresh_token)
         setToken(data.token)
+        setRefreshToken(data.refresh_token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -76,8 +82,26 @@ const actions = {
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       removeToken()
+      removeRefreshToken()
       resetRouter()
       commit('RESET_STATE')
+      resolve()
+    })
+  },
+
+  // 前端 登出
+  FedLogOut({ commit, dispatch }) {
+    return new Promise(resolve => {
+      commit('SET_TOKEN', '')
+      commit('SET_REFRESH_TOKEN', '')
+      removeToken()
+      removeRefreshToken()
+      resetRouter()
+
+      // reset visited views and cached views
+      // to fixed https://github.com/PanJiaChen/vue-element-admin/issues/2485
+      dispatch('tagsView/delAllViews', null, { root: true })
+
       resolve()
     })
   },
@@ -88,6 +112,26 @@ const actions = {
       removeToken() // must remove  token  first
       commit('RESET_STATE')
       resolve()
+    })
+  },
+
+  // accessToken超时
+  handleCheckRefreshToken({ state, commit }) {
+    return new Promise((resolve, reject) => {
+      console.log('state.token', state.token)
+      console.log('state.refresh_token', state.refresh_token)
+      checkRefreshToken().then(res => {
+        const data = res.data
+        commit('SET_TOKEN', data.token)
+        commit('SET_REFRESH_TOKEN', data.refresh_token)
+        setToken(data.token)
+        setRefreshToken(data.refresh_token)
+
+        resolve()
+      }).catch((error) => {
+        console.log('error.......', error)
+        reject(error)
+      })
     })
   },
 

@@ -16,6 +16,9 @@
         <el-col :span="6">
           <el-button type="primary" @click="Crawlerrequestsent">文章爬虫提交</el-button>
         </el-col>
+        <el-col :span="6">
+          <el-button type="primary" @click="tokenforcedrefresh">token强制刷新</el-button>
+        </el-col>
       </el-row>
     </el-header>
     <el-main>
@@ -56,6 +59,7 @@ import { Postlist, DeletePost, Updatehomepageimage } from '@/api/admin/BlogPosts
 import { Crawlersubmitbutton } from '@/api/admin/CrawlerSubmission'
 import { MessageBox } from 'element-ui'
 import PostEdit from '@/views/admin/BlogPosts/PostEdit.vue'
+import { checkRefreshToken } from '@/api/login'
 
 export default {
   components: {
@@ -145,6 +149,14 @@ export default {
         })
 
       return true
+    },
+    async tokenforcedrefresh() {
+      try {
+        const response = await checkRefreshToken()
+        console.log(response.data)
+      } catch (error) {
+        console.error('Create error:', error)
+      }
     },
     async createItem() {
       try {
