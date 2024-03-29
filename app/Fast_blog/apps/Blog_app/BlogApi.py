@@ -3,10 +3,12 @@
 import pickle
 from typing import Union
 import jwt
+from functools import partial
 from Fast_blog.database.databaseconnection import engine, db_session
 from Fast_blog.middleware.backlist import BlogCache, Adminoauth2_scheme, aliOssUpload
 from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag
 from Fast_blog.schemas.schemas import BlogCreate
+from Fast_blog.middleware.TokenAuthentication import verify_token
 from fastapi import APIRouter, UploadFile
 from fastapi import Depends, File
 from fastapi import HTTPException
@@ -15,7 +17,7 @@ from sqlalchemy import select
 from sqlalchemy import update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
-from app.Fast_blog.apps.AdminApp.superuserAdmin import verify_token
+
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -291,6 +293,7 @@ async def SubmitComments(blog_id: int, comment: Comment):
 async def AdminBlogCreate(blog_create: BlogCreate, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
+
             content = blog_create.content.encode('utf-8')  # 将content字段转换为字节
             blog_create.content = content  # 更新blog_create中的content值
 
@@ -330,18 +333,13 @@ async def AdminBlogCreate(blog_create: BlogCreate, token: str = Depends(Adminoau
 ##博客Admin删除
 async def AdminBlogDel(blog_id: int, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
-        async with session.begin():
             try:
-                if verify_token(token=token, typology="main_token" ):
-                    result = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
-                    original = result.scalars().first()
-                    await session.delete(original)
-                    return {"code": 20000, "message": "删除成功", "success": True}
-                else:
-                    return {"code": 50014,"status":401}
+                result = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
+                original = result.scalars().first()
+                await session.delete(original)
+                return {"code": 20000, "message": "删除成功", "success": True}
             except jwt.ExpiredSignatureError:
-                return {"code": 50012, "message": "Token已过期"}
+                raise HTTPException(status_code=401, detail={"code":50014})
             except jwt.InvalidTokenError:
-                return {"code": 40003, "message": "无效的Token"}
-            except Exception as e:
-                return {"code": 50000, "message": "内部服务器错误"}
+                raise HTTPException(status_code=401, detail={"code":50014})
+

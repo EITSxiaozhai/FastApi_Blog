@@ -49,7 +49,7 @@ service.interceptors.response.use(
    * 以下代码均为样例，请结合自生需求加以修改，若不需要，则可删除
    */
   response => {
-    const res = response.data
+    const res = response.data.data
     // console.log('response interceptor', response)
     if (res.code !== 20000) {
       Message({
@@ -79,17 +79,6 @@ service.interceptors.response.use(
     }
   },
   error => {
-    // Error对象可能log出来并不是你想象的那种以对象的样子出现
-    console.log(error.response) // console.log(error) 401 再判断 error.response.data.code
-    // // let config = error.response.config
-    // console.log('err' + error) // for debug
-
-    // Message({
-    //   message: error.message,
-    //   type: 'error',
-    //   duration: 5 * 1000
-    // })
-
     // 拦截网络连接非 200 及 401 响应的错误, eg. Status Code: 500 Internal Server Error
     if (error.response.status !== 200 && error.response.status !== 401) {
       Message({
@@ -100,7 +89,7 @@ service.interceptors.response.use(
       return
     }
 
-    if (error.response.status === 401 && error.response.data.code === 50014) {
+    if (error.response.status === 401 && error.response.data.detail.code === 50014) {
       // Message({
       //   message: 'access_token过期,自动续期',
       //   type: 'error',
@@ -109,7 +98,7 @@ service.interceptors.response.use(
       return againRequest(error)
     }
 
-    if (error.response.status === 401 && error.response.data.code === 50015) {
+    if (error.response.status === 401 && error.response.data.detail.code === 50015) {
       // Message({
       //   message: 'refresh_token过期,重定向登录',
       //   type: 'error',

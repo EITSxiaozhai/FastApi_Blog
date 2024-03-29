@@ -2,7 +2,6 @@ import datetime
 import json
 import os
 import uuid
-
 import httplib2
 import jwt
 import requests
@@ -22,6 +21,8 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import joinedload
 from starlette.background import BackgroundTasks
 
+from app.Fast_blog.middleware.TokenAuthentication import verify_token
+
 AdminApi = APIRouter()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -37,44 +38,6 @@ def create_jwt_token(data: dict,typology) -> str:
     elif typology == "refresh_token":
         token = jwt.encode(data, REFRESHSECRET_KEY, algorithm=ALGORITHM)
         return token
-
-def verify_token(token,typology):
-    try:
-        if typology == "main_token":
-            # 解码 JWT，此处JWT 使用 HS256 算法进行签名
-            payload = jwt.decode(token,SECRET_KEY,algorithms=["HS256"])
-            # 获取过期时间（exp 字段）
-            exp_timestamp = payload['exp']
-            # 获取当前时间戳
-            current_timestamp = datetime.datetime.utcnow().timestamp()
-            # 检查是否过期
-            if current_timestamp > exp_timestamp:
-                print("Token 已过期")
-                return False
-            else:
-                print("Token 未过期")
-                return True
-        elif typology == "refresh_token":
-            # 解码 JWT，此处JWT 使用 HS256 算法进行签名
-            payload = jwt.decode(token,REFRESHSECRET_KEY,algorithms=["HS256"])
-            # 获取过期时间（exp 字段）
-            exp_timestamp = payload['exp']
-            detoken_username = payload['username']
-            # 获取当前时间戳
-            current_timestamp = datetime.datetime.utcnow().timestamp()
-            # 检查是否过期
-            if current_timestamp > exp_timestamp:
-                print("Token 已过期")
-                return False
-            else:
-                print("Token 未过期")
-                return {"expired":True,"username":detoken_username}
-    except jwt.ExpiredSignatureError:
-        print("Token 已过期")
-        return False
-    except jwt.InvalidTokenError:
-        print("无效的 Token")
-        return False
 
 async def verify_password(username: str, password: str) -> bool:
     async with db_session() as session:
@@ -145,23 +108,26 @@ async def UserLogin(x: UserCredentials, request: Request):
 @AdminApi.post("/user/refreshtoken")
 async  def Refreshtoken(request:Request):
     # 获取请求头中的 Authorization 值
+
     authorization_header = request.headers.get('authorization')
+    print(authorization_header)
     # 检查是否存在 Authorization 头
     if authorization_header:
         # 使用空格分割字符串，并获取第二部分（即令牌内容）
         token = authorization_header.split('Bearer ')[1]
-        print("Token Content:", token)
         Refreshtoken_verification = verify_token(token=token,typology="refresh_token")
         if Refreshtoken_verification["expired"] == True and Refreshtoken_verification["username"] != "":
             token = create_jwt_token(data={"username":Refreshtoken_verification["username"],"exp": datetime.datetime.utcnow() + datetime.timedelta(seconds=20)},typology="main_token")
             refresh_token = create_jwt_token(data={"username":Refreshtoken_verification["username"],"exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60)},typology="refresh_token")
             return \
                 {
-                "code": 20000,
+                    "code": 20000,
                     "data":
                     {
                         "token": token,
                         "refresh_token":refresh_token,
+                        "message":"token刷新成功",
+                        "code": 20000,
                     }
                 }
     else:
