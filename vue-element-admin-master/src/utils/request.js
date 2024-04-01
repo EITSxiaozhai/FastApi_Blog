@@ -49,7 +49,7 @@ service.interceptors.response.use(
    * 以下代码均为样例，请结合自生需求加以修改，若不需要，则可删除
    */
   response => {
-    const res = response.data.data
+    const res = response.data
     // console.log('response interceptor', response)
     if (res.code !== 20000) {
       Message({

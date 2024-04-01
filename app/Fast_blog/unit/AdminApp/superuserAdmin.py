@@ -6,7 +6,7 @@ import httplib2
 import jwt
 import requests
 from Fast_blog.database.databaseconnection import db_session
-from Fast_blog.middleware.backlist import Adminoauth2_scheme, aliOssPrivateDocument, verify_recaptcha, \
+from Fast_blog.middleware.backtasks import Adminoauth2_scheme, aliOssPrivateDocument, verify_recaptcha, \
     aliOssBlogMarkdownimg
 from Fast_blog.model import models
 from Fast_blog.model.models import AdminUser, UserPrivileges, Blog, ReptileInclusion
@@ -21,7 +21,7 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.orm import joinedload
 from starlette.background import BackgroundTasks
 
-from app.Fast_blog.middleware.TokenAuthentication import verify_token
+from Fast_blog.middleware import verify_Refresh_token,verify_Access_token
 
 AdminApi = APIRouter()
 
@@ -110,13 +110,15 @@ async  def Refreshtoken(request:Request):
     # 获取请求头中的 Authorization 值
 
     authorization_header = request.headers.get('authorization')
-    print(authorization_header)
+
     # 检查是否存在 Authorization 头
     if authorization_header:
         # 使用空格分割字符串，并获取第二部分（即令牌内容）
         token = authorization_header.split('Bearer ')[1]
-        Refreshtoken_verification = verify_token(token=token,typology="refresh_token")
-        if Refreshtoken_verification["expired"] == True and Refreshtoken_verification["username"] != "":
+        print(token)
+        Refreshtoken_verification =await verify_Refresh_token(Refreshtoken=authorization_header)
+        print(Refreshtoken_verification)
+        if Refreshtoken_verification["expired"] == False and Refreshtoken_verification["username"] != "":
             token = create_jwt_token(data={"username":Refreshtoken_verification["username"],"exp": datetime.datetime.utcnow() + datetime.timedelta(seconds=20)},typology="main_token")
             refresh_token = create_jwt_token(data={"username":Refreshtoken_verification["username"],"exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60)},typology="refresh_token")
             return \
@@ -138,7 +140,7 @@ async  def Refreshtoken(request:Request):
 async def Userinfo(request: Request, token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
-            print(token)
+
             if token:
                 token = token.replace("Bearer", "").strip()
                 # Verify and decode the token
@@ -550,7 +552,7 @@ async def markdown_img_upload(file: UploadFile = File(...), token: str = Depends
 async def AdminBlogTagget(token: str = Depends(Adminoauth2_scheme)):
     async with db_session() as session:
         try:
-            if verify_token(token=token,typology="main_token"):
+            if verify_Access_token():
                 sql = select(models.BlogTag)
                 result = await session.execute(sql)
                 tags = result.scalars().all()

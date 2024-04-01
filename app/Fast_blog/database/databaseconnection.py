@@ -7,7 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import sys
 
-sys.path.append('../')
+
 load_dotenv()
 
 # 从环境变量中获取值

@@ -9,11 +9,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from logstash_async.handler import AsynchronousLogstashHandler
 from sqlalchemy.orm import sessionmaker
-from Fast_blog.apps import AdminApp
-from Fast_blog.apps import Blog_app
-from Fast_blog.apps import Power_Crawl
-from Fast_blog.apps import SystemMonitoring
-from Fast_blog.apps import User_app
+from Fast_blog.unit import AdminApp
+from Fast_blog.unit import Blog_app
+from Fast_blog.unit import Power_Crawl
+from Fast_blog.unit import SystemMonitoring
+from Fast_blog.unit import User_app
 from Fast_blog.database.databaseconnection import engine
 from Fast_blog.middleware.exception import ExceptionHandlerMiddleware
 
@@ -22,7 +22,7 @@ session = SessionLocal()
 
 # 准备添加APM监控
 app = FastAPI()
-app.add_middleware(ExceptionHandlerMiddleware)
+# app.add_middleware(ExceptionHandlerMiddleware)
 
 
 app.include_router(User_app.UserApp, prefix='/api/generaluser', tags=["普通用户页面"])

@@ -5,10 +5,10 @@ from typing import Union
 import jwt
 from functools import partial
 from Fast_blog.database.databaseconnection import engine, db_session
-from Fast_blog.middleware.backlist import BlogCache, Adminoauth2_scheme, aliOssUpload
+from Fast_blog.middleware.backtasks import BlogCache, Adminoauth2_scheme, aliOssUpload
 from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag
 from Fast_blog.schemas.schemas import BlogCreate
-from Fast_blog.middleware.TokenAuthentication import verify_token
+from Fast_blog.middleware.TokenAuthentication import verify_Access_token,verify_Refresh_token
 from fastapi import APIRouter, UploadFile
 from fastapi import Depends, File
 from fastapi import HTTPException
@@ -324,20 +324,23 @@ async def AdminBlogCreate(blog_create: BlogCreate, token: str = Depends(Adminoau
             print("数据库完整性错误:", e)
             return {"code": 40001, "message": "标签重复或其他数据库完整性错误"}
         except Exception as e:
-            print("我们遇到了下面的问题")
             print(e)
-            return {"code": 50000, "message": "服务器错误"}
+            raise HTTPException(status_code=401, detail={"code": 50014, "message": "Token验证出现问题"})
 
 
 @BlogApp.post("/blog/BlogDel")
 ##博客Admin删除
-async def AdminBlogDel(blog_id: int, token: str = Depends(Adminoauth2_scheme)):
+async def AdminBlogDel(blog_id: int, verified_Access_token: bool = Depends(verify_Access_token)):
     async with db_session() as session:
             try:
-                result = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
-                original = result.scalars().first()
-                await session.delete(original)
-                return {"code": 20000, "message": "删除成功", "success": True}
+                if verified_Access_token:
+                    result = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
+                    original = result.scalars().first()
+                    await session.delete(original)
+                    await session.commit()
+                    return {"code": 20000, "message": "删除成功", "success": True}
+                else:
+                    raise HTTPException(status_code=401, detail={"code": 50014})
             except jwt.ExpiredSignatureError:
                 raise HTTPException(status_code=401, detail={"code":50014})
             except jwt.InvalidTokenError:
