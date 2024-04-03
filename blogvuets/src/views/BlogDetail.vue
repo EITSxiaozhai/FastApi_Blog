@@ -230,7 +230,7 @@ const vote = async () => {
       device_id: device_id.toString(),
     });
 
-    const response = await backApi.post(`/blogs/${blogId}/ratings/?${queryParams.toString()}`);
+    const response = await backApi.post(`/views/blogs/${blogId}/ratings/?${queryParams.toString()}`);
     const oldContent = data.data[0].content; // 保存投票前的内容
     data.data = response.data;
 
@@ -252,7 +252,7 @@ const averageRating = ref(0); // 创建一个 ref 来存储平均评分
 const getAverageRating = async () => {
   const blogId = route.params.blogId;
   try {
-    const response = await backApi.get(`/blogs/${blogId}/average-rating/`);
+    const response = await backApi.get(`/views/blogs/${blogId}/average-rating/`);
     averageRating.value = response.data; // 设置平均评分数据到 ref
   } catch (error) {
     console.error(error);

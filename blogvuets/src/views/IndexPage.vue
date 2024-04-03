@@ -40,7 +40,7 @@ const data = reactive({
 });
 
 function getData() {
-  backApi.get('/blog/BlogIndex')
+  backApi.get('/views/blog/BlogIndex')
       .then(response => {
         data.data = response.data;
 
@@ -56,7 +56,7 @@ const loadedCards = ref(pageSize);
 
 const loadData = async (page = 0) => {
   try {
-    const response = await backApi.get(`/blog/BlogIndex?initialLoad=false&page=${page}&pageSize=${pageSize}`);
+    const response = await backApi.get(`/views/blog/BlogIndex?initialLoad=false&page=${page}&pageSize=${pageSize}`);
     if (response.data.length > 0) {
       response.data.forEach(blog => {
         // 判断博客是否已加载，根据 BlogID 判断

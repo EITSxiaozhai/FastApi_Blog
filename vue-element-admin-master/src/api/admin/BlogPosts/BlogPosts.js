@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function Postlist(data) {
   return request({
-    url: '/blog/AdminBlogIndex',
+    url: '/admin/blog/AdminBlogIndex',
     method: 'get',
     data
   })
@@ -11,14 +11,14 @@ export function Postlist(data) {
 // 前端请求函数
 export function BlogDetails(blog_id) {
   return request({
-    url: `/blog/Blogid?blog_id=${blog_id}`, // 构建 URL 参数
+    url: `/admin/blog/Blogid?blog_id=${blog_id}`, // 构建 URL 参数
     method: 'post' // 使用 GET 请求
   })
 }
 
 export function BlogDetailsedit(blog_id, data) {
   return request({
-    url: `/blog/Blogedit?blog_id=${blog_id}`, // 构建 URL 参数
+    url: `/admin/blog/Blogedit?blog_id=${blog_id}`, // 构建 URL 参数
     method: 'post', // 使用 GET 请求
     data
   })
@@ -26,7 +26,7 @@ export function BlogDetailsedit(blog_id, data) {
 
 export function CreateContent(data, blog_id) {
   return request({
-    url: '/blog/BlogCreate',
+    url: '/admin/blog/BlogCreate',
     method: 'post',
     data
   })
@@ -34,7 +34,7 @@ export function CreateContent(data, blog_id) {
 
 export function Updatehomepageimage(blog_id, data) {
   return request({
-    url: `/blog/Blogeditimg?blog_id=${blog_id}`,
+    url: `/admin/blog/Blogeditimg?blog_id=${blog_id}`,
     method: 'post',
     data
   })
@@ -42,7 +42,7 @@ export function Updatehomepageimage(blog_id, data) {
 
 export function DeletePost(blog_id, data) {
   return request({
-    url: `/blog/BlogDel?blog_id=${blog_id}`,
+    url: `/admin/blog/BlogDel?blog_id=${blog_id}`,
     method: 'post',
     data
   })
@@ -50,7 +50,7 @@ export function DeletePost(blog_id, data) {
 
 export function BlogTagList(data) {
   return request({
-    url: `/blog/Blogtaglist`,
+    url: `/admin/blog/Blogtaglist`,
     method: 'post',
     data
   })
@@ -58,7 +58,7 @@ export function BlogTagList(data) {
 
 export function BlogTagCreate(data) {
   return request({
-    url: `/blog/BlogtagCreate`,
+    url: `/admin/blog/BlogtagCreate`,
     method: 'post',
     data
   })
@@ -66,7 +66,7 @@ export function BlogTagCreate(data) {
 
 export function BlogTagget(data) {
   return request({
-    url: `/blog/Blogtagget`,
+    url: `/admin/blog/Blogtagget`,
     method: 'post',
     data
   })
