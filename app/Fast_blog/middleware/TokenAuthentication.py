@@ -15,12 +15,27 @@ ALGORITHM = "HS256"
 
 class AccessTokenMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
-        if request.url.path == "/api/user/login":
-            # 如果是登录请求，直接调用下一个中间件或处理程序
+        #跳过用户登录接口的token验证。因为不登录无法获取token
+        if request.url.path == "/api/admin/user/login":
             response = await call_next(request)
             return response
-        if request.url.path == "/api/user/refreshtoken":
-            # 如果是登录请求，直接调用下一个中间件或处理程序
+        #跳过刷新token的api。开发环境点击获取新token
+        if request.url.path == "/api/admin/user/refreshtoken":
+            response = await call_next(request)
+            return response
+        #跳过前台用户的token验证。否则用户无法查看文章
+        if request.url.path.startswith("/api/views"):
+            response = await call_next(request)
+            return response
+        #跳过开发环境中的docs文件
+        if request.url.path.startswith("/docs"):
+            response = await call_next(request)
+            return response
+        #跳过开发环境中的openapi.json文件
+        if request.url.path.startswith("/openapi.json"):
+            response = await call_next(request)
+            return response
+        if request.url.path.startswith("/favicon.ico"):
             response = await call_next(request)
             return response
         try:
@@ -45,6 +60,9 @@ class AccessTokenMiddleware(BaseHTTPMiddleware):
         except jwt.InvalidTokenError:
             print("无效的 Access_token，执行重新续期操作")
             return JSONResponse(status_code=401, content={"code": 50014, "message": "无效的 Access_token"})
+        except Exception as e:
+            print(f"服务器验证错误:{e}")
+            return JSONResponse(status_code=500, content={"code": 50000, "message": "服务器验证错误"})
         response = await call_next(request)
         return response
 
@@ -85,10 +103,10 @@ async def verify_Refresh_token(Refreshtoken:str):
          # 检查是否过期
         if current_timestamp > exp_timestamp:
             print("refresh_token 已经过期。执行返回登录页面操作")
-            raise HTTPException(status_code=401, detail={"code": 50015, "message": "登录已经过期。退出登录"})
+            return JSONResponse(status_code=401, content={"code": 50015, "message": "无效的refresh_token退出登录"})
         else:
             print("refresh_token 未过期")
             return {"expired": False, "username": detoken_username}
     except jwt.ExpiredSignatureError:
         print("refresh_token 已过期")
-        raise HTTPException(status_code=401, detail={"code": 50015, "message": "登录已经过期。退出登录"})
+        return JSONResponse(status_code=401, content={"code": 50015, "message": "无效的refresh_token退出登录"})

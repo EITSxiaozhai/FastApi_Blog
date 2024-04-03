@@ -8,7 +8,6 @@ from Fast_blog.database.databaseconnection import engine, db_session
 from Fast_blog.middleware.backtasks import BlogCache, Adminoauth2_scheme, aliOssUpload
 from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag
 from Fast_blog.schemas.schemas import BlogCreate
-from Fast_blog.middleware.TokenAuthentication import verify_Access_token,verify_Refresh_token
 from fastapi import APIRouter, UploadFile
 from fastapi import Depends, File
 from fastapi import HTTPException
@@ -17,6 +16,7 @@ from sqlalchemy import select
 from sqlalchemy import update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
+
 
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -65,26 +65,6 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
             print(e)
             return {"errorCode": 500}
 
-
-@BlogApp.get("/blog/AdminBlogIndex")
-##用户博客首页API
-async def AdminBlogIndex(token: str = Depends(Adminoauth2_scheme)):
-    async with db_session() as session:
-        try:
-            results = await session.execute(select(Blog))
-            if results is not None:
-                data = results.scalars().all()
-                data = [item.to_dict() for item in data]
-
-                return {"code": 20000, "data": data}
-            else:
-                return {"code": 20001, "message": "未找到数据"}
-        except Exception as e:
-            print("我们遇到了下面的问题")
-            print(e)
-            return {"code": 50000, "message": "内部服务器错误"}
-
-
 blog_cache = BlogCache()
 
 
@@ -124,95 +104,6 @@ async def Blogid(blog_id: int):
             blog_cache.redis_client.set(redis_key, pickle.dumps(data))
             blog_cache.redis_client.expire(redis_key, 3600)
             return data
-
-
-@BlogApp.post("/blog/Blogid")
-##博客对应ID内容查询
-async def AdminBlogid(blog_id: int, token: str = Depends(Adminoauth2_scheme)):
-    async with db_session() as session:
-        try:
-            results = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
-            data = results.scalars().all()
-            data = [item.to_dict() for item in data]
-            return {"code": 20000, "data": data}
-        except Exception as e:
-            print("我们遇到了下面的问题")
-            print(e)
-        return []
-
-
-@BlogApp.post("/blog/Blogeditimg")
-async def AdminBlogidADDimg(blog_id: int, file: UploadFile = File(...), token: str = Depends(Adminoauth2_scheme)):
-    async with db_session() as session:
-        try:
-            file = await file.read()
-            fileurl = await uploadoss.Binaryfileupload(blogid=blog_id, bitsfile=file)
-            result = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
-            now = result.scalars().first()
-
-            if now is None:
-                print("数据库中还没有对应ID图片，进行新建")
-                return {
-                    "code": 20000,
-                    "data": {
-                        "msg": fileurl
-                    }
-                }
-            else:
-                print("数据库中存在对应ID图片，进行修改")
-                update_stmt = update(Blog).where(Blog.BlogId == blog_id).values(BlogIntroductionPicture=fileurl)
-                # 执行更新操作
-                await session.execute(update_stmt)
-                await session.commit()  # 提交事务以保存更改
-                return {
-                    "code": 20000,
-                    "data": {
-                        "msg": fileurl
-                    }
-                }
-
-        except Exception as e:
-            print(f"我们遇到了下面的错误{e}")
-            return {"code": 50000, "message": "服务器错误"}
-
-
-@BlogApp.post("/blog/Blogedit")
-##博客对应ID编辑
-async def AdminBlogidedit(blog_id: int, blog_edit: BlogCreate, token: str = Depends(Adminoauth2_scheme)):
-    async with db_session() as session:
-        try:
-            # 提取标签信息
-            tags = blog_edit.tags
-
-            # 根据 BlogId 查询相应的博客
-            result = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
-            blog_entry = result.scalar_one()
-
-            # 更新博客内容
-            for key, value in blog_edit.dict().items():
-                if key == 'content':
-                    # 编码字符串为二进制
-                    setattr(blog_entry, key, bytes(value, encoding='utf-8'))
-                else:
-                    setattr(blog_entry, key, value)
-
-            # 提交事务
-            await session.flush()
-
-            blog_id = blog_entry.BlogId
-            # 创建对应的博客标签
-            for tag in tags:
-                blog_tag = BlogTag(Article_Type=tag, blog_id=blog_id)
-                session.add(blog_tag)
-
-            await session.commit()
-            return {"code": 20000, "message": "更新成功"}
-        except Exception as e:
-            print("遇到了问题")
-            print(e)
-            await session.rollback()  # 发生错误时回滚事务
-            return {"code": 50000, "message": "更新失败"}
-
 
 ## 将数据存入数据库
 @BlogApp.post("/blogs/{blog_id}/ratings/")
@@ -286,63 +177,3 @@ async def SubmitComments(blog_id: int, comment: Comment):
         session.add(new_comment)
         session.commit()
         return {"message": "Comment submitted successfully!"}
-
-
-@BlogApp.post("/blog/BlogCreate")
-##博客Admin创建文章
-async def AdminBlogCreate(blog_create: BlogCreate, token: str = Depends(Adminoauth2_scheme)):
-    async with db_session() as session:
-        try:
-
-            content = blog_create.content.encode('utf-8')  # 将content字段转换为字节
-            blog_create.content = content  # 更新blog_create中的content值
-
-            # 提取标签信息
-            tags = blog_create.tags
-
-            # 创建博客文章
-            blog_data = blog_create.dict(exclude={'tags'})  # 排除'tags'字段
-            blog = Blog(**blog_data)
-            session.add(blog)
-            await session.flush()  # 获取插入记录后的自增值
-            blog_id = blog.BlogId
-
-            # 创建对应的博客标签
-            for tag in tags:
-                blog_tag = BlogTag(Article_Type=tag, blog_id=blog_id)
-                session.add(blog_tag)
-
-            await session.commit()
-
-            return {"code": 20000, "message": "更新成功"}
-        except jwt.ExpiredSignatureError:
-            return {"code": 50012,"message": "Token已过期","error":"Token已经过期"}
-        except jwt.InvalidTokenError:
-            return {"code": 40003, "message": "无效的Token"}
-        except IntegrityError as e:
-            # 处理标签重复或其他数据库完整性错误
-            print("数据库完整性错误:", e)
-            return {"code": 40001, "message": "标签重复或其他数据库完整性错误"}
-        except Exception as e:
-            print(e)
-            raise HTTPException(status_code=401, detail={"code": 50014, "message": "Token验证出现问题"})
-
-
-@BlogApp.post("/blog/BlogDel")
-##博客Admin删除
-async def AdminBlogDel(blog_id: int, verified_Access_token: bool = Depends(verify_Access_token)):
-    async with db_session() as session:
-            try:
-                if verified_Access_token:
-                    result = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
-                    original = result.scalars().first()
-                    await session.delete(original)
-                    await session.commit()
-                    return {"code": 20000, "message": "删除成功", "success": True}
-                else:
-                    raise HTTPException(status_code=401, detail={"code": 50014})
-            except jwt.ExpiredSignatureError:
-                raise HTTPException(status_code=401, detail={"code":50014})
-            except jwt.InvalidTokenError:
-                raise HTTPException(status_code=401, detail={"code":50014})
-
