@@ -10,12 +10,16 @@
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改接口路由&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/CrawlerSubmission.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/CrawlerSubmission.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/upload.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/upload.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/api/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/api/login.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/api/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/api/user.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/utils/request.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/utils/request.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/database/databaseconnection.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/database/databaseconnection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/TokenAuthentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/TokenAuthentication.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/backtasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/backtasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/superuserAdmin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -947,7 +951,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="403" />
+    <option name="localTasksCounter" value="404" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

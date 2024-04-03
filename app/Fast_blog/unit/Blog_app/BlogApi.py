@@ -2,22 +2,15 @@
 # author: YAO XU time:
 import pickle
 from typing import Union
-import jwt
-from functools import partial
+
 from Fast_blog.database.databaseconnection import engine, db_session
-from Fast_blog.middleware.backtasks import BlogCache, Adminoauth2_scheme, aliOssUpload
-from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag
-from Fast_blog.schemas.schemas import BlogCreate
-from fastapi import APIRouter, UploadFile
-from fastapi import Depends, File
+from Fast_blog.middleware.backtasks import BlogCache, aliOssUpload
+from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User
+from fastapi import APIRouter
 from fastapi import HTTPException
 from sqlalchemy import event
 from sqlalchemy import select
-from sqlalchemy import update
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import sessionmaker
-
-
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -35,19 +28,15 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
     async with db_session() as session:
         try:
             columns = [Blog.BlogId, Blog.title, Blog.created_at, Blog.author, Blog.BlogIntroductionPicture]
-
             # 查询实际数据库中的文章总数
             total_articles = await session.scalar(select(func.count()).select_from(Blog))
-
             # 根据实际数据库中的文章总数调整 pageSize
             adjusted_page_size = min(pageSize, total_articles)
-
             # 计算合法的 offset，确保不超过实际文章数量
             offset = (page - 1) * adjusted_page_size if page > 0 else 0
             stmt = select(*columns).offset(offset).limit(adjusted_page_size)
             results = await session.execute(stmt)
             data = results.fetchall()
-
             data_dicts = []
             for row in data:
                 data_dict = {
@@ -58,16 +47,14 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
                     "BlogIntroductionPicture": row[4],
                 }
                 data_dicts.append(data_dict)
-
             return data_dicts
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
             return {"errorCode": 500}
 
+
 blog_cache = BlogCache()
-
-
 # Create event listener to update cache
 @event.listens_for(Blog, 'after_insert')
 @event.listens_for(Blog, 'after_update')
@@ -104,6 +91,7 @@ async def Blogid(blog_id: int):
             blog_cache.redis_client.set(redis_key, pickle.dumps(data))
             blog_cache.redis_client.expire(redis_key, 3600)
             return data
+
 
 ## 将数据存入数据库
 @BlogApp.post("/blogs/{blog_id}/ratings/")

@@ -2,16 +2,19 @@ import datetime
 import json
 import os
 import uuid
+
 import httplib2
 import jwt
 import requests
-from Fast_blog.schemas.schemas import BlogCreate
 from Fast_blog.database.databaseconnection import db_session
+from Fast_blog.middleware import verify_Refresh_token
 from Fast_blog.middleware.backtasks import Adminoauth2_scheme, aliOssPrivateDocument, verify_recaptcha, \
     aliOssBlogMarkdownimg
 from Fast_blog.model import models
-from Fast_blog.model.models import AdminUser, UserPrivileges, Blog, ReptileInclusion,BlogTag
+from Fast_blog.model.models import AdminUser, UserPrivileges, Blog, ReptileInclusion, BlogTag
+from Fast_blog.schemas.schemas import BlogCreate
 from Fast_blog.schemas.schemas import UserCredentials
+from Fast_blog.unit.Blog_app.BlogApi import uploadoss
 from fastapi import APIRouter, Request, Depends, File
 from fastapi import HTTPException, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
@@ -21,11 +24,7 @@ from sqlalchemy import select, update
 from sqlalchemy.exc import NoResultFound, IntegrityError
 from sqlalchemy.orm import joinedload
 from starlette.background import BackgroundTasks
-
-from Fast_blog.middleware import verify_Refresh_token
 from starlette.responses import JSONResponse
-
-from Fast_blog.unit.Blog_app.BlogApi import uploadoss
 
 AdminApi = APIRouter()
 
@@ -34,14 +33,16 @@ REFRESHSECRET_KEY = os.getenv("REFSECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-#根据不同了类型调用不同的加密密钥
-def create_jwt_token(data: dict,typology) -> str:
+
+# 根据不同了类型调用不同的加密密钥
+def create_jwt_token(data: dict, typology) -> str:
     if typology == "main_token":
         token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
         return token
     elif typology == "refresh_token":
         token = jwt.encode(data, REFRESHSECRET_KEY, algorithm=ALGORITHM)
         return token
+
 
 async def verify_password(username: str, password: str) -> bool:
     async with db_session() as session:
@@ -70,13 +71,13 @@ async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
             "username": Incoming.username,
             "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=40)
         }
-        token = create_jwt_token(data=token_data,typology="main_token")
+        token = create_jwt_token(data=token_data, typology="main_token")
         Retoken_data = {
             "username": Incoming.username,
             "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
         }
-        Retoken = create_jwt_token(data=Retoken_data,typology="refresh_token")
-        return {"access_token": token, "token_type": 'Bearer', "token": token,"refresh_token":Retoken}
+        Retoken = create_jwt_token(data=Retoken_data, typology="refresh_token")
+        return {"access_token": token, "token_type": 'Bearer', "token": token, "refresh_token": Retoken}
 
 
 @AdminApi.post("/user/login")
@@ -110,34 +111,39 @@ async def UserLogin(x: UserCredentials, request: Request):
 
 
 @AdminApi.post("/user/refreshtoken")
-async  def Refreshtoken(request:Request):
+async def Refreshtoken(request: Request):
     # 获取请求头中的 Authorization 值
     authorization_header = request.headers.get('authorization')
     # 检查是否存在 Authorization 头
     if authorization_header:
         # 使用空格分割字符串，并获取第二部分（即令牌内容）
         token = authorization_header.split('Bearer ')[1]
-        Refreshtoken_verification =await verify_Refresh_token(Refreshtoken=token)
+        Refreshtoken_verification = await verify_Refresh_token(Refreshtoken=token)
         print(Refreshtoken_verification)
         if Refreshtoken_verification["expired"] == False and Refreshtoken_verification["username"] != "":
-            token = create_jwt_token(data={"username":Refreshtoken_verification["username"],"exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=40)},typology="main_token")
-            refresh_token = create_jwt_token(data={"username":Refreshtoken_verification["username"],"exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60)},typology="refresh_token")
+            token = create_jwt_token(data={"username": Refreshtoken_verification["username"],
+                                           "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=40)},
+                                     typology="main_token")
+            refresh_token = create_jwt_token(data={"username": Refreshtoken_verification["username"],
+                                                   "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60)},
+                                             typology="refresh_token")
             return \
                 {
                     "code": 20000,
                     "data":
-                    {
-                        "token": token,
-                        "refresh_token":refresh_token,
-                        "message":"token刷新成功",
-                        "code": 20000,
-                    }
+                        {
+                            "token": token,
+                            "refresh_token": refresh_token,
+                            "message": "token刷新成功",
+                            "code": 20000,
+                        }
                 }
         else:
             return JSONResponse(status_code=401, content={"code": 50015, "message": "无效的refresh_token退出登录"})
     else:
         print("Authorization Header not found.")
         return JSONResponse(status_code=401, content={"code": 50015, "message": "无效的refresh_token退出登录"})
+
 
 @AdminApi.get("/user/info")
 async def Userinfo(request: Request, token: str = Depends(Adminoauth2_scheme)):
@@ -164,7 +170,7 @@ async def Userinfo(request: Request, token: str = Depends(Adminoauth2_scheme)):
                                 }
             return {"code": 20001, "message": "用户未找到"}
         except jwt.ExpiredSignatureError:
-            return {"code": 50012,"message": "Token已过期","error":"Token已经过期"}
+            return {"code": 50012, "message": "Token已过期", "error": "Token已经过期"}
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
@@ -199,7 +205,7 @@ async def Userinfo(token: str = Depends(Adminoauth2_scheme)):
                                 }
             return {"code": 20001, "message": "用户未找到"}
         except jwt.ExpiredSignatureError:
-            return {"code": 50012,"message": "Token已过期","error":"Token已经过期"}
+            return {"code": 50012, "message": "Token已过期", "error": "Token已经过期"}
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
@@ -212,23 +218,23 @@ async def Userinfo(token: str = Depends(Adminoauth2_scheme)):
 async def AllAdminUser():
     async with db_session() as session:
         try:
-                sql = select(AdminUser)
-                result = await session.execute(sql)
-                data = result.scalars().all()
+            sql = select(AdminUser)
+            result = await session.execute(sql)
+            data = result.scalars().all()
 
-                modified_data = []
-                for item in data:
-                    user_privilege = await session.scalar(
-                        select(UserPrivileges.privilegeName)
-                        .where(UserPrivileges.NameId == item.userPrivileges)
-                    )
-                    if user_privilege is not None:
-                        item_dict = item.to_dict()
-                        item_dict["privilegeName"] = user_privilege
-                        modified_data.append(item_dict)
-                return {"code": 20000, "data": modified_data}
+            modified_data = []
+            for item in data:
+                user_privilege = await session.scalar(
+                    select(UserPrivileges.privilegeName)
+                    .where(UserPrivileges.NameId == item.userPrivileges)
+                )
+                if user_privilege is not None:
+                    item_dict = item.to_dict()
+                    item_dict["privilegeName"] = user_privilege
+                    modified_data.append(item_dict)
+            return {"code": 20000, "data": modified_data}
         except jwt.ExpiredSignatureError:
-            return {"code": 50012,"message": "Token已过期","error":"Token已经过期"}
+            return {"code": 50012, "message": "Token已过期", "error": "Token已经过期"}
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
@@ -258,18 +264,18 @@ async def query(inputname: str, inpassword: str, inEmail: EmailStr, ingender: bo
     async with db_session() as session:
         try:
 
-                UserQurey = await GetUser(inputusername=inputname)
-                if UserQurey != None:
-                    return ({"用户已经存在,存在值为:": UserQurey['username']})
-                elif UserQurey == None:
-                    x = models.AdminUser(username=inputname, userpassword=inpassword, UserEmail=inEmail, gender=ingender,
-                                         userPrivileges=Typeofuser, UserUuid=str((UUID_crt(inputname))))
-                    session.add(x)
-                    await session.commit()
-                    print("用户添加成功")
-                    return ({"用户添加成功,你的用户名为:": inputname})
+            UserQurey = await GetUser(inputusername=inputname)
+            if UserQurey != None:
+                return ({"用户已经存在,存在值为:": UserQurey['username']})
+            elif UserQurey == None:
+                x = models.AdminUser(username=inputname, userpassword=inpassword, UserEmail=inEmail, gender=ingender,
+                                     userPrivileges=Typeofuser, UserUuid=str((UUID_crt(inputname))))
+                session.add(x)
+                await session.commit()
+                print("用户添加成功")
+                return ({"用户添加成功,你的用户名为:": inputname})
         except jwt.ExpiredSignatureError:
-            return {"code": 50012,"message": "Token已过期","error":"Token已经过期"}
+            return {"code": 50012, "message": "Token已过期", "error": "Token已经过期"}
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
@@ -278,43 +284,43 @@ async def query(inputname: str, inpassword: str, inEmail: EmailStr, ingender: bo
 
 
 @AdminApi.post("/user/updateUser")
-async def UpdateUser(request: Request,):
+async def UpdateUser(request: Request, ):
     async with db_session() as session:
         try:
 
-                data = await request.json()  # This will extract the JSON data from the request body
-                print(data)
-                stmt = select(models.AdminUser).filter_by(
-                    username=data["username"])  # Assuming "username" is the primary key
-                result = await session.execute(stmt)
-                user = result.scalar_one_or_none()
+            data = await request.json()  # This will extract the JSON data from the request body
+            print(data)
+            stmt = select(models.AdminUser).filter_by(
+                username=data["username"])  # Assuming "username" is the primary key
+            result = await session.execute(stmt)
+            user = result.scalar_one_or_none()
 
-                if user:
-                    # Update the user's information based on the received data
-                    user.UserEmail = data["UserEmail"]
-                    user.UserUuid = data["UserUuid"]
-                    user.gender = data["gender"]["code"]
+            if user:
+                # Update the user's information based on the received data
+                user.UserEmail = data["UserEmail"]
+                user.UserUuid = data["UserUuid"]
+                user.gender = data["gender"]["code"]
 
-                    # Map privilege name to privilege value using Typeofuserchoices
-                    privilege_name = data["userprivilegesData"]
-                    privilege_value = None
-                    for choice in models.UserPrivileges.Typeofuserchoices:
-                        if choice[1] == privilege_name:
-                            privilege_value = choice[0]
-                            break
+                # Map privilege name to privilege value using Typeofuserchoices
+                privilege_name = data["userprivilegesData"]
+                privilege_value = None
+                for choice in models.UserPrivileges.Typeofuserchoices:
+                    if choice[1] == privilege_name:
+                        privilege_value = choice[0]
+                        break
 
-                    if privilege_value is not None:
-                        # Query the privilege value by privilege_name
-                        privilege = await session.execute(
-                            select(models.UserPrivileges).where(models.UserPrivileges.privilegeName == privilege_name))
-                        privilege = privilege.scalar_one_or_none()
-                        if privilege:
-                            user.userPrivileges = privilege.NameId
+                if privilege_value is not None:
+                    # Query the privilege value by privilege_name
+                    privilege = await session.execute(
+                        select(models.UserPrivileges).where(models.UserPrivileges.privilegeName == privilege_name))
+                    privilege = privilege.scalar_one_or_none()
+                    if privilege:
+                        user.userPrivileges = privilege.NameId
 
-                    await session.commit()
-                    return {"code": 20000}
-                else:
-                    return {"data": "User not found"}
+                await session.commit()
+                return {"code": 20000}
+            else:
+                return {"data": "User not found"}
         except jwt.ExpiredSignatureError:
             return {"code": 50012, "message": "Token已过期"}
         except jwt.InvalidTokenError:
@@ -328,18 +334,17 @@ async def UpdateUser(request: Request,):
 async def UserPrivilegeName(request: Request, ):
     async with db_session() as session:
         try:
-
-                data = await request.json()
-                stmt = select(models.AdminUser).filter_by(
-                    usename=data['username'])  # Assuming "username" is the primary key
-                stmt = stmt.options(joinedload(AdminUser.userPrivileges))
-                result = await session.execute(stmt)
-                user = result.scalar_one_or_none()
-                if user:
-                    privilege = user.userPrivileges.privilegeName
-                    return {"code": 20000, "privilegeName": privilege}
-                else:
-                    return {"code": 20001, "message": "User not found"}
+            data = await request.json()
+            stmt = select(models.AdminUser).filter_by(
+                usename=data['username'])  # Assuming "username" is the primary key
+            stmt = stmt.options(joinedload(AdminUser.userPrivileges))
+            result = await session.execute(stmt)
+            user = result.scalar_one_or_none()
+            if user:
+                privilege = user.userPrivileges.privilegeName
+                return {"code": 20000, "privilegeName": privilege}
+            else:
+                return {"code": 20001, "message": "User not found"}
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
@@ -371,25 +376,26 @@ async def UserloginOut():
             print(e)
         return 0
 
+
 @AdminApi.post('/Blogtaglist')
 async def BlogTagList():
     async with db_session() as session:
         try:
 
-                sql = select(models.BlogTag)
-                result = await session.execute(sql)  # 使用 execute_async 替代 execute
-                enddata = {}
-                for tag in result.scalars().all():
-                    if tag.blog_id not in enddata:
-                        sql2 = select(models.Blog).filter_by(BlogId=tag.blog_id)
-                        blogresult = await session.execute(sql2)
-                        for blogname in blogresult.scalars().all():
-                            enddata[tag.blog_id] = {
-                                'TagName': tag.Article_Type,
-                                'Date': blogname.created_at,
-                                'Title': blogname.title,
-                            }
-                return {"data": enddata, "code": 20000}
+            sql = select(models.BlogTag)
+            result = await session.execute(sql)  # 使用 execute_async 替代 execute
+            enddata = {}
+            for tag in result.scalars().all():
+                if tag.blog_id not in enddata:
+                    sql2 = select(models.Blog).filter_by(BlogId=tag.blog_id)
+                    blogresult = await session.execute(sql2)
+                    for blogname in blogresult.scalars().all():
+                        enddata[tag.blog_id] = {
+                            'TagName': tag.Article_Type,
+                            'Date': blogname.created_at,
+                            'Title': blogname.title,
+                        }
+            return {"data": enddata, "code": 20000}
         except jwt.ExpiredSignatureError:
             return {"code": 50012, "message": "Token已过期"}
         except jwt.InvalidTokenError:
@@ -397,15 +403,16 @@ async def BlogTagList():
         except Exception as e:
             return {"code": 50000, "message": "内部服务器错误"}
 
+
 @AdminApi.post('/Blogtagcreate/{blog_id}/{type}')
 async def BlogTagcreate(type: str, blog_id: int, ):
     async with db_session() as session:
         try:
 
-                new_type = models.BlogTag(Article_Type=type, blog_id=blog_id)
-                session.add(new_type)
-                await session.commit()
-                return {"data": new_type, "code": 20000}
+            new_type = models.BlogTag(Article_Type=type, blog_id=blog_id)
+            session.add(new_type)
+            await session.commit()
+            return {"data": new_type, "code": 20000}
         except jwt.ExpiredSignatureError:
             return {"code": 50012, "message": "Token已过期"}
         except jwt.InvalidTokenError:
@@ -415,25 +422,25 @@ async def BlogTagcreate(type: str, blog_id: int, ):
 
 
 @AdminApi.post('/Blogtagmodify/{blog_id}/{type}')
-async def BlogTagModify(blog_id: int, type: str,):
+async def BlogTagModify(blog_id: int, type: str, ):
     async with db_session() as session:
         try:
-                # 查询是否存在对应的记录
-                sql_select = select(models.Blog).filter_by(BlogId=blog_id)
-                result_select = await session.execute(sql_select)
-                if len(result_select.all()) == 0:
-                    return {"data": "没有查到对应的ID跳过修改", "code": 50000}
+            # 查询是否存在对应的记录
+            sql_select = select(models.Blog).filter_by(BlogId=blog_id)
+            result_select = await session.execute(sql_select)
+            if len(result_select.all()) == 0:
+                return {"data": "没有查到对应的ID跳过修改", "code": 50000}
 
-                # 查询并修改指定的记录
-                sql_update = update(models.BlogTag).where(
-                    (models.BlogTag.blog_id == blog_id) & (models.BlogTag.Article_Type == type)
-                ).values(tag_created_at=datetime.datetime.now())
+            # 查询并修改指定的记录
+            sql_update = update(models.BlogTag).where(
+                (models.BlogTag.blog_id == blog_id) & (models.BlogTag.Article_Type == type)
+            ).values(tag_created_at=datetime.datetime.now())
 
-                # 使用 fetchall 获取所有结果
-                result_update = await session.execute(sql_update)
-                await session.flush()
+            # 使用 fetchall 获取所有结果
+            result_update = await session.execute(sql_update)
+            await session.flush()
 
-                return {"data": "修改成功", "code": 20000}
+            return {"data": "修改成功", "code": 20000}
         except Exception as e:
             print("我们遇到了下面的问题", {"data": str(e)})
 
@@ -446,7 +453,7 @@ aliOssPrivateDocument = aliOssPrivateDocument()
 
 
 @AdminApi.get('/blogseo/googleoauth2')
-async def url_sent(background_tasks: BackgroundTasks,):
+async def url_sent(background_tasks: BackgroundTasks, ):
     try:
         background_tasks.add_task(publish_url_notification)
         return {"data": "请求已经发送", "code": 20000}
@@ -543,12 +550,12 @@ async def publish_url_notification(notification_type="URL_UPDATED"):
 
 
 @AdminApi.post('/markdown/uploadimg/')
-async def markdown_img_upload(file: UploadFile = File(...),):
-        x = datetime.datetime.now().strftime("%Y-%m-%d,%H:%M:%S")
-        waitmarkdownimg = await file.read()
-        image_url = await (aliOssBlogMarkdownimg().Binaryfileuploadmarkdownimg
-                           (bitsfile=waitmarkdownimg, current_blogimgconunt=x))
-        return {"code": 20000, "msg": "图片上传成功", "file": file.filename, "url": image_url}
+async def markdown_img_upload(file: UploadFile = File(...), ):
+    x = datetime.datetime.now().strftime("%Y-%m-%d,%H:%M:%S")
+    waitmarkdownimg = await file.read()
+    image_url = await (aliOssBlogMarkdownimg().Binaryfileuploadmarkdownimg
+                       (bitsfile=waitmarkdownimg, current_blogimgconunt=x))
+    return {"code": 20000, "msg": "图片上传成功", "file": file.filename, "url": image_url}
 
 
 @AdminApi.post("/blog/Blogtagget")
@@ -556,10 +563,10 @@ async def markdown_img_upload(file: UploadFile = File(...),):
 async def AdminBlogTagget():
     async with db_session() as session:
         try:
-                sql = select(models.BlogTag)
-                result = await session.execute(sql)
-                tags = result.scalars().all()
-                return {"code:": 20000, "data:": tags}
+            sql = select(models.BlogTag)
+            result = await session.execute(sql)
+            tags = result.scalars().all()
+            return {"code:": 20000, "data:": tags}
         except jwt.ExpiredSignatureError:
             return {"code": 50012, "message": "Token已过期"}
         except jwt.InvalidTokenError:
@@ -568,40 +575,38 @@ async def AdminBlogTagget():
             return {"code": 50000, "message": "内部服务器错误"}
 
 
-
 @AdminApi.post("/blog/Blogeditimg")
-async def AdminBlogidADDimg(blog_id: int, file: UploadFile = File(...),):
+async def AdminBlogidADDimg(blog_id: int, file: UploadFile = File(...), ):
     async with db_session() as session:
         try:
-                file = await file.read()
-                fileurl = await uploadoss.Binaryfileupload(blogid=blog_id, bitsfile=file)
-                result = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
-                now = result.scalars().first()
+            file = await file.read()
+            fileurl = await uploadoss.Binaryfileupload(blogid=blog_id, bitsfile=file)
+            result = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
+            now = result.scalars().first()
 
-                if now is None:
-                    print("数据库中还没有对应ID图片，进行新建")
-                    return {
-                        "code": 20000,
-                        "data": {
-                            "msg": fileurl
-                        }
+            if now is None:
+                print("数据库中还没有对应ID图片，进行新建")
+                return {
+                    "code": 20000,
+                    "data": {
+                        "msg": fileurl
                     }
-                else:
-                    print("数据库中存在对应ID图片，进行修改")
-                    update_stmt = update(Blog).where(Blog.BlogId == blog_id).values(BlogIntroductionPicture=fileurl)
-                    # 执行更新操作
-                    await session.execute(update_stmt)
-                    await session.commit()  # 提交事务以保存更改
-                    return {
-                        "code": 20000,
-                        "data": {
-                            "msg": fileurl
-                        }
+                }
+            else:
+                print("数据库中存在对应ID图片，进行修改")
+                update_stmt = update(Blog).where(Blog.BlogId == blog_id).values(BlogIntroductionPicture=fileurl)
+                # 执行更新操作
+                await session.execute(update_stmt)
+                await session.commit()  # 提交事务以保存更改
+                return {
+                    "code": 20000,
+                    "data": {
+                        "msg": fileurl
                     }
+                }
         except Exception as e:
             print(f"我们遇到了下面的错误{e}")
             return {"code": 50000, "message": "服务器错误"}
-
 
 
 @AdminApi.post("/blog/Blogedit")
@@ -609,32 +614,32 @@ async def AdminBlogidADDimg(blog_id: int, file: UploadFile = File(...),):
 async def AdminBlogidedit(blog_id: int, blog_edit: BlogCreate):
     async with db_session() as session:
         try:
-                # 提取标签信息
-                tags = blog_edit.tags
+            # 提取标签信息
+            tags = blog_edit.tags
 
-                # 根据 BlogId 查询相应的博客
-                result = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
-                blog_entry = result.scalar_one()
+            # 根据 BlogId 查询相应的博客
+            result = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
+            blog_entry = result.scalar_one()
 
-                # 更新博客内容
-                for key, value in blog_edit.dict().items():
-                    if key == 'content':
-                        # 编码字符串为二进制
-                        setattr(blog_entry, key, bytes(value, encoding='utf-8'))
-                    else:
-                        setattr(blog_entry, key, value)
+            # 更新博客内容
+            for key, value in blog_edit.dict().items():
+                if key == 'content':
+                    # 编码字符串为二进制
+                    setattr(blog_entry, key, bytes(value, encoding='utf-8'))
+                else:
+                    setattr(blog_entry, key, value)
 
-                # 提交事务
-                await session.flush()
+            # 提交事务
+            await session.flush()
 
-                blog_id = blog_entry.BlogId
-                # 创建对应的博客标签
-                for tag in tags:
-                    blog_tag = BlogTag(Article_Type=tag, blog_id=blog_id)
-                    session.add(blog_tag)
+            blog_id = blog_entry.BlogId
+            # 创建对应的博客标签
+            for tag in tags:
+                blog_tag = BlogTag(Article_Type=tag, blog_id=blog_id)
+                session.add(blog_tag)
 
-                await session.commit()
-                return {"code": 20000, "message": "更新成功"}
+            await session.commit()
+            return {"code": 20000, "message": "更新成功"}
         except Exception as e:
             print("遇到了问题")
             print(e)
@@ -644,58 +649,58 @@ async def AdminBlogidedit(blog_id: int, blog_edit: BlogCreate):
 
 @AdminApi.post("/blog/Blogid")
 ##博客对应ID内容查询
-async def AdminBlogid(blog_id: int,):
+async def AdminBlogid(blog_id: int, ):
     async with db_session() as session:
         try:
-                results = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
-                data = results.scalars().all()
-                data = [item.to_dict() for item in data]
-                return {"code": 20000, "data": data}
+            results = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
+            data = results.scalars().all()
+            data = [item.to_dict() for item in data]
+            return {"code": 20000, "data": data}
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)
         return []
 
 
-
 @AdminApi.post("/blog/BlogDel")
 ##博客Admin删除
 async def AdminBlogDel(blog_id: int):
     async with db_session() as session:
-            try:
-                result = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
-                original = result.scalars().first()
-                await session.delete(original)
-                await session.commit()
-                return {"code": 20000, "message": "删除成功", "success": True}
-            except jwt.ExpiredSignatureError:
-                raise HTTPException(status_code=401, detail={"code":50014})
-            except jwt.InvalidTokenError:
-                raise HTTPException(status_code=401, detail={"code":50014})
+        try:
+            result = await session.execute(select(Blog).where(Blog.BlogId == blog_id))
+            original = result.scalars().first()
+            await session.delete(original)
+            await session.commit()
+            return {"code": 20000, "message": "删除成功", "success": True}
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(status_code=401, detail={"code": 50014})
+        except jwt.InvalidTokenError:
+            raise HTTPException(status_code=401, detail={"code": 50014})
+
 
 @AdminApi.post("/blog/BlogCreate")
 ##博客Admin创建文章
 async def AdminBlogCreate(blog_create: BlogCreate):
     async with db_session() as session:
         try:
-                content = blog_create.content.encode('utf-8')  # 将content字段转换为字节
-                blog_create.content = content  # 更新blog_create中的content值
-                # 提取标签信息
-                tags = blog_create.tags
-                # 创建博客文章
-                blog_data = blog_create.dict(exclude={'tags'})  # 排除'tags'字段
-                blog = Blog(**blog_data)
-                session.add(blog)
-                await session.flush()  # 获取插入记录后的自增值
-                blog_id = blog.BlogId
-                # 创建对应的博客标签
-                for tag in tags:
-                    blog_tag = BlogTag(Article_Type=tag, blog_id=blog_id)
-                    session.add(blog_tag)
-                await session.commit()
-                return {"code": 20000, "message": "更新成功"}
+            content = blog_create.content.encode('utf-8')  # 将content字段转换为字节
+            blog_create.content = content  # 更新blog_create中的content值
+            # 提取标签信息
+            tags = blog_create.tags
+            # 创建博客文章
+            blog_data = blog_create.dict(exclude={'tags'})  # 排除'tags'字段
+            blog = Blog(**blog_data)
+            session.add(blog)
+            await session.flush()  # 获取插入记录后的自增值
+            blog_id = blog.BlogId
+            # 创建对应的博客标签
+            for tag in tags:
+                blog_tag = BlogTag(Article_Type=tag, blog_id=blog_id)
+                session.add(blog_tag)
+            await session.commit()
+            return {"code": 20000, "message": "更新成功"}
         except jwt.ExpiredSignatureError:
-            return {"code": 50012,"message": "Token已过期","error":"Token已经过期"}
+            return {"code": 50012, "message": "Token已过期", "error": "Token已经过期"}
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
         except IntegrityError as e:
@@ -707,19 +712,19 @@ async def AdminBlogCreate(blog_create: BlogCreate):
             raise HTTPException(status_code=401, detail={"code": 50014, "message": "Token验证出现问题"})
 
 
-#超级用户文章管理界面
+# 超级用户文章管理界面
 @AdminApi.get("/blog/AdminBlogIndex")
 async def AdminBlogIndex():
     async with db_session() as session:
         try:
-                results = await session.execute(select(Blog))
-                if results is not None:
-                    data = results.scalars().all()
-                    data = [item.to_dict() for item in data]
+            results = await session.execute(select(Blog))
+            if results is not None:
+                data = results.scalars().all()
+                data = [item.to_dict() for item in data]
 
-                    return {"code": 20000, "data": data}
-                else:
-                    return {"code": 20001, "message": "未找到数据"}
+                return {"code": 20000, "data": data}
+            else:
+                return {"code": 20001, "message": "未找到数据"}
         except Exception as e:
             print("我们遇到了下面的问题")
             print(e)

@@ -43,7 +43,6 @@ function getData() {
   backApi.get('/views/blog/BlogIndex')
       .then(response => {
         data.data = response.data;
-
       })
       .catch(error => {
         console.error(error);

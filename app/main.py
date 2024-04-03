@@ -1,22 +1,19 @@
 import logging
 import os
-import subprocess
 
 from dotenv import load_dotenv
-from elasticapm.contrib.starlette import make_apm_client, ElasticAPM
-import subprocess
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from logstash_async.handler import AsynchronousLogstashHandler
 from sqlalchemy.orm import sessionmaker
+
+from Fast_blog.database.databaseconnection import engine
+from Fast_blog.middleware.TokenAuthentication import AccessTokenMiddleware
 from Fast_blog.unit import AdminApp
 from Fast_blog.unit import Blog_app
 from Fast_blog.unit import Power_Crawl
 from Fast_blog.unit import SystemMonitoring
 from Fast_blog.unit import User_app
-from Fast_blog.database.databaseconnection import engine
-from Fast_blog.middleware.exception import ExceptionHandlerMiddleware
-from Fast_blog.middleware.TokenAuthentication import AccessTokenMiddleware
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -37,16 +34,16 @@ app.add_middleware(
     CORSMiddleware,
     ##此处URL用来允许通过的域名。提高安全性，需要根据你的进行修改
     allow_origins=["https://blog.exploit-db.xyz", "https://blogapi.exploitblog.eu.org", 'http://192.168.0.149:9527',
-                   'http://127.0.0.1:8000/api', 'http://192.168.0.13:9527','http://192.168.0.13:5173'
-                   "https://zpwl002.oss-cn-hangzhou.aliyuncs.com","https://static.cloudflareinsights.com"],
+                   'http://127.0.0.1:8000', 'http://192.168.0.13:9527', 'http://192.168.0.13:5173','https://zpwl002.oss-cn-hangzhou.aliyuncs.com',
+                   "https://static.cloudflareinsights.com"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-#celery_command = "celery -A Fast_blog.middleware.backlist worker --loglevel=info -P eventlet"
-#subprocess.Popen(celery_command, shell=True)
+# celery_command = "celery -A Fast_blog.middleware.backlist worker --loglevel=info -P eventlet"
+# subprocess.Popen(celery_command, shell=True)
 
 @app.get("/")
 async def root():
@@ -55,10 +52,11 @@ async def root():
 
 load_dotenv()
 LogStash_ip = os.getenv("LogStathIP")
+
+
 # 设置日志通过logstash去发送到后端ELK集群上去
 @app.on_event("startup")
 async def startup_event():
     logger = logging.getLogger("uvicorn.access")
     formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     logger.addHandler(AsynchronousLogstashHandler(host=LogStash_ip, port=5000, database_path=None, formatter=formatter))
-

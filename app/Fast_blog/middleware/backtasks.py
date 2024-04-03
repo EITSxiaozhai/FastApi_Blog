@@ -6,6 +6,7 @@ import smtplib
 from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
 import httpx
 import jwt
 import oss2
@@ -15,7 +16,6 @@ from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
 
 load_dotenv()
-
 
 db_password = os.getenv("REDIS_DB_PASSWORD")
 redis_host = os.getenv("REDIS_DB_HOSTNAME")
@@ -126,7 +126,7 @@ async def verify_recaptcha(UserreCAPTCHA, SecretKeyTypology):
                 )
             return {"message": response.json()}
     except Exception as e:
-        print( f"ERROR: {e}")
+        print(f"ERROR: {e}")
         return {"message": "服务器遇到了问题"}
 
 
@@ -140,6 +140,7 @@ class BlogCache:
 Adminoauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
 Useroauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/generaluser/token")
 Refresh_scheme = OAuth2PasswordBearer(tokenUrl="/api/refreshtoken")
+
 
 ## 阿里云文件上传
 class aliOssUpload():
