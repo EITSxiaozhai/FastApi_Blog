@@ -89,7 +89,7 @@ service.interceptors.response.use(
       return
     }
 
-    if (error.response.status === 401 && error.response.data.detail.code === 50014) {
+    if (error.response.status === 401 && error.response.data.code === 50014) {
       // Message({
       //   message: 'access_token过期,自动续期',
       //   type: 'error',
