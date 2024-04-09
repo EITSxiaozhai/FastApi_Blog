@@ -13,6 +13,9 @@ ALGORITHM = "HS256"
 
 class AccessTokenMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
+        if request.url.path.startswith("/api/user/"):
+            response = await call_next(request)
+            return response
         # 跳过用户登录接口的token验证。因为不登录无法获取token
         if request.url.path == "/api/admin/user/login":
             response = await call_next(request)
@@ -34,6 +37,9 @@ class AccessTokenMiddleware(BaseHTTPMiddleware):
             response = await call_next(request)
             return response
         if request.url.path.startswith("/favicon.ico"):
+            response = await call_next(request)
+            return response
+        if request.url.path.startswith("/api/generaluser"):
             response = await call_next(request)
             return response
         try:
