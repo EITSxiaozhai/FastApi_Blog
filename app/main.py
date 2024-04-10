@@ -60,4 +60,4 @@ LogStash_ip = os.getenv("LogStathIP")
 async def startup_event():
     logger = logging.getLogger("uvicorn.access")
     formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    logger.addHandler(AsynchronousLogstashHandler(host=LogStash_ip, port=5000, database_path=None, formatter=formatter))
+    logger.addHandler(AsynchronousLogstashHandler(host=LogStash_ip, port=5044, database_path=None, formatter=formatter))
