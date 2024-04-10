@@ -9,7 +9,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改node版本&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;">
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -598,7 +599,8 @@
       <workItem from="1711351420862" duration="2589000" />
       <workItem from="1711609925969" duration="6015000" />
       <workItem from="1712671250448" duration="3334000" />
-      <workItem from="1712720492558" duration="1191000" />
+      <workItem from="1712720492558" duration="2614000" />
+      <workItem from="1712756174092" duration="1783000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -943,7 +945,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="410" />
+    <option name="localTasksCounter" value="411" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

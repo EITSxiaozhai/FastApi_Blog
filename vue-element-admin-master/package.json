@@ -112,5 +112,10 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PanJiaChen/vue-element-admin.git"
+  },
+  "homepage": "https://github.com/PanJiaChen/vue-element-admin#readme",
+  "main": ".eslintrc.js",
+  "directories": {
+    "test": "tests"
   }
 }
