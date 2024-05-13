@@ -95,7 +95,7 @@ const handleStepClick = (index) => {
 const getData = async () => {
   const blogId = route.params.blogId;
   try {
-    const response = await backApi.post(`/user/Blogid?blog_id=${blogId}`);
+    const response = await backApi.post(`/views/user/Blogid?blog_id=${blogId}`);
     data.data = response.data;
     isLoading.value = false;
     document.title = data.data[0].title
