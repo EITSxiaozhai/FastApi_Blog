@@ -559,7 +559,7 @@ async def markdown_img_upload(file: UploadFile = File(...), ):
 
 
 @AdminApi.post("/blog/Blogtagget")
-# 博客Admin删除
+# 博客AdminTag获取
 async def AdminBlogTagget():
     async with db_session() as session:
         try:
@@ -662,7 +662,7 @@ async def AdminBlogid(blog_id: int, ):
         return []
 
 
-@AdminApi.post("/blog/BlogDel")
+@AdminApi.delete("/blog/BlogDel")
 ##博客Admin删除
 async def AdminBlogDel(blog_id: int):
     async with db_session() as session:

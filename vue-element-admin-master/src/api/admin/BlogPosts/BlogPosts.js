@@ -43,7 +43,7 @@ export function Updatehomepageimage(blog_id, data) {
 export function DeletePost(blog_id, data) {
   return request({
     url: `/admin/blog/BlogDel?blog_id=${blog_id}`,
-    method: 'post',
+    method: 'delete',
     data
   })
 }
