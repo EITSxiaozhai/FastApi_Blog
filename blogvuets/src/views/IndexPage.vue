@@ -403,7 +403,9 @@ const sendEmail = () => {
                                 <h1 style="font-size: 25px;">{{ blog.title }}</h1>
                                 <p>作者:{{ blog.author }}</p>
                                 <p>发布日期:{{ blog.created_at }}</p>
+
                               </div>
+                              <el-tag type="primary">{{ blog.tag }}</el-tag>
                             </el-card>
 
                           </template>
@@ -417,8 +419,10 @@ const sendEmail = () => {
                                   <h1 style="font-size: 25px;">{{ blog.title }}</h1>
                                   <p>作者:{{ blog.author }}</p>
                                   <p>发布日期:{{ blog.created_at }}</p>
+
                                 </el-main>
                               </el-container>
+                              <el-tag type="primary">{{ blog.tag }}</el-tag>
                             </el-card>
                           </template>
                         </router-link>
@@ -451,6 +455,7 @@ const sendEmail = () => {
 
           <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
             文章分类
+
           </el-card>
 
           <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
@@ -459,6 +464,13 @@ const sendEmail = () => {
 
           <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
             文章标签
+            <div class="flex gap-5">
+              <el-tag type="primary">Tag 1</el-tag>
+              <el-tag type="success">Tag 2</el-tag>
+              <el-tag type="info">Tag 3</el-tag>
+              <el-tag type="warning">Tag 4</el-tag>
+              <el-tag type="danger">Tag 5</el-tag>
+            </div>
           </el-card>
 
           <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
