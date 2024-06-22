@@ -95,4 +95,4 @@ async def AllPowerInfo():
             return {"data": data}
         except Exception as e:
             print(e)
-            return {"ERROR:": e}
+            return {"Error": "服务器发生了点问题"}

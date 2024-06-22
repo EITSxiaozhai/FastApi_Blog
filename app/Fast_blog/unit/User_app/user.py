@@ -85,7 +85,7 @@ async def PutUser(file: UploadFile = File(...)):
             return {"file_name": file.filename, "content_type": file.content_type, "image_url": image_url}
         except Exception as e:
             print(f"An error occurred: {e}")
-            return {"error": str(e)}
+            return {"error": "服务器发生了问题!"}
 
 
 @UserApp.post("/reguser")
@@ -146,7 +146,7 @@ async def UserLogin(x: UserCredentials):
                     return {"success": "true", "message": x.username, 'token': token_cont}
         except Exception as e:
             print(f"遇到了下面的问题：{e}")
-            return {"data": f'{e}'}
+            return {"error": "服务器发生了问题!"}
 
 
 def generate_numeric_verification_code(length=6):
@@ -231,7 +231,7 @@ async def CommentList(vueblogid: int):
         except Exception as e:
             print("Caught an exception:", repr(e))
             print("Error:", e)
-            return {"error": f"commentlist {e}"}
+            return {"error": "服务器发生了问题!"}
 
 
 @UserApp.post("/token")
