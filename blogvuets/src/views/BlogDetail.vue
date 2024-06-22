@@ -464,17 +464,25 @@ const redirectToUserProfile = () => {
           <h1 style="padding-left: 20px;font-size: 20px">
             <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
           </h1>
-          <el-sub-menu index="2-4" id="login">
-            <template #title>
-              {{ isLoggedIn ? `你好：${usernames}` : '登录' }}
-            </template>
-            <el-menu-item v-if="isLoggedIn" index="2-4-2">
-              <a href="#" style="text-decoration:none" @click.prevent="redirectToUserProfile">个人资料</a>
-            </el-menu-item>
-            <el-menu-item index="2-4-1">
-              <a href="" style="text-decoration:none" @click.prevent="redirectToRegister">注册</a>
-            </el-menu-item>
-          </el-sub-menu>
+  <el-sub-menu index="2-4" id="login">
+    <template #title>
+      {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
+    </template>
+    <router-link style="text-decoration:none" to="/user-profile">
+    <el-menu-item v-if="isLoggedIn" index="2-4-2">
+      个人资料
+    </el-menu-item>
+    </router-link>
+    <router-link style="text-decoration:none" to="/reg">
+    <el-menu-item index="2-4-1">
+      注册
+    </el-menu-item>
+    </router-link>
+     <router-link style="text-decoration:none" to="/login">
+    <el-menu-item index="2-4-1">登录
+    </el-menu-item>
+       </router-link>
+  </el-sub-menu>
         </el-menu>
         <el-progress :percentage="readingProgress" :show-text="false"/>
       </el-header>

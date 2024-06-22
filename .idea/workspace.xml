@@ -9,8 +9,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="CD添加对应变量读取&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;">
-      <change beforePath="$PROJECT_DIR$/.gitlab-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.gitlab-ci.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -95,14 +96,12 @@
       </RecentBranches>
     </option>
   </component>
-  <component name="GithubPullRequestsUISettings">
-    <option name="selectedUrlAndAccountId">
-      <UrlAndAccount>
-        <option name="accountId" value="525d2f61-eecd-4ffc-8b20-b2bb461ee345" />
-        <option name="url" value="https://github.com/EITSxiaozhai/FastApi_Blog.git" />
-      </UrlAndAccount>
-    </option>
-  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/EITSxiaozhai/FastApi_Blog.git&quot;,
+    &quot;accountId&quot;: &quot;525d2f61-eecd-4ffc-8b20-b2bb461ee345&quot;
+  }
+}</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/.env" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/app/Fast_blog/database/databaseconnection.py" root0="FORCE_HIGHLIGHTING" />
@@ -149,7 +148,7 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;http.proxy&quot;,
     &quot;ts.external.directory.path&quot;: &quot;E:\\pytest\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
@@ -310,8 +309,8 @@
     <list>
       <item itemvalue="FastAPI.Fastapi_blog" />
       <item itemvalue="Python.1" />
-      <item itemvalue="Python.backtasks" />
       <item itemvalue="Python.backlist" />
+      <item itemvalue="Python.backtasks" />
       <item itemvalue="Python.main" />
       <item itemvalue="Python.user" />
     </list>
@@ -328,7 +327,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-09665e90c3a7-b11f5e8da5ad-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.15026.15" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.17890.14" />
+        <option value="bundled-python-sdk-5b207ade9991-7e9c3bbb6e34-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.17890.14" />
       </set>
     </attachedChunks>
   </component>
@@ -600,7 +600,16 @@
       <workItem from="1711609925969" duration="6015000" />
       <workItem from="1712671250448" duration="3334000" />
       <workItem from="1712720492558" duration="2614000" />
-      <workItem from="1712756174092" duration="5325000" />
+      <workItem from="1712756174092" duration="5760000" />
+      <workItem from="1713617397293" duration="1497000" />
+      <workItem from="1713702746541" duration="117000" />
+      <workItem from="1715490397615" duration="5000" />
+      <workItem from="1715490446976" duration="34000" />
+      <workItem from="1716643732678" duration="1109000" />
+      <workItem from="1718639484263" duration="631000" />
+      <workItem from="1718892398684" duration="639000" />
+      <workItem from="1718893255052" duration="184000" />
+      <workItem from="1719037290338" duration="1968000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -945,7 +954,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="413" />
+    <option name="localTasksCounter" value="414" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -264,8 +264,11 @@ const sendEmail = () => {
 
 
   <el-container id="left-my" style="margin-top: 3%;">
+
     <el-header id="top-mains" :class="{ 'hidden': isHeaderHidden }"
+
                :style="{ 'background-color': headerBackgroundColor }" style="padding-right: 0;padding-left: 0">
+
       <transition name="fade">
         <el-menu
             class="el-menu-demo"
@@ -273,24 +276,34 @@ const sendEmail = () => {
           <h1 style="padding-left: 20px;font-size: 20px">
             <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
           </h1>
-          <div class="search-container">
+
+          <div class="search-container" style="align-content: center;margin-left: 20vh">
             <el-autocomplete
                 v-model="state"
                 :fetch-suggestions="querySearchAsync"
-                placeholder="Please input"
+                placeholder="搜索你感兴趣的"
                 @select="handleSelect"
             />
           </div>
+
           <el-sub-menu index="2-4" id="login">
             <template #title>
-              {{ isLoggedIn ? `你好：${usernames}` : '登录' }}
+              {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
             </template>
-            <el-menu-item v-if="isLoggedIn" index="2-4-2">
-              <a href="#" style="text-decoration:none" @click.prevent="redirectToUserProfile">个人资料</a>
-            </el-menu-item>
-            <el-menu-item index="2-4-1">
-              <a href="" style="text-decoration:none" @click.prevent="redirectToRegister">注册</a>
-            </el-menu-item>
+            <router-link style="text-decoration:none" to="/user-profile">
+              <el-menu-item v-if="isLoggedIn" index="2-4-2">
+                个人资料
+              </el-menu-item>
+            </router-link>
+            <router-link style="text-decoration:none" to="/reg">
+              <el-menu-item index="2-4-1">
+                注册
+              </el-menu-item>
+            </router-link>
+            <router-link style="text-decoration:none" to="/login">
+              <el-menu-item index="2-4-1">登录
+              </el-menu-item>
+            </router-link>
           </el-sub-menu>
         </el-menu>
       </transition>
