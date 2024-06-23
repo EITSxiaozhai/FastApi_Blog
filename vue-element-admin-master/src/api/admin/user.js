@@ -23,3 +23,11 @@ export function userprivileges(data) {
     data
   })
 }
+
+export function adminadd(data) {
+  return request({
+    url: '/admin/user/Adminadd',
+    method: 'post',
+    data
+  })
+}
