@@ -8,11 +8,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加icon阿里云&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加tag&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/components.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/components.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/TokenAuthentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/TokenAuthentication.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/superuserAdmin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/api/admin/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/user/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/user/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,37 +131,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "FastAPI.Fastapi_blog.executor": "Debug",
-    "FastAPI.Unnamed.executor": "Run",
-    "Python.1.executor": "Run",
-    "Python.backlist (1).executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "TODO_SCOPE": "All Places",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "two__token",
-    "last_opened_file_path": "C:/Users/admin/PycharmProjects/FastApi_Blog/app",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "http.proxy",
-    "ts.external.directory.path": "E:\\pytest\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;FastAPI.Fastapi_blog.executor&quot;: &quot;Debug&quot;,
+    &quot;FastAPI.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;Python.1.executor&quot;: &quot;Run&quot;,
+    &quot;Python.backlist (1).executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;two__token&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/admin/PycharmProjects/FastApi_Blog/app&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;http.proxy&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;E:\\pytest\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "vue.recent.templates": [
-      "Vue Options API Component",
-      "Vue Composition API Component"
+  &quot;keyToStringList&quot;: {
+    &quot;vue.recent.templates&quot;: [
+      &quot;Vue Options API Component&quot;,
+      &quot;Vue Composition API Component&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\FastApi_Blog\blogvuets\public" />
@@ -611,7 +613,10 @@
       <workItem from="1718892398684" duration="639000" />
       <workItem from="1718893255052" duration="184000" />
       <workItem from="1719037290338" duration="4195000" />
-      <workItem from="1719046300519" duration="4051000" />
+      <workItem from="1719046300519" duration="10015000" />
+      <workItem from="1719061153539" duration="811000" />
+      <workItem from="1719062481514" duration="5007000" />
+      <workItem from="1719120228198" duration="5456000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -956,7 +961,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="417" />
+    <option name="localTasksCounter" value="421" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1000,7 +1005,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="删除无用包" />
     <MESSAGE value="修改包地址" />
     <MESSAGE value="删除无用包&#10;&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="修改包地址路径&#10;&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
@@ -1025,7 +1029,8 @@
     <MESSAGE value="修复异常输出到前端&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="修改跨域IP地址&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="添加icon阿里云&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加icon阿里云&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
+    <MESSAGE value="添加tag&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加tag&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

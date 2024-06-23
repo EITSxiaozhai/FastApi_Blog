@@ -26,6 +26,8 @@ from sqlalchemy.orm import joinedload
 from starlette.background import BackgroundTasks
 from starlette.responses import JSONResponse
 
+from Fast_blog.schemas.schemas import AdminUserModel
+
 AdminApi = APIRouter()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -258,27 +260,26 @@ async def GetUser(inputusername: str, token: str = Depends(Adminoauth2_scheme)):
             print(e)
 
 
-@AdminApi.get("/Adminadd")
-async def query(inputname: str, inpassword: str, inEmail: EmailStr, ingender: bool, Typeofuser: bool,
-                ):
+@AdminApi.post("/user/Adminadd")
+async def AdminUserAdd(inputuser:AdminUserModel):
     async with db_session() as session:
         try:
-
-            UserQurey = await GetUser(inputusername=inputname)
+            UserQurey = await GetUser(inputusername=inputuser.username)
             if UserQurey != None:
                 return ({"用户已经存在,存在值为:": UserQurey['username']})
             elif UserQurey == None:
-                x = models.AdminUser(username=inputname, userpassword=inpassword, UserEmail=inEmail, gender=ingender,
-                                     userPrivileges=Typeofuser, UserUuid=str((UUID_crt(inputname))))
+                x = models.AdminUser(username=inputuser.username, userpassword=inputuser.userpassword, UserEmail=inputuser.UserEmail, gender=inputuser.gender,
+                                     userPrivileges=inputuser.userprivilegesData, UserUuid=str((UUID_crt(inputuser.username))))
                 session.add(x)
                 await session.commit()
                 print("用户添加成功")
-                return ({"用户添加成功,你的用户名为:": inputname})
+                return ({"用户添加成功,你的用户名为:":  inputuser.username})
         except jwt.ExpiredSignatureError:
             return {"code": 50012, "message": "Token已过期", "error": "Token已经过期"}
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
+            print(e)
             return {"code": 50000, "message": "内部服务器错误"}
         return {"重复用户名": UserQurey}
 
@@ -357,12 +358,16 @@ async def get_user_privileges():
         try:
             # 查询所有不同的权限值
             privileges = await session.execute(
-                select(UserPrivileges.privilegeName).distinct()
+                select(UserPrivileges.NameId, UserPrivileges.privilegeName).distinct()
             )
-            privilege_values = [privilege.code for privilege in privileges.scalars()]
-            return {"code": 20000, "data": privilege_values}
+            privilege_values = privileges.all()
+
+            # 将数据转换为 {id: 'name'} 的形式
+            privilege_map = {privilege.NameId: privilege.privilegeName for privilege in privilege_values}
+            print(privilege_map)
+            return {"code": 20000, "data": privilege_map}
         except NoResultFound:
-            return []
+            return {"code": 20000, "data": {}}
 
 
 @AdminApi.get("/user/logout")
