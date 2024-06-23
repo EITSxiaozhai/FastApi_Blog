@@ -75,16 +75,11 @@ class CommentModel(BaseModel):
 
 
 class AdminUserModel(BaseModel):
-    UserId: int
     username: str
     userpassword: constr(min_length=8)
-    gender: str
-    creation_time: datetime
-    Last_Login_Time: datetime
-    UserUuid: str
     UserEmail: EmailStr
-    userPrivileges: Optional[int]
-    privileges: Optional[UserPrivilegesModel]
+    gender:str
+    userprivilegesData: int
 
 
 class BlogModel(BaseModel):
