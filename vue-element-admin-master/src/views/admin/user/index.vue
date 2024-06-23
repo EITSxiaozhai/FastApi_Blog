@@ -2,7 +2,7 @@
   <el-container>
     <el-header />
     <el-main style="margin-top: -50px;">
-      <el-button type="primary">添加用户</el-button>
+      <el-button type="primary" @click="openAddDialog">添加用户</el-button>
       <el-button type="success">成功按钮</el-button>
 
       <el-card style="margin-top: 20px">
@@ -50,10 +50,10 @@
         <el-form-item label="用户权限" prop="Typeofuser">
           <el-select v-model="editFormData.userprivilegesData" placeholder="请选择">
             <el-option
-              v-for="item in userprivilegesData"
-              :key="item"
-              :label="item"
-              :value="item"
+              v-for="(privilege, key) in userprivilegesData"
+              :key="key"
+              :label="privilege.value"
+              :value="key"
             />
           </el-select>
         </el-form-item>
@@ -65,12 +65,51 @@
         <el-button type="primary" @click="saveEdit">保 存</el-button>
       </span>
     </el-dialog>
+    <!-- 添加新用户的对话框 -->
+    <el-dialog :visible.sync="addDialogVisible" title="添加新用户">
+      <el-form ref="addForm" :model="addFormData" label-width="80px">
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="addFormData.username" />
+        </el-form-item>
+        <el-form-item label="用户密码" prop="Userpassword">
+          <el-input v-model="addFormData.userpassword" />
+        </el-form-item>
+        <el-form-item label="用户邮箱" prop="UserEmail">
+          <el-input v-model="addFormData.UserEmail" />
+        </el-form-item>
+        <el-form-item label="用户权限" prop="Typeofuser">
+          <el-select v-model="addFormData.userprivilegesData" placeholder="请选择">
+            <el-option
+              v-for="(privilege, key) in userprivilegesData"
+              :key="key"
+              :label="privilege.value"
+              :value="key"
+            />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="用户性别" prop="Typeofusergender">
+          <el-select v-model="addFormData.gender" placeholder="请选择">
+            <el-option
+              v-for="(privilege, key) in userprivilegesData"
+              :key="key"
+              :label="privilege.value"
+              :value="key"
+            />
+          </el-select>
+        </el-form-item>
+        <!-- 其他需要添加的字段 -->
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveAdd">保 存</el-button>
+      </span>
+    </el-dialog>
 
   </el-container>
 </template>
 
 <script>
-import { adminlist, updateUser, userprivileges } from '@/api/admin/user.js'
+import { adminlist, updateUser, userprivileges, adminadd } from '@/api/admin/user.js'
 
 export default {
   data() {
@@ -78,9 +117,11 @@ export default {
       adminData: [], // 初始化一个空数组，用于存储adminlist接口的数据
       typeofuserData: [],
       editDialogVisible: false, // 添加控制对话框显示与隐藏的变量
+      addDialogVisible: false, // 添加新用户对话框的显示与隐藏变量
       editFormData: {}, // 添加一个对象用于存储修改信息的表单数据
-      userprivilegesData: []
-
+      addFormData: {}, // 添加一个对象用于存储新用户信息的表单数据
+      userprivilegesData: [],
+      gender: []
     }
   },
   created() {
@@ -111,6 +152,10 @@ export default {
       this.editFormData = { ...row } // 使用对象拷贝复制用户数据，防止直接修改原始数据
       this.editDialogVisible = true
     },
+    openAddDialog() {
+      this.addFormData = {} // 重置表单数据
+      this.addDialogVisible = true // 打开添加用户对话框
+    },
     async fetchTypeofuserData() {
       try {
         const response = await adminlist() // Call the API to get Typeofuser data
@@ -128,6 +173,22 @@ export default {
         await this.fetchAdminList()
         // 关闭对话框
         this.editDialogVisible = false
+      } catch (error) {
+        console.error('API error:', error)
+        // 处理错误，例如显示错误提示等
+      }
+    },
+    async saveAdd() {
+      try {
+        const payload = { ...this.addFormData }
+        // 调用后端接口将新用户信息保存到数据库中
+        console.log(this.userprivilegesData)
+        payload.userPrivileges = Number(payload.userPrivileges)
+        await adminadd(payload)
+        // 更新页面上的用户列表
+        await this.fetchAdminList()
+        // 关闭对话框
+        this.addDialogVisible = false
       } catch (error) {
         console.error('API error:', error)
         // 处理错误，例如显示错误提示等
