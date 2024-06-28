@@ -4,6 +4,7 @@ uvicorn~=0.18.3
 fastapi~=0.109.1
 SQLAlchemy~=2.0.5.post1
 pydantic~=2.7.1
+dnspython~=2.6.1
 sqlalchemy_utils~=0.40.0
 asyncmy ~= 0.2.7
 alembic~=1.11.3
