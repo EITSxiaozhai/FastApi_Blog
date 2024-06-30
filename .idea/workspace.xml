@@ -10,6 +10,8 @@
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="禁止上传的文件&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logstash.yml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -617,7 +619,7 @@
       <workItem from="1716882212861" duration="396000" />
       <workItem from="1719558392856" duration="3700000" />
       <workItem from="1719737511265" duration="211000" />
-      <workItem from="1719737733511" duration="600000" />
+      <workItem from="1719737733511" duration="883000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -962,7 +964,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="421" />
+    <option name="localTasksCounter" value="422" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
