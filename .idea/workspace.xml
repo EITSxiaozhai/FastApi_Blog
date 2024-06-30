@@ -8,10 +8,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改模块包版本&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;&#10;&#10;Signed-off-by: exploit &lt;eitsxiaozhai@gmail.com&gt;">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="禁止上传的文件&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic.ini" beforeDir="false" afterPath="$PROJECT_DIR$/alembic.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -154,7 +154,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "language.qml",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "ts.external.directory.path": "E:\\pytest\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   },
@@ -174,11 +174,11 @@
       <recent name="D:\项目备份\fast-api\blogvuets\public" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\pytest\FastApi_Blog" />
       <recent name="E:\pytest\FastApi_Blog\vue-element-admin-master" />
       <recent name="C:\Users\admin\PycharmProjects\FastApi_Blog" />
       <recent name="D:\FastApi_Blog\blogvuets\static\img" />
       <recent name="D:\项目备份\fast-api\BlogIndex\src\assets" />
-      <recent name="D:\项目备份\fast-api\vue-element-admin-master\src\views\admin\BlogPosts" />
     </key>
   </component>
   <component name="RunManager" selected="FastAPI.Fastapi_blog">
@@ -333,8 +333,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-PY-241.14494.241" />
-        <option value="bundled-python-sdk-0509580d9d50-28c9f5db9ffe-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.14494.241" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.17890.14" />
       </set>
     </attachedChunks>
   </component>
@@ -964,7 +963,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="416" />
+    <option name="localTasksCounter" value="417" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1020,7 +1019,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="删除无用包" />
     <MESSAGE value="修改包地址" />
     <MESSAGE value="删除无用包&#10;&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="修改包地址路径&#10;&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
@@ -1045,7 +1043,8 @@
     <MESSAGE value="CD添加对应变量读取&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;&#10;&#10;Signed-off-by: exploit &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="修改读取方法以及注释&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;&#10;&#10;Signed-off-by: exploit &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="修改模块包版本&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;&#10;&#10;Signed-off-by: exploit &lt;eitsxiaozhai@gmail.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改模块包版本&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;&#10;&#10;Signed-off-by: exploit &lt;eitsxiaozhai@gmail.com&gt;" />
+    <MESSAGE value="禁止上传的文件&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="禁止上传的文件&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
