@@ -8,7 +8,7 @@ alembic/versions
 app/google.json
 .png
 .jpg
-alembic.ini
+!/alembic.ini
 *.ini
 !/logstash.yml
 
