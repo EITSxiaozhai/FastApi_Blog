@@ -1,5 +1,5 @@
 app/.env
-./alembic.ini
+/alembic.ini
 celerybeat-schedule.bak
 celerybeat-schedule.dat
 celerybeat-schedule.dir
@@ -8,3 +8,5 @@ alembic/versions
 app/google.json
 .png
 .jpg
+alembic.ini
+*.ini
