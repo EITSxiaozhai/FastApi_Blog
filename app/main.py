@@ -43,7 +43,7 @@ app.add_middleware(
 )
 
 
-celery_command = "celery -A Fast_blog.middleware.backtasks worker --loglevel=info -P eventlet"
+celery_command = "celery -A Fast_blog.middleware.backtasks worker --loglevel=info"
 subprocess.Popen(celery_command, shell=True)
 
 @app.get("/")

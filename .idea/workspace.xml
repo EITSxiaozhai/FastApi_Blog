@@ -8,8 +8,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改模型&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改模块包版本&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;&#10;&#10;Signed-off-by: exploit &lt;eitsxiaozhai@gmail.com&gt;">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,12 +99,14 @@
       </RecentBranches>
     </option>
   </component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/EITSxiaozhai/FastApi_Blog.git&quot;,
-    &quot;accountId&quot;: &quot;525d2f61-eecd-4ffc-8b20-b2bb461ee345&quot;
-  }
-}</component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="selectedUrlAndAccountId">
+      <UrlAndAccount>
+        <option name="accountId" value="525d2f61-eecd-4ffc-8b20-b2bb461ee345" />
+        <option name="url" value="https://github.com/EITSxiaozhai/FastApi_Blog.git" />
+      </UrlAndAccount>
+    </option>
+  </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/.env" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/app/Fast_blog/database/databaseconnection.py" root0="FORCE_HIGHLIGHTING" />
@@ -130,44 +133,44 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;FastAPI.Fastapi_blog.executor&quot;: &quot;Debug&quot;,
-    &quot;FastAPI.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;Python.1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.backlist (1).executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;two__token&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/pytest/FastApi_Blog/app/Fast_blog/unit&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;E:\\pytest\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "FastAPI.Fastapi_blog.executor": "Debug",
+    "FastAPI.Unnamed.executor": "Run",
+    "Python.1.executor": "Run",
+    "Python.backlist (1).executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "TODO_SCOPE": "All Places",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/admin/PycharmProjects/FastApi_Blog/app",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "language.qml",
+    "ts.external.directory.path": "E:\\pytest\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;vue.recent.templates&quot;: [
-      &quot;Vue Options API Component&quot;,
-      &quot;Vue Composition API Component&quot;
+  "keyToStringList": {
+    "vue.recent.templates": [
+      "Vue Options API Component",
+      "Vue Composition API Component"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\pytest\FastApi_Blog\app\Fast_blog\unit" />
       <recent name="D:\FastApi_Blog\blogvuets\public" />
       <recent name="D:\FastApi_Blog\blogvuets\src\views\pages" />
       <recent name="D:\项目备份\fast-api\blogvuets" />
       <recent name="D:\项目备份\fast-api\blogvuets\src\assets" />
+      <recent name="D:\项目备份\fast-api\blogvuets\public" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\pytest\FastApi_Blog\vue-element-admin-master" />
@@ -329,8 +332,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.17890.14" />
-        <option value="bundled-python-sdk-5b207ade9991-7e9c3bbb6e34-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.17890.14" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-PY-241.14494.241" />
+        <option value="bundled-python-sdk-0509580d9d50-28c9f5db9ffe-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.14494.241" />
       </set>
     </attachedChunks>
   </component>
@@ -602,24 +605,20 @@
       <workItem from="1711609925969" duration="6015000" />
       <workItem from="1712671250448" duration="3334000" />
       <workItem from="1712720492558" duration="2614000" />
-      <workItem from="1712756174092" duration="5760000" />
-      <workItem from="1713617397293" duration="1497000" />
-      <workItem from="1713702746541" duration="117000" />
-      <workItem from="1715490397615" duration="5000" />
-      <workItem from="1715490446976" duration="34000" />
-      <workItem from="1716643732678" duration="1109000" />
-      <workItem from="1718639484263" duration="631000" />
-      <workItem from="1718892398684" duration="639000" />
-      <workItem from="1718893255052" duration="184000" />
-      <workItem from="1719037290338" duration="4195000" />
-      <workItem from="1719046300519" duration="10015000" />
-      <workItem from="1719061153539" duration="811000" />
-      <workItem from="1719062481514" duration="5007000" />
-      <workItem from="1719120228198" duration="8318000" />
-      <workItem from="1719632310285" duration="1369000" />
-      <workItem from="1719733719660" duration="842000" />
-      <workItem from="1719734619839" duration="927000" />
-      <workItem from="1719735574770" duration="384000" />
+      <workItem from="1712756174092" duration="5325000" />
+      <workItem from="1714466754885" duration="1924000" />
+      <workItem from="1714468717627" duration="1524000" />
+      <workItem from="1714959281118" duration="7290000" />
+      <workItem from="1715051195642" duration="54000" />
+      <workItem from="1715148022074" duration="4188000" />
+      <workItem from="1715586993313" duration="317000" />
+      <workItem from="1715590565126" duration="7000" />
+      <workItem from="1715653066215" duration="1292000" />
+      <workItem from="1716776444085" duration="2020000" />
+      <workItem from="1716863186322" duration="1107000" />
+      <workItem from="1716866242531" duration="3570000" />
+      <workItem from="1716882212861" duration="396000" />
+      <workItem from="1719558392856" duration="3700000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -964,7 +963,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="430" />
+    <option name="localTasksCounter" value="416" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1008,6 +1007,14 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <MESSAGE value="删除无用包" />
+    <MESSAGE value="修改包地址" />
+    <MESSAGE value="删除无用包&#10;&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
+    <MESSAGE value="修改包地址路径&#10;&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
+    <MESSAGE value="修改传入参数&#10;&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
+    <MESSAGE value="删除多余注释&#10;&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
+    <MESSAGE value="添加ELK日志存储。读取环境&#10;&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
+    <MESSAGE value="点击按钮强制重置token&#10;&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="接口超时自动刷新token&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="修改接口超时后。重新发起token获取请求&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="Admin—token 全局token拦截验证&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
@@ -1021,19 +1028,11 @@
     <MESSAGE value="修改node版本&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="添加脚本&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="CD添加对应变量读取&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <MESSAGE value="修改前端页面注册和搜索&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <MESSAGE value="修复异常输出到前端&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <MESSAGE value="修改跨域IP地址&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <MESSAGE value="添加icon阿里云&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <MESSAGE value="添加tag&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <MESSAGE value="增加添加用户功能&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <MESSAGE value="增加添加用户功能,自动转换权限id&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <MESSAGE value="增加添加用户接口&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <MESSAGE value="路径判断列表化&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <MESSAGE value="添加用户接口增加接口数据判定&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <MESSAGE value="修改模块版本&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <MESSAGE value="修改模型&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改模型&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
+    <MESSAGE value="&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;&#10;&#10;Signed-off-by: exploit &lt;eitsxiaozhai@gmail.com&gt;" />
+    <MESSAGE value="CD添加对应变量读取&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;&#10;&#10;Signed-off-by: exploit &lt;eitsxiaozhai@gmail.com&gt;" />
+    <MESSAGE value="修改读取方法以及注释&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;&#10;&#10;Signed-off-by: exploit &lt;eitsxiaozhai@gmail.com&gt;" />
+    <MESSAGE value="修改模块包版本&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;&#10;&#10;Signed-off-by: exploit &lt;eitsxiaozhai@gmail.com&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改模块包版本&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;&#10;&#10;Signed-off-by: exploit &lt;eitsxiaozhai@gmail.com&gt;" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
