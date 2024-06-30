@@ -28,14 +28,6 @@ Vue2_admin_image_build:
     - docker build -t vue2:$CI_PIPELINE_ID .
 
 
-# code_test:
-#   stage: test
-#   script:
-#     - cd app
-#     - cat main.py
-
-
-
 Fastapi_deploy_test:
   stage: test
   script:
@@ -86,20 +78,3 @@ Vue2_admin_deploy1:
       - docker stop $x && docker rm $x
       - docker run -d -p 49400:9526  --network bridge   --name vue2admin$CI_PIPELINE_ID   vue2:$CI_PIPELINE_ID
       - docker ps
-
-#container_deploy2:
-#    stage: deploy
-#    script:
-#      - docker run -d -p 10089 --name $CI_JOB_NAME-$CI_PIPELINE_ID fastapi:$CI_PIPELINE_ID
-#      - docker ps
-
-
-# clean_containers:
-#     stage: clean
-#     script:
-#       - docker stop $CI_JOB_NAME-$CI_PIPELINE_ID
-#       - docker rm $CI_JOB_NAME-$CI_PIPELINE_ID
-      
-
-# Create a new stage called "clean_containers" to run the docker stop and docker rm commands after all the stages. Can
-# you see how this is useful? what changes does this make to your pipeline?
