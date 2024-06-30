@@ -10,3 +10,4 @@ app/google.json
 .jpg
 alembic.ini
 *.ini
+logstash.yml
