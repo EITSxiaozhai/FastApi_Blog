@@ -104,10 +104,11 @@ class TokenManager():
 async def verify_recaptcha(UserreCAPTCHA, SecretKeyTypology):
     try:
         if SecretKeyTypology == "admin":
+            print("管理员验证")
             # 向Google reCAPTCHA验证端点发送POST请求来验证令牌
             async with httpx.AsyncClient() as client:
                 response = await client.post(
-                    "https://recaptcha.net/recaptcha/api/siteverify",
+                    "https://www.google.com/recaptcha/api/siteverify",
                     data={
                         "secret": ADMIN_RECAPTCHA_SECRET_KEY,
                         "response": UserreCAPTCHA,
@@ -115,10 +116,11 @@ async def verify_recaptcha(UserreCAPTCHA, SecretKeyTypology):
                 )
             return {"message": response.json()}
         elif SecretKeyTypology == "user":
+            print("普通用户验证")
             # 向Google reCAPTCHA验证端点发送POST请求来验证令牌
             async with httpx.AsyncClient() as client:
                 response = await client.post(
-                    "https://recaptcha.net/recaptcha/api/siteverify",
+                    "https://www.google.com/recaptcha/api/siteverify",
                     data={
                         "secret": GENERAL_USER_RECAPTCHA_SECRET_KEY,
                         "response": UserreCAPTCHA,
