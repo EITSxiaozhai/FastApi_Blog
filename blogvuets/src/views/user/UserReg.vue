@@ -82,7 +82,7 @@ const RegisterUserForm = reactive({
   verificationCode: '',
   googlerecaptcha: '',
   EmailverificationCod: '',
-
+  UserAvatar: '',
 });
 
 
@@ -221,7 +221,7 @@ const register = async () => {
         email: RegisterUserForm.email,
         googlerecaptcha: RegisterUserForm.googlerecaptcha,
         EmailverificationCod: RegisterUserForm.EmailverificationCod,
-
+        UserAvatar: RegisterUserForm.UserAvatar
         // Other registration fields
       });
 
@@ -345,6 +345,7 @@ const ossUpload = async (param: any) => {
           <el-upload
               class="avatar-uploader"
               action=#
+              v-model="RegisterUserForm.UserAvatar"
               ref="uploadavatar"
               :show-file-list="false"
               :http-request="ossUpload"

@@ -25,4 +25,4 @@ oss2~=2.18.0
 oauth2client~=4.1.3
 httplib2
 elastic-apm
-python-logstash-async
+python-logstash-async~=3.0.0
