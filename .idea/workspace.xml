@@ -8,10 +8,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改了Google验证码地址&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改头像上传模式&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/UserReg.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserReg.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -311,12 +309,12 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="FastAPI.Fastapi_blog" />
       <item itemvalue="Python.1" />
       <item itemvalue="Python.backlist" />
       <item itemvalue="Python.backtasks" />
       <item itemvalue="Python.main" />
       <item itemvalue="Python.user" />
+      <item itemvalue="FastAPI.Fastapi_blog" />
     </list>
     <recent_temporary>
       <list>
@@ -626,7 +624,7 @@
       <workItem from="1720937750101" duration="1409000" />
       <workItem from="1720941768577" duration="685000" />
       <workItem from="1720942827605" duration="1330000" />
-      <workItem from="1721267806931" duration="4594000" />
+      <workItem from="1721267806931" duration="5909000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -971,7 +969,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="429" />
+    <option name="localTasksCounter" value="431" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1027,8 +1025,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改包地址路径&#10;&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <MESSAGE value="修改传入参数&#10;&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="删除多余注释&#10;&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="添加ELK日志存储。读取环境&#10;&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="点击按钮强制重置token&#10;&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
@@ -1052,7 +1048,9 @@
     <MESSAGE value="禁止上传的文件&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="修改文件内容&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="修改了Google验证码地址&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改了Google验证码地址&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
+    <MESSAGE value="修改头像非必选&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
+    <MESSAGE value="修改头像上传模式&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改头像上传模式&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
