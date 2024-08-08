@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import subprocess
@@ -10,11 +11,8 @@ from sqlalchemy.orm import sessionmaker
 
 from Fast_blog.database.databaseconnection import engine
 from Fast_blog.middleware.TokenAuthentication import AccessTokenMiddleware
-from Fast_blog.unit import AdminApp
-from Fast_blog.unit import Blog_app
-from Fast_blog.unit import Power_Crawl
-from Fast_blog.unit import SystemMonitoring
-from Fast_blog.unit import User_app
+from Fast_blog.unit import AdminApp,Blog_app,Power_Crawl,SystemMonitoring,User_app
+
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -54,10 +52,31 @@ async def root():
 load_dotenv()
 LogStash_ip = os.getenv("LogStathIP")
 
+class JSONLogFormatter(logging.Formatter):
+    def format(self, record):
+        log_record = {
+            "timestamp": self.formatTime(record, self.datefmt),
+            "level": record.levelname,
+            "message": record.getMessage(),
+            "logger_name": record.name,
+            "func_name": record.funcName,
+            "file_name": record.pathname,
+            "line_no": record.lineno
+        }
+        return json.dumps(log_record)
 
 # 设置日志通过logstash去发送到后端ELK集群上去
 @app.on_event("startup")
 async def startup_event():
     logger = logging.getLogger("uvicorn.access")
-    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    logger.addHandler(AsynchronousLogstashHandler(host=LogStash_ip, port=5044, database_path=None, formatter=formatter))
+    logger.setLevel(logging.INFO)
+
+    # 使用自定义的 JSON 格式化器
+    formatter = JSONLogFormatter()
+    logstash_handler = AsynchronousLogstashHandler(
+        host=LogStash_ip,
+        port=5044,
+        database_path=None
+    )
+    logstash_handler.setFormatter(formatter)
+    logger.addHandler(logstash_handler)
