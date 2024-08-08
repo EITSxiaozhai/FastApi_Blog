@@ -8,8 +8,8 @@ import jwt
 import requests
 from Fast_blog.database.databaseconnection import db_session
 from Fast_blog.middleware import verify_Refresh_token
-from Fast_blog.middleware.backtasks import Adminoauth2_scheme, aliOssPrivateDocument, verify_recaptcha, \
-    aliOssBlogMarkdownimg
+from Fast_blog.middleware.backtasks import Adminoauth2_scheme, AliOssPrivateDocument, verify_recaptcha, \
+    AliOssBlogMarkdownImg
 from Fast_blog.model import models
 from Fast_blog.model.models import AdminUser, UserPrivileges, Blog, ReptileInclusion, BlogTag
 from Fast_blog.schemas.schemas import BlogCreate
@@ -454,7 +454,7 @@ async def BlogTagModify(blog_id: int, type: str, ):
 # ENDPOINT = "https://indexing.googleapis.com/v3/urlNotifications:publish"
 # JSON_KEY_FILE = "C:\\Users\\admin\\Desktop\\google.json"
 
-aliOssPrivateDocument = aliOssPrivateDocument()
+aliOssPrivateDocument = AliOssPrivateDocument()
 
 
 @AdminApi.get('/blogseo/googleoauth2')
@@ -558,7 +558,7 @@ async def publish_url_notification(notification_type="URL_UPDATED"):
 async def markdown_img_upload(file: UploadFile = File(...), ):
     x = datetime.datetime.now().strftime("%Y-%m-%d,%H:%M:%S")
     waitmarkdownimg = await file.read()
-    image_url = await (aliOssBlogMarkdownimg().Binaryfileuploadmarkdownimg
+    image_url = await (AliOssBlogMarkdownImg().Binaryfileuploadmarkdownimg
                        (bitsfile=waitmarkdownimg, current_blogimgconunt=x))
     return {"code": 20000, "msg": "图片上传成功", "file": file.filename, "url": image_url}
 
@@ -585,7 +585,7 @@ async def AdminBlogidADDimg(blog_id: int, file: UploadFile = File(...), ):
     async with db_session() as session:
         try:
             file = await file.read()
-            fileurl = await uploadoss.Binaryfileupload(blogid=blog_id, bitsfile=file)
+            fileurl = await uploadoss.async_upload_bitsfile(blogid=blog_id, bitsfile=file)
             result = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
             now = result.scalars().first()
 

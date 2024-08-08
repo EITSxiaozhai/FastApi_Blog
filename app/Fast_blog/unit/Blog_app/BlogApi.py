@@ -4,7 +4,7 @@ import pickle
 from typing import Union
 
 from Fast_blog.database.databaseconnection import engine, db_session
-from Fast_blog.middleware.backtasks import BlogCache, aliOssUpload
+from Fast_blog.middleware.backtasks import BlogCache, AliOssUpload
 from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User
 from fastapi import APIRouter
 from fastapi import HTTPException
@@ -17,7 +17,7 @@ session = SessionLocal()
 
 BlogApp = APIRouter()
 
-uploadoss = aliOssUpload()
+uploadoss = AliOssUpload()
 ## 博客游客用户主页显示
 
 from sqlalchemy import func
@@ -70,7 +70,7 @@ def update_cache(mapper, connection, target):
         "created_at": target.created_at,
     }
     blog_cache.redis_client.set(redis_key, pickle.dumps([data]))
-    blog_cache.redis_client.expire(redis_key, 3600)  # Set expiration time to 1 hour
+    blog_cache.redis_client.expire(redis_key, 86400)  # Set expiration time to 24 hour
 
 
 ### 数据库缓存读取判断
