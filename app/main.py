@@ -14,7 +14,7 @@ from sqlalchemy.orm import sessionmaker
 from Fast_blog.database.databaseconnection import engine
 from Fast_blog.middleware.TokenAuthentication import AccessTokenMiddleware
 from Fast_blog.unit import AdminApp,Blog_app,Power_Crawl,SystemMonitoring,User_app
-
+from Fast_blog.middleware.LogDecode import JSONLogFormatter
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -22,8 +22,9 @@ session = SessionLocal()
 # 准备添加APM监控
 app = FastAPI()
 app.add_middleware(AccessTokenMiddleware)
-# app.add_middleware(ExceptionHandlerMiddleware)
 
+load_dotenv()
+LogStash_ip = os.getenv("LogStathIP")
 
 app.include_router(User_app.UserApp, prefix='/api/generaluser', tags=["普通用户页面"])
 app.include_router(Blog_app.BlogApp, prefix='/api/views', tags=["博客游客浏览页面"])
@@ -49,5 +50,46 @@ subprocess.Popen(celery_command, shell=True)
 @app.get("/")
 async def root():
     return {"message": "Hello world"}
+
+# 设置日志通过 Logstash 发送到后端 ELK 集群上去
+@app.on_event("startup")
+async def startup_event():
+    logger = logging.getLogger("uvicorn.access")
+
+    # 使用自定义的 JSON 格式化器
+    formatter = JSONLogFormatter()
+    logstash_handler = AsynchronousLogstashHandler(
+        host=LogStash_ip,
+        port=5044,
+        database_path=None
+    )
+    logstash_handler.setFormatter(formatter)
+    logger.addHandler(logstash_handler)
+
+# 创建中间件来记录请求和响应的信息
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    start_time = datetime.utcnow()
+    response = await call_next(request)
+    process_time = (datetime.utcnow() - start_time).total_seconds()
+
+    # 解析请求信息
+    client_host = request.client.host
+    request_method = request.method
+    request_path = request.url.path
+
+    log_data = {
+        "response_code": response.status_code,
+        "request_method": request_method,
+        "request_path": request_path,
+        "request_ip": client_host,
+        "request_time": process_time
+    }
+    logger = logging.getLogger("uvicorn.access")
+    logger.info(
+        f"{client_host} - {request_method} {request_path} {response.status_code}",
+        extra=log_data
+    )
+    return response
 
 
