@@ -66,7 +66,7 @@ async def startup_event():
     logstash_handler.setFormatter(formatter)
     logger.addHandler(logstash_handler)
 
-# 创建中间件来记录请求和响应的信息
+
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
     start_time = datetime.utcnow()
@@ -77,19 +77,16 @@ async def log_requests(request: Request, call_next):
     client_host = request.client.host
     request_method = request.method
     request_path = request.url.path
+    status_code = response.status_code
 
-    log_data = {
-        "response_code": response.status_code,
-        "request_method": request_method,
-        "request_path": request_path,
-        "request_ip": client_host,
-        "request_time": process_time
-    }
+    # 构建完整的日志消息
+    log_message = f"{client_host} - {request_method} {request_path} {status_code} - {process_time:.2f}s"
+
+    # 获取 uvicorn 的访问日志记录器
     logger = logging.getLogger("uvicorn.access")
-    logger.info(
-        f"{client_host} - {request_method} {request_path} {response.status_code}",
-        extra=log_data
-    )
-    return response
 
+    # 直接记录日志消息，不使用 extra 参数
+    logger.info(log_message)
+
+    return response
 

@@ -152,25 +152,20 @@ class AliOssBase:
         self.bucket = oss2.Bucket(auth, endpoint, bucket_name)  # 创建Bucket对象
         self.upload_path = upload_path  # 设置上传路径
 
-
     # 上传文件到OSS
     def upload_file(self, oss_path, file_obj):
         try:
             self.bucket.put_object(oss_path, file_obj)  # 将文件上传到OSS
-            return f"http://oss-cn-hangzhou.aliyuncs.com/{oss_path}"   # 返回文件的URL
+            return f"https://oss-cn-hangzhou.aliyuncs.com/{oss_path}"   # 返回文件的URL
         except oss2.exceptions.OssError as e:  # 处理上传过程中可能出现的异常
             print(f"文件上传到OSS失败: {e}")  # 打印错误信息
             return None  # 返回None表示上传失败
-
-    # 异步上传文件到OSS
-    async def async_upload_file(self, oss_path, file_obj):
-        return await asyncio.to_thread(self.upload_file, oss_path, file_obj)  # 使用线程池执行同步的上传操作
 
 
 # 定义一个子类，用于特定的上传操作
 class AliOssUpload(AliOssBase):
     def __init__(self):
-        super().__init__('zpwl002', 'http://oss-cn-hangzhou.aliyuncs.com/', 'blog/maincare/')  # 初始化基类
+        super().__init__('zpwl002', 'https://oss-cn-hangzhou.aliyuncs.com/', 'blog/maincare/')  # 初始化基类
 
     # 上传博客主卡图片
     def upload_bitsfile(self, blogid, bitsfile):
@@ -178,7 +173,7 @@ class AliOssUpload(AliOssBase):
 
     # 异步上传博客主卡图片
     async def async_upload_bitsfile(self, blogid, bitsfile):
-        return await self.async_upload_file(f'{self.upload_path}{blogid}-maincard.jpg', bitsfile)  # 调用基类的异步方法上传文件
+        return  self.upload_file(f'{self.upload_path}{blogid}-maincard.jpg', bitsfile)  # 调用基类的异步方法上传文件
 
     # 上传头像图片
     def upload_avatar(self, bitsfile):
@@ -186,7 +181,7 @@ class AliOssUpload(AliOssBase):
 
     # 异步上传头像图片
     async def async_upload_avatar(self, bitsfile):
-        return await self.async_upload_file(f'{self.upload_path}-avatar.jpg', bitsfile)  # 调用基类的异步方法上传文件
+        return self.upload_file(f'{self.upload_path}-avatar.jpg', bitsfile)  # 调用基类的异步方法上传文件
 
     # 上传本地文件
     def upload_local_file(self, file_path):
@@ -198,7 +193,7 @@ class AliOssUpload(AliOssBase):
 # 定义一个子类，用于处理私有文档的操作
 class AliOssPrivateDocument(AliOssBase):
     def __init__(self):
-        super().__init__('privatedocument', 'http://oss-cn-hangzhou.aliyuncs.com', '/')  # 初始化基类
+        super().__init__('privatedocument', 'https://oss-cn-hangzhou.aliyuncs.com', '/')  # 初始化基类
 
     # 获取爬虫密钥
     def get_crawler_key(self):
@@ -213,7 +208,7 @@ class AliOssPrivateDocument(AliOssBase):
 # 定义一个子类，用于上传Markdown博客图片
 class AliOssBlogMarkdownImg(AliOssBase):
     def __init__(self):
-        super().__init__('blogmarkdown', 'http://oss-cn-shanghai.aliyuncs.com/', 'blogimg/')  # 初始化基类
+        super().__init__('blogmarkdown', 'https://oss-cn-shanghai.aliyuncs.com/', 'blogimg/')  # 初始化基类
 
     # 上传博客图片
     def upload_blog_image(self, bitsfile, image_count):
@@ -221,4 +216,4 @@ class AliOssBlogMarkdownImg(AliOssBase):
 
     # 异步上传博客图片
     async def async_upload_blog_image(self, bitsfile, image_count):
-        return await self.async_upload_file(f'{self.upload_path}{image_count}.jpg', bitsfile)  # 调用基类的异步方法上传文件
+        return self.upload_file(f'{self.upload_path}{image_count}.jpg', bitsfile)  # 调用基类的异步方法上传文件
