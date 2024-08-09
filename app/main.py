@@ -54,7 +54,7 @@ async def root():
 # 设置日志通过 Logstash 发送到后端 ELK 集群上去
 @app.on_event("startup")
 async def startup_event():
-    logger = logging.getLogger("uvicorn.access")
+    logger = logging.getLogger("uvicorn")
 
     # 使用自定义的 JSON 格式化器
     formatter = JSONLogFormatter()
@@ -65,7 +65,7 @@ async def startup_event():
     )
     logstash_handler.setFormatter(formatter)
     logger.addHandler(logstash_handler)
-
+    logger.setLevel(logging.INFO)
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
@@ -79,14 +79,17 @@ async def log_requests(request: Request, call_next):
     request_path = request.url.path
     status_code = response.status_code
 
-    # 构建完整的日志消息
-    log_message = f"{client_host} - {request_method} {request_path} {status_code} - {process_time:.2f}s"
-
-    # 获取 uvicorn 的访问日志记录器
-    logger = logging.getLogger("uvicorn.access")
-
-    # 直接记录日志消息，不使用 extra 参数
-    logger.info(log_message)
+    # 记录日志
+    logger = logging.getLogger("uvicorn")
+    logger.info(
+        extra={
+            "response_code": status_code,
+            "request_method": request_method,
+            "request_path": request_path,
+            "request_ip": client_host,
+            "request_time": process_time
+        }
+    )
 
     return response
 
