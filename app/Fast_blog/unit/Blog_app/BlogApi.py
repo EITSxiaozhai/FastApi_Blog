@@ -4,7 +4,7 @@ import pickle
 from typing import Union
 
 from Fast_blog.database.databaseconnection import engine, db_session
-from Fast_blog.middleware.backtasks import BlogCache, AliOssUpload
+from Fast_blog.middleware.backtasks import BlogCache, aliOssUpload
 from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User
 from fastapi import APIRouter
 from fastapi import HTTPException
@@ -17,7 +17,7 @@ session = SessionLocal()
 
 BlogApp = APIRouter()
 
-uploadoss = AliOssUpload()
+uploadoss = aliOssUpload()
 ## 博客游客用户主页显示
 
 from sqlalchemy import func
