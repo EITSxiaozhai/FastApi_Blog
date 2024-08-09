@@ -558,7 +558,7 @@ async def publish_url_notification(notification_type="URL_UPDATED"):
 async def markdown_img_upload(file: UploadFile = File(...), ):
     x = datetime.datetime.now().strftime("%Y-%m-%d,%H:%M:%S")
     waitmarkdownimg = await file.read()
-    image_url = await (AliOssBlogMarkdownImg().Binaryfileuploadmarkdownimg
+    image_url = await (AliOssBlogMarkdownImg().async_upload_blog_image
                        (bitsfile=waitmarkdownimg, current_blogimgconunt=x))
     return {"code": 20000, "msg": "图片上传成功", "file": file.filename, "url": image_url}
 
