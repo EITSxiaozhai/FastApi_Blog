@@ -152,15 +152,12 @@ class AliOssBase:
         self.bucket = oss2.Bucket(auth, endpoint, bucket_name)  # 创建Bucket对象
         self.upload_path = upload_path  # 设置上传路径
 
-    # 获取文件的URL
-    def get_image_url(self, filename):
-        return f"http://{self.bucket.bucket_name}.{self.bucket.endpoint}/{self.upload_path}{filename}"
 
     # 上传文件到OSS
     def upload_file(self, oss_path, file_obj):
         try:
             self.bucket.put_object(oss_path, file_obj)  # 将文件上传到OSS
-            return self.get_image_url(oss_path)  # 返回文件的URL
+            return f"http://oss-cn-hangzhou.aliyuncs.com/{oss_path}"   # 返回文件的URL
         except oss2.exceptions.OssError as e:  # 处理上传过程中可能出现的异常
             print(f"文件上传到OSS失败: {e}")  # 打印错误信息
             return None  # 返回None表示上传失败
@@ -173,7 +170,7 @@ class AliOssBase:
 # 定义一个子类，用于特定的上传操作
 class AliOssUpload(AliOssBase):
     def __init__(self):
-        super().__init__('zpwl002', 'http://oss-cn-hangzhou.aliyuncs.com', 'blog/maincare/')  # 初始化基类
+        super().__init__('zpwl002', 'http://oss-cn-hangzhou.aliyuncs.com/', 'blog/maincare/')  # 初始化基类
 
     # 上传博客主卡图片
     def upload_bitsfile(self, blogid, bitsfile):
@@ -216,7 +213,7 @@ class AliOssPrivateDocument(AliOssBase):
 # 定义一个子类，用于上传Markdown博客图片
 class AliOssBlogMarkdownImg(AliOssBase):
     def __init__(self):
-        super().__init__('blogmarkdown', 'http://oss-cn-shanghai.aliyuncs.com', 'blogimg/')  # 初始化基类
+        super().__init__('blogmarkdown', 'http://oss-cn-shanghai.aliyuncs.com/', 'blogimg/')  # 初始化基类
 
     # 上传博客图片
     def upload_blog_image(self, bitsfile, image_count):
