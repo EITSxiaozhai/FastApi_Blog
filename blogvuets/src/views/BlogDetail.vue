@@ -266,11 +266,9 @@ const LoadComments = async () => {
   try {
     const CommentList = await backApi.post(`/generaluser/${blogId}/commentlist`);
     config.comments = CommentList.data;
-    console.log(config.comments)
     //获取到评论后下个Tick才会读取评论区高度
     nextTick(() => {
       commentx.value = commentx.value.offsetHeight;
-      console.log(commentx.value)
     })
   } catch (error) {
     console.error(error);
@@ -358,7 +356,6 @@ const submit = async ({content, parentId, files, finish, reply}) => {
     files: files,
   };
 
-  console.log(jsonData)
   const token = localStorage.getItem("token");
   const blogId = route.params.blogId;
   await UpComments(jsonData);
