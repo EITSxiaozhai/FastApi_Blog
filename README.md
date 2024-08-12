@@ -69,7 +69,6 @@
 - MQ_USERNAME
 ```
 # 程序目录介绍
-
 - [app](app)
   - [Fast_blog](/app/Fast_blog) 
     - [database](/app/Fast_blog/database) 数据库链接
