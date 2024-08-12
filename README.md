@@ -1,4 +1,4 @@
-# Fastapi + Vue3/2 的全栈练习项目
+# Fastapi + Vue3/2 的全栈项目
 
 # 基本实现功能
 
@@ -13,6 +13,7 @@
 * 文章博客实时传输到Redis中。减轻数据库压力。实现了Redis和Mysql同步功能
 
 ## 管理员功能
+
 * 增删改查对应文章
 * 使用了[vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)进行管理员端管理
 * 审查评论
@@ -22,6 +23,9 @@
 * Google验证码登录注册验证
 * 双Token自动续期，全局管理员Token拦截。
 
+## 中间件功能
+* 全局Token验证拦截。必须携带token才能进行某些接口的访问。
+* 日志格式化功能.接受来自uvicorn的日志。并且格式化成对应形式。通过ELK进行日志存储使用等
 ---
 
 
@@ -33,8 +37,10 @@
 - Python3-Fastapi
 - vue3和vue2的环境
 - 阿里云的OSS key，用来存放文章首页图片
-- Google 验证码的密钥
-
+- Google 验证码的密钥，分为两个角色请分开。
+- ELK的日志服务器地址
+## 目录介绍
+* app目录存储为
 # 部署方法
 
 ---
@@ -62,6 +68,21 @@
 - MQ_DBPORT
 - MQ_USERNAME
 ```
+# 程序目录介绍
+
+- [app](app)
+  - [Fast_blog](/app/Fast_blog)
+    - [database](/app/Fast_blog/database)
+    - [middleware](/app/Fast_blog/middleware)
+    - [model](/app/Fast_blog/model)
+    - [schemas](/app/Fast_blog/schemas)
+    - [unit](/app/Fast_blog/unit)
+      - [AdminAPP](/app/Fast_blog/unit/AdminApp)
+      - [Blog_app](/app/Fast_blog/unit/Blog_app)
+      - [Power_crawl](/app/Fast_blog/unit/Power_Crawl)
+      - [SystemMonitoring](/app/Fast_blog/unit/SystemMonitoring)
+      - [User_app](/app/Fast_blog/unit/User_app)
+        
 
 ---
 
@@ -75,13 +96,13 @@
 uvicorn.exe main:app --reload
 ```
 
-后端启动完成后。代码中包含了自动其中邮件发送任务。当然你可以拆除它。并使用下面的命令进行手动启动
+后端启动完成后。代码中包含了自动启动邮件发送定时任务。当然你可以拆除它。并使用下面的命令进行手动启动
 
 #### 启动Celery的主服务
 ``` python
  celery -A app.Fast_blog.middleware.backlist worker --loglevel=info -P eventlet
 ```
-#### 启动Celery的调度器进行自动执行
+#### 启动Celery的循环定时任务调度器进行自动执行
 ``` python
  celery -A app.Fast_blog.middleware.celerybeat-schedule:celery_app beat
 ```
