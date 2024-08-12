@@ -71,17 +71,17 @@
 # 程序目录介绍
 
 - [app](app)
-  - [Fast_blog](/app/Fast_blog)
-    - [database](/app/Fast_blog/database)
-    - [middleware](/app/Fast_blog/middleware)
-    - [model](/app/Fast_blog/model)
-    - [schemas](/app/Fast_blog/schemas)
-    - [unit](/app/Fast_blog/unit)
-      - [AdminAPP](/app/Fast_blog/unit/AdminApp)
-      - [Blog_app](/app/Fast_blog/unit/Blog_app)
-      - [Power_crawl](/app/Fast_blog/unit/Power_Crawl)
-      - [SystemMonitoring](/app/Fast_blog/unit/SystemMonitoring)
-      - [User_app](/app/Fast_blog/unit/User_app)
+  - [Fast_blog](/app/Fast_blog) 
+    - [database](/app/Fast_blog/database) 数据库链接
+    - [middleware](/app/Fast_blog/middleware) 中间件模块
+    - [model](/app/Fast_blog/model) 数据库模型模块
+    - [schemas](/app/Fast_blog/schemas) 请求验证模块
+    - [unit](/app/Fast_blog/unit) app模块文件夹
+      - [AdminAPP](/app/Fast_blog/unit/AdminApp) 管理员接口
+      - [Blog_app](/app/Fast_blog/unit/Blog_app) 博客接口
+      - [Power_crawl](/app/Fast_blog/unit/Power_Crawl) 爬虫接口（自用。可以删除）
+      - [SystemMonitoring](/app/Fast_blog/unit/SystemMonitoring) websocket系统监控模块
+      - [User_app](/app/Fast_blog/unit/User_app) 普通用户接口
         
 
 ---
