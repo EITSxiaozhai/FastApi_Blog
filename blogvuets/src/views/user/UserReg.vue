@@ -93,7 +93,7 @@ const getVerificationCode = async () => {
   // 检查邮箱是否为空
   if (!RegisterUserForm.email) {
     // 如果邮箱为空，不发送请求
-    console.log("Email is empty. Request not sent.");
+
     return;
   }
   const response = await backApi.post('/generaluser/emailcod', {
@@ -136,7 +136,6 @@ const debouncedCheckUsername = _.debounce(async (username, callback) => {
 }, 500);  // 500毫秒的防抖延迟
 
 const validateUsername = (rule: any, value: any, callback: any) => {
-  console.log(value);
   const reg = /^[^\s\u4e00-\u9fa5]+$/;
 
   if (!reg.test(value)) {
@@ -148,7 +147,6 @@ const validateUsername = (rule: any, value: any, callback: any) => {
 };
 
 const validatePass = (rule: any, value: any, callback: any) => {
-  console.log(value)
   if (value === '') {
     callback(new Error('Please input the password'))
   } else {
@@ -161,7 +159,6 @@ const validatePass = (rule: any, value: any, callback: any) => {
 }
 
 const validatePass2 = (rule: any, value: any, callback: any) => {
-  console.log(value)
   nextTick(() => {
     const passwordValue = RegisterUserForm.password;
     const password2Value = value
@@ -170,7 +167,6 @@ const validatePass2 = (rule: any, value: any, callback: any) => {
     } else if (passwordValue === '') {
       callback(new Error('请先输入密码'));
     } else if (password2Value !== passwordValue) {
-      console.log(password2Value, passwordValue)
       callback(new Error('两次输入不一致'));
     } else {
       callback();
@@ -179,7 +175,6 @@ const validatePass2 = (rule: any, value: any, callback: any) => {
 };
 
 const validateEmail = (rule: any, value: any, callback: any) => {
-  console.log(value)
   const reg = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
   if (!reg.test(value)) {
     callback(new Error('请输入正确的邮箱地址'));
