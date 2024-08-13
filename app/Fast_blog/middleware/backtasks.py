@@ -143,90 +143,65 @@ Adminoauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
 Useroauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/generaluser/token")
 Refresh_scheme = OAuth2PasswordBearer(tokenUrl="/api/refreshtoken")
 
-## 阿里云文件上传
-class aliOssUpload():
-    def __init__(self):
+#阿里云操作基类
+class AliOssBase:
+    def __init__(self, bucket_name, upload_path, region='cn-hangzhou'):
         access_key_id = os.getenv('ACCESS_KEY_ID')
         access_key_secret = os.getenv('ACCESS_KEY_SECRET')
 
-        # 填写自己的 Bucket 名称和上传地址
-        self.bucket_name = 'zpwl002'
-        self.upload_path = 'blog/maincare/'
+        self.bucket_name = bucket_name
+        self.upload_path = upload_path
+        self.region = region  # 保存 region 值
 
-        # 创建 OSS 链接
         auth = oss2.Auth(access_key_id, access_key_secret)
-        self.bucket = oss2.Bucket(auth, 'https://oss-cn-hangzhou.aliyuncs.com', self.bucket_name)
+        self.bucket = oss2.Bucket(auth, f'https://oss-{region}.aliyuncs.com', self.bucket_name)
 
-    # 二进制上传博客首页
-    def upload_bitsfile(self, blogid, bitsfile):
-        self.bucket.put_object(f'{self.upload_path}{blogid}-maincard.jpg', bitsfile)
+    def _get_full_url(self, file_name):
+        return f"https://{self.bucket_name}.oss-{self.region}.aliyuncs.com/{self.upload_path}{file_name}"
 
-    # 二进制上传博客首页
-    async def Binaryfileupload(self, blogid, bitsfile):
-        await asyncio.to_thread(self.upload_bitsfile, blogid, bitsfile)
-        image_url = f"https://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}{blogid}-maincard.jpg"
-        return image_url
+    async def async_upload(self, func, *args, **kwargs):
+        await asyncio.to_thread(func, *args, **kwargs)
 
-    # 二进制上传头像
-    def upload_bitsfileAvatar(self, bitsfile):
-        self.bucket.put_object(f'{self.upload_path}-avatar.jpg', bitsfile)
+#阿里云博客文章主页介绍图片
+class AliOssUpload(AliOssBase):
+    def __init__(self):
+        super().__init__('zpwl002', 'blog/maincare/')
 
-    # 二进制上传头像
-    async def Binaryfileuploadavatar(self, bitsfile):
-        await asyncio.to_thread(self.upload_bitsfileAvatar, bitsfile)
-        image_url = f"https://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}-avatar.jpg"
-        return image_url
+    async def upload_bitsfile(self, blogid, bitsfile):
+        file_name = f'{blogid}-maincard.jpg'
+        self.bucket.put_object(f'{self.upload_path}{file_name}', bitsfile)
+        return self._get_full_url(file_name)
 
-    # 普通上传文件地址
+    async def upload_bitsfile_avatar(self, bitsfile):
+        file_name = '-avatar.jpg'
+        self.bucket.put_object(f'{self.upload_path}{file_name}', bitsfile)
+        return self._get_full_url(file_name)
+
     def oss_upload_file(self, file_path):
-        # 构造上传路径
         file_name = os.path.basename(file_path)
         oss_path = self.upload_path + file_name
-        # 上传文件
         with open(file_path, 'rb') as file_obj:
-            result = self.bucket.put_object(oss_path, file_obj)
-        # 返回上传地址
-        image_url = f"https://{self.bucket_name}.oss-cn-hangzhou.aliyuncs.com/{self.upload_path}{file_name}"
-        print(image_url)
-        return image_url
+            self.bucket.put_object(oss_path, file_obj)
+        return self._get_full_url(file_name)
 
-
-##私有私有密钥类下载读取
-class aliOssPrivateDocument():
+#私有文档读取地址
+class AliOssPrivateDocument(AliOssBase):
     def __init__(self):
-        access_key_id = os.getenv('ACCESS_KEY_ID')
-        access_key_secret = os.getenv('ACCESS_KEY_SECRET')
-        # 填写自己的 Bucket 名称和地址
-        self.bucket_name = 'privatedocument'
-        self.upload_path = '/'
-        auth = oss2.Auth(access_key_id, access_key_secret)
-        self.bucket = oss2.Bucket(auth, 'https://oss-cn-hangzhou.aliyuncs.com', self.bucket_name)
+        super().__init__('privatedocument', '/')
 
     def CrawlerKeyAcquisition(self):
         result = self.bucket.get_object('google.json')
         return result.read()
 
-
-##markdown图片地址
-class aliOssBlogMarkdownimg():
+#markdown文章读取
+class AliOssBlogMarkdownImg(AliOssBase):
     def __init__(self):
-        access_key_id = os.getenv('ACCESS_KEY_ID')
-        access_key_secret = os.getenv('ACCESS_KEY_SECRET')
+        super().__init__('blogmarkdown', 'blogimg/', region='cn-shanghai')
 
-        # 填写自己的 Bucket 名称和上传地址
-        self.bucket_name = 'blogmarkdown'
-        self.upload_path = 'blogimg/'
-
-        # 创建 OSS 链接
-        auth = oss2.Auth(access_key_id, access_key_secret)
-        self.bucket = oss2.Bucket(auth, 'https://oss-cn-shanghai.aliyuncs.com', self.bucket_name)
-
-    def upload_bitsfileMarkdownimg(self, bitsfile, current_blogimgconunt):
-        self.bucket.put_object(f'{self.upload_path}{current_blogimgconunt}.jpg', bitsfile)
-
-        # 二进制上传博客图片
+    async def upload_bitsfile_markdown_img(self, bitsfile, current_blogimgconunt):
+        file_name = f'{current_blogimgconunt}.jpg'
+        self.bucket.put_object(f'{self.upload_path}{file_name}', bitsfile)
+        return self._get_full_url(file_name)
 
     async def Binaryfileuploadmarkdownimg(self, bitsfile, current_blogimgconunt):
-        await asyncio.to_thread(self.upload_bitsfileMarkdownimg, bitsfile, current_blogimgconunt)
-        image_url = f"https://{self.bucket_name}.oss-cn-shanghai.aliyuncs.com/{self.upload_path}{current_blogimgconunt}.jpg"
-        return image_url
+        return await self.async_upload(self.upload_bitsfile_markdown_img, bitsfile, current_blogimgconunt)
