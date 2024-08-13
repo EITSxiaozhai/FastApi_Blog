@@ -8,7 +8,7 @@ import uuid
 import jwt
 from Fast_blog.database.databaseconnection import engine, db_session
 from Fast_blog.middleware.backtasks import TokenManager, Useroauth2_scheme, verify_recaptcha, send_activation_email, \
-    aliOssUpload
+    AliOssUpload
 from Fast_blog.model import models
 from Fast_blog.model.models import User, Comment, Blog
 from Fast_blog.schemas.schemas import UserCredentials, UserRegCredentials
