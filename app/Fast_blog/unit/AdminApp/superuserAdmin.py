@@ -561,7 +561,7 @@ async def markdown_img_upload(file: UploadFile = File(...), ):
     # 创建 AliOssBlogMarkdownImg 的实例
     oss_client = AliOssBlogMarkdownImg()
     # 调用实例方法上传图片
-    image_url = await oss_client.Binaryfileuploadmarkdownimg(bitsfile=waitmarkdownimg, current_blogimgconunt=x)
+    image_url = await oss_client.upload_bitsfile_markdown_img(bitsfile=waitmarkdownimg, current_blogimgconunt=x)
     return {"code": 20000, "msg": "图片上传成功", "file": file.filename, "url": image_url}
 
 
@@ -587,7 +587,7 @@ async def AdminBlogidADDimg(blog_id: int, file: UploadFile = File(...), ):
     async with db_session() as session:
         try:
             file = await file.read()
-            fileurl = await uploadoss.async_upload_bitsfile(blogid=blog_id, bitsfile=file)
+            fileurl = await uploadoss.upload_bitsfile(blogid=blog_id, bitsfile=file)
             result = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
             now = result.scalars().first()
 
