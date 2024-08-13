@@ -8,10 +8,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改类调用方法&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="精简重复无效代码&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/TokenAuthentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/TokenAuthentication.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/backtasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/backtasks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/superuserAdmin.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -656,7 +657,7 @@
       <workItem from="1723452165181" duration="263000" />
       <workItem from="1723514957737" duration="4267000" />
       <workItem from="1723521634244" duration="660000" />
-      <workItem from="1723522316896" duration="2553000" />
+      <workItem from="1723522316896" duration="5925000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -1001,7 +1002,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="457" />
+    <option name="localTasksCounter" value="459" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1057,7 +1058,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="CD添加对应变量读取&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;&#10;&#10;Signed-off-by: exploit &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="CD添加对应变量读取&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;&#10;&#10;Signed-off-by: exploit &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="修改读取方法以及注释&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;&#10;&#10;Signed-off-by: exploit &lt;eitsxiaozhai@gmail.com&gt;" />
@@ -1082,7 +1082,8 @@
     <MESSAGE value="修改介绍&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="删除前端页面LOG&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="修改类调用方法&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改类调用方法&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
+    <MESSAGE value="精简重复无效代码&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="精简重复无效代码&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

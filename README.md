@@ -22,6 +22,7 @@
 * 详细实现功能可以跳转到vue-element-admin上查看。
 * Google验证码登录注册验证
 * 双Token自动续期，全局管理员Token拦截。
+* WebSocket+折线图监控主机情况
 
 ## 中间件功能
 * 全局Token验证拦截。必须携带token才能进行某些接口的访问。

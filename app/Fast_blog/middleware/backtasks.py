@@ -46,7 +46,7 @@ ALGORITHM = "HS256"
 celery_app = Celery('tasks', broker=f'amqp://{mq_username}:{mq_password}@{mq_host}:{mq_port}/{mq_dbname}',
                     backend=f'redis://:{db_password}@{redis_host}:{redis_port}/{redis_db}')
 
-
+#邮件发送任务
 @celery_app.task(name="middleware/backlist")
 def send_activation_email(email, activation_code):
     smtp_server = SMTPSERVER
@@ -75,7 +75,7 @@ def send_activation_email(email, activation_code):
         server.sendmail(sender_email, receiver_email, msg.as_string())
 
 
-##token缓存到redis中
+##token缓存到redis中，暂时还没有使用
 class TokenManager():
     def __init__(self, secret_key=secret_key):
         self.secret_key = secret_key
@@ -100,7 +100,7 @@ class TokenManager():
 
         return False
 
-
+##Google验证码验证
 async def verify_recaptcha(UserreCAPTCHA, SecretKeyTypology):
     try:
         if SecretKeyTypology == "admin":
@@ -138,7 +138,7 @@ class BlogCache:
         # 创建Redis连接
         self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, password=db_password)
 
-
+#几个认证接口
 Adminoauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
 Useroauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/generaluser/token")
 Refresh_scheme = OAuth2PasswordBearer(tokenUrl="/api/refreshtoken")
