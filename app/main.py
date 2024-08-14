@@ -15,6 +15,7 @@ from Fast_blog.database.databaseconnection import engine
 from Fast_blog.middleware.TokenAuthentication import AccessTokenMiddleware
 from Fast_blog.unit import AdminApp,Blog_app,Power_Crawl,SystemMonitoring,User_app
 from Fast_blog.middleware.LogDecode import JSONLogFormatter
+from Fast_blog.middleware import celery_app
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -45,9 +46,9 @@ app.add_middleware(
 
 
 celery_command = "celery -A Fast_blog.middleware.backtasks worker --loglevel=info"
-celery_beat_command = "celery -A Fast_blog.middleware.backtasks beat --loglevel=info"
+# celery_beat_command = "celery -A Fast_blog.middleware.backtasks beat --loglevel=info"
 subprocess.Popen(celery_command, shell=True)
-subprocess.Popen(celery_beat_command, shell=True)
+# subprocess.Popen(celery_beat_command, shell=True)
 
 @app.get("/")
 async def root():
@@ -56,6 +57,7 @@ async def root():
 # 设置日志通过 Logstash 发送到后端 ELK 集群上去
 @app.on_event("startup")
 async def startup_event():
+
     logger = logging.getLogger("uvicorn")
 
     # 使用自定义的 JSON 格式化器
