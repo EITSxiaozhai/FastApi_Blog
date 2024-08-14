@@ -4,7 +4,7 @@ import pickle
 from typing import Union
 
 from Fast_blog.database.databaseconnection import engine, db_session
-from Fast_blog.middleware.backtasks import BlogCache, AliOssUpload
+from Fast_blog.middleware.backtasks import BlogCache, AliOssUpload,celery_app
 from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User
 from fastapi import APIRouter
 from fastapi import HTTPException
@@ -59,7 +59,7 @@ blog_cache = BlogCache()
 @event.listens_for(Blog, 'after_insert')
 @event.listens_for(Blog, 'after_update')
 @event.listens_for(Blog, 'after_delete')
-def update_cache(mapper, connection, target):
+async def update_cache(mapper, connection, target):
     redis_key = f"blog_{target.BlogId}"
     data = {
         "BlogId": target.BlogId,
@@ -72,6 +72,25 @@ def update_cache(mapper, connection, target):
     blog_cache.redis_client.set(redis_key, pickle.dumps([data]))
     blog_cache.redis_client.expire(redis_key, 86400)  # Set expiration time to 24 hour
 
+#定时同步任务
+@celery_app.task
+async def update_redis_cache():
+    async with db_session() as session:  # Assuming you have an async DB session
+        results = await session.execute(select(Blog))
+        blogs = results.scalars().all()
+
+        for blog in blogs:
+            redis_key = f"blog_{blog.BlogId}"
+            data = {
+                "BlogId": blog.BlogId,
+                "title": blog.title,
+                "content": blog.content,
+                "author": blog.author,
+                "BlogIntroductionPicture": blog.BlogIntroductionPicture,
+                "created_at": blog.created_at,
+            }
+            blog_cache.redis_client.set(redis_key, pickle.dumps([data]))
+            blog_cache.redis_client.expire(redis_key, 86400)  # Set expiration time to 24 hours
 
 ### 数据库缓存读取判断
 @BlogApp.post("/user/Blogid")

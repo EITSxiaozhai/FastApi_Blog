@@ -205,3 +205,4 @@ class AliOssBlogMarkdownImg(AliOssBase):
 
     async def Binaryfileuploadmarkdownimg(self, bitsfile, current_blogimgconunt):
         return await self.async_upload(self.upload_bitsfile_markdown_img, bitsfile, current_blogimgconunt)
+
