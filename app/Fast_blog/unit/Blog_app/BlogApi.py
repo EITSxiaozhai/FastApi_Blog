@@ -73,7 +73,7 @@ async def update_cache(mapper, connection, target):
     blog_cache.redis_client.expire(redis_key, 86400)  # Set expiration time to 24 hour
 
 #定时同步任务
-@celery_app.task
+@celery_app.task(name="BlogAuto")
 async def update_redis_cache():
     async with db_session() as session:  # Assuming you have an async DB session
         results = await session.execute(select(Blog))
