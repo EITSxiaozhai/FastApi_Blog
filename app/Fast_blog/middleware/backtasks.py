@@ -49,6 +49,7 @@ celery_app = Celery('tasks', broker=f'amqp://{mq_username}:{mq_password}@{mq_hos
 #邮件发送任务
 @celery_app.task(name="middleware/backlist")
 def send_activation_email(email, activation_code):
+    print("Sending activation email")
     smtp_server = SMTPSERVER
     smtp_port = 465
     smtp_user = SMTPUSER
