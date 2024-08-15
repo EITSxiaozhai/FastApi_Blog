@@ -15,6 +15,8 @@ from celery import Celery
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
 
+
+
 load_dotenv()
 
 db_password = os.getenv("REDIS_DB_PASSWORD")
@@ -43,11 +45,11 @@ SMTPUSER = os.getenv("SMTPUSER")
 SMTPPASSWORD = os.getenv("SMTPPASSWORD")
 ALGORITHM = "HS256"
 
-celery_app = Celery('tasks', broker=f'amqp://{mq_username}:{mq_password}@{mq_host}:{mq_port}/{mq_dbname}',
+celery_app = Celery('task', broker=f'amqp://{mq_username}:{mq_password}@{mq_host}:{mq_port}/{mq_dbname}',
                     backend=f'redis://:{db_password}@{redis_host}:{redis_port}/{redis_db}')
 
 #邮件发送任务
-@celery_app.task(name="middleware/backlist")
+@celery_app.task(name="sentmail")
 def send_activation_email(email, activation_code):
     print("Sending activation email")
     smtp_server = SMTPSERVER
@@ -75,6 +77,11 @@ def send_activation_email(email, activation_code):
         server.login(smtp_user, smtp_password)
         server.sendmail(sender_email, receiver_email, msg.as_string())
 
+@celery_app.task(name="update_redis_cache")
+async def update_redis_cache_task():
+    from Fast_blog.unit.Blog_app.BlogApi import update_redis_cache
+    await update_redis_cache()
+    return 0
 
 ##token缓存到redis中，暂时还没有使用
 class TokenManager():
