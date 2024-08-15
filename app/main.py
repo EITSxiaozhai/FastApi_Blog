@@ -47,10 +47,10 @@ app.add_middleware(
 )
 
 
-# celery_command = "celery -A Fast_blog.middleware.backtasks worker -l info"
-# # celery_beat_command = "celery -A Fast_blog.middleware.backtasks beat --loglevel=info"
-# subprocess.Popen(celery_command, shell=True)
-# # subprocess.Popen(celery_beat_command, shell=True)
+celery_command = "celery -A Fast_blog.middleware.backtasks worker -l info"
+celery_beat_command = "celery -A Fast_blog.middleware.celerybeat-schedule  beat --loglevel=info"
+subprocess.Popen(celery_command, shell=True)
+subprocess.Popen(celery_beat_command, shell=True)
 
 @app.get("/")
 async def root():
