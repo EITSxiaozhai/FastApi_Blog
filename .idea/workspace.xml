@@ -8,8 +8,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加定时任务自动执行缓存到redis中&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加定时任务命令">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/RequestInterception.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/components.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/components.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,37 +149,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;FastAPI.Fastapi_blog.executor&quot;: &quot;Debug&quot;,
-    &quot;FastAPI.Unnamed.executor&quot;: &quot;Run&quot;,
-    &quot;Python.1.executor&quot;: &quot;Run&quot;,
-    &quot;Python.backlist (1).executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
-    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/FastApi_Blog&quot;,
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.nodejs&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;E:\\pytest\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "FastAPI.Fastapi_blog.executor": "Debug",
+    "FastAPI.Unnamed.executor": "Run",
+    "Python.1.executor": "Run",
+    "Python.backlist (1).executor": "Debug",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
+    "TODO_SCOPE": "All Places",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "D:/FastApi_Blog",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "settings.nodejs",
+    "ts.external.directory.path": "D:\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;vue.recent.templates&quot;: [
-      &quot;Vue Options API Component&quot;,
-      &quot;Vue Composition API Component&quot;
+  "keyToStringList": {
+    "vue.recent.templates": [
+      "Vue Options API Component",
+      "Vue Composition API Component"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\FastApi_Blog" />
@@ -654,7 +660,9 @@
       <workItem from="1723452165181" duration="263000" />
       <workItem from="1723514957737" duration="4267000" />
       <workItem from="1723521634244" duration="660000" />
-      <workItem from="1723522316896" duration="35516000" />
+      <workItem from="1723522316896" duration="42826000" />
+      <workItem from="1723777655887" duration="1538000" />
+      <workItem from="1723790686908" duration="3340000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -999,7 +1007,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="466" />
+    <option name="localTasksCounter" value="467" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1055,7 +1063,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改头像非必选&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="修改头像上传模式&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="添加PV监控&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="拆分OSS类&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
@@ -1080,7 +1087,8 @@
     <MESSAGE value="准备添加自动定时任务&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="测试启动命令&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="添加定时任务自动执行缓存到redis中&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加定时任务自动执行缓存到redis中&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
+    <MESSAGE value="添加定时任务命令" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加定时任务命令" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

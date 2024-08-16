@@ -428,31 +428,6 @@ const redirectToUserProfile = () => {
 
 <template>
   <el-container>
-    <el-aside style="width: 13%;">
-      <el-card style="height: 40%; position: fixed; width: 13%;margin-top: 10%;overflow-y: scroll;">
-        <el-steps
-            direction="vertical"
-            :active="currentStep"
-            v-if="!isLoading"
-            @click="handleStepClick"
-            :style="{ 'margin-top': stepMarginTop + 'px' }"
-        >
-          <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"
-                   @click="() => handleStepClick(index)"></el-step>
-        </el-steps>
-        <el-skeleton :rows="5" animated v-else/>
-      </el-card>
-      <el-card style="position: fixed; width: 13%;margin-top: 80vh">
-        <h4>喜欢该文章吗？</h4>
-        <el-rate
-            v-model="value"
-            :icons="icons"
-            :void-icon="ChatRound"
-            :colors="['#409eff', '#67c23a', '#FF9900']"
-            @change="submitRating"
-        />
-      </el-card>
-    </el-aside>
 
 
     <el-container>
@@ -461,50 +436,75 @@ const redirectToUserProfile = () => {
           <h1 style="padding-left: 20px;font-size: 20px">
             <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
           </h1>
-  <el-sub-menu index="2-4" id="login">
-    <template #title>
-      {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
-    </template>
-    <router-link style="text-decoration:none" to="/user-profile">
-    <el-menu-item v-if="isLoggedIn" index="2-4-2">
-      个人资料
-    </el-menu-item>
-    </router-link>
-    <router-link style="text-decoration:none" to="/reg">
-    <el-menu-item index="2-4-1">
-      注册
-    </el-menu-item>
-    </router-link>
-     <router-link style="text-decoration:none" to="/login">
-    <el-menu-item index="2-4-1">登录
-    </el-menu-item>
-       </router-link>
-  </el-sub-menu>
+          <el-sub-menu index="2-4" id="login">
+            <template #title>
+              {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
+            </template>
+            <router-link style="text-decoration:none" to="/user-profile">
+              <el-menu-item v-if="isLoggedIn" index="2-4-2">
+                个人资料
+              </el-menu-item>
+            </router-link>
+            <router-link style="text-decoration:none" to="/reg">
+              <el-menu-item index="2-4-1">
+                注册
+              </el-menu-item>
+            </router-link>
+            <router-link style="text-decoration:none" to="/login">
+              <el-menu-item index="2-4-1">登录
+              </el-menu-item>
+            </router-link>
+          </el-sub-menu>
         </el-menu>
         <el-progress :percentage="readingProgress" :show-text="false"/>
       </el-header>
-      <el-main style="margin-right:15%">
-        <el-card style="margin-top: 5%; display: flex; justify-content: center;" v-if="!isLoading" pa>
-          <div v-for="(item, index) in data.data" :key="index" class="text item">
-            <div>
-              <div style="display: flex; flex-direction: column; align-items: center;">
-                <h1 style="font-size: 200%" class="el-title">{{ item.title }}</h1>
-              </div>
-              <div style="display: flex; justify-content: center; align-items: center;">
-                <h3 style="padding-right: 50px">作者:{{ item.author }}</h3>
-                <h3>总体评分:</h3>
-                <el-rate style="padding-right: 50px" v-model="averageRating" allow-half disabled/>
-                <h3 style="padding-right: 50px">发布时间：{{ item.created_at }}</h3>
-              </div>
+      <el-card style="margin-top: 4%; display: flex; justify-content: center;" v-if="!isLoading" pa>
+        <div v-for="(item, index) in data.data" :key="index" class="text item">
+          <div>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <h1 style="font-size: 200%" class="el-title">{{ item.title }}</h1>
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+              <h3 style="padding-right: 50px">作者:{{ item.author }}</h3>
+              <h3>总体评分:</h3>
+              <el-rate style="padding-right: 50px" v-model="averageRating" allow-half disabled/>
+              <h3 style="padding-right: 50px">发布时间：{{ item.created_at }}</h3>
             </div>
           </div>
-        </el-card>
+        </div>
+      </el-card>
 
-        <el-card v-else>
-          <!-- 骨架屏 -->
-          <el-skeleton :rows="5" animated/>
-        </el-card>
+      <el-card v-else>
+        <!-- 骨架屏 -->
+        <el-skeleton :rows="5" animated/>
+      </el-card>
 
+        <el-aside style="width: 13%;">
+          <el-card style="height: 40%; position: fixed; width: 13%;margin-top: 1%;overflow-y: scroll;">
+            <el-steps
+                direction="vertical"
+                :active="currentStep"
+                v-if="!isLoading"
+                @click="handleStepClick"
+                :style="{ 'margin-top': stepMarginTop + 'px' }"
+            >
+              <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"
+                       @click="() => handleStepClick(index)"></el-step>
+            </el-steps>
+            <el-skeleton :rows="5" animated v-else/>
+          </el-card>
+          <el-card style="position: fixed; width: 13%; margin-top: 21%">
+            <h4>喜欢该文章吗？</h4>
+            <el-rate
+                v-model="value"
+                :icons="icons"
+                :void-icon="ChatRound"
+                :colors="['#409eff', '#67c23a', '#FF9900']"
+                @change="submitRating"
+            />
+          </el-card>
+        </el-aside>
+    <el-main style="margin-left:15%;margin-right: 10%">
         <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
           <div v-for="(item, index) in data.data" :key="index" class="text item">
             <div>
