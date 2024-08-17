@@ -428,126 +428,124 @@ const redirectToUserProfile = () => {
 
 <template>
   <el-container>
+    <el-header :class="{ 'hidden': scrollDirection === 'down' }" id="top-mains">
+      <el-menu class="el-menu-demo" mode="horizontal">
+        <h1 style="padding-left: 20px;font-size: 20px">
+          <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
+        </h1>
+        <el-sub-menu index="2-4" id="login">
+          <template #title>
+            {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
+          </template>
+          <router-link style="text-decoration:none" to="/user-profile">
+            <el-menu-item v-if="isLoggedIn" index="2-4-2">
+              个人资料
+            </el-menu-item>
+          </router-link>
+          <router-link style="text-decoration:none" to="/reg">
+            <el-menu-item index="2-4-1">
+              注册
+            </el-menu-item>
+          </router-link>
+          <router-link style="text-decoration:none" to="/login">
+            <el-menu-item index="2-4-1">登录
+            </el-menu-item>
+          </router-link>
+        </el-sub-menu>
+      </el-menu>
+      <el-progress :percentage="readingProgress" :show-text="false"/>
+    </el-header>
 
 
-    <el-container>
-      <el-header :class="{ 'hidden': scrollDirection === 'down' }" id="top-mains">
-        <el-menu class="el-menu-demo" mode="horizontal">
-          <h1 style="padding-left: 20px;font-size: 20px">
-            <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
-          </h1>
-          <el-sub-menu index="2-4" id="login">
-            <template #title>
-              {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
-            </template>
-            <router-link style="text-decoration:none" to="/user-profile">
-              <el-menu-item v-if="isLoggedIn" index="2-4-2">
-                个人资料
-              </el-menu-item>
-            </router-link>
-            <router-link style="text-decoration:none" to="/reg">
-              <el-menu-item index="2-4-1">
-                注册
-              </el-menu-item>
-            </router-link>
-            <router-link style="text-decoration:none" to="/login">
-              <el-menu-item index="2-4-1">登录
-              </el-menu-item>
-            </router-link>
-          </el-sub-menu>
-        </el-menu>
-        <el-progress :percentage="readingProgress" :show-text="false"/>
-      </el-header>
-      <el-card style="margin-top: 4%; display: flex; justify-content: center;" v-if="!isLoading" pa>
-        <div v-for="(item, index) in data.data" :key="index" class="text item">
-          <div>
-            <div style="display: flex; flex-direction: column; align-items: center;">
-              <h1 style="font-size: 200%" class="el-title">{{ item.title }}</h1>
+    <el-row>
+      <el-container>
+        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
+          <el-aside style="margin-top: 20px;" class="hidden-md-and-down">
+            <el-affix :offset="250">
+              <el-card>
+                <el-steps
+                    direction="vertical"
+                    :active="currentStep"
+                    v-if="!isLoading"
+                    @click="handleStepClick"
+                    :style="{ 'margin-top': stepMarginTop + 'px' }"
+                >
+                  <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"
+                           @click="() => handleStepClick(index)"></el-step>
+                </el-steps>
+                <el-skeleton :rows="5" animated v-else/>
+              </el-card>
+              <el-card style="margin-top: 20px">
+                <h4>喜欢该文章吗？</h4>
+                <el-rate
+                    v-model="value"
+                    :icons="icons"
+                    :void-icon="ChatRound"
+                    :colors="['#409eff', '#67c23a', '#FF9900']"
+                    @change="submitRating"
+                />
+              </el-card>
+            </el-affix>
+          </el-aside>
+        </el-col>
+        <el-col :xs="20" :sm="20" :md="20" :lg="20" :xl="20">
+          <el-main style="">
+            <el-card style="margin-top: 4%; display: flex; justify-content: center;" v-if="!isLoading" pa>
+              <div v-for="(item, index) in data.data" :key="index" class="text item">
+                <div>
+                  <div style="display: flex; flex-direction: column; align-items: center;">
+                    <h1 style="font-size: 200%" class="el-title">{{ item.title }}</h1>
+                  </div>
+                  <div style="display: flex; justify-content: center; align-items: center;">
+                    <h3 style="padding-right: 50px">作者:{{ item.author }}</h3>
+                    <h3>总体评分:</h3>
+                    <el-rate style="padding-right: 50px" v-model="averageRating" allow-half disabled/>
+                    <h3 style="padding-right: 50px">发布时间：{{ item.created_at }}</h3>
+                  </div>
+                </div>
+              </div>
+            </el-card>
+
+            <el-card v-else>
+              <!-- 骨架屏 -->
+              <el-skeleton :rows="5" animated/>
+            </el-card>
+            <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
+              <div v-for="(item, index) in data.data" :key="index" class="text item">
+                <div>
+                  <div v-html="convertMarkdown(item.content)"></div>
+                </div>
+              </div>
+            </el-card>
+
+            <el-card v-else>
+              <el-skeleton :rows="10" animated/>
+            </el-card>
+
+            <div ref="commentx">
+              <el-card style="margin-top: 1%">
+                <u-comment :config="config" @submit="submit" @like="like">
+                </u-comment>
+              </el-card>
             </div>
-            <div style="display: flex; justify-content: center; align-items: center;">
-              <h3 style="padding-right: 50px">作者:{{ item.author }}</h3>
-              <h3>总体评分:</h3>
-              <el-rate style="padding-right: 50px" v-model="averageRating" allow-half disabled/>
-              <h3 style="padding-right: 50px">发布时间：{{ item.created_at }}</h3>
-            </div>
-          </div>
-        </div>
-      </el-card>
-
-      <el-card v-else>
-        <!-- 骨架屏 -->
-        <el-skeleton :rows="5" animated/>
-      </el-card>
-
-        <el-aside style="width: 13%;">
-          <el-card style="height: 40%; position: fixed; width: 13%;margin-top: 1%;overflow-y: scroll;">
-            <el-steps
-                direction="vertical"
-                :active="currentStep"
-                v-if="!isLoading"
-                @click="handleStepClick"
-                :style="{ 'margin-top': stepMarginTop + 'px' }"
-            >
-              <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"
-                       @click="() => handleStepClick(index)"></el-step>
-            </el-steps>
-            <el-skeleton :rows="5" animated v-else/>
-          </el-card>
-          <el-card style="position: fixed; width: 13%; margin-top: 21%">
-            <h4>喜欢该文章吗？</h4>
-            <el-rate
-                v-model="value"
-                :icons="icons"
-                :void-icon="ChatRound"
-                :colors="['#409eff', '#67c23a', '#FF9900']"
-                @change="submitRating"
-            />
-          </el-card>
-        </el-aside>
-    <el-main style="margin-left:15%;margin-right: 10%">
-        <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
-          <div v-for="(item, index) in data.data" :key="index" class="text item">
-            <div>
-              <div v-html="convertMarkdown(item.content)"></div>
-            </div>
-          </div>
-        </el-card>
-
-        <el-card v-else>
-          <el-skeleton :rows="10" animated/>
-        </el-card>
-
-        <div ref="commentx">
-          <el-card style="margin-top: 1%">
-            <u-comment :config="config" @submit="submit" @like="like">
-            </u-comment>
-          </el-card>
-        </div>
-      </el-main>
-
-    </el-container>
-    <el-backtop :right="100" :bottom="100"/>
+          </el-main>
+        </el-col>
+      </el-container>
+    </el-row>
   </el-container>
+
+  <el-backtop/>
 
 
 </template>
 
 
 <style>
-body {
-  background: rgb(233, 233, 235);
-}
-
 .markdown-image {
   max-width: 100%; /* Ensure images don't exceed the container width */
   height: auto; /* Maintain the aspect ratio */
   margin-top: 20px;
   margin-bottom: 20px;
-}
-
-.common-layout div .el-aside {
-  top: 60px;
-  position: sticky;
 }
 
 
