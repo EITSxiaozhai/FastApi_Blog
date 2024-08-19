@@ -459,9 +459,9 @@ const redirectToUserProfile = () => {
 
   <el-row>
       <el-col :xs="11" :sm="3" :md="4" :lg="6" :xl="10"  class="hidden-md-and-down">
-        <el-aside style="margin-top: 20px;">
-          <el-affix :offset="250">
-            <el-card>
+        <el-aside>
+          <el-affix  :offset="200">
+            <el-card style="height: 30vh">
               <el-steps
                   direction="vertical"
                   :active="currentStep"
