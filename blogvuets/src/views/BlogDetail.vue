@@ -427,7 +427,7 @@ const redirectToUserProfile = () => {
 </script>
 
 <template>
-  <el-container>
+
     <el-header :class="{ 'hidden': scrollDirection === 'down' }" id="top-mains">
       <el-menu class="el-menu-demo" mode="horizontal">
         <h1 style="padding-left: 20px;font-size: 20px">
@@ -457,85 +457,81 @@ const redirectToUserProfile = () => {
     </el-header>
 
 
-    <el-row>
-      <el-container>
-        <el-col :xs="3" :sm="3" :md="3" :lg="3" :xl="3">
-          <el-aside style="margin-top: 20px;" class="hidden-md-and-down">
-            <el-affix :offset="250">
-              <el-card>
-                <el-steps
-                    direction="vertical"
-                    :active="currentStep"
-                    v-if="!isLoading"
-                    @click="handleStepClick"
-                    :style="{ 'margin-top': stepMarginTop + 'px' }"
-                >
-                  <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"
-                           @click="() => handleStepClick(index)"></el-step>
-                </el-steps>
-                <el-skeleton :rows="5" animated v-else/>
-              </el-card>
-              <el-card style="margin-top: 20px">
-                <h4>喜欢该文章吗？</h4>
-                <el-rate
-                    v-model="value"
-                    :icons="icons"
-                    :void-icon="ChatRound"
-                    :colors="['#409eff', '#67c23a', '#FF9900']"
-                    @change="submitRating"
-                />
-              </el-card>
-            </el-affix>
-          </el-aside>
-        </el-col>
-        <el-col :xs="20" :sm="20" :md="20" :lg="20" :xl="20">
-          <el-main style="">
-            <el-card style="margin-top: 4%; display: flex; justify-content: center;" v-if="!isLoading" pa>
-              <div v-for="(item, index) in data.data" :key="index" class="text item">
-                <div>
-                  <div style="display: flex; flex-direction: column; align-items: center;">
-                    <h1 style="font-size: 200%" class="el-title">{{ item.title }}</h1>
-                  </div>
-                  <div style="display: flex; justify-content: center; align-items: center;">
-                    <h3 style="padding-right: 50px">作者:{{ item.author }}</h3>
-                    <h3>总体评分:</h3>
-                    <el-rate style="padding-right: 50px" v-model="averageRating" allow-half disabled/>
-                    <h3 style="padding-right: 50px">发布时间：{{ item.created_at }}</h3>
-                  </div>
+  <el-row>
+      <el-col :xs="11" :sm="3" :md="4" :lg="6" :xl="10"  class="hidden-md-and-down">
+        <el-aside style="margin-top: 20px;">
+          <el-affix :offset="250">
+            <el-card>
+              <el-steps
+                  direction="vertical"
+                  :active="currentStep"
+                  v-if="!isLoading"
+                  @click="handleStepClick"
+                  :style="{ 'margin-top': stepMarginTop + 'px' }"
+              >
+                <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"
+                         @click="() => handleStepClick(index)"></el-step>
+              </el-steps>
+              <el-skeleton :rows="5" animated v-else/>
+            </el-card>
+            <el-card style="margin-top: 20px">
+              <h4>喜欢该文章吗？</h4>
+              <el-rate
+                  v-model="value"
+                  :icons="icons"
+                  :void-icon="ChatRound"
+                  :colors="['#409eff', '#67c23a', '#FF9900']"
+                  @change="submitRating"
+              />
+            </el-card>
+          </el-affix>
+        </el-aside>
+      </el-col>
+
+      <el-col :xs="24" :sm="24" :md="19" :lg="17" :xl="13">
+        <el-main style="">
+          <el-card style="margin-top: 4%; display: flex; justify-content: center;" v-if="!isLoading" pa>
+            <div v-for="(item, index) in data.data" :key="index" class="text item">
+              <div>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                  <h1 style="font-size: 200%" class="el-title">{{ item.title }}</h1>
+                </div>
+                <div style="display: flex; justify-content: center; align-items: center;">
+                  <h3 style="padding-right: 50px">作者:{{ item.author }}</h3>
+                  <h3>总体评分:</h3>
+                  <el-rate style="padding-right: 50px" v-model="averageRating" allow-half disabled/>
+                  <h3 style="padding-right: 50px">发布时间：{{ item.created_at }}</h3>
                 </div>
               </div>
-            </el-card>
-
-            <el-card v-else>
-              <!-- 骨架屏 -->
-              <el-skeleton :rows="5" animated/>
-            </el-card>
-            <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
-              <div v-for="(item, index) in data.data" :key="index" class="text item">
-                <div>
-                  <div v-html="convertMarkdown(item.content)"></div>
-                </div>
-              </div>
-            </el-card>
-
-            <el-card v-else>
-              <el-skeleton :rows="10" animated/>
-            </el-card>
-
-            <div ref="commentx">
-              <el-card style="margin-top: 1%">
-                <u-comment :config="config" @submit="submit" @like="like">
-                </u-comment>
-              </el-card>
             </div>
-          </el-main>
-        </el-col>
-      </el-container>
-    </el-row>
-  </el-container>
+          </el-card>
 
+          <el-card v-else>
+            <!-- 骨架屏 -->
+            <el-skeleton :rows="5" animated/>
+          </el-card>
+          <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
+            <div v-for="(item, index) in data.data" :key="index" class="text item">
+              <div>
+                <div v-html="convertMarkdown(item.content)"></div>
+              </div>
+            </div>
+          </el-card>
+
+          <el-card v-else>
+            <el-skeleton :rows="10" animated/>
+          </el-card>
+
+          <div ref="commentx">
+            <el-card style="margin-top: 1%">
+              <u-comment :config="config" @submit="submit" @like="like">
+              </u-comment>
+            </el-card>
+          </div>
+        </el-main>
+      </el-col>
+  </el-row>
   <el-backtop/>
-
 
 </template>
 
@@ -560,7 +556,6 @@ const redirectToUserProfile = () => {
   top: 0;
   z-index: 2;
 }
-
 
 </style>
 

@@ -40,7 +40,7 @@ app.add_middleware(
     ##此处URL用来允许通过的域名。提高安全性，需要根据你的进行修改
     allow_origins=["https://blog.exploit-db.xyz","https://blogapi.exploit-db.xyz", "https://blogapi.exploitblog.eu.org", 'http://192.168.0.149:9527',
                    'http://127.0.0.1:8000','http://192.168.0.149:5173', 'http://192.168.0.149:5174','http://192.168.0.13:9527', 'http://192.168.0.13:5173','https://zpwl002.oss-cn-hangzhou.aliyuncs.com',
-                   "https://static.cloudflareinsights.com"],
+                   "https://static.cloudflareinsights.com","http://192.168.190.43:5173"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
