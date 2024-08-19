@@ -515,7 +515,7 @@ const redirectToUserProfile = () => {
          </el-col>
 
 
-      <el-col :xs="24" :sm="25" :md="14" :lg="17" :xl="13">
+      <el-col :xs="24" :sm="14" :md="14" :lg="17" :xl="13">
         <el-main>
           <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
             <div v-for="(item, index) in data.data" :key="index" class="text item">
