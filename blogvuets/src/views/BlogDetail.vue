@@ -44,7 +44,7 @@ const convertMarkdown = (markdownText, callback) => {
 
   renderedContent = renderedContent.replace(/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/g, '<a$1href="$2"$3 style="color: blue; text-decoration: underline;">$4</a>');
   const codeBlocks = renderedContent.match(/<pre><code class="lang-(.*?)">([\s\S]*?)<\/code><\/pre>/gm);
-  renderedContent = renderedContent.replace(/<img(.*?)src="(.*?)"(.*?)>/g, '<img$1src="$2"$3 class="markdown-image">');
+  renderedContent = renderedContent.replace(/<img(.*?)src="(.*?)"(.*?)>/g, '<img$1src="$2"$3 style="max-width: 50%;" class="markdown-image">');
 
   if (codeBlocks) {
     codeBlocks.forEach(codeBlock => {
