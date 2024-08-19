@@ -481,8 +481,6 @@ const redirectToUserProfile = () => {
 
 
   <el-container class="affix-container">
-    <el-row>
-      <el-col :xs="11" :sm="3" :md="4" :lg="6" :xl="10" class="hidden-md-and-down">
         <el-aside>
           <el-affix target=".affix-container" :offset="270">
             <el-card style="height: 30vh">
@@ -512,10 +510,7 @@ const redirectToUserProfile = () => {
             </el-card>
           </el-affix>
         </el-aside>
-      </el-col>
 
-
-      <el-col :xs="24" :sm="24" :md="19" :lg="17" :xl="13">
         <el-main>
           <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
             <div v-for="(item, index) in data.data" :key="index" class="text item">
@@ -536,8 +531,6 @@ const redirectToUserProfile = () => {
             </el-card>
           </div>
         </el-main>
-      </el-col>
-    </el-row>
   </el-container>
   <el-backtop/>
 </template>
@@ -545,7 +538,7 @@ const redirectToUserProfile = () => {
 
 <style>
 .markdown-image {
-  max-width: 50%; /* Ensure images don't exceed the container width */
+  max-width: 100%; /* Ensure images don't exceed the container width */
   height: auto; /* Maintain the aspect ratio */
   margin-top: 20px;
   margin-bottom: 20px;
