@@ -427,7 +427,7 @@ const redirectToUserProfile = () => {
 </script>
 
 <template>
-
+  <el-container>
     <el-header :class="{ 'hidden': scrollDirection === 'down' }" id="top-mains">
       <el-menu class="el-menu-demo" mode="horizontal">
         <h1 style="padding-left: 20px;font-size: 20px">
@@ -455,12 +455,35 @@ const redirectToUserProfile = () => {
       </el-menu>
       <el-progress :percentage="readingProgress" :show-text="false"/>
     </el-header>
+  </el-container>
+
+  <el-card style="margin-top: 5%; display: flex; justify-content: center;margin-right: 0" v-if="!isLoading" pa>
+    <div v-for="(item, index) in data.data" :key="index" class="text item">
+      <div>
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <h1 style="font-size: 200%" class="el-title">{{ item.title }}</h1>
+        </div>
+        <div style="display: flex; justify-content: center; align-items: center;">
+          <h3 style="padding-right: 50px">作者:{{ item.author }}</h3>
+          <h3>总体评分:</h3>
+          <el-rate style="padding-right: 50px" v-model="averageRating" allow-half disabled/>
+          <h3 style="padding-right: 50px">发布时间：{{ item.created_at }}</h3>
+        </div>
+      </div>
+    </div>
+  </el-card>
+
+  <el-card v-else>
+    <!-- 骨架屏 -->
+    <el-skeleton :rows="5" animated/>
+  </el-card>
 
 
-  <el-row>
-      <el-col :xs="11" :sm="3" :md="4" :lg="6" :xl="10"  class="hidden-md-and-down">
+  <el-container>
+    <el-row>
+      <el-col :xs="11" :sm="3" :md="4" :lg="6" :xl="10" class="hidden-md-and-down">
         <el-aside>
-          <el-affix  :offset="200">
+          <el-affix :offset="200">
             <el-card style="height: 30vh">
               <el-steps
                   direction="vertical"
@@ -474,6 +497,9 @@ const redirectToUserProfile = () => {
               </el-steps>
               <el-skeleton :rows="5" animated v-else/>
             </el-card>
+          </el-affix>
+
+          <el-affix style="margin-top: 20px" :offset="300">
             <el-card style="margin-top: 20px">
               <h4>喜欢该文章吗？</h4>
               <el-rate
@@ -488,28 +514,9 @@ const redirectToUserProfile = () => {
         </el-aside>
       </el-col>
 
-      <el-col :xs="24" :sm="24" :md="19" :lg="17" :xl="13">
-        <el-main style="">
-          <el-card style="margin-top: 4%; display: flex; justify-content: center;" v-if="!isLoading" pa>
-            <div v-for="(item, index) in data.data" :key="index" class="text item">
-              <div>
-                <div style="display: flex; flex-direction: column; align-items: center;">
-                  <h1 style="font-size: 200%" class="el-title">{{ item.title }}</h1>
-                </div>
-                <div style="display: flex; justify-content: center; align-items: center;">
-                  <h3 style="padding-right: 50px">作者:{{ item.author }}</h3>
-                  <h3>总体评分:</h3>
-                  <el-rate style="padding-right: 50px" v-model="averageRating" allow-half disabled/>
-                  <h3 style="padding-right: 50px">发布时间：{{ item.created_at }}</h3>
-                </div>
-              </div>
-            </div>
-          </el-card>
 
-          <el-card v-else>
-            <!-- 骨架屏 -->
-            <el-skeleton :rows="5" animated/>
-          </el-card>
+      <el-col :xs="24" :sm="24" :md="19" :lg="17" :xl="13">
+        <el-main>
           <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
             <div v-for="(item, index) in data.data" :key="index" class="text item">
               <div>
@@ -530,7 +537,8 @@ const redirectToUserProfile = () => {
           </div>
         </el-main>
       </el-col>
-  </el-row>
+    </el-row>
+  </el-container>
   <el-backtop/>
 
 </template>
@@ -556,6 +564,7 @@ const redirectToUserProfile = () => {
   top: 0;
   z-index: 2;
 }
+
 
 </style>
 
