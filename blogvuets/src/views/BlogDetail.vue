@@ -481,8 +481,8 @@ const redirectToUserProfile = () => {
 
 
   <el-container class="affix-container">
-    <el-row>
-      <el-col :xs="11" :sm="3" :md="4" :lg="6" :xl="10" class="hidden-md-and-down">
+<!--    <el-row>-->
+<!--      <el-col :xs="11" :sm="3" :md="4" :lg="6" :xl="10" class="hidden-md-and-down">-->
         <el-aside>
           <el-affix target=".affix-container" :offset="270">
             <el-card style="height: 30vh">
@@ -500,7 +500,7 @@ const redirectToUserProfile = () => {
             </el-card>
 
 
-            <el-card  style="margin-top: 1%">
+            <el-card style="margin-top: 1%">
               <h4>喜欢该文章吗？</h4>
               <el-rate
                   v-model="value"
@@ -512,10 +512,10 @@ const redirectToUserProfile = () => {
             </el-card>
           </el-affix>
         </el-aside>
-      </el-col>
+<!--      </el-col>-->
 
 
-      <el-col :xs="24" :sm="24" :md="19" :lg="17" :xl="13">
+<!--      <el-col :xs="24" :sm="24" :md="19" :lg="17" :xl="13">-->
         <el-main>
           <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
             <div v-for="(item, index) in data.data" :key="index" class="text item">
@@ -535,13 +535,11 @@ const redirectToUserProfile = () => {
               </u-comment>
             </el-card>
           </div>
-
         </el-main>
-      </el-col>
-    </el-row>
+<!--      </el-col>-->
+<!--    </el-row>-->
   </el-container>
   <el-backtop/>
-
 </template>
 
 

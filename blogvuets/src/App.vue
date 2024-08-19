@@ -17,7 +17,9 @@ useHead({
   <head>
     <meta name="keywords" content="">
   </head>
+
   <div id="app">
+
     <router-view/>
 <!--    <div v-for="item of 500" :key="item" class="snowflake"></div>-->
   </div>
