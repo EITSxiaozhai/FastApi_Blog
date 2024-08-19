@@ -545,7 +545,7 @@ const redirectToUserProfile = () => {
 
 <style>
 .markdown-image {
-  max-width: 100%; /* Ensure images don't exceed the container width */
+  max-width: 50%; /* Ensure images don't exceed the container width */
   height: auto; /* Maintain the aspect ratio */
   margin-top: 20px;
   margin-bottom: 20px;
