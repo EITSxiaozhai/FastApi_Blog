@@ -98,15 +98,20 @@ const getData = async () => {
     const response = await backApi.post(`/views/user/Blogid?blog_id=${blogId}`);
     data.data = response.data;
     isLoading.value = false;
-    document.title = data.data[0].title
-    myPage.value.description = data.data[0].content
+    document.title = data.data[0].title;
+    myPage.value.description = data.data[0].content;
+
+    // Ensure content is converted to HTML if it's Markdown
+    const htmlContent = convertMarkdown(response.data[0].content);
+
+    // Trigger table of contents generation
+    generateTableOfContents(htmlContent);
+
     setTimeout(() => {
       hljs.highlightAll();
     }, 0);
-    // 触发目录生成逻辑
-    generateTableOfContents(response.data.content);
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching blog data:', error);
   }
 };
 // 页面元数据变量
@@ -118,7 +123,6 @@ useHead({
 })
 
 
-
 // 生成目录
 const generateTableOfContents = (markdownContent) => {
   const toc = [];
@@ -128,27 +132,29 @@ const generateTableOfContents = (markdownContent) => {
       const level = parseInt(header.match(/<h([1-6])>/)[1]);
       const title = header.match(/<h[1-6]>(.*?)<\/h[1-6]>/)[1];
       const anchor = `#anchor-${index}`;
-      toc.push({ level, title, anchor });
+      toc.push({level, title, anchor});
       markdownContent = markdownContent.replace(header, `<h${level} id="anchor-${index}">${title}</h${level}>`);
     });
   }
-  tableOfContents.value = buildTreeStructure(toc);
+  tableOfContents.value = buildTreeStructure(toc);  // 更新 Vue 响应式数据
 };
 
 // 将扁平结构转换为树形结构
 const buildTreeStructure = (toc) => {
   const root = [];
-  const stack = [{ level: 0, children: root }];
+  const stack = [{level: 0, children: root}];
 
   toc.forEach(item => {
-    const node = { label: item.title, anchor: item.anchor, children: [] };
+    console.log("Processing item:", item);  // 调试当前 item
+    const node = {label: item.title, anchor: item.anchor, children: []};
     while (stack[stack.length - 1].level >= item.level) {
       stack.pop();
     }
     stack[stack.length - 1].children.push(node);
-    stack.push({ ...item, children: node.children });
+    stack.push({...item, children: node.children});
   });
-  console.log(root)
+
+  console.log(root);  // 调试最终生成的树形结构
   return root;
 };
 
@@ -156,7 +162,7 @@ const buildTreeStructure = (toc) => {
 const handleNodeClick = (data) => {
   const targetElement = document.querySelector(data.anchor);
   if (targetElement) {
-    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
   }
 };
 
@@ -497,29 +503,29 @@ const redirectToUserProfile = () => {
     </el-card>
   </div>
 
-<el-row>
-  <el-container class="affix-container">
-    <el-col :xs="0" :sm="0" :md="4" :lg="6" :xl="5">
+  <el-row>
+    <el-container class="affix-container">
+      <el-col :xs="0" :sm="0" :md="4" :lg="6" :xl="5">
         <el-aside>
           <el-affix target=".affix-container" :offset="270">
             <el-card style="height: 30vh">
-<!--              <el-steps-->
-<!--                  direction="vertical"-->
-<!--                  :active="currentStep"-->
-<!--                  v-if="!isLoading"-->
-<!--                  @click="handleStepClick"-->
-<!--                  :style="{ 'margin-top': stepMarginTop + 'px' }"-->
-<!--              >-->
-<!--                <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"-->
-<!--                         @click="() => handleStepClick(index)"></el-step>-->
-<!--              </el-steps>-->
-                        <el-tree
-            :data="tableOfContents"
-            node-key="anchor"
-            :props="{ label: 'label', children: 'children' }"
-            @node-click="handleNodeClick"
-            v-if="!isLoading"
-          />
+              <!--              <el-steps-->
+              <!--                  direction="vertical"-->
+              <!--                  :active="currentStep"-->
+              <!--                  v-if="!isLoading"-->
+              <!--                  @click="handleStepClick"-->
+              <!--                  :style="{ 'margin-top': stepMarginTop + 'px' }"-->
+              <!--              >-->
+              <!--                <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"-->
+              <!--                         @click="() => handleStepClick(index)"></el-step>-->
+              <!--              </el-steps>-->
+              <el-tree
+                  :data="tableOfContents"
+                  node-key="anchor"
+                  :props="{ label: 'label', children: 'children' }"
+                  @node-click="handleNodeClick"
+                  v-if="!isLoading"
+              />
               <el-skeleton :rows="5" animated v-else/>
             </el-card>
 
@@ -561,8 +567,8 @@ const redirectToUserProfile = () => {
           </div>
         </el-main>
       </el-col>
-  <el-backtop/>
-  </el-container>
+      <el-backtop/>
+    </el-container>
   </el-row>
 </template>
 
