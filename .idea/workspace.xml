@@ -1002,7 +1002,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="481" />
+    <option name="localTasksCounter" value="482" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1058,7 +1058,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改OSS上传类功能&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="修改ELK日志格式&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="移动ELK日志格式代码&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
     <MESSAGE value="类方法修改&#10;Signed-off-by: EITSxiaozhai &lt;eitsxiaozhai@gmail.com&gt;" />
@@ -1082,6 +1081,7 @@
     <MESSAGE value="删除无用css" />
     <MESSAGE value="优化页面布局" />
     <MESSAGE value="栅栏布局修改" />
+    <MESSAGE value="测试响应布局" />
     <MESSAGE value="推送测试数据" />
     <option name="LAST_COMMIT_MESSAGE" value="推送测试数据" />
   </component>

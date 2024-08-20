@@ -24,7 +24,7 @@ const icons = [ChatRound, ChatLineRound, ChatDotRound]
 const isLoading = ref(true); // 初始时，骨架屏可见
 const currentStep = ref(0); // 创建响应式变量用于跟踪当前标题索引
 // 创建Markdown渲染器实例
-// const md =  MarkdownIt();
+
 const md = new MarkdownIt({
   langPrefix: 'language-',
   html: true,
@@ -118,30 +118,48 @@ useHead({
 })
 
 
-// Markdown格式话操作
+
+// 生成目录
 const generateTableOfContents = (markdownContent) => {
-  if (typeof markdownContent !== 'string' || markdownContent.trim() === '') {
-    // 如果 markdownContent 为空或不是字符串，直接返回
-    return;
-  }
   const toc = [];
   const headers = markdownContent.match(/<h([1-6])>(.*?)<\/h\1>/gm);
   if (headers) {
     headers.forEach((header, index) => {
-      const levelMatch = header.match(/<h([1-6])>/);
-      const level = levelMatch ? parseInt(levelMatch[1]) : 0;
-      const titleMatch = header.match(/<h[1-6]>(.*?)<\/h[1-6]>/);
-      const title = titleMatch ? titleMatch[1] : '';
-
-      if (level > 0 && title) {
-        const anchor = `#anchor-${index}`;
-        toc.push({level, title, anchor});
-        markdownContent = markdownContent.replace(header, `<h${level} id="anchor-${index}">${title}</h${level}>`);
-      }
+      const level = parseInt(header.match(/<h([1-6])>/)[1]);
+      const title = header.match(/<h[1-6]>(.*?)<\/h[1-6]>/)[1];
+      const anchor = `#anchor-${index}`;
+      toc.push({ level, title, anchor });
+      markdownContent = markdownContent.replace(header, `<h${level} id="anchor-${index}">${title}</h${level}>`);
     });
   }
-  tableOfContents.value = toc;
+  tableOfContents.value = buildTreeStructure(toc);
 };
+
+// 将扁平结构转换为树形结构
+const buildTreeStructure = (toc) => {
+  const root = [];
+  const stack = [{ level: 0, children: root }];
+
+  toc.forEach(item => {
+    const node = { label: item.title, anchor: item.anchor, children: [] };
+    while (stack[stack.length - 1].level >= item.level) {
+      stack.pop();
+    }
+    stack[stack.length - 1].children.push(node);
+    stack.push({ ...item, children: node.children });
+  });
+  console.log(root)
+  return root;
+};
+
+// 处理树节点点击
+const handleNodeClick = (data) => {
+  const targetElement = document.querySelector(data.anchor);
+  if (targetElement) {
+    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
+
 
 getData()
 
@@ -479,21 +497,29 @@ const redirectToUserProfile = () => {
     </el-card>
   </div>
 
-
+<el-row>
   <el-container class="affix-container">
+    <el-col :xs="0" :sm="0" :md="4" :lg="6" :xl="5">
         <el-aside>
           <el-affix target=".affix-container" :offset="270">
             <el-card style="height: 30vh">
-              <el-steps
-                  direction="vertical"
-                  :active="currentStep"
-                  v-if="!isLoading"
-                  @click="handleStepClick"
-                  :style="{ 'margin-top': stepMarginTop + 'px' }"
-              >
-                <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"
-                         @click="() => handleStepClick(index)"></el-step>
-              </el-steps>
+<!--              <el-steps-->
+<!--                  direction="vertical"-->
+<!--                  :active="currentStep"-->
+<!--                  v-if="!isLoading"-->
+<!--                  @click="handleStepClick"-->
+<!--                  :style="{ 'margin-top': stepMarginTop + 'px' }"-->
+<!--              >-->
+<!--                <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"-->
+<!--                         @click="() => handleStepClick(index)"></el-step>-->
+<!--              </el-steps>-->
+                        <el-tree
+            :data="tableOfContents"
+            node-key="anchor"
+            :props="{ label: 'label', children: 'children' }"
+            @node-click="handleNodeClick"
+            v-if="!isLoading"
+          />
               <el-skeleton :rows="5" animated v-else/>
             </el-card>
 
@@ -510,8 +536,9 @@ const redirectToUserProfile = () => {
             </el-card>
           </el-affix>
         </el-aside>
+      </el-col>
 
-
+      <el-col :xs="24" :sm="24" :md="24" :lg="18" :xl="19">
 
         <el-main>
           <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
@@ -533,9 +560,10 @@ const redirectToUserProfile = () => {
             </el-card>
           </div>
         </el-main>
-
+      </el-col>
   <el-backtop/>
   </el-container>
+  </el-row>
 </template>
 
 
