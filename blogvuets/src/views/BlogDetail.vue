@@ -479,9 +479,10 @@ const redirectToUserProfile = () => {
     </el-card>
   </div>
 
-
-  <el-container class="affix-container">
-        <el-aside>
+  <el-row>
+    <el-container class="affix-container">
+       <el-col :xs="0" :sm="0" :md="4" :lg="6" :xl="5">
+      <el-aside class="hidden-md-and-down">
           <el-affix target=".affix-container" :offset="270">
             <el-card style="height: 30vh">
               <el-steps
@@ -509,11 +510,12 @@ const redirectToUserProfile = () => {
               />
             </el-card>
           </el-affix>
-        </el-aside>
 
+      </el-aside>
+      </el-col>
 
-
-        <el-main>
+      <el-col :xs="24" :sm="24" :md="24" :lg="18" :xl="19">
+      <el-main>
           <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
             <div v-for="(item, index) in data.data" :key="index" class="text item">
               <div>
@@ -532,10 +534,11 @@ const redirectToUserProfile = () => {
               </u-comment>
             </el-card>
           </div>
-        </el-main>
-
-  <el-backtop/>
-  </el-container>
+      </el-main>
+      </el-col>
+      <el-backtop/>
+    </el-container>
+  </el-row>
 </template>
 
 
