@@ -39,12 +39,13 @@ const data = reactive({
 
 
 // 转换markdown操作代码高亮和目录生成
-// Markdown转换函数
-const convertMarkdown = (markdownText) => {
+const convertMarkdown = (markdownText, callback) => {
   let renderedContent = md.render(markdownText);
+
   renderedContent = renderedContent.replace(/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/g, '<a$1href="$2"$3 style="color: blue; text-decoration: underline;">$4</a>');
   const codeBlocks = renderedContent.match(/<pre><code class="lang-(.*?)">([\s\S]*?)<\/code><\/pre>/gm);
   renderedContent = renderedContent.replace(/<img(.*?)src="(.*?)"(.*?)>/g, '<img$1src="$2"$3  class="markdown-image">');
+
   if (codeBlocks) {
     codeBlocks.forEach(codeBlock => {
       const langMatch = codeBlock.match(/<code class="lang-(.*?)">/);
@@ -60,10 +61,26 @@ const convertMarkdown = (markdownText) => {
       }
     });
   }
-  generateTableOfContents(renderedContent);
+  // 解析目录
+  const toc = [];
+  const headers = renderedContent.match(/<h(.*?)>(.*?)<\/h\1>/gm);
+  if (headers) {
+    headers.forEach(header => {
+      const levelMatch = header.match(/<h(\d)>/);
+      const level = levelMatch ? parseInt(levelMatch[1]) : 0;
+      const titleMatch = header.match(/<h\d>(.*?)<\/h\d>/);
+      const title = titleMatch ? titleMatch[1] : '';
+
+      if (level > 0 && title) {
+        const anchor = `#anchor-${toc.length}`;
+        toc.push({level, title, anchor});
+        renderedContent = renderedContent.replace(header, `<h${level} id="anchor-${toc.length}">${title}</h${level}>`);
+      }
+    });
+  }
+  tableOfContents.value = toc;
   return renderedContent;
 };
-
 
 const handleStepClick = (index) => {
   const anchor = `#anchor-${index}`;
@@ -102,60 +119,29 @@ useHead({
 
 
 // Markdown格式话操作
-// 处理树节点点击
-const handleNodeClick = (data) => {
-  const anchorElement = document.querySelector(data.anchor);
-  if (anchorElement) {
-    anchorElement.scrollIntoView({behavior: 'smooth'});
-  }
-};
-
-
-// 生成目录
 const generateTableOfContents = (markdownContent) => {
-  const headers = markdownContent.match(/<h([1-3])>(.*?)<\/h\1>/gm); // 匹配 H1 到 H3 级别的标题
-  if (!headers) return;
-
+  if (typeof markdownContent !== 'string' || markdownContent.trim() === '') {
+    // 如果 markdownContent 为空或不是字符串，直接返回
+    return;
+  }
   const toc = [];
-  let currentLevel = 0;
-  let currentParent = toc;
+  const headers = markdownContent.match(/<h([1-6])>(.*?)<\/h\1>/gm);
+  if (headers) {
+    headers.forEach((header, index) => {
+      const levelMatch = header.match(/<h([1-6])>/);
+      const level = levelMatch ? parseInt(levelMatch[1]) : 0;
+      const titleMatch = header.match(/<h[1-6]>(.*?)<\/h[1-6]>/);
+      const title = titleMatch ? titleMatch[1] : '';
 
-  headers.forEach((header, index) => {
-    const levelMatch = header.match(/<h([1-3])>/);
-    const level = levelMatch ? parseInt(levelMatch[1]) : 0;
-    const titleMatch = header.match(/<h[1-3]>(.*?)<\/h[1-3]>/);
-    const title = titleMatch ? titleMatch[1] : '';
-
-    const anchor = `#anchor-${index}`;
-    markdownContent = markdownContent.replace(header, `<h${level} id="anchor-${index}">${title}</h${level}>`);
-
-    const tocItem = {label: title, id: anchor, children: []};
-
-    if (level > currentLevel) {
-      const parent = currentParent[currentParent.length - 1];
-      if (parent) {
-        parent.children.push(tocItem);
-        currentParent = parent.children;
+      if (level > 0 && title) {
+        const anchor = `#anchor-${index}`;
+        toc.push({level, title, anchor});
+        markdownContent = markdownContent.replace(header, `<h${level} id="anchor-${index}">${title}</h${level}>`);
       }
-    } else if (level < currentLevel) {
-      let ancestor = toc;
-      while (ancestor.length > 0 && ancestor[ancestor.length - 1].children.length > 0 && ancestor[ancestor.length - 1].children[ancestor[ancestor.length - 1].children.length - 1].id !== tocItem.id) {
-        ancestor = ancestor[ancestor.length - 1].children;
-      }
-      ancestor.push(tocItem);
-      currentParent = ancestor;
-    } else {
-      currentParent.push(tocItem);
-    }
-
-    currentLevel = level;
-  });
-
+    });
+  }
   tableOfContents.value = toc;
 };
-
-
-
 
 getData()
 
@@ -163,29 +149,22 @@ getData()
 const readingProgress = ref(0);
 let totalCharacters = 0;
 
+// 获取阅读进度操作
 const updateReadingProgress = () => {
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
   const windowHeight = window.innerHeight;
-  const documentHeight = document.documentElement.scrollHeight;
+  const documentHeight = document.documentElement.scrollHeight - commentx.value;
   const scrollableDistance = documentHeight - windowHeight;
   const scrollPercentage = (scrollTop / scrollableDistance) * 100;
 
+
   // 根据阅读进度计算当前标题索引
   const totalSteps = tableOfContents.value.length;
-  let currentStepIndex = 0;
+  const calculatedStep = Math.floor((scrollPercentage / 100) * totalSteps);
 
-  tableOfContents.value.forEach((item, index) => {
-    const element = document.querySelector(item.id);
-    if (element) {
-      const rect = element.getBoundingClientRect();
-      if (rect.top >= 0 && rect.top < windowHeight) {
-        currentStepIndex = index;
-      }
-    }
-  });
-
-  currentStep.value = currentStepIndex; // 更新 currentStep
-  stepMarginTop.value = -currentStep.value * 15;
+  // 更新currentStep
+  currentStep.value = calculatedStep;
+  stepMarginTop.value = -calculatedStep * 15;
   readingProgress.value = scrollPercentage;
 };
 
@@ -214,6 +193,7 @@ const fingerprint = ref(null);
 // 挂载时操作
 onMounted(async () => {
   const commentx = ref(null)
+
   // 使用Fingerprint2生成浏览器指纹
   const options = {
     excludes: {
@@ -331,15 +311,10 @@ const UpComments = async (str) => {
 
 const commentx = ref()
 
-onMounted(async () => {
-  await getData();
-  nextTick(() => {
-    window.addEventListener('scroll', updateReadingProgress);
-  });
+onMounted(() => {
   store.commit('setLastVisitedRoute', route.params.blogId);
   getAverageRating();
   LoadComments();
-
 });
 
 
@@ -504,36 +479,21 @@ const redirectToUserProfile = () => {
     </el-card>
   </div>
 
-  <el-row>
-    <el-container class="affix-container">
-      <el-col :xs="0" :sm="0" :md="4" :lg="6" :xl="5">
-        <el-aside class="hidden-md-and-down">
+
+  <el-container class="affix-container">
+        <el-aside>
           <el-affix target=".affix-container" :offset="270">
             <el-card style="height: 30vh">
-              <!--              <el-steps-->
-              <!--                  direction="vertical"-->
-              <!--                  :active="currentStep"-->
-              <!--                  v-if="!isLoading"-->
-              <!--                  @click="handleStepClick"-->
-              <!--                  :style="{ 'margin-top': stepMarginTop + 'px' }"-->
-              <!--              >-->
-              <!--                <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"-->
-              <!--                         @click="() => handleStepClick(index)"></el-step>-->
-              <!--              </el-steps>-->
-
-              <el-tree
-  :default-expand-all="true"
-  :style="{ 'margin-top': stepMarginTop + 'px' }"
-  v-if="!isLoading"
-  :data="tableOfContents"
-  :props="defaultProps"
-  @node-click="onTreeNodeClick"
-  :highlight-current="true"
->
-  <template #default="{ node, data }">
-    <span :class="{ 'highlighted': tableOfContents.indexOf(data) === currentStep }">{{ data.label }}</span>
-  </template>
-</el-tree>
+              <el-steps
+                  direction="vertical"
+                  :active="currentStep"
+                  v-if="!isLoading"
+                  @click="handleStepClick"
+                  :style="{ 'margin-top': stepMarginTop + 'px' }"
+              >
+                <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"
+                         @click="() => handleStepClick(index)"></el-step>
+              </el-steps>
               <el-skeleton :rows="5" animated v-else/>
             </el-card>
 
@@ -549,11 +509,10 @@ const redirectToUserProfile = () => {
               />
             </el-card>
           </el-affix>
-
         </el-aside>
-      </el-col>
 
-      <el-col :xs="24" :sm="24" :md="24" :lg="18" :xl="19">
+
+
         <el-main>
           <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
             <div v-for="(item, index) in data.data" :key="index" class="text item">
@@ -574,10 +533,9 @@ const redirectToUserProfile = () => {
             </el-card>
           </div>
         </el-main>
-      </el-col>
-      <el-backtop/>
-    </el-container>
-  </el-row>
+
+  <el-backtop/>
+  </el-container>
 </template>
 
 
@@ -600,11 +558,6 @@ const redirectToUserProfile = () => {
   right: 0;
   top: 0;
   z-index: 2;
-}
-
-.highlighted {
-  font-weight: bold;
-  color: #409eff; /* 或其他高亮颜色 */
 }
 
 
