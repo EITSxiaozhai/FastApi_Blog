@@ -37,11 +37,16 @@ const data = reactive({
   data: []
 })
 
+const defaultProps = {
+  children: 'children',
+  label: 'label',
+}
+
 
 // 转换markdown操作代码高亮和目录生成
-const convertMarkdown = (markdownText, callback) => {
+const convertMarkdown = (markdownText) => {
   let renderedContent = md.render(markdownText);
-
+  // 高亮代码
   renderedContent = renderedContent.replace(/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/g, '<a$1href="$2"$3 style="color: blue; text-decoration: underline;">$4</a>');
   const codeBlocks = renderedContent.match(/<pre><code class="lang-(.*?)">([\s\S]*?)<\/code><\/pre>/gm);
   renderedContent = renderedContent.replace(/<img(.*?)src="(.*?)"(.*?)>/g, '<img$1src="$2"$3  class="markdown-image">');
@@ -62,23 +67,7 @@ const convertMarkdown = (markdownText, callback) => {
     });
   }
   // 解析目录
-  const toc = [];
-  const headers = renderedContent.match(/<h(.*?)>(.*?)<\/h\1>/gm);
-  if (headers) {
-    headers.forEach(header => {
-      const levelMatch = header.match(/<h(\d)>/);
-      const level = levelMatch ? parseInt(levelMatch[1]) : 0;
-      const titleMatch = header.match(/<h\d>(.*?)<\/h\d>/);
-      const title = titleMatch ? titleMatch[1] : '';
-
-      if (level > 0 && title) {
-        const anchor = `#anchor-${toc.length}`;
-        toc.push({level, title, anchor});
-        renderedContent = renderedContent.replace(header, `<h${level} id="anchor-${toc.length}">${title}</h${level}>`);
-      }
-    });
-  }
-  tableOfContents.value = toc;
+  generateTableOfContents(renderedContent);
   return renderedContent;
 };
 
@@ -124,39 +113,54 @@ useHead({
 
 
 // 生成目录
+// 生成目录
 const generateTableOfContents = (markdownContent) => {
   const toc = [];
-  const headers = markdownContent.match(/<h([1-6])>(.*?)<\/h\1>/gm);
+  const headers = markdownContent.match(/<h([1-6])[^>]*>(.*?)<\/h\1>/gmi);
+
   if (headers) {
     headers.forEach((header, index) => {
-      const level = parseInt(header.match(/<h([1-6])>/)[1]);
-      const title = header.match(/<h[1-6]>(.*?)<\/h[1-6]>/)[1];
-      const anchor = `#anchor-${index}`;
-      toc.push({level, title, anchor});
-      markdownContent = markdownContent.replace(header, `<h${level} id="anchor-${index}">${title}</h${level}>`);
+      const levelMatch = header.match(/<h([1-6])[^>]*>/);
+      const titleMatch = header.match(/<h[1-6][^>]*>(.*?)<\/h[1-6]>/i);
+
+      if (levelMatch && titleMatch) {
+        const level = parseInt(levelMatch[1]);
+        const title = titleMatch[1] || "Unknown Title";
+        const anchor = `#anchor-${index}`;
+        toc.push({level, title, anchor});
+        markdownContent = markdownContent.replace(header, `<h${level} id="anchor-${index}">${title}</h${level}>`);
+      }
     });
   }
-  tableOfContents.value = buildTreeStructure(toc);  // 更新 Vue 响应式数据
+
+  tableOfContents.value = buildTreeStructure(toc);
 };
 
 // 将扁平结构转换为树形结构
 const buildTreeStructure = (toc) => {
   const root = [];
-  const stack = [{level: 0, children: root}];
+  const stack = [{level: 0, children: root}];  // 初始层级为 0 的根节点
 
   toc.forEach(item => {
-    console.log("Processing item:", item);  // 调试当前 item
     const node = {label: item.title, anchor: item.anchor, children: []};
-    while (stack[stack.length - 1].level >= item.level) {
+
+    // 如果当前项的层级小于等于堆栈顶层的层级，弹出堆栈
+    while (stack.length > 0 && stack[stack.length - 1].level >= item.level) {
       stack.pop();
     }
-    stack[stack.length - 1].children.push(node);
-    stack.push({...item, children: node.children});
+
+    // 将当前节点添加到堆栈顶层的 children 中
+    if (stack.length > 0) {
+      stack[stack.length - 1].children.push(node);
+    }
+
+    // 将当前项压入堆栈
+    stack.push({level: item.level, children: node.children});
   });
 
-  console.log(root);  // 调试最终生成的树形结构
   return root;
 };
+
 
 // 处理树节点点击
 const handleNodeClick = (data) => {
@@ -448,6 +452,7 @@ const redirectToUserProfile = () => {
   router.push('/user-profile');
 };
 
+
 </script>
 
 <template>
@@ -509,26 +514,17 @@ const redirectToUserProfile = () => {
         <el-aside>
           <el-affix target=".affix-container" :offset="270">
             <el-card style="height: 30vh">
-              <!--              <el-steps-->
-              <!--                  direction="vertical"-->
-              <!--                  :active="currentStep"-->
-              <!--                  v-if="!isLoading"-->
-              <!--                  @click="handleStepClick"-->
-              <!--                  :style="{ 'margin-top': stepMarginTop + 'px' }"-->
-              <!--              >-->
-              <!--                <el-step v-for="(item, index) in tableOfContents" :key="index" :title="item.title"-->
-              <!--                         @click="() => handleStepClick(index)"></el-step>-->
-              <!--              </el-steps>-->
               <el-tree
                   :data="tableOfContents"
                   node-key="anchor"
-                  :props="{ label: 'label', children: 'children' }"
+                  element-loading-text="正在加载中..."
+                  :props="defaultProps"
                   @node-click="handleNodeClick"
                   v-if="!isLoading"
               />
               <el-skeleton :rows="5" animated v-else/>
             </el-card>
-
+            <!--            <pre>{{ tableOfContents }}</pre>-->
 
             <el-card style="margin-top: 1%">
               <h4>喜欢该文章吗？</h4>
