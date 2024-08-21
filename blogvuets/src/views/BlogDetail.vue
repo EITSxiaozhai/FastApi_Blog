@@ -24,7 +24,8 @@ const icons = [ChatRound, ChatLineRound, ChatDotRound]
 const isLoading = ref(true); // 初始时，骨架屏可见
 const currentStep = ref(0); // 创建响应式变量用于跟踪当前标题索引
 // 创建Markdown渲染器实例
-
+const currentAnchor = ref(''); // 当前高亮的锚点
+const elTreeRef = ref(null); // el-tree 的引用
 const md = new MarkdownIt({
   langPrefix: 'language-',
   html: true,
@@ -37,11 +38,61 @@ const data = reactive({
   data: []
 })
 
-const defaultProps = {
-  children: 'children',
-  label: 'label',
-}
+const treeProps = {
+  data: tableOfContents.value,
+  props: {
+    children: 'children',
+    label: 'label',
+    isLeaf: (data, node) => !data.children || !data.children.length,
+  },
+  highlightCurrent: true, // 高亮当前节点
+  'default-expand-all': true,
+};
 
+
+// 滚动到 el-tree 中的当前高亮节点
+const scrollToCurrentNode = () => {
+  nextTick(() => {
+    const tree = elTreeRef.value;
+    if (tree) {
+      const currentNode = tree.getCurrentNode(); // 获取当前高亮节点
+      const nodeEl = tree.$el.querySelector('.is-current'); // 获取高亮节点的 DOM 元素
+
+      if (nodeEl && currentNode) {
+        const treeWrapper = tree.$el.querySelector('.el-tree__content'); // 获取 el-tree 的内容容器
+        if (treeWrapper) {
+          const wrapperRect = treeWrapper.getBoundingClientRect();
+          const nodeRect = nodeEl.getBoundingClientRect();
+
+          // 判断节点是否在可见范围外，若是则滚动
+          if (nodeRect.top < wrapperRect.top || nodeRect.bottom > wrapperRect.bottom) {
+            treeWrapper.scrollTop += nodeRect.top - wrapperRect.top - wrapperRect.height / 2 + nodeRect.height / 2;
+          }
+        }
+      }
+    }
+  });
+};
+
+// 页面滚动监听函数
+const handleScroll = () => {
+  const headings = document.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
+  let closestHeading = null;
+
+  // 遍历所有标题，找到最接近视口顶部的标题
+  headings.forEach(heading => {
+    const bounding = heading.getBoundingClientRect();
+    if (bounding.top >= 0 && bounding.top <= window.innerHeight / 2) {
+      closestHeading = heading;
+    }
+  });
+
+  // 如果找到了新的当前标题，则更新currentAnchor
+  if (closestHeading && closestHeading.id !== currentAnchor.value) {
+    currentAnchor.value = `#${closestHeading.id}`;
+    scrollToCurrentNode(); // 滚动到当前节点
+  }
+};
 
 // 转换markdown操作代码高亮和目录生成
 const convertMarkdown = (markdownText) => {
@@ -148,6 +199,8 @@ const handleNodeClick = (data) => {
   }
 };
 
+
+
 // 博客内容获取操作
 const getData = async () => {
   const blogId = route.params.blogId;
@@ -220,6 +273,7 @@ getData().then(() => {
 
 onBeforeUnmount(() => {
   // 移除滚动事件监听
+  window.removeEventListener('scroll', handleScroll);
   window.removeEventListener('scroll', updateReadingProgress);
 });
 
@@ -239,6 +293,7 @@ onMounted(async () => {
       // 更多排除选项可根据需求添加
     }
   };
+  window.addEventListener('scroll', handleScroll);
   Fingerprint2.get(options, function (components) {
     const fingerprintId = Fingerprint2.x64hash128(components.map(function (pair) {
       return pair.value;
@@ -522,17 +577,22 @@ const redirectToUserProfile = () => {
         <el-aside>
           <el-affix target=".affix-container" :offset="270">
             <el-card style="height: 30vh">
+              <div>
               <el-tree
+                  ref="elTreeRef"
                   :data="tableOfContents"
-                  node-key="anchor"
-                  element-loading-text="正在加载中..."
-                  :props="defaultProps"
+                  :props="treeProps"
+                  :highlight-current="treeProps.highlightCurrent"
+                  :default-expand-all="treeProps['default-expand-all']"
+                  :current-node-key="currentAnchor"
                   @node-click="handleNodeClick"
+                  node-key="anchor"
                   v-if="!isLoading"
               />
+
               <el-skeleton :rows="5" animated v-else/>
+                 </div>
             </el-card>
-            <!--            <pre>{{ tableOfContents }}</pre>-->
 
             <el-card style="margin-top: 1%">
               <h4>喜欢该文章吗？</h4>
