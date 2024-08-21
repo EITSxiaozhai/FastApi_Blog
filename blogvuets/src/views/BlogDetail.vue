@@ -50,7 +50,8 @@ const treeProps = {
 };
 
 
-// 滚动到 el-tree 中的当前高亮节点
+
+// 滚动 el-tree 组件，使当前节点保持在视图中间
 const scrollToCurrentNode = () => {
   nextTick(() => {
     const tree = elTreeRef.value;
@@ -59,16 +60,10 @@ const scrollToCurrentNode = () => {
       const nodeEl = tree.$el.querySelector('.is-current'); // 获取高亮节点的 DOM 元素
 
       if (nodeEl && currentNode) {
-        const treeWrapper = tree.$el.querySelector('.el-tree__content'); // 获取 el-tree 的内容容器
-        if (treeWrapper) {
-          const wrapperRect = treeWrapper.getBoundingClientRect();
-          const nodeRect = nodeEl.getBoundingClientRect();
-
-          // 判断节点是否在可见范围外，若是则滚动
-          if (nodeRect.top < wrapperRect.top || nodeRect.bottom > wrapperRect.bottom) {
-            treeWrapper.scrollTop += nodeRect.top - wrapperRect.top - wrapperRect.height / 2 + nodeRect.height / 2;
-          }
-        }
+        nodeEl.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
       }
     }
   });
