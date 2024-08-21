@@ -45,7 +45,17 @@ const defaultProps = {
 
 // 转换markdown操作代码高亮和目录生成
 const convertMarkdown = (markdownText) => {
+  // 生成 HTML 内容
   let renderedContent = md.render(markdownText);
+
+  // 解析目录并添加锚点
+  const toc = [];
+  renderedContent = renderedContent.replace(/<h([1-6])[^>]*>(.*?)<\/h\1>/gmi, (match, level, title, offset) => {
+    const anchor = `#anchor-${toc.length}`;
+    toc.push({level: parseInt(level), title, anchor});
+    return `<h${level} id="anchor-${toc.length - 1}">${title}</h${level}>`;
+  });
+
   // 高亮代码
   renderedContent = renderedContent.replace(/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/g, '<a$1href="$2"$3 style="color: blue; text-decoration: underline;">$4</a>');
   const codeBlocks = renderedContent.match(/<pre><code class="lang-(.*?)">([\s\S]*?)<\/code><\/pre>/gm);
@@ -66,53 +76,22 @@ const convertMarkdown = (markdownText) => {
       }
     });
   }
-  // 解析目录
-  generateTableOfContents(renderedContent);
+
+  // 更新目录
+  tableOfContents.value = buildTreeStructure(toc);
+
   return renderedContent;
 };
 
-const handleStepClick = (index) => {
-  const anchor = `#anchor-${index}`;
-  const targetElement = document.querySelector(anchor);
-  if (targetElement) {
-    // Use smooth scroll effect, remove options if you don't need smooth scrolling
-    targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
-  }
-};
+// const handleStepClick = (index) => {
+//   const anchor = `#anchor-${index}`;
+//   const targetElement = document.querySelector(anchor);
+//   if (targetElement) {
+//     // Use smooth scroll effect, remove options if you don't need smooth scrolling
+//     targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
+//   }
+// };
 
-// 博客内容获取操作
-const getData = async () => {
-  const blogId = route.params.blogId;
-  try {
-    const response = await backApi.post(`/views/user/Blogid?blog_id=${blogId}`);
-    data.data = response.data;
-    isLoading.value = false;
-    document.title = data.data[0].title;
-    myPage.value.description = data.data[0].content;
-
-    // Ensure content is converted to HTML if it's Markdown
-    const htmlContent = convertMarkdown(response.data[0].content);
-
-    // Trigger table of contents generation
-    generateTableOfContents(htmlContent);
-
-    setTimeout(() => {
-      hljs.highlightAll();
-    }, 0);
-  } catch (error) {
-    console.error('Error fetching blog data:', error);
-  }
-};
-// 页面元数据变量
-const myPage = ref({description: ''})
-// 操作页面元数据
-useHead({
-  meta: [{name: 'description', content: () => myPage.value.description}]
-  // computed (not recommended)
-})
-
-
-// 生成目录
 // 生成目录
 const generateTableOfContents = (markdownContent) => {
   const toc = [];
@@ -132,7 +111,6 @@ const generateTableOfContents = (markdownContent) => {
       }
     });
   }
-
   tableOfContents.value = buildTreeStructure(toc);
 };
 
@@ -170,6 +148,36 @@ const handleNodeClick = (data) => {
   }
 };
 
+// 博客内容获取操作
+const getData = async () => {
+  const blogId = route.params.blogId;
+  try {
+    const response = await backApi.post(`/views/user/Blogid?blog_id=${blogId}`);
+    data.data = response.data;
+    isLoading.value = false;
+    document.title = data.data[0].title;
+    myPage.value.description = data.data[0].content;
+
+    // Ensure content is converted to HTML if it's Markdown
+    const htmlContent = convertMarkdown(response.data[0].content);
+
+    // Trigger table of contents generation
+    generateTableOfContents(htmlContent);
+
+    setTimeout(() => {
+      hljs.highlightAll();
+    }, 0);
+  } catch (error) {
+    console.error('Error fetching blog data:', error);
+  }
+};
+// 页面元数据变量
+const myPage = ref({description: ''})
+// 操作页面元数据
+useHead({
+  meta: [{name: 'description', content: () => myPage.value.description}]
+  // computed (not recommended)
+})
 
 getData()
 
