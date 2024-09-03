@@ -397,8 +397,9 @@ async def BlogTagList():
                     for blogname in blogresult.scalars().all():
                         enddata[tag.blog_id] = {
                             'TagName': tag.Article_Type,
-                            'Date': blogname.created_at,
-                            'Title': blogname.title,
+                            'Date': blogname.created_at.strftime('%Y-%m-%d'),
+                            'Blog_id': tag.blog_id,
+                            'Blog_title' : blogname.title,
                         }
             return {"data": enddata, "code": 20000}
         except jwt.ExpiredSignatureError:
