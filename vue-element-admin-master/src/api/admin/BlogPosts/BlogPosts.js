@@ -50,7 +50,7 @@ export function DeletePost(blog_id, data) {
 
 export function BlogTagList(data) {
   return request({
-    url: `/admin/blog/Blogtaglist`,
+    url: `/admin/Blogtaglist`,
     method: 'post',
     data
   })
