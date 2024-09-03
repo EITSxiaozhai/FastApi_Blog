@@ -12,7 +12,7 @@ from Fast_blog.middleware.backtasks import Adminoauth2_scheme, AliOssUpload, ver
     AliOssBlogMarkdownImg,AliOssPrivateDocument
 from Fast_blog.model import models
 from Fast_blog.model.models import AdminUser, UserPrivileges, Blog, ReptileInclusion, BlogTag
-from Fast_blog.schemas.schemas import BlogCreate
+from Fast_blog.schemas.schemas import BlogCreate,BlogTagModel
 from Fast_blog.schemas.schemas import UserCredentials
 from Fast_blog.unit.Blog_app.BlogApi import uploadoss
 from fastapi import APIRouter, Request, Depends, File
@@ -408,13 +408,12 @@ async def BlogTagList():
         except Exception as e:
             return {"code": 50000, "message": "内部服务器错误"}
 
-
+#从文章中创建Tag
 @AdminApi.post('/Blogtagcreate/{blog_id}/{type}')
-async def BlogTagcreate(type: str, blog_id: int, ):
+async def BlogTagcreate(data:BlogTagModel):
     async with db_session() as session:
         try:
-
-            new_type = models.BlogTag(Article_Type=type, blog_id=blog_id)
+            new_type = models.BlogTag(Article_Type=data.Article_Type, blog_id=data.blog_id,tag_created_at=data.tag_created_at)
             session.add(new_type)
             await session.commit()
             return {"data": new_type, "code": 20000}
@@ -423,6 +422,48 @@ async def BlogTagcreate(type: str, blog_id: int, ):
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
+            return {"code": 50000, "message": "内部服务器错误"}
+
+@AdminApi.post('/Newtagcreate/')
+async def NewTagcreate(data: BlogTagModel):
+    async with db_session() as session:
+        try:
+            # 查询是否已经存在相同名字的tag
+            existing_tag_query = select(models.BlogTag).where(
+                models.BlogTag.Article_Type == data.Article_Type,
+                models.BlogTag.blog_id == data.Blog_id if data.Blog_id != 'None' else None
+            )
+            existing_tag = await session.execute(existing_tag_query)
+            existing_tag = existing_tag.scalar_one_or_none()
+
+            if existing_tag:
+                return {"code": 40002, "message": "该文章已存在相同名字的tag"}
+
+            # 如果没有找到重复的tag，则添加新tag
+            if data.Blog_id == 'None':
+                new_type = models.BlogTag(
+                    Article_Type=data.Article_Type,
+                    tag_created_at=data.tag_created_at
+                )
+            else:
+                new_type = models.BlogTag(
+                    Article_Type=data.Article_Type,
+                    tag_created_at=data.tag_created_at,
+                    blog_id=data.Blog_id
+                )
+
+            session.add(new_type)
+            await session.commit()
+            return {"data": "添加新Tag成功", "code": 20000}
+
+        except IntegrityError:
+            return {"code": 40001, "message": "请检查 blog_id 是否存在"}
+        except jwt.ExpiredSignatureError:
+            return {"code": 50012, "message": "Token已过期"}
+        except jwt.InvalidTokenError:
+            return {"code": 40003, "message": "无效的Token"}
+        except Exception as e:
+            print(e)
             return {"code": 50000, "message": "内部服务器错误"}
 
 
