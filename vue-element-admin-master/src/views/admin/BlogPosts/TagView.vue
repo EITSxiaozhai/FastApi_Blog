@@ -9,29 +9,30 @@
         style="width: 100%"
       >
         <el-table-column
-          prop="date"
-          label="日期"
-          sortable
-          width="auto"
-          column-key="date"
-          :filters="[{text: '2016-05-01', value: '2016-05-01'}, {text: '2016-05-02', value: '2016-05-02'}, {text: '2016-05-03', value: '2016-05-03'}, {text: '2016-05-04', value: '2016-05-04'}]"
-          :filter-method="filterHandler"
+          prop="TagName"
+          label="标签名"
         />
         <el-table-column
-          prop="tag"
-          label="标签"
-          width="auto"
-          :filters="[{ text: '家', value: '家' }, { text: '公司', value: '公司' }]"
-          :filter-method="filterTag"
-          filter-placement="bottom-end"
+          prop="Date"
+          label="创建时间"
+        />
+        <el-table-column
+          prop="Blog_id"
+          label="关联ID"
+        />
+        <el-table-column
+          prop="Blog_title"
+          label="关联标题"
         />
         <el-table-column
           prop="OtherOperation"
           label="其他操作"
           width="auto"
         >
-          <el-button type="primary">修改标签</el-button>
-          <el-button type="danger">删除标签</el-button>
+          <template v-slot="">
+            <el-button type="primary">修改标签</el-button>
+            <el-button type="danger">删除标签</el-button>
+          </template>
         </el-table-column>
       </el-table>
     </el-card>
@@ -39,54 +40,39 @@
 </template>
 
 <script>
+import { BlogTagList } from '@/api/admin/BlogPosts/BlogPosts'
 
 export default {
   data() {
     return {
-      tableData: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄',
-        tag: '家'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1517 弄',
-        tag: '公司'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1519 弄',
-        tag: '家'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1516 弄',
-        tag: '公司'
-      }]
+      tableData: [] // 初始状态为空，等API调用后填充
     }
   },
+  async created() {
+    await this.GetTageinfo() // 组件创建时获取数据
+  },
   methods: {
+    async GetTageinfo() {
+      try {
+        // 向API发送请求以获取文章分类
+        const response = await BlogTagList()
+        // 将响应数据转换为数组格式
+        this.tableData = Object.values(response.data).map(item => ({
+          TagName: item.TagName,
+          Date: item.Date,
+          Blog_id: item.Blog_id,
+          Blog_title: item.Blog_title
+        }))
+      } catch (error) {
+        console.error('获取文章分类时出错：', error)
+      }
+    },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter('date')
     },
     clearFilter() {
       this.$refs.filterTable.clearFilter()
-    },
-    formatter(row, column) {
-      return row.address
-    },
-    filterTag(value, row) {
-      return row.tag === value
-    },
-    filterHandler(value, row, column) {
-      const property = column['property']
-      return row[property] === value
     }
   }
 }
 </script>
-
-<style scoped lang="scss">
-
-</style>
