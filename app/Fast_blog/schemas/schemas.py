@@ -1,7 +1,6 @@
 from datetime import datetime
-from typing import Optional
-
-from pydantic import BaseModel, EmailStr, FileUrl, Field
+from typing import Optional, List
+from pydantic import BaseModel, EmailStr, constr,Field
 
 
 class UserCredentials(BaseModel):
@@ -39,8 +38,6 @@ class SchemasUser(BaseModel):
     UserEmail: EmailStr
 
 
-from typing import Optional, List
-from pydantic import BaseModel, EmailStr, constr
 
 
 class UserPrivilegesModel(BaseModel):
@@ -119,9 +116,9 @@ class VoteModel(BaseModel):
 
 
 class BlogTagModel(BaseModel):
-    blog_id: int
-    Article_Type: str
-    tag_created_at: datetime
+    Blog_id: Optional[str] = Field(...)
+    Article_Type: Optional[str]
+    tag_created_at: datetime = datetime.now()
 
 
 class CommentDTO(BaseModel):
