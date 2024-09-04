@@ -424,7 +424,7 @@ const sendEmail = () => {
 
                                 </el-main>
                               </el-container>
-                              <el-tag v-for="(tag, index ) in data.row.tag" type="primary">{{ tag }}</el-tag>
+                              <el-tag v-for="tag in blog.tag" type="primary">{{ tag }}</el-tag>
                             </el-card>
                           </template>
                         </router-link>

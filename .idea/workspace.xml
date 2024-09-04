@@ -10,7 +10,6 @@
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加跨域ip">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -324,12 +323,12 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="FastAPI.Fastapi_blog" />
       <item itemvalue="Python.1" />
       <item itemvalue="Python.backlist" />
       <item itemvalue="Python.backtasks" />
       <item itemvalue="Python.main" />
       <item itemvalue="Python.user" />
-      <item itemvalue="FastAPI.Fastapi_blog" />
     </list>
     <recent_temporary>
       <list>
@@ -665,7 +664,7 @@
       <workItem from="1725241711347" duration="8970000" />
       <workItem from="1725326924872" duration="290000" />
       <workItem from="1725327366995" duration="27875000" />
-      <workItem from="1725432490848" duration="19000" />
+      <workItem from="1725432490848" duration="1712000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -1010,7 +1009,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="499" />
+    <option name="localTasksCounter" value="500" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
