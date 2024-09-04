@@ -5,7 +5,7 @@ from typing import Union
 
 from Fast_blog.database.databaseconnection import engine, db_session
 from Fast_blog.middleware.backtasks import BlogCache, AliOssUpload,celery_app
-from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User
+from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag
 from fastapi import APIRouter
 from fastapi import HTTPException
 from sqlalchemy import event
@@ -22,6 +22,18 @@ uploadoss = AliOssUpload()
 
 from sqlalchemy import func
 
+async def GetBlogTaginfo(blog_id: int):
+    async with db_session() as session:
+        taglist = []
+        # 修改查询，仅选择 Article_Type 字段
+        query = select(BlogTag.Article_Type).where(BlogTag.blog_id == blog_id)
+        # 执行查询
+        result = await session.execute(query)
+        # 提取查询结果中的 Article_Type 数据
+        article_types = result.scalars().all()
+        # 将查询结果添加到 taglist 中
+        taglist.extend(article_types)  # 将所有 Article_Type 数据加入到 taglist
+        return taglist
 
 @BlogApp.get("/blog/BlogIndex")
 async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
@@ -39,12 +51,14 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
             data = results.fetchall()
             data_dicts = []
             for row in data:
+                taglist = await GetBlogTaginfo(blog_id=row[0])
                 data_dict = {
                     "BlogId": row[0],
                     "title": row[1],
                     "created_at": row[2],
                     "author": row[3],
                     "BlogIntroductionPicture": row[4],
+                    "tags": taglist,
                 }
                 data_dicts.append(data_dict)
             return data_dicts
