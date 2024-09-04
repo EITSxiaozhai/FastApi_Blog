@@ -9,16 +9,26 @@
         style="width: 100%"
       >
         <el-table-column
+          :filter-method="filterTag"
+          :filters="tagFilters"
           prop="TagName"
           label="标签名"
-        />
+        >
+          <template v-slot="scope">
+            <!-- 使用 el-tag 包裹标签名 -->
+            <el-tag>{{ scope.row.TagName }}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column
+
           prop="Date"
+          sortable
+          column-key="date"
           label="创建时间"
         />
         <el-table-column
           prop="Blog_id"
-          label="关联ID"
+          label="关联博客ID"
         />
         <el-table-column
           prop="Blog_title"
@@ -48,6 +58,14 @@ export default {
       tableData: [] // 初始状态为空，等API调用后填充
     }
   },
+  computed: {
+    // 动态生成 filters
+    tagFilters() {
+      const tags = this.tableData.map(item => item.TagName)
+      // 去重并生成 filter 对象数组
+      return [...new Set(tags)].map(tag => ({ text: tag, value: tag }))
+    }
+  },
   async created() {
     await this.GetTageinfo() // 组件创建时获取数据
   },
@@ -72,6 +90,16 @@ export default {
     },
     clearFilter() {
       this.$refs.filterTable.clearFilter()
+    },
+    formatter(row, column) {
+      return row.address
+    },
+    filterTag(value, row) {
+      return row.TagName === value
+    },
+    filterHandler(value, row, column) {
+      const property = column['property']
+      return row[property] === value
     }
   }
 }
