@@ -9,24 +9,6 @@
         style="width: 100%"
       >
         <el-table-column
-          :filter-method="filterTag"
-          :filters="tagFilters"
-          prop="TagName"
-          label="标签名"
-        >
-          <template v-slot="scope">
-            <!-- 使用 el-tag 包裹标签名 -->
-            <el-tag>{{ scope.row.TagName }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-
-          prop="Date"
-          sortable
-          column-key="date"
-          label="创建时间"
-        />
-        <el-table-column
           prop="Blog_id"
           label="关联博客ID"
         />
@@ -34,6 +16,27 @@
           prop="Blog_title"
           label="关联标题"
         />
+        <el-table-column
+          prop="Date"
+          sortable
+          column-key="date"
+          label="创建时间"
+        />
+        <el-table-column
+          label="标签名"
+          prop="Tags"
+        >
+          <template v-slot="scope">
+            <!-- 循环展示所有的标签 -->
+            <el-tag
+              v-for="(tag, index) in scope.row.Tags"
+              :key="index"
+              style="margin-right: 4px"
+            >
+              {{ tag }}
+            </el-tag>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="OtherOperation"
           label="其他操作"
@@ -58,14 +61,6 @@ export default {
       tableData: [] // 初始状态为空，等API调用后填充
     }
   },
-  computed: {
-    // 动态生成 filters
-    tagFilters() {
-      const tags = this.tableData.map(item => item.TagName)
-      // 去重并生成 filter 对象数组
-      return [...new Set(tags)].map(tag => ({ text: tag, value: tag }))
-    }
-  },
   async created() {
     await this.GetTageinfo() // 组件创建时获取数据
   },
@@ -76,10 +71,10 @@ export default {
         const response = await BlogTagList()
         // 将响应数据转换为数组格式
         this.tableData = Object.values(response.data).map(item => ({
-          TagName: item.TagName,
-          Date: item.Date,
           Blog_id: item.Blog_id,
-          Blog_title: item.Blog_title
+          Blog_title: item.Blog_title,
+          Date: item.Date,
+          Tags: item.Tags // 将 Tags 数组保存在这里
         }))
       } catch (error) {
         console.error('获取文章分类时出错：', error)
