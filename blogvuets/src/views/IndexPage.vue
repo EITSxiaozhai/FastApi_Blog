@@ -425,7 +425,7 @@ const sendEmail = () => {
                                 </el-main>
                               </el-container>
 
-                              <el-tag v-for="tag in blog.tag" type="primary">{{ tag }}</el-tag>
+                              <el-tag v-for="tag in blog.tags" type="primary">{{ tag }}</el-tag>
 
                             </el-card>
                           </template>
