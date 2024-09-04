@@ -386,28 +386,36 @@ async def UserloginOut():
 async def BlogTagList():
     async with db_session() as session:
         try:
-
             sql = select(models.BlogTag)
-            result = await session.execute(sql)  # 使用 execute_async 替代 execute
+            result = await session.execute(sql)
+
+            # 使用字典将相同 blog_id 的标签聚合到一起
             enddata = {}
             for tag in result.scalars().all():
                 if tag.blog_id not in enddata:
                     sql2 = select(models.Blog).filter_by(BlogId=tag.blog_id)
                     blogresult = await session.execute(sql2)
-                    for blogname in blogresult.scalars().all():
+                    blogname = blogresult.scalars().first()
+
+                    if blogname:
                         enddata[tag.blog_id] = {
-                            'TagName': tag.Article_Type,
-                            'Date': blogname.created_at.strftime('%Y-%m-%d'),
                             'Blog_id': tag.blog_id,
-                            'Blog_title' : blogname.title,
+                            'Blog_title': blogname.title,
+                            'Date': blogname.created_at.strftime('%Y-%m-%d'),
+                            'Tags': [tag.Article_Type]  # 初始化标签列表
                         }
-            return {"data": enddata, "code": 20000}
+                else:
+                    # 如果该标签不在已有标签列表中，添加它
+                    if tag.Article_Type not in enddata[tag.blog_id]['Tags']:
+                        enddata[tag.blog_id]['Tags'].append(tag.Article_Type)
+
+            return {"data": list(enddata.values()), "code": 20000}
         except jwt.ExpiredSignatureError:
             return {"code": 50012, "message": "Token已过期"}
         except jwt.InvalidTokenError:
             return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
-            return {"code": 50000, "message": "内部服务器错误"}
+            return {"code": 50000, "message": "内部服务器错误", "error": str(e)}
 
 #从文章中创建Tag
 @AdminApi.post('/Blogtagcreate/{blog_id}/{type}')
