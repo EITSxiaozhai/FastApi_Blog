@@ -23,6 +23,8 @@
           label="创建时间"
         />
         <el-table-column
+          :filters="tagFilters"
+          :filter-method="filterTag"
           label="标签名"
           prop="Tags"
         >
@@ -61,6 +63,14 @@ export default {
       tableData: [] // 初始状态为空，等API调用后填充
     }
   },
+  computed: {
+    // 动态生成 filters
+    tagFilters() {
+      // 获取所有标签并去重
+      const allTags = this.tableData.flatMap(item => item.Tags)
+      return [...new Set(allTags)].map(tag => ({ text: tag, value: tag }))
+    }
+  },
   async created() {
     await this.GetTageinfo() // 组件创建时获取数据
   },
@@ -86,15 +96,9 @@ export default {
     clearFilter() {
       this.$refs.filterTable.clearFilter()
     },
-    formatter(row, column) {
-      return row.address
-    },
+    // 筛选标签
     filterTag(value, row) {
-      return row.TagName === value
-    },
-    filterHandler(value, row, column) {
-      const property = column['property']
-      return row[property] === value
+      return row.Tags.includes(value)
     }
   }
 }
