@@ -405,7 +405,9 @@ const sendEmail = () => {
                                 <p>发布日期:{{ blog.created_at }}</p>
 
                               </div>
-                              <el-tag type="primary">{{ blog.tag }}</el-tag>
+                              <el-tag v-for="(tag, index) in blog.tag"
+                                      :key="index" type="primary"> {{ tag }}
+                              </el-tag>
                             </el-card>
 
                           </template>
@@ -422,7 +424,7 @@ const sendEmail = () => {
 
                                 </el-main>
                               </el-container>
-                              <el-tag type="primary">{{ blog.tag }}</el-tag>
+                              <el-tag v-for="(tag, index ) in data.row.tag" type="primary">{{ tag }}</el-tag>
                             </el-card>
                           </template>
                         </router-link>
@@ -690,6 +692,7 @@ body {
 .hidden {
   display: none;
 }
+
 
 </style>
 

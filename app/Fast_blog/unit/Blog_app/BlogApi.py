@@ -58,7 +58,7 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
                     "created_at": row[2],
                     "author": row[3],
                     "BlogIntroductionPicture": row[4],
-                    "tags": taglist,
+                    "tag": taglist,
                 }
                 data_dicts.append(data_dict)
             return data_dicts
