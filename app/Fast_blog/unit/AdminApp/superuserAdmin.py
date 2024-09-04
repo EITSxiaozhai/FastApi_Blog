@@ -409,7 +409,7 @@ async def BlogTagList():
                     if tag.Article_Type not in enddata[tag.blog_id]['Tags']:
                         enddata[tag.blog_id]['Tags'].append(tag.Article_Type)
 
-            return {"data": list(enddata.values()), "code": 20000}
+            return {"data": enddata, "code": 20000}
         except jwt.ExpiredSignatureError:
             return {"code": 50012, "message": "Token已过期"}
         except jwt.InvalidTokenError:
