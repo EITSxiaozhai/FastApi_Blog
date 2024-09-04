@@ -421,12 +421,11 @@ const sendEmail = () => {
                                   <h1 style="font-size: 25px;">{{ blog.title }}</h1>
                                   <p>作者:{{ blog.author }}</p>
                                   <p>发布日期:{{ blog.created_at }}</p>
-
                                 </el-main>
                               </el-container>
-
-                              <el-tag v-for="(tag,index) in blog.tags" type="primary">{{ tag }}</el-tag>
-
+                                                    <el-tag v-for="(tag, index) in blog.tag"
+                                      :key="index" type="primary"> {{ tag }}
+                              </el-tag>
                             </el-card>
                           </template>
                         </router-link>
