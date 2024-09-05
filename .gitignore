@@ -8,6 +8,7 @@ celerybeat-schedule.dir
 alembic/versions
 app/google.json
 .png
+*.json
 google.json
 .jpg
 *.ini

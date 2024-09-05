@@ -11,10 +11,14 @@ export default createStore({
         token: '', // 初始状态为空令牌
         username: '', // 添加一个用于用户名的新属性
         lastVisitedRoute: '',
+        PagingRecord:'',
     },
     mutations: {
         setLastVisitedRoute(state, route) {
             state.lastVisitedRoute = route;
+        },
+        setPagingRecord(state, pagingRecord) {
+            state.PagingRecord = pagingRecord;
         },
         setTokenAndUsername(state, {token, username}) {
             state.token = token;
@@ -33,6 +37,9 @@ export default createStore({
         },
         getToken(state) {
             return state.token;
+        },
+        getPagingRecord: (state) => {
+            return state.PagingRecord;
         },
         getUsername(state) {
             // Example getter
