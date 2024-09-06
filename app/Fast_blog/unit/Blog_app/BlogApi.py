@@ -2,7 +2,8 @@
 # author: YAO XU time:
 import pickle
 from typing import Union
-
+from googleapiclient.discovery import build
+from google.oauth2 import service_account
 from Fast_blog.database.databaseconnection import engine, db_session
 from Fast_blog.middleware.backtasks import BlogCache, AliOssUpload,celery_app
 from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag
@@ -197,4 +198,34 @@ async def SubmitComments(blog_id: int, comment: Comment):
         new_comment = Comment(**comment.dict(), uid=user.UserId)
         session.add(new_comment)
         session.commit()
+        return {"message": "Comment submitted successfully!"}
+
+@BlogApp.get("/blogs/uvpvget")
+async def GoogleUVPVGet():
+    async with db_session() as session:
+        # 设置认证凭据
+        credentials = service_account.Credentials.from_service_account_file('D:\\FastApi_Blog\\blog-uvpv.json')
+
+        service = build('analyticsreporting', 'v4', credentials=credentials)
+
+        # 设置报告请求
+        request = {
+            'viewId': '450792356',  # 替换为你的 GA 视图 ID
+            'dateRanges': [{'startDate': '2024-08-01', 'endDate': '2024-09-01'}],
+            'metrics': [{'expression': 'ga:users'}, {'expression': 'ga:pageviews'}],
+            'dimensions': [{'name': 'ga:date'}]
+        }
+
+        response = service.reports().batchGet(body={'reportRequests': [request]}).execute()
+
+        # 输出 UV 和 PV
+        for report in response['reports']:
+            for row in report['data']['rows']:
+                date = row['dimensions'][0]
+                users = row['metrics'][0]['values'][0]
+                pageviews = row['metrics'][0]['values'][1]
+                print(f"Date: {date}")
+                print(f"Users (UV): {users}")
+                print(f"Pageviews (PV): {pageviews}")
+
         return {"message": "Comment submitted successfully!"}
