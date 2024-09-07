@@ -204,13 +204,13 @@ async def SubmitComments(blog_id: int, comment: Comment):
 async def GoogleUVPVGet():
     async with db_session() as session:
         # 设置认证凭据
-        credentials = service_account.Credentials.from_service_account_file('D:\\FastApi_Blog\\blog-uvpv.json')
+        credentials = service_account.Credentials.from_service_account_file('E:\\pytest\\FastApi_Blog\\blog-uvpv.json')
 
         service = build('analyticsreporting', 'v4', credentials=credentials)
 
         # 设置报告请求
         request = {
-            'viewId': '450792356',  # 替换为你的 GA 视图 ID
+            'viewId': '322220995',  # 替换为你的 GA 视图 ID
             'dateRanges': [{'startDate': '2024-08-01', 'endDate': '2024-09-01'}],
             'metrics': [{'expression': 'ga:users'}, {'expression': 'ga:pageviews'}],
             'dimensions': [{'name': 'ga:date'}]
