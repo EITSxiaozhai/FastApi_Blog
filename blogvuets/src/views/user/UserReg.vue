@@ -191,7 +191,7 @@ const rules = reactive({
     {required: true, type: 'password', message: "请填写你的密码", validator: validatePass, trigger: 'change'}
   ],
   confirmPassword: [
-    {required: true, type: 'password', message: "请填写你的确认密码", validator: validatePass2, trigger: 'change'}
+    {required: true, type: 'password', message: "确认密码和你输入的密码不同", validator: validatePass2, trigger: 'change'}
   ],
   verificationCode: [{required: true, message: '请输入正确邮箱验证码', trigger: 'blur', min: 6, max: 6}],
   email: [{
