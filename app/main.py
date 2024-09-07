@@ -1,3 +1,4 @@
+import multiprocessing
 from datetime import datetime
 import json
 import logging
@@ -46,10 +47,24 @@ app.add_middleware(
 )
 
 
-celery_command = "celery -A Fast_blog.middleware.backtasks worker -l info"
-celery_beat_command = "celery -A Fast_blog.middleware.celerybeat-schedule  beat --loglevel=info"
-subprocess.Popen(celery_command, shell=True)
-subprocess.Popen(celery_beat_command, shell=True)
+# 定义全局变量，用于存储进程对象
+worker_process = None
+beat_process = None
+
+
+def start_celery_worker():
+    try:
+        celery_command = ["celery", "-A", "Fast_blog.middleware.backtasks", "worker", "-l", "info"]
+        subprocess.run(celery_command, check=True)
+    except KeyboardInterrupt:
+        print("Celery worker process interrupted. Exiting...")
+
+def start_celery_beat():
+    try:
+        celery_beat_command = ["celery", "-A", "Fast_blog.middleware.celerybeat-schedule", "beat", "--loglevel=info"]
+        subprocess.run(celery_beat_command, check=True)
+    except KeyboardInterrupt:
+        print("Celery beat process interrupted. Exiting...")
 
 @app.get("/")
 async def root():
@@ -58,6 +73,11 @@ async def root():
 # 设置日志通过 Logstash 发送到后端 ELK 集群上去
 @app.on_event("startup")
 async def startup_event():
+    worker_process = multiprocessing.Process(target=start_celery_worker)
+    beat_process = multiprocessing.Process(target=start_celery_beat)
+    worker_process.start()
+    beat_process.start()
+
     logger = logging.getLogger("uvicorn")
     # 使用自定义的 JSON 格式化器
     formatter = JSONLogFormatter()
@@ -69,6 +89,18 @@ async def startup_event():
     logstash_handler.setFormatter(formatter)
     logger.addHandler(logstash_handler)
     logger.setLevel(logging.INFO)
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    if worker_process.is_alive():
+        worker_process.terminate()
+        worker_process.join()
+
+    if beat_process.is_alive():
+        beat_process.terminate()
+        beat_process.join()
+
+    logging.getLogger("uvicorn").info("Celery processes terminated.")
 
 @app.middleware("http")
 async def log_requests(request: Request, call_next):
