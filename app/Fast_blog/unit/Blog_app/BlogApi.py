@@ -1,5 +1,6 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
+import os
 import pickle
 from typing import Union
 from googleapiclient.discovery import build
@@ -12,6 +13,13 @@ from fastapi import HTTPException
 from sqlalchemy import event
 from sqlalchemy import select
 from sqlalchemy.orm import sessionmaker
+from google.analytics.data_v1beta import BetaAnalyticsDataClient
+from google.analytics.data_v1beta.types import (
+    DateRange,
+    Dimension,
+    Metric,
+    RunReportRequest,
+)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -203,29 +211,33 @@ async def SubmitComments(blog_id: int, comment: Comment):
 @BlogApp.get("/blogs/uvpvget")
 async def GoogleUVPVGet():
     async with db_session() as session:
-        # 设置认证凭据
-        credentials = service_account.Credentials.from_service_account_file('E:\\pytest\\FastApi_Blog\\blog-uvpv.json')
-
-        service = build('analyticsreporting', 'v4', credentials=credentials)
-
+        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'E:\\pytest\\FastApi_Blog\\blog-uvpv.json'
+        property_id = "450792356"
         # 设置报告请求
-        request = {
-            'viewId': '322220995',  # 替换为你的 GA 视图 ID
-            'dateRanges': [{'startDate': '2024-08-01', 'endDate': '2024-09-01'}],
-            'metrics': [{'expression': 'ga:users'}, {'expression': 'ga:pageviews'}],
-            'dimensions': [{'name': 'ga:date'}]
-        }
+        client = BetaAnalyticsDataClient()
 
-        response = service.reports().batchGet(body={'reportRequests': [request]}).execute()
+        request = RunReportRequest(
+            property=f'properties/{property_id}',  # 替换为你的 GA4 属性 ID
+            dimensions=[{'name': 'date'}],
+            metrics=[{'name': 'activeUsers'}, {'name': 'screenPageViews'}],
+            date_ranges=[{'start_date': '2023-01-01', 'end_date': '2024-12-31'}]
+        )
 
-        # 输出 UV 和 PV
-        for report in response['reports']:
-            for row in report['data']['rows']:
-                date = row['dimensions'][0]
-                users = row['metrics'][0]['values'][0]
-                pageviews = row['metrics'][0]['values'][1]
-                print(f"Date: {date}")
-                print(f"Users (UV): {users}")
-                print(f"Pageviews (PV): {pageviews}")
+        response = client.run_report(request=request)
 
-        return {"message": "Comment submitted successfully!"}
+        # 初始化一个空字典
+        uv_pv_data = {}
+
+        # 输出 UV 和 PV，并将结果存储到字典中
+        for row in response.rows:
+            date = row.dimension_values[0].value
+            active_users = row.metric_values[0].value
+            page_views = row.metric_values[1].value
+
+            # 将数据存储到字典，日期作为键
+            uv_pv_data[date] = {
+                'Active Users (UV)': active_users,
+                'Page Views (PV)': page_views
+            }
+        return {"data": uv_pv_data,"code":20000}
+
