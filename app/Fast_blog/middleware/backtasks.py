@@ -200,6 +200,9 @@ class AliOssPrivateDocument(AliOssBase):
     def CrawlerKeyAcquisition(self):
         result = self.bucket.get_object('google.json')
         return result.read()
+    def GoogleAnalytics(self):
+        result = self.bucket.get_object('blog-uvpv.json')
+        return result.read()
 
 #markdown文章读取
 class AliOssBlogMarkdownImg(AliOssBase):

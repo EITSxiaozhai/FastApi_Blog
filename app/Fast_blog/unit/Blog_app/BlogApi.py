@@ -1,5 +1,6 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
+import json
 import os
 import pickle
 from typing import Union
@@ -14,12 +15,15 @@ from sqlalchemy import event
 from sqlalchemy import select
 from sqlalchemy.orm import sessionmaker
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
+from google.auth.exceptions import GoogleAuthError
 from google.analytics.data_v1beta.types import (
     DateRange,
     Dimension,
     Metric,
     RunReportRequest,
 )
+
+from Fast_blog.middleware.backtasks import AliOssPrivateDocument
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -208,36 +212,59 @@ async def SubmitComments(blog_id: int, comment: Comment):
         session.commit()
         return {"message": "Comment submitted successfully!"}
 
+
 @BlogApp.get("/blogs/uvpvget")
 async def GoogleUVPVGet():
     async with db_session() as session:
-        os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'E:\\pytest\\FastApi_Blog\\blog-uvpv.json'
-        property_id = "450792356"
-        # 设置报告请求
-        client = BetaAnalyticsDataClient()
+        try:
+            # 从阿里云 OSS 获取 Google Analytics 密钥
+            jsonkey = AliOssPrivateDocument()
+            JSON_KEY_FILE = jsonkey.CrawlerKeyAcquisition()
+            JSON_KEY_FILE_str = JSON_KEY_FILE.decode('utf-8')
 
-        request = RunReportRequest(
-            property=f'properties/{property_id}',  # 替换为你的 GA4 属性 ID
-            dimensions=[{'name': 'date'}],
-            metrics=[{'name': 'activeUsers'}, {'name': 'screenPageViews'}],
-            date_ranges=[{'start_date': '2023-01-01', 'end_date': '2024-12-31'}]
-        )
+            # 将 JSON 字符串转换为字典
+            JSON_KEY_FILE_dict = json.loads(JSON_KEY_FILE_str.replace("'", '"').replace('\r\n', '\\r\\n'))
 
-        response = client.run_report(request=request)
+            print(JSON_KEY_FILE_dict)
 
-        # 初始化一个空字典
-        uv_pv_data = {}
+            # 使用适合 Google Analytics 的 OAuth 范围
+            SCOPES = ['https://www.googleapis.com/auth/analytics']
+            credentials = service_account.Credentials.from_service_account_info(JSON_KEY_FILE_dict, scopes=SCOPES)
 
-        # 输出 UV 和 PV，并将结果存储到字典中
-        for row in response.rows:
-            date = row.dimension_values[0].value
-            active_users = row.metric_values[0].value
-            page_views = row.metric_values[1].value
+            property_id = "450792356"
+            # 使用传递的凭据创建客户端
 
-            # 将数据存储到字典，日期作为键
-            uv_pv_data[date] = {
-                'Active Users (UV)': active_users,
-                'Page Views (PV)': page_views
-            }
-        return {"data": uv_pv_data,"code":20000}
+            client = BetaAnalyticsDataClient(credentials=credentials)
 
+            if not credentials.valid:
+                return {"error": "Invalid credentials", "code": 40001}
+            else:
+                # 设置报告请求
+                request = RunReportRequest(
+                    property=f'properties/{property_id}',  # 替换为你的 GA4 属性 ID
+                    dimensions=[{'name': 'date'}],
+                    metrics=[{'name': 'activeUsers'}, {'name': 'screenPageViews'}],
+                    date_ranges=[{'start_date': '2023-01-01', 'end_date': '2024-12-31'}]
+                )
+
+                response = client.run_report(request=request)
+
+                # 初始化一个空字典
+                uv_pv_data = {}
+
+                # 输出 UV 和 PV，并将结果存储到字典中
+                for row in response.rows:
+                    date = row.dimension_values[0].value
+                    active_users = row.metric_values[0].value
+                    page_views = row.metric_values[1].value
+
+                    # 将数据存储到字典，日期作为键
+                    uv_pv_data[date] = {
+                        'Active Users (UV)': active_users,
+                        'Page Views (PV)': page_views
+                    }
+                return {"data": uv_pv_data, "code": 20000}
+        except GoogleAuthError as auth_error:
+            return {"error": "Authentication failed", "message": str(auth_error), "code": 40002}
+        except Exception as e:
+            return {"error": "Internal Server Error", "message": str(e), "code": 50000}
