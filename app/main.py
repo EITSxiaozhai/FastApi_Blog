@@ -73,10 +73,17 @@ async def root():
 # 设置日志通过 Logstash 发送到后端 ELK 集群上去
 @app.on_event("startup")
 async def startup_event():
-    worker_process = multiprocessing.Process(target=start_celery_worker)
-    beat_process = multiprocessing.Process(target=start_celery_beat)
-    worker_process.start()
-    beat_process.start()
+    global worker_process, beat_process  # 使用 global 关键字声明全局变量
+
+    # 启动 Celery 进程，只在进程不存在时启动
+    if worker_process is None or not worker_process.is_alive():
+        worker_process = multiprocessing.Process(target=start_celery_worker)
+        worker_process.start()
+
+    if beat_process is None or not beat_process.is_alive():
+        beat_process = multiprocessing.Process(target=start_celery_beat)
+        beat_process.start()
+
 
     logger = logging.getLogger("uvicorn")
     # 使用自定义的 JSON 格式化器
