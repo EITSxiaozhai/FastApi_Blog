@@ -8,11 +8,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改报错日志">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加新Google包">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -679,7 +677,8 @@
       <workItem from="1725764985372" duration="377000" />
       <workItem from="1725765605301" duration="5082000" />
       <workItem from="1725864850228" duration="11256000" />
-      <workItem from="1726105840175" duration="9187000" />
+      <workItem from="1726105840175" duration="11332000" />
+      <workItem from="1726124661744" duration="1253000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -1024,7 +1023,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="516" />
+    <option name="localTasksCounter" value="518" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1068,8 +1067,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="设置响应式布局,设置树状布局" />
-    <MESSAGE value="设置锚点跳转" />
     <MESSAGE value="设置目录视图居中" />
     <MESSAGE value="设置创建TAG非必传参数" />
     <MESSAGE value="设置创建TAG非必传参数,优化Tag创建方法" />
@@ -1093,7 +1090,9 @@
     <MESSAGE value="添加到多进程中，避免开发过程celery内存泄露。" />
     <MESSAGE value="添加跨域ip" />
     <MESSAGE value="修改报错日志" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改报错日志" />
+    <MESSAGE value="修改重复启动" />
+    <MESSAGE value="添加新Google包" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加新Google包" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

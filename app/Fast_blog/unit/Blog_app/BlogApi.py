@@ -1,13 +1,15 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
+import ast
 import json
 import os
 import pickle
 from typing import Union
-from googleapiclient.discovery import build
+
 from google.oauth2 import service_account
+from googleapiclient.discovery import build
 from Fast_blog.database.databaseconnection import engine, db_session
-from Fast_blog.middleware.backtasks import BlogCache, AliOssUpload,celery_app
+from Fast_blog.middleware.backtasks import BlogCache, AliOssUpload, celery_app
 from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag
 from fastapi import APIRouter
 from fastapi import HTTPException
@@ -22,18 +24,20 @@ from google.analytics.data_v1beta.types import (
     Metric,
     RunReportRequest,
 )
-
 from Fast_blog.middleware.backtasks import AliOssPrivateDocument
+from sqlalchemy import func
+
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
 
 BlogApp = APIRouter()
-
+aliOssPrivateDocument = AliOssPrivateDocument()
 uploadoss = AliOssUpload()
 ## 博客游客用户主页显示
 
-from sqlalchemy import func
+
+
 
 async def GetBlogTaginfo(blog_id: int):
     async with db_session() as session:
@@ -47,6 +51,7 @@ async def GetBlogTaginfo(blog_id: int):
         # 将查询结果添加到 taglist 中
         taglist.extend(article_types)  # 将所有 Article_Type 数据加入到 taglist
         return taglist
+
 
 @BlogApp.get("/blog/BlogIndex")
 async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
@@ -82,6 +87,8 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
 
 
 blog_cache = BlogCache()
+
+
 # Create event listener to update cache
 @event.listens_for(Blog, 'after_insert')
 @event.listens_for(Blog, 'after_update')
@@ -99,7 +106,8 @@ async def update_cache(mapper, connection, target):
     blog_cache.redis_client.set(redis_key, pickle.dumps([data]))
     blog_cache.redis_client.expire(redis_key, 86400)  # Set expiration time to 24 hour
 
-#定时同步任务
+
+# 定时同步任务
 async def update_redis_cache():
     async with db_session() as session:  # Assuming you have an async DB session
         print("开始同步")
@@ -118,6 +126,7 @@ async def update_redis_cache():
             }
             blog_cache.redis_client.set(redis_key, pickle.dumps([data]))
             blog_cache.redis_client.expire(redis_key, 86400)  # Set expiration time to 24 hours
+
 
 ### 数据库缓存读取判断
 @BlogApp.post("/user/Blogid")
@@ -217,53 +226,38 @@ async def SubmitComments(blog_id: int, comment: Comment):
 async def GoogleUVPVGet():
     async with db_session() as session:
         try:
-            # 从阿里云 OSS 获取 Google Analytics 密钥
-            jsonkey = AliOssPrivateDocument()
-            JSON_KEY_FILE = jsonkey.CrawlerKeyAcquisition()
+            JSON_KEY_FILE = aliOssPrivateDocument.GoogleAnalytics()
             JSON_KEY_FILE_str = JSON_KEY_FILE.decode('utf-8')
-
-            # 将 JSON 字符串转换为字典
-            JSON_KEY_FILE_dict = json.loads(JSON_KEY_FILE_str.replace("'", '"').replace('\r\n', '\\r\\n'))
-
-            print(JSON_KEY_FILE_dict)
-
-            # 使用适合 Google Analytics 的 OAuth 范围
-            SCOPES = ['https://www.googleapis.com/auth/analytics']
-            credentials = service_account.Credentials.from_service_account_info(JSON_KEY_FILE_dict, scopes=SCOPES)
-
-            property_id = "450792356"
+            JSON_KEY_FILE = json.loads(JSON_KEY_FILE_str.replace("'", '"').replace('\r\n', '\\r\\n'), strict=False)
+            property_id = "457560039"
             # 使用传递的凭据创建客户端
-
+            credentials = service_account.Credentials.from_service_account_info(JSON_KEY_FILE)
             client = BetaAnalyticsDataClient(credentials=credentials)
 
-            if not credentials.valid:
-                return {"error": "Invalid credentials", "code": 40001}
-            else:
-                # 设置报告请求
-                request = RunReportRequest(
-                    property=f'properties/{property_id}',  # 替换为你的 GA4 属性 ID
-                    dimensions=[{'name': 'date'}],
-                    metrics=[{'name': 'activeUsers'}, {'name': 'screenPageViews'}],
-                    date_ranges=[{'start_date': '2023-01-01', 'end_date': '2024-12-31'}]
-                )
+            request = RunReportRequest(
+                property=f'properties/{property_id}',  # 替换为你的 GA4 属性 ID
+                dimensions=[{'name': 'date'}],
+                metrics=[{'name': 'activeUsers'}, {'name': 'screenPageViews'}],
+                date_ranges=[{'start_date': '2023-01-01', 'end_date': '2024-12-31'}]
+            )
 
-                response = client.run_report(request=request)
+            response = client.run_report(request=request)
 
-                # 初始化一个空字典
-                uv_pv_data = {}
+            # 初始化一个空字典
+            uv_pv_data = {}
 
-                # 输出 UV 和 PV，并将结果存储到字典中
-                for row in response.rows:
-                    date = row.dimension_values[0].value
-                    active_users = row.metric_values[0].value
-                    page_views = row.metric_values[1].value
+            # 输出 UV 和 PV，并将结果存储到字典中
+            for row in response.rows:
+                date = row.dimension_values[0].value
+                active_users = row.metric_values[0].value
+                page_views = row.metric_values[1].value
 
-                    # 将数据存储到字典，日期作为键
-                    uv_pv_data[date] = {
-                        'Active Users (UV)': active_users,
-                        'Page Views (PV)': page_views
-                    }
-                return {"data": uv_pv_data, "code": 20000}
+                # 将数据存储到字典，日期作为键
+                uv_pv_data[date] = {
+                    'Active Users (UV)': active_users,
+                    'Page Views (PV)': page_views
+                }
+            return {"data": uv_pv_data, "code": 20000}
         except GoogleAuthError as auth_error:
             return {"error": "Authentication failed", "message": str(auth_error), "code": 40002}
         except Exception as e:
