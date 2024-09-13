@@ -99,13 +99,19 @@ async def startup_event():
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    if worker_process.is_alive():
-        worker_process.terminate()
-        worker_process.join()
+    global worker_process, beat_process  # 使用 global 关键字声明全局变量
 
-    if beat_process.is_alive():
-        beat_process.terminate()
-        beat_process.join()
+    # 检查 Celery worker 进程是否存在且存活，然后终止它
+    if worker_process is not None:
+        if worker_process.is_alive():
+            worker_process.terminate()  # 尽量使用 terminate() 正常终止进程
+            worker_process.join()       # 确保进程完全退出
+
+    # 检查 Celery beat 进程是否存在且存活，然后终止它
+    if beat_process is not None:
+        if beat_process.is_alive():
+            beat_process.terminate()    # 正常终止 beat 进程
+            beat_process.join()         # 等待进程退出
 
     logging.getLogger("uvicorn").info("Celery processes terminated.")
 
