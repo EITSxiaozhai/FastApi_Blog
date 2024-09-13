@@ -42,14 +42,13 @@ const data = reactive({
   data: []
 });
 
-function getData() {
-  backApi.get('/views/blog/BlogIndex')
-      .then(response => {
-        data.data = response.data;
-      })
-      .catch(error => {
-        console.error(error);
-      });
+async function getData() {
+  try {
+    const response = await backApi.get('/views/blog/BlogIndex');
+    data.data = response.data;
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 // 创建函数来获取 UV 和 PV 数据

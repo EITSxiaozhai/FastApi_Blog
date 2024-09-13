@@ -8,11 +8,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="完成从oss获取证书验证">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="设置google api调用方式">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/components.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/components.d.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -683,7 +681,7 @@
       <workItem from="1726105840175" duration="11332000" />
       <workItem from="1726124661744" duration="1908000" />
       <workItem from="1726127089102" duration="350000" />
-      <workItem from="1726131673369" duration="3305000" />
+      <workItem from="1726131673369" duration="4111000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -1028,7 +1026,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="519" />
+    <option name="localTasksCounter" value="522" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1072,9 +1070,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="设置创建TAG非必传参数" />
-    <MESSAGE value="设置创建TAG非必传参数,优化Tag创建方法" />
-    <MESSAGE value="修改请求路径" />
     <MESSAGE value="修改TagList显示" />
     <MESSAGE value="Tag接口显示" />
     <MESSAGE value="Tag返回参数增加" />
@@ -1097,7 +1092,10 @@
     <MESSAGE value="修改重复启动" />
     <MESSAGE value="添加新Google包" />
     <MESSAGE value="完成从oss获取证书验证" />
-    <option name="LAST_COMMIT_MESSAGE" value="完成从oss获取证书验证" />
+    <MESSAGE value="添加UVPV接口" />
+    <MESSAGE value="调整Celery启动方式" />
+    <MESSAGE value="设置google api调用方式" />
+    <option name="LAST_COMMIT_MESSAGE" value="设置google api调用方式" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
