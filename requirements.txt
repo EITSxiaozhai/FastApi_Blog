@@ -28,3 +28,4 @@ elastic-apm
 python-logstash-async~=3.0.0
 google-api-python-client
 google-auth
+google-analytics-data
