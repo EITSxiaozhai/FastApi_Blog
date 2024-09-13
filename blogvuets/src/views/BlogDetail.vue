@@ -105,7 +105,7 @@ const convertMarkdown = (markdownText) => {
   // 高亮代码
   renderedContent = renderedContent.replace(/<a(.*?)href="(.*?)"(.*?)>(.*?)<\/a>/g, '<a$1href="$2"$3 style="color: blue; text-decoration: underline;">$4</a>');
   const codeBlocks = renderedContent.match(/<pre><code class="lang-(.*?)">([\s\S]*?)<\/code><\/pre>/gm);
-  renderedContent = renderedContent.replace(/<img(.*?)src="(.*?)"(.*?)>/g, '<img$1src="$2"$3  class="markdown-image">');
+  renderedContent = renderedContent.replace(/<img(.*?)src="(.*?)"(.*?)>/g, '<img$1src="$2"$3 class="markdown-image" style="display: block; width: 100%; margin: 0 auto;">');
 
   if (codeBlocks) {
     codeBlocks.forEach(codeBlock => {
@@ -634,7 +634,7 @@ const redirectToUserProfile = () => {
 
 <style>
 .markdown-image {
-  max-width: 100%; /* Ensure images don't exceed the container width */
+  width: 100%; /* Ensure images don't exceed the container width */
   height: auto; /* Maintain the aspect ratio */
   margin-top: 20px;
   margin-bottom: 20px;
