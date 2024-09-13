@@ -35,6 +35,9 @@ const {xlLayout} = useXlLayout();
 const input1 = ref('');
 const text = ref(null)
 const router = useRouter();
+// 定义 ref 变量存储 UV 和 PV 数据
+const totalUV = ref(0);
+const totalPV = ref(0);
 const data = reactive({
   data: []
 });
@@ -48,6 +51,19 @@ function getData() {
         console.error(error);
       });
 }
+
+// 创建函数来获取 UV 和 PV 数据
+const fetchUvPvData = async () => {
+  try {
+    const response = await backApi.get('/views/blogs/total_uvpv');
+    if (response.data.code === 20000) {
+      totalUV.value = response.data.data['UV'];
+      totalPV.value = response.data.data['PV'];
+    }
+  } catch (error) {
+    console.error('Error fetching UV/PV data:', error);
+  }
+};
 
 const pageSize = 4;
 let currentPage = 1;
@@ -125,6 +141,7 @@ const VerseGetting = async () => {
 
 
 onMounted(async () => {
+  fetchUvPvData();
   const content = await VerseGetting();
   new (TypeIt)(text.value, {
     strings: [content],
@@ -479,17 +496,11 @@ const sendEmail = () => {
           <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
 
             <el-row>
-              <el-col :span="6">
-                <el-statistic title="浏览用户" :value="1234"/>
+              <el-col :span="12">
+                <el-statistic title="独立访客数" :value="totalUV"/>
               </el-col>
-              <el-col :span="6">
-                <el-statistic title="注册用户" :value="2"/>
-              </el-col>
-              <el-col :span="6">
-                <el-statistic title="评论数量" :value="12"/>
-              </el-col>
-              <el-col :span="6">
-                <el-statistic title="文章数" :value="2"/>
+              <el-col :span="12">
+                <el-statistic title="页面浏览量" :value="totalPV"/>
               </el-col>
             </el-row>
           </el-card>
