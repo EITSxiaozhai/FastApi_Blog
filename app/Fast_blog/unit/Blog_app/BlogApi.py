@@ -222,42 +222,52 @@ async def SubmitComments(blog_id: int, comment: Comment):
         return {"message": "Comment submitted successfully!"}
 
 
-@BlogApp.get("/blogs/uvpvget")
-async def GoogleUVPVGet():
+@BlogApp.get("/blogs/total_uvpv")
+async def get_total_uvpv():
     async with db_session() as session:
         try:
-            JSON_KEY_FILE = aliOssPrivateDocument.GoogleAnalytics()
-            JSON_KEY_FILE_str = JSON_KEY_FILE.decode('utf-8')
-            JSON_KEY_FILE = json.loads(JSON_KEY_FILE_str.replace("'", '"').replace('\r\n', '\\r\\n'), strict=False)
-            property_id = "457560039"
-            # 使用传递的凭据创建客户端
-            credentials = service_account.Credentials.from_service_account_info(JSON_KEY_FILE)
-            client = BetaAnalyticsDataClient(credentials=credentials)
+            # 从阿里云 OSS 获取 Google Analytics 密钥
+            jsonkey = AliOssPrivateDocument()
+            JSON_KEY_FILE = jsonkey.GoogleAnalytics()
+            JSON_KEY_FILE_dict = json.loads(JSON_KEY_FILE.decode('utf-8'))
 
+            credentials = service_account.Credentials.from_service_account_info(JSON_KEY_FILE_dict)
+            scoped_credentials = credentials.with_scopes(
+                ['https://www.googleapis.com/auth/analytics.readonly']
+            )
+
+            property_id = "457560039"  # GA4 属性 ID
+
+            # 使用传递的凭据创建客户端
+            client = BetaAnalyticsDataClient(credentials=scoped_credentials)
+
+            # 构造查询请求：获取全站数据
             request = RunReportRequest(
                 property=f'properties/{property_id}',  # 替换为你的 GA4 属性 ID
-                dimensions=[{'name': 'date'}],
-                metrics=[{'name': 'activeUsers'}, {'name': 'screenPageViews'}],
-                date_ranges=[{'start_date': '2023-01-01', 'end_date': '2024-12-31'}]
+                dimensions=[],  # 不需要按维度拆分数据，获取整体数据
+                metrics=[{'name': 'activeUsers'}, {'name': 'screenPageViews'}],  # UV 和 PV 指标
+                date_ranges=[{'start_date': '2024-08-01', 'end_date': 'today'}]  # 建站日期到今天
             )
 
             response = client.run_report(request=request)
 
-            # 初始化一个空字典
-            uv_pv_data = {}
+            # 初始化 UV 和 PV 数据
+            total_uv = 0
+            total_pv = 0
 
-            # 输出 UV 和 PV，并将结果存储到字典中
+            # 提取 UV 和 PV 数据
             for row in response.rows:
-                date = row.dimension_values[0].value
-                active_users = row.metric_values[0].value
-                page_views = row.metric_values[1].value
+                total_uv = row.metric_values[0].value
+                total_pv = row.metric_values[1].value
 
-                # 将数据存储到字典，日期作为键
-                uv_pv_data[date] = {
-                    'Active Users (UV)': active_users,
-                    'Page Views (PV)': page_views
-                }
-            return {"data": uv_pv_data, "code": 20000}
+            # 返回总 UV 和 PV
+            return {
+                "data": {
+                    "UV": total_uv,
+                    "PV": total_pv
+                },
+                "code": 20000
+            }
         except GoogleAuthError as auth_error:
             return {"error": "Authentication failed", "message": str(auth_error), "code": 40002}
         except Exception as e:
