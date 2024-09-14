@@ -256,11 +256,6 @@ const redirectToRegister = () => {
   router.push('/register');
 };
 
-// 跳转到用户个人资料页面
-const redirectToUserProfile = () => {
-  // 在这里编写跳转逻辑
-  router.push('/user-profile');
-};
 
 const sendEmail = () => {
   // 替换以下邮箱地址为你的目标邮箱
@@ -306,11 +301,6 @@ const sendEmail = () => {
             <template #title>
               {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
             </template>
-            <router-link style="text-decoration:none" to="/user-profile">
-              <el-menu-item v-if="isLoggedIn" index="2-4-2">
-                个人资料
-              </el-menu-item>
-            </router-link>
             <router-link style="text-decoration:none" to="/reg">
               <el-menu-item index="2-4-1">
                 注册
