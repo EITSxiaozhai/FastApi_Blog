@@ -1,11 +1,32 @@
 import datetime
 from dataclasses import dataclass
 
-from Fast_blog.database.databaseconnection import Base
+from app.Fast_blog.database.databaseconnection import Base
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinary, Float, \
     UniqueConstraint, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import EmailType, ChoiceType, PasswordType
+
+@dataclass
+class SEO(Base):
+    __tablename__ = "seotable"
+    __table_args__ = {'extend_existing': True}
+
+    SEOId = Column(Integer, primary_key=True, index=True)
+    meta_description = Column(String(255), nullable=True)  # SEO meta description
+    meta_keywords = Column(String(255), nullable=True)  # SEO keywords
+    meta_author = Column(String(255), nullable=True)  # SEO author
+    created_at = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+
+    # Foreign key to associate with Blog table
+    BlogId = Column(Integer, ForeignKey('blogtable.BlogId'), nullable=False)
+
+    # Relationship with the Blog table
+    blog = relationship("Blog", back_populates="seo")
+
+    def to_dict(self):
+        return dict(SEOId=self.SEOId, meta_description=self.meta_description, meta_keywords=self.meta_keywords,
+                    meta_author=self.meta_author, created_at=self.created_at, BlogId=self.BlogId)
 
 
 @dataclass
