@@ -23,7 +23,7 @@ const router = createRouter({
             component: BlogDetail,
             meta: {
                 cacheable: false,
-                title: 'Blog详情',
+                title: '页面加载中-Pageloading',
                 // description: '这是 Blog 详情页面的描述文本',
             },
         },
