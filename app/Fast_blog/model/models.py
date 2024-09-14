@@ -1,7 +1,7 @@
 import datetime
 from dataclasses import dataclass
 
-from app.Fast_blog.database.databaseconnection import Base
+from Fast_blog.database.databaseconnection import Base
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinary, Float, \
     UniqueConstraint, Text
 from sqlalchemy.orm import relationship
@@ -133,7 +133,7 @@ class Blog(Base):
     admin_id = Column(Integer, ForeignKey('Admintable.UserId'))
     ratings = relationship("BlogRating", back_populates="blog")
     comments = relationship("Comment", back_populates="blog")
-
+    seo = relationship("SEO", back_populates="blog", uselist=False)
     def to_dict(self):
         return dict(BlogId=self.BlogId, title=self.title, content=self.content, author=self.author,
                     BlogIntroductionPicture=self.BlogIntroductionPicture, created_at=self.created_at)
