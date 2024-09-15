@@ -38,7 +38,7 @@ uploadoss = AliOssUpload()
 
 
 
-
+@BlogApp.get("/blog/tag/{blog_id}")
 async def GetBlogTaginfo(blog_id: int):
     async with db_session() as session:
         taglist = []
@@ -50,7 +50,7 @@ async def GetBlogTaginfo(blog_id: int):
         article_types = result.scalars().all()
         # 将查询结果添加到 taglist 中
         taglist.extend(article_types)  # 将所有 Article_Type 数据加入到 taglist
-        return taglist
+        return {'code':'20000','data':taglist}
 
 
 @BlogApp.get("/blog/BlogIndex")
