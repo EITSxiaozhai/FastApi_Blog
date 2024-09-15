@@ -210,7 +210,7 @@ const getData = async () => {
 
     // Trigger table of contents generation
     generateTableOfContents(htmlContent);
-
+    await fetchKeywords();
     setTimeout(() => {
       hljs.highlightAll();
     }, 0);
@@ -506,29 +506,34 @@ const redirectToUserProfile = () => {
 
 
 const keywords = ref('');
+const description = ref('');
 
 // 使用 `useMeta` 设置 meta 信息
 const { meta } = useMeta({
-  keywords: keywords.value,
+      keywords: keywords.value,
+      description: description.value
 });
 
 // 从接口获取关键词
 const fetchKeywords = async () => {
   try {
-    const response = await backApi.get('/api/keywords'); // 假设接口返回 { keywords: "some,keywords,here" }
-    keywords.value = response.data.keywords;
-
-    // 动态更新 meta 的关键词
-    meta.keywords = keywords.value;
+    const blogId = route.params.blogId;
+    const response = await backApi.get(`/views/blog/tag/${blogId}`); // 假设接口返回 { data: ["some", "keywords", "here"] }
+    const apikeywords = response.data.data;  // 获取后端返回的关键词数组
+    const keywordsString = apikeywords.join(", ");  // 将数组转换为逗号分隔的字符串
+    keywords.value = keywordsString;  // 更新 `keywords` 值
   } catch (error) {
     console.error('Error fetching keywords:', error);
   }
 };
 
-
 </script>
 
 <template>
+
+  <template>
+    <metainfo></metainfo>
+  </template>
 
 
   <el-container>

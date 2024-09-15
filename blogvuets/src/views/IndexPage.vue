@@ -7,6 +7,7 @@ import 'element-plus/theme-chalk/display.css'
 import {useStore} from "vuex";
 import 'animate.css';
 import WOW from "wow.js";
+import { useMeta } from 'vue-meta';
 
 //自动布局修改适配手机端平板端屏幕
 const useXlLayout = () => {
@@ -267,13 +268,11 @@ const sendEmail = () => {
 </script>
 
 <template>
-  <!--    <metainfo></metainfo>-->
+  <metainfo></metainfo>
   <div class="background-container" :style="{ transform: `translateY(-${scrollY}px)` }" style="z-index: 3">
     <div class="background-image"></div>
-    <h1 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" id="maintext" ref="maintext"
-        class="maintext"></h1>
+    <h1 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" id="maintext"></h1>
   </div>
-
 
   <el-container id="left-my" style="margin-top: 3%;">
     <el-container>
@@ -288,14 +287,15 @@ const sendEmail = () => {
             </h1>
           </el-menu-item>
         </router-link>
-        <div>
-                    <el-autocomplete
-              v-model="state"
-              :fetch-suggestions="querySearchAsync"
-              placeholder="Please input"
-              @select="handleSelect"
-          />
-        </div>
+<div class="autocomplete-container">
+  <el-autocomplete
+    v-model="state"
+    :fetch-suggestions="querySearchAsync"
+    placeholder="Please input"
+    @select="handleSelect"
+    class="full-height"
+  />
+</div>
       <el-menu-item-group id="login">
             <template #title>
               {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
@@ -683,6 +683,10 @@ body {
 
 .el-menu--horizontal > .el-menu-item:nth-child(1) {
   margin-right: auto;
+}
+
+#top-mains .el-menu--horizontal .el-autocomplete{
+  bottom:-1vh;
 }
 </style>
 
