@@ -33,7 +33,7 @@ const {xlLayout} = useXlLayout();
 
 
 const input1 = ref('');
-const text = ref(null)
+const maintext = ref('');
 const router = useRouter();
 // 定义 ref 变量存储 UV 和 PV 数据
 const totalUV = ref(0);
@@ -131,7 +131,6 @@ const VerseGetting = async () => {
   try {
     const response = await fetch('https://v1.jinrishici.com/rensheng/shiguang');
     const data = await response.json();
-
     return data.content
   } catch (error) {
     console.error('Error fetching data:', error);
@@ -142,14 +141,15 @@ const VerseGetting = async () => {
 onMounted(async () => {
   fetchUvPvData();
   const content = await VerseGetting();
-  new (TypeIt)(text.value, {
+
+  new (TypeIt)("#maintext", {
     strings: [content],
     cursorChar: "<span class='cursorChar'>|<span>",//用于光标的字符。HTML也可以
     speed: 100,
     lifeLike: true,// 使打字速度不规则
     cursor: true,//在字符串末尾显示闪烁的光标
     breakLines: false,// 控制是将多个字符串打印在彼此之上，还是删除这些字符串并相互替换
-    loop: false,//是否循环
+    loop: true,//是否循环
   }).go()
 })
 
@@ -267,40 +267,44 @@ const sendEmail = () => {
 </script>
 
 <template>
-
+  <!--    <metainfo></metainfo>-->
   <div class="background-container" :style="{ transform: `translateY(-${scrollY}px)` }" style="z-index: 3">
     <div class="background-image"></div>
-    <h1 style=";position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" ref="text" class="msg"></h1>
+    <h1 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);" id="maintext" ref="maintext"
+        class="maintext"></h1>
   </div>
 
 
   <el-container id="left-my" style="margin-top: 3%;">
-
-    <el-header id="top-mains" :class="{ 'hidden': isHeaderHidden }"
-
+    <el-container>
+      <el-header id="top-mains" :class="{ 'hidden': isHeaderHidden }"
                :style="{ 'background-color': headerBackgroundColor }" style="padding-right: 0;padding-left: 0">
+      <el-menu mode="horizontal">
 
-      <transition name="fade">
-        <el-menu
-            class="el-menu-demo"
-            mode="horizontal">
-          <h1 style="padding-left: 20px;font-size: 20px">
-            <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
-          </h1>
-
-          <div class="search-container" style="align-content: center;margin-left: 20vh">
-            <el-autocomplete
-                v-model="state"
-                :fetch-suggestions="querySearchAsync"
-                placeholder="搜索你感兴趣的"
-                @select="handleSelect"
-            />
-          </div>
-
-          <el-sub-menu index="2-4" id="login">
+        <router-link to="/" style="text-decoration-line: none">
+          <el-menu-item index="0">
+            <h1 style="text-align: center;">
+              Exp1oit Blog
+            </h1>
+          </el-menu-item>
+        </router-link>
+        <div>
+                    <el-autocomplete
+              v-model="state"
+              :fetch-suggestions="querySearchAsync"
+              placeholder="Please input"
+              @select="handleSelect"
+          />
+        </div>
+      <el-menu-item-group id="login">
             <template #title>
               {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
             </template>
+            <router-link style="text-decoration:none" to="/user-profile">
+              <el-menu-item v-if="isLoggedIn" index="2-4-2">
+                个人资料
+              </el-menu-item>
+            </router-link>
             <router-link style="text-decoration:none" to="/reg">
               <el-menu-item index="2-4-1">
                 注册
@@ -310,10 +314,12 @@ const sendEmail = () => {
               <el-menu-item index="2-4-1">登录
               </el-menu-item>
             </router-link>
-          </el-sub-menu>
-        </el-menu>
-      </transition>
+          </el-menu-item-group>
+      </el-menu>
+
     </el-header>
+    </el-container>
+
 
     <!--个人介绍卡片-->
     <!--    文章介绍卡片-->
@@ -429,7 +435,7 @@ const sendEmail = () => {
                                   <p>发布日期:{{ blog.created_at }}</p>
                                 </el-main>
                               </el-container>
-                                                    <el-tag v-for="(tag, index) in blog.tag"
+                              <el-tag v-for="(tag, index) in blog.tag"
                                       :key="index" type="primary"> {{ tag }}
                               </el-tag>
                             </el-card>
@@ -652,25 +658,6 @@ body {
 }
 
 
-.floating-window {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 20%;
-  height: 20%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.84);
-  border: 1px solid rgba(204, 204, 204, 0.35);
-  padding: 10px;
-  display: none;
-  z-index: 9999;
-}
-
-.floating-window.show {
-  display: block; /* 当 "showFloatingWindow" 为 true 时显示 */
-}
-
-
 .background-container {
   position: relative;
   margin-left: 0;
@@ -694,7 +681,9 @@ body {
   display: none;
 }
 
-
+.el-menu--horizontal > .el-menu-item:nth-child(1) {
+  margin-right: auto;
+}
 </style>
 
 <style src="wow.js/css/libs/animate.css"></style>

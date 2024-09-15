@@ -15,7 +15,8 @@ import {useStore} from 'vuex';
 import emoji from '@/assets/emoji'
 import {UToast, createObjectURL} from 'undraw-ui';
 import {ElNotification} from "element-plus";
-import {useHead} from '@unhead/vue'
+import { useMeta } from 'vue-meta';
+
 
 // 常用变量操作
 const route = useRoute()
@@ -204,8 +205,6 @@ const getData = async () => {
     data.data = response.data;
     isLoading.value = false;
     document.title = data.data[0].title;
-    myPage.value.description = data.data[0].content;
-
     // Ensure content is converted to HTML if it's Markdown
     const htmlContent = convertMarkdown(response.data[0].content);
 
@@ -219,13 +218,7 @@ const getData = async () => {
     console.error('Error fetching blog data:', error);
   }
 };
-// 页面元数据变量
-const myPage = ref({description: ''})
-// 操作页面元数据
-useHead({
-  meta: [{name: 'description', content: () => myPage.value.description}]
-  // computed (not recommended)
-})
+
 
 getData()
 
@@ -277,6 +270,7 @@ const fingerprint = ref(null);
 
 // 挂载时操作
 onMounted(async () => {
+  fetchKeywords()
   const commentx = ref(null)
 
   // 使用Fingerprint2生成浏览器指纹
@@ -511,40 +505,77 @@ const redirectToUserProfile = () => {
 };
 
 
+const keywords = ref('');
+
+// 使用 `useMeta` 设置 meta 信息
+const { meta } = useMeta({
+  keywords: keywords.value,
+});
+
+// 从接口获取关键词
+const fetchKeywords = async () => {
+  try {
+    const response = await backApi.get('/api/keywords'); // 假设接口返回 { keywords: "some,keywords,here" }
+    keywords.value = response.data.keywords;
+
+    // 动态更新 meta 的关键词
+    meta.keywords = keywords.value;
+  } catch (error) {
+    console.error('Error fetching keywords:', error);
+  }
+};
+
+
 </script>
 
 <template>
+
+
   <el-container>
-    <el-header :class="{ 'hidden': scrollDirection === 'down' }" id="top-mains">
-      <el-menu class="el-menu-demo" mode="horizontal">
-        <h1 style="padding-left: 20px;font-size: 20px">
-          <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
-        </h1>
-        <el-sub-menu index="2-4" id="login">
-          <template #title>
-            {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
-          </template>
-          <router-link style="text-decoration:none" to="/user-profile">
-            <el-menu-item v-if="isLoggedIn" index="2-4-2">
-              个人资料
-            </el-menu-item>
-          </router-link>
-          <router-link style="text-decoration:none" to="/reg">
-            <el-menu-item index="2-4-1">
-              注册
-            </el-menu-item>
-          </router-link>
-          <router-link style="text-decoration:none" to="/login">
-            <el-menu-item index="2-4-1">登录
-            </el-menu-item>
-          </router-link>
-        </el-sub-menu>
+    <el-header id="top-mains" :class="{ 'hidden': isHeaderHidden }"
+               :style="{ 'background-color': headerBackgroundColor }" style="padding-right: 0;padding-left: 0">
+      <el-menu mode="horizontal">
+
+        <router-link to="/" style="text-decoration-line: none">
+          <el-menu-item index="0">
+            <h1 style="text-align: center;">
+              Exp1oit Blog
+            </h1>
+          </el-menu-item>
+        </router-link>
+        <div>
+                    <el-autocomplete
+              v-model="state"
+              :fetch-suggestions="querySearchAsync"
+              placeholder="Please input"
+              @select="handleSelect"
+          />
+        </div>
+      <el-menu-item-group id="login">
+            <template #title>
+              {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
+            </template>
+            <router-link style="text-decoration:none" to="/user-profile">
+              <el-menu-item v-if="isLoggedIn" index="2-4-2">
+                个人资料
+              </el-menu-item>
+            </router-link>
+            <router-link style="text-decoration:none" to="/reg">
+              <el-menu-item index="2-4-1">
+                注册
+              </el-menu-item>
+            </router-link>
+            <router-link style="text-decoration:none" to="/login">
+              <el-menu-item index="2-4-1">登录
+              </el-menu-item>
+            </router-link>
+          </el-menu-item-group>
       </el-menu>
-      <el-progress :percentage="readingProgress" :show-text="false"/>
+
     </el-header>
   </el-container>
   <div>
-    <el-card style="margin-top: 5%; display: flex; justify-content: center;margin-right: 0" v-if="!isLoading" pa>
+    <el-card style="margin-top: 3%; display: flex; justify-content: center;margin-right: 0" v-if="!isLoading" pa>
       <div v-for="(item, index) in data.data" :key="index" class="text item">
         <div>
           <div style="display: flex; flex-direction: column; align-items: center;">
