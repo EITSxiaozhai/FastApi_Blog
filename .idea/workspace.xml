@@ -8,10 +8,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="删除SEO关键字">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改设置SEO方法">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/components.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/components.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" afterDir="false" />
     </list>
@@ -691,7 +693,7 @@
       <workItem from="1726314951327" duration="619000" />
       <workItem from="1726315626726" duration="1375000" />
       <workItem from="1726363903421" duration="13112000" />
-      <workItem from="1726392320479" duration="324000" />
+      <workItem from="1726392320479" duration="4977000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -1036,7 +1038,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="532" />
+    <option name="localTasksCounter" value="533" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1080,7 +1082,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改标签返回方法" />
     <MESSAGE value="优化Tag返回方法" />
     <MESSAGE value="优化Tag显示为一行" />
     <MESSAGE value="添加Tag筛选" />
@@ -1105,7 +1106,8 @@
     <MESSAGE value="添加SEO表关联" />
     <MESSAGE value="添加vue-meta包" />
     <MESSAGE value="删除SEO关键字" />
-    <option name="LAST_COMMIT_MESSAGE" value="删除SEO关键字" />
+    <MESSAGE value="修改设置SEO方法" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改设置SEO方法" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
