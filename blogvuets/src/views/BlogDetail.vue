@@ -515,10 +515,8 @@ const redirectToUserProfile = () => {
 
 <template>
   <el-container>
-    <el-header id="top-mains" :class="{ 'hidden': isHeaderHidden }"
-               :style="{ 'background-color': headerBackgroundColor }" style="padding-right: 0;padding-left: 0">
-      <transition name="fade">
-        <el-menu
+    <el-header :class="{ 'hidden': scrollDirection === 'down' }" id="top-mains">
+      <el-menu
             class="el-menu-demo"
             mode="horizontal">
 
@@ -537,9 +535,6 @@ const redirectToUserProfile = () => {
                 @select="handleSelect"
             />
 
-          <el-menu-item index="3" >
-            <router-link to="/about-me" style="text-decoration: none;">关于我</router-link>
-          </el-menu-item>
 
 
           <el-sub-menu index="4">
@@ -563,7 +558,7 @@ const redirectToUserProfile = () => {
           </el-sub-menu>
 
         </el-menu>
-      </transition>
+      <el-progress :percentage="readingProgress" :show-text="false"/>
     </el-header>
   </el-container>
   <div>
