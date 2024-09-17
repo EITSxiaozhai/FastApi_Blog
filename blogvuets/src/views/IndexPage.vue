@@ -282,25 +282,34 @@ const sendEmail = () => {
   <el-container id="left-my" style="margin-top: 3%;">
 
     <el-header id="top-mains" :class="{ 'hidden': isHeaderHidden }"
-
                :style="{ 'background-color': headerBackgroundColor }" style="padding-right: 0;padding-left: 0">
-
       <transition name="fade">
         <el-menu
             class="el-menu-demo"
             mode="horizontal">
-          <h1 style="padding-left: 20px;font-size: 20px">
-            <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
-          </h1>
 
-          <div class="search-container" style="align-content: center;margin-left: 20vh">
+          <el-menu-item>
+            <h1>
+              <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
+            </h1>
+          </el-menu-item>
+
+
+          <el-menu-item style="margin-left: 35%;text-align: -webkit-center;">
             <el-autocomplete
                 v-model="state"
                 :fetch-suggestions="querySearchAsync"
                 placeholder="搜索你感兴趣的"
                 @select="handleSelect"
+                style="height: max-content;width: max-content;"
             />
-          </div>
+          </el-menu-item>
+
+
+          <el-menu-item style="margin-left: 35%" index="2-1">
+            关于我
+          </el-menu-item>
+
 
           <el-sub-menu index="2-4" id="login">
             <template #title>
@@ -321,6 +330,7 @@ const sendEmail = () => {
               </el-menu-item>
             </router-link>
           </el-sub-menu>
+
         </el-menu>
       </transition>
     </el-header>
@@ -439,7 +449,7 @@ const sendEmail = () => {
                                   <p>发布日期:{{ blog.created_at }}</p>
                                 </el-main>
                               </el-container>
-                                                    <el-tag v-for="(tag, index) in blog.tag"
+                              <el-tag v-for="(tag, index) in blog.tag"
                                       :key="index" type="primary"> {{ tag }}
                               </el-tag>
                             </el-card>
@@ -508,7 +518,7 @@ const sendEmail = () => {
       <!--    文章介绍卡片-->
     </el-row>
 
-    <el-footer style="margin-top: 10%">
+    <el-footer style="margin-top: 10%;">
       <div id="footer">
         <el-row class="footer-content">
           <el-col :span="6">
@@ -548,16 +558,8 @@ const sendEmail = () => {
   font-weight: 300;
 }
 
-#footer {
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
-  background-color: #333; /* 设置背景颜色 */
-  color: #fff; /* 设置文本颜色 */
-  padding: 10px 0; /* 减小上下边距 */
-}
-
 /* 脚注内容的样式 */
 .footer-content {
-
   max-width: 1200px; /* 设置最大宽度，根据需要调整 */
   margin: 0 auto; /* 居中对齐 */
 }
@@ -653,12 +655,14 @@ body {
 
 
 #footer {
-  background: rgba(192, 192, 213, 0.73);
+  background: #79bbff;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
-
+  color: #fff; /* 设置文本颜色 */
+  padding: 10px 0; /* 减小上下边距 */
   position: absolute;
   left: 0;
   right: 0;
+  box-shadow: #a0cfff 0px 0px 150px;
 }
 
 
@@ -698,6 +702,7 @@ body {
   width: 100%;
   height: 100%;
   transition: transform 10s ease; /* 添加过渡效果 */
+
 }
 
 .hidden {
