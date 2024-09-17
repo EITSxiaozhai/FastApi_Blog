@@ -109,7 +109,7 @@ async def RegUser(reg: UserRegCredentials):
                     if existing_verification_code_user:
                         sql = update(User).where(User.ActivationCode == reg.EmailverificationCod).values(
                             username=reg.username, UserUuid=UUID_crt(UuidApi=reg.username), userpassword=reg.password,
-                            UserEmail=reg.email, ActivationState=0)
+                            UserEmail=reg.email, ActivationState='YA')
                         await session.execute(sql)
                         await session.commit()
                         return {"message": "用户已经创建", "success": True}
