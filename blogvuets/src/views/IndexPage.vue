@@ -295,18 +295,18 @@ const sendEmail = () => {
           </el-menu-item>
 
 
-          <el-menu-item style="margin-left: 35%;text-align: -webkit-center;">
+          <el-menu-item>
             <el-autocomplete
                 v-model="state"
                 :fetch-suggestions="querySearchAsync"
                 placeholder="搜索你感兴趣的"
                 @select="handleSelect"
-                style="height: max-content;width: max-content;"
+
             />
           </el-menu-item>
 
 
-          <el-menu-item style="margin-left: 35%" index="2-1">
+          <el-menu-item>
             关于我
           </el-menu-item>
 

@@ -8,12 +8,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改SEO介绍">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改CSS样式，优化布局">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/components.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/components.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -332,12 +328,12 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="FastAPI.Fastapi_blog" />
       <item itemvalue="Python.1" />
       <item itemvalue="Python.backlist" />
       <item itemvalue="Python.backtasks" />
       <item itemvalue="Python.main" />
       <item itemvalue="Python.user" />
+      <item itemvalue="FastAPI.Fastapi_blog" />
     </list>
     <recent_temporary>
       <list>
@@ -690,7 +686,8 @@
       <workItem from="1726241082455" duration="1417000" />
       <workItem from="1726285534886" duration="6639000" />
       <workItem from="1726405849221" duration="17000" />
-      <workItem from="1726551630947" duration="4462000" />
+      <workItem from="1726551630947" duration="4684000" />
+      <workItem from="1726556786630" duration="21000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -1035,7 +1032,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="527" />
+    <option name="localTasksCounter" value="528" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1079,7 +1076,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="添加Tag筛选-查询" />
     <MESSAGE value="添加接口返回Tag信息" />
     <MESSAGE value="修改标签读取方法" />
     <MESSAGE value="根据布局修改标签读取方法" />
@@ -1104,7 +1100,8 @@
     <MESSAGE value="回滚操作" />
     <MESSAGE value="修改激活状态码" />
     <MESSAGE value="修改SEO介绍" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改SEO介绍" />
+    <MESSAGE value="修改CSS样式，优化布局" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改CSS样式，优化布局" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
