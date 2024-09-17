@@ -2,9 +2,9 @@
 import {ref} from 'vue';
 import {useHead} from '@unhead/vue';
 
-const myPage = ref({description: 'Exp1oit的博客。分享Linux服务器搭建运维,学习Python技术,vue3,利用Fastapi,Django,mysql的技术搭建个人网站。记录一下自己的学习成果'})
+const myPage = ref({description: 'Exp1oit的博客，专注于Linux服务器运维、Python编程、Vue 3开发、FastAPI、Django、MySQL、DevOps等技术的应用。通过详细教程和个人经验分享，帮助开发者掌握云服务、DevOps流程、网站搭建和计算机技术的最佳实践'})
 const title = ref('title')
-const metakeywords = ref('Linux,Python,Vue,运维,云服务,Seo,计算机教学,计算机基础')
+const metakeywords = ref('Linux服务器运维, Python开发, Vue 3, FastAPI, Django, MySQL, DevOps, 网站搭建, 云服务, 运维教程, CI/CD, 容器化, 自动化部署, 技术博客, SEO优化')
 
 
 useHead({

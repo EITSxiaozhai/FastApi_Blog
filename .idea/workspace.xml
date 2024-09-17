@@ -8,9 +8,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="回滚操作">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改激活状态码">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/App.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -328,12 +329,12 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="FastAPI.Fastapi_blog" />
       <item itemvalue="Python.1" />
       <item itemvalue="Python.backlist" />
       <item itemvalue="Python.backtasks" />
       <item itemvalue="Python.main" />
       <item itemvalue="Python.user" />
-      <item itemvalue="FastAPI.Fastapi_blog" />
     </list>
     <recent_temporary>
       <list>
@@ -686,7 +687,7 @@
       <workItem from="1726241082455" duration="1417000" />
       <workItem from="1726285534886" duration="6639000" />
       <workItem from="1726405849221" duration="17000" />
-      <workItem from="1726551630947" duration="50000" />
+      <workItem from="1726551630947" duration="209000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -1031,7 +1032,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="525" />
+    <option name="localTasksCounter" value="526" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1075,7 +1076,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Tag返回参数增加" />
     <MESSAGE value="删除跨域地址" />
     <MESSAGE value="添加Tag筛选-查询" />
     <MESSAGE value="添加接口返回Tag信息" />
@@ -1100,7 +1100,8 @@
     <MESSAGE value="设置google api调用方式" />
     <MESSAGE value="设置图片大小" />
     <MESSAGE value="回滚操作" />
-    <option name="LAST_COMMIT_MESSAGE" value="回滚操作" />
+    <MESSAGE value="修改激活状态码" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改激活状态码" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
