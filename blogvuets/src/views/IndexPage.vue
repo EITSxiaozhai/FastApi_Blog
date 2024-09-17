@@ -288,30 +288,27 @@ const sendEmail = () => {
             class="el-menu-demo"
             mode="horizontal">
 
-          <el-menu-item>
+          <el-menu-item index="1">
             <h1>
               <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
             </h1>
           </el-menu-item>
 
 
-          <el-menu-item>
-            <el-autocomplete
+
+            <el-autocomplete style="margin-right: auto"
                 v-model="state"
                 :fetch-suggestions="querySearchAsync"
                 placeholder="搜索你感兴趣的"
                 @select="handleSelect"
-
             />
+
+          <el-menu-item index="3" >
+            <router-link to="/about-me" style="text-decoration: none;">关于我</router-link>
           </el-menu-item>
 
 
-          <el-menu-item>
-            关于我
-          </el-menu-item>
-
-
-          <el-sub-menu index="2-4" id="login">
+          <el-sub-menu index="4">
             <template #title>
               {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
             </template>
@@ -614,19 +611,11 @@ const sendEmail = () => {
 }
 
 #top-mains {
-  opacity: 0.8;
-  position: fixed;
-  height: 10px;
-  width: 100%;
-  right: 0;
-  top: 0;
   z-index: 999;
 }
 
 
-#login {
-  margin-left: auto;
-}
+
 
 
 .el-header {
@@ -702,14 +691,15 @@ body {
   width: 100%;
   height: 100%;
   transition: transform 10s ease; /* 添加过渡效果 */
-
 }
 
 .hidden {
   display: none;
 }
 
-
+.el-menu--horizontal > .el-menu-item:nth-child(1) {
+  margin-right: auto;
+}
 </style>
 
 <style src="wow.js/css/libs/animate.css"></style>

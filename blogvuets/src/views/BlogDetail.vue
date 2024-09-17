@@ -515,32 +515,55 @@ const redirectToUserProfile = () => {
 
 <template>
   <el-container>
-    <el-header :class="{ 'hidden': scrollDirection === 'down' }" id="top-mains">
-      <el-menu class="el-menu-demo" mode="horizontal">
-        <h1 style="padding-left: 20px;font-size: 20px">
-          <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
-        </h1>
-        <el-sub-menu index="2-4" id="login">
-          <template #title>
-            {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
-          </template>
-          <router-link style="text-decoration:none" to="/user-profile">
-            <el-menu-item v-if="isLoggedIn" index="2-4-2">
-              个人资料
-            </el-menu-item>
-          </router-link>
-          <router-link style="text-decoration:none" to="/reg">
-            <el-menu-item index="2-4-1">
-              注册
-            </el-menu-item>
-          </router-link>
-          <router-link style="text-decoration:none" to="/login">
-            <el-menu-item index="2-4-1">登录
-            </el-menu-item>
-          </router-link>
-        </el-sub-menu>
-      </el-menu>
-      <el-progress :percentage="readingProgress" :show-text="false"/>
+    <el-header id="top-mains" :class="{ 'hidden': isHeaderHidden }"
+               :style="{ 'background-color': headerBackgroundColor }" style="padding-right: 0;padding-left: 0">
+      <transition name="fade">
+        <el-menu
+            class="el-menu-demo"
+            mode="horizontal">
+
+          <el-menu-item index="1">
+            <h1>
+              <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
+            </h1>
+          </el-menu-item>
+
+
+
+            <el-autocomplete style="margin-right: auto"
+                v-model="state"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="搜索你感兴趣的"
+                @select="handleSelect"
+            />
+
+          <el-menu-item index="3" >
+            <router-link to="/about-me" style="text-decoration: none;">关于我</router-link>
+          </el-menu-item>
+
+
+          <el-sub-menu index="4">
+            <template #title>
+              {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
+            </template>
+            <router-link style="text-decoration:none" to="/user-profile">
+              <el-menu-item v-if="isLoggedIn" index="2-4-2">
+                个人资料
+              </el-menu-item>
+            </router-link>
+            <router-link style="text-decoration:none" to="/reg">
+              <el-menu-item index="2-4-1">
+                注册
+              </el-menu-item>
+            </router-link>
+            <router-link style="text-decoration:none" to="/login">
+              <el-menu-item index="2-4-1">登录
+              </el-menu-item>
+            </router-link>
+          </el-sub-menu>
+
+        </el-menu>
+      </transition>
     </el-header>
   </el-container>
   <div>
