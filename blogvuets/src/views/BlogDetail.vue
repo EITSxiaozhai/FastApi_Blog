@@ -544,7 +544,7 @@ const redirectToUserProfile = () => {
     </el-header>
   </el-container>
   <div>
-    <el-card style="margin-top: 5%; display: flex; justify-content: center;margin-right: 0" v-if="!isLoading" pa>
+    <el-card style="margin-top: 3%; display: flex; justify-content: center;margin-right: 0" v-if="!isLoading" pa>
       <div v-for="(item, index) in data.data" :key="index" class="text item">
         <div>
           <div style="display: flex; flex-direction: column; align-items: center;">
