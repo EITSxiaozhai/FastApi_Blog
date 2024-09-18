@@ -1,6 +1,6 @@
 import {createRouter, createWebHistory} from 'vue-router';
-import BlogDetail from '../views/BlogDetail.vue';
-import Index from '../views/IndexPage.vue';
+import BlogDetail from '../views/BlogPages/BlogDetail.vue';
+import Index from '../views/BlogPages/IndexPage.vue';
 import UserLogin from '../views/user/UserLogin.vue';
 import UserReg from '../views/user/UserReg.vue';
 
