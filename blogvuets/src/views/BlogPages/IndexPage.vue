@@ -415,7 +415,7 @@ const sendEmail = () => {
                   <el-main>
                     <keep-alive>
                       <transition name="el-fade-in-linear">
-                        <router-link style="text-decoration: none" :to="`/blog/${blog.BlogId}`">
+                        <router-link target="_blank" style="text-decoration: none" :to="`/blog/${blog.BlogId}`">
                           <!-- 使用条件判断选择布局 -->
                           <template v-if="xlLayout ">
                             <el-card class="wow animate__bounce bounceInDown box-card" data-wow-duration="2s"
