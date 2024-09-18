@@ -8,8 +8,8 @@ const apis = {
 
 const baseURL = process.env.NODE_ENV === 'production' ? apis.production : apis.development;
 
-const ajax = axios.create({
+const backApi = axios.create({
     baseURL: baseURL
 });
 
-export default ajax;
+export default backApi;

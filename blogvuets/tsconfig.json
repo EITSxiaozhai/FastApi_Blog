@@ -14,7 +14,10 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmitOnError": true
+    "noEmitOnError": true,
+    "paths": {
+      "@/*": ["src/*"] // 配置路径别名
+    }
   },
   "include": [
     "src/**/*.ts",
