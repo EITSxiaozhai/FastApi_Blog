@@ -13,15 +13,15 @@ import {
   postCommentList,
   postCommentSave,
   getAverageRatingRequest
-} from '@/Api/Blog/blogapig'
+} from '@/Api/Blog/blogapig';
 import {Discount} from "@element-plus/icons-vue";
 import {ChatDotRound, ChatLineRound, ChatRound} from '@element-plus/icons-vue'
 import Fingerprint2 from "fingerprintjs2";
 import {useStore} from 'vuex';
-import emoji from '@/assets/emoji'
+import emoji from '@/assets/emoji';
 import {UToast, createObjectURL} from 'undraw-ui';
 import {ElNotification} from "element-plus";
-import {useHead} from '@unhead/vue'
+import {useHead} from '@unhead/vue';
 
 // 常用变量操作
 const route = useRoute()
