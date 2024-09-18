@@ -13,7 +13,7 @@ import {
   postCommentList,
   postCommentSave,
   getAverageRatingRequest
-} from '@/Api/Blog/blogapig';
+} from '@/api/Blog/blogapig';
 import {Discount} from "@element-plus/icons-vue";
 import {ChatDotRound, ChatLineRound, ChatRound} from '@element-plus/icons-vue'
 import Fingerprint2 from "fingerprintjs2";
