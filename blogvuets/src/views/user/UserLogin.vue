@@ -1,12 +1,11 @@
 <script setup>
 import {ref, onMounted, onBeforeMount, nextTick, onActivated, defineProps} from 'vue';
-import backApi from "@/Api/backApi";
 import {useRouter} from 'vue-router'; // 导入useRouter函数
 import {ElNotification} from 'element-plus';
 import vueRecaptcha from 'vue3-recaptcha2';
 import {useStore} from 'vuex';
 import VueJwtDecode from 'vue-jwt-decode';
-
+import { UserLogin } from  '@/Api/User/user'
 
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
 
@@ -81,7 +80,7 @@ const store = useStore();
 const login = async () => {
   try {
 
-    const response = await backApi.post('/generaluser/login', {
+    const response = await UserLogin('', {
       username: LoginUserForm.value.username,
       password: LoginUserForm.value.password,
       googlerecaptcha: LoginUserForm.value.googlerecaptcha

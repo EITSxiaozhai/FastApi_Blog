@@ -2,12 +2,12 @@
 import {ref, reactive, watch, onBeforeMount, nextTick, onMounted, defineProps} from 'vue';
 import vueRecaptcha from 'vue3-recaptcha2';
 import {ElNotification, ElUpload, ElMessage} from 'element-plus';
-import backApi from "@/Api/backApi";
 import {Plus} from '@element-plus/icons-vue'
 import type {UploadProps} from 'element-plus'
 import {useRouter} from 'vue-router';
 import type {FormInstance} from 'element-plus'
 import _ from 'lodash';
+import { UploadUserAvatar,RegUser,CheckUserName,SentMailCod } from '@/Api/User/user'
 
 
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
@@ -96,7 +96,8 @@ const getVerificationCode = async () => {
 
     return;
   }
-  const response = await backApi.post('/generaluser/emailcod', {
+
+  const response = await SentMailCod({
     email: RegisterUserForm.email,
   });
 
@@ -123,7 +124,7 @@ const ruleFormRef = ref<FormInstance>()
 
 const debouncedCheckUsername = _.debounce(async (username, callback) => {
   try {
-    const response = await backApi.post('/generaluser/check-username', {username: username});
+    const response = await CheckUserName( {username: username});
     if (response.data.exists) {
       callback(new Error('用户名已存在'));
     } else {
@@ -209,7 +210,7 @@ const register = async () => {
     // Check if Google reCAPTCHA is verified
     if (googleRecaptchaVerified.value) {
       // Perform registration logic
-      const response = await backApi.post('/generaluser/reguser', {
+      const response = await RegUser({
         username: RegisterUserForm.username,
         password: RegisterUserForm.password,
         confirmpassword: RegisterUserForm.confirmPassword,
@@ -262,7 +263,7 @@ const ossUpload = async (param: any) => {
   }
   const formData = new FormData();
   formData.append('file', param.file);
-  await backApi.post('/generaluser/putuser', formData);
+  await UploadUserAvatar(formData);
 };
 
 // :ref="RegisterUserForm"
