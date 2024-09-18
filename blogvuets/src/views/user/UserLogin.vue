@@ -5,7 +5,7 @@ import {ElNotification} from 'element-plus';
 import vueRecaptcha from 'vue3-recaptcha2';
 import {useStore} from 'vuex';
 import VueJwtDecode from 'vue-jwt-decode';
-import {UserLogin} from '@/Api/User/userapi';
+import {UserLogin} from '@//Api/User/userapi';
 
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
 
