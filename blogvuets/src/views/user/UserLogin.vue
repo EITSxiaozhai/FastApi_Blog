@@ -5,7 +5,7 @@ import {ElNotification} from 'element-plus';
 import vueRecaptcha from 'vue3-recaptcha2';
 import {useStore} from 'vuex';
 import VueJwtDecode from 'vue-jwt-decode';
-import { UserLogin } from  '@/Api/User/user'
+import {UserLogin} from '@/Api/User/user'
 
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
 
@@ -80,10 +80,12 @@ const store = useStore();
 const login = async () => {
   try {
 
-    const response = await UserLogin('', {
-      username: LoginUserForm.value.username,
-      password: LoginUserForm.value.password,
-      googlerecaptcha: LoginUserForm.value.googlerecaptcha
+    const response = await UserLogin({
+      data: {
+        username: LoginUserForm.value.username,
+        password: LoginUserForm.value.password,
+        googlerecaptcha: LoginUserForm.value.googlerecaptcha
+      }
     });
 
     if (response.data.success) {

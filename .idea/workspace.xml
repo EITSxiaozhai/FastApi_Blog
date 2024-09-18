@@ -8,10 +8,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改CSS样式，优化布局">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改Request方法">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/IndexPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,9 +27,9 @@
         <option value="Dockerfile" />
         <option value="Vue Options API Component" />
         <option value="Vue Composition API Component" />
-        <option value="TypeScript File" />
         <option value="JavaScript File" />
         <option value="Python Script" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -171,7 +172,7 @@
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.linters.eslint&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;E:\\pytest\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
   &quot;keyToStringList&quot;: {
@@ -190,11 +191,11 @@
       <recent name="D:\项目备份\fast-api\blogvuets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\FastApi_Blog\blogvuets\src\views\BlogPages" />
+      <recent name="D:\FastApi_Blog\blogvuets\src\utils" />
       <recent name="E:\pytest\FastApi_Blog" />
       <recent name="E:\pytest\FastApi_Blog\vue-element-admin-master" />
       <recent name="C:\Users\admin\PycharmProjects\FastApi_Blog" />
-      <recent name="D:\FastApi_Blog\blogvuets\static\img" />
-      <recent name="D:\项目备份\fast-api\BlogIndex\src\assets" />
     </key>
   </component>
   <component name="RunManager" selected="FastAPI.Fastapi_blog">
@@ -349,8 +350,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-PY-242.21829.153" />
-        <option value="bundled-python-sdk-464836ebc622-b74155a9e76b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.21829.153" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.18034.82" />
+        <option value="bundled-python-sdk-975db3bf15a3-2767605e8bc2-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.18034.82" />
       </set>
     </attachedChunks>
   </component>
@@ -689,6 +690,7 @@
       <workItem from="1726405849221" duration="17000" />
       <workItem from="1726551630947" duration="4684000" />
       <workItem from="1726556786630" duration="2714000" />
+      <workItem from="1726629810078" duration="5419000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -1033,7 +1035,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="531" />
+    <option name="localTasksCounter" value="533" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1077,8 +1079,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="添加接口返回Tag信息" />
-    <MESSAGE value="修改标签读取方法" />
     <MESSAGE value="根据布局修改标签读取方法" />
     <MESSAGE value="修改标签返回方法" />
     <MESSAGE value="优化Tag返回方法" />
@@ -1102,7 +1102,9 @@
     <MESSAGE value="修改激活状态码" />
     <MESSAGE value="修改SEO介绍" />
     <MESSAGE value="修改CSS样式，优化布局" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改CSS样式，优化布局" />
+    <MESSAGE value="设置Request发送接口请求" />
+    <MESSAGE value="修改Request方法" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改Request方法" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

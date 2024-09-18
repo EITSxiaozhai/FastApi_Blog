@@ -7,7 +7,13 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark-reasonable.css'; // Import the style you prefer
 import {useRouter} from "vue-router";
 import {reactive} from "vue";
-import backApi from '../Api/backApi.ts';
+import {
+  postBlogRatings,
+  postUserBlogId,
+  postCommentList,
+  postCommentSave,
+  getAverageRatingRequest
+} from '@/Api/Blog/blog'
 import {Discount} from "@element-plus/icons-vue";
 import {ChatDotRound, ChatLineRound, ChatRound} from '@element-plus/icons-vue'
 import Fingerprint2 from "fingerprintjs2";
@@ -48,7 +54,6 @@ const treeProps = {
   highlightCurrent: true, // 高亮当前节点
   'default-expand-all': true,
 };
-
 
 
 // 滚动 el-tree 组件，使当前节点保持在视图中间
@@ -195,12 +200,11 @@ const handleNodeClick = (data) => {
 };
 
 
-
 // 博客内容获取操作
 const getData = async () => {
   const blogId = route.params.blogId;
   try {
-    const response = await backApi.post(`/views/user/Blogid?blog_id=${blogId}`);
+    const response = await postUserBlogId(blogId);
     data.data = response.data;
     isLoading.value = false;
     document.title = data.data[0].title;
@@ -316,7 +320,7 @@ const vote = async () => {
       device_id: device_id.toString(),
     });
 
-    const response = await backApi.post(`/views/blogs/${blogId}/ratings/?${queryParams.toString()}`);
+    const response = await postBlogRatings(blogId, queryParams);
     const oldContent = data.data[0].content; // 保存投票前的内容
     data.data = response.data;
 
@@ -338,19 +342,18 @@ const averageRating = ref(0); // 创建一个 ref 来存储平均评分
 const getAverageRating = async () => {
   const blogId = route.params.blogId;
   try {
-    const response = await backApi.get(`/views/blogs/${blogId}/average-rating/`);
+    const response = await getAverageRatingRequest(blogId);
     averageRating.value = response.data; // 设置平均评分数据到 ref
   } catch (error) {
     console.error(error);
   }
 };
 
-
 //加载评论操作
 const LoadComments = async () => {
   const blogId = route.params.blogId;
   try {
-    const CommentList = await backApi.post(`/generaluser/${blogId}/commentlist`);
+    const CommentList = await postCommentList(blogId);
     config.comments = CommentList.data;
     //获取到评论后下个Tick才会读取评论区高度
     nextTick(() => {
@@ -366,13 +369,7 @@ const UpComments = async (str) => {
   const blogId = route.params.blogId;
   const token = localStorage.getItem("token"); // 从本地存储获取 token
   try {
-    const UpComment = await backApi.post(`/generaluser/commentsave/vueblogid=${blogId}`, {
-      content: str,
-    }, {
-      headers: {
-        'Authorization': `Bearer ${token}`, // 在 headers 中包含 token
-      },
-    });
+    const UpComment = await postCommentSave(blogId, str, token);
     if (UpComment.data.code === 40002) {
       // Token 已过期
       UToast({message: 'Token无效，请尝试重新登录', type: 'info'})
@@ -517,47 +514,45 @@ const redirectToUserProfile = () => {
   <el-container>
     <el-header :class="{ 'hidden': scrollDirection === 'down' }" id="top-mains">
       <el-menu
-            class="el-menu-demo"
-            mode="horizontal">
+          class="el-menu-demo"
+          mode="horizontal">
 
-          <el-menu-item index="1">
-            <h1>
-              <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
-            </h1>
-          </el-menu-item>
-
-
-
-            <el-autocomplete style="margin-right: auto"
-                v-model="state"
-                :fetch-suggestions="querySearchAsync"
-                placeholder="搜索你感兴趣的"
-                @select="handleSelect"
-            />
+        <el-menu-item index="1">
+          <h1>
+            <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
+          </h1>
+        </el-menu-item>
 
 
+        <el-autocomplete style="margin-right: auto"
+                         v-model="state"
+                         :fetch-suggestions="querySearchAsync"
+                         placeholder="搜索你感兴趣的"
+                         @select="handleSelect"
+        />
 
-          <el-sub-menu index="4">
-            <template #title>
-              {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
-            </template>
-            <router-link style="text-decoration:none" to="/user-profile">
-              <el-menu-item v-if="isLoggedIn" index="2-4-2">
-                个人资料
-              </el-menu-item>
-            </router-link>
-            <router-link style="text-decoration:none" to="/reg">
-              <el-menu-item index="2-4-1">
-                注册
-              </el-menu-item>
-            </router-link>
-            <router-link style="text-decoration:none" to="/login">
-              <el-menu-item index="2-4-1">登录
-              </el-menu-item>
-            </router-link>
-          </el-sub-menu>
 
-        </el-menu>
+        <el-sub-menu index="4">
+          <template #title>
+            {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
+          </template>
+          <router-link style="text-decoration:none" to="/user-profile">
+            <el-menu-item v-if="isLoggedIn" index="2-4-2">
+              个人资料
+            </el-menu-item>
+          </router-link>
+          <router-link style="text-decoration:none" to="/reg">
+            <el-menu-item index="2-4-1">
+              注册
+            </el-menu-item>
+          </router-link>
+          <router-link style="text-decoration:none" to="/login">
+            <el-menu-item index="2-4-1">登录
+            </el-menu-item>
+          </router-link>
+        </el-sub-menu>
+
+      </el-menu>
       <el-progress :percentage="readingProgress" :show-text="false"/>
     </el-header>
   </el-container>
@@ -591,20 +586,20 @@ const redirectToUserProfile = () => {
           <el-affix target=".affix-container" :offset="270">
             <el-card style="height: 30vh">
               <div>
-              <el-tree
-                  ref="elTreeRef"
-                  :data="tableOfContents"
-                  :props="treeProps"
-                  :highlight-current="treeProps.highlightCurrent"
-                  :default-expand-all="treeProps['default-expand-all']"
-                  :current-node-key="currentAnchor"
-                  @node-click="handleNodeClick"
-                  node-key="anchor"
-                  v-if="!isLoading"
-              />
+                <el-tree
+                    ref="elTreeRef"
+                    :data="tableOfContents"
+                    :props="treeProps"
+                    :highlight-current="treeProps.highlightCurrent"
+                    :default-expand-all="treeProps['default-expand-all']"
+                    :current-node-key="currentAnchor"
+                    @node-click="handleNodeClick"
+                    node-key="anchor"
+                    v-if="!isLoading"
+                />
 
-              <el-skeleton :rows="5" animated v-else/>
-                 </div>
+                <el-skeleton :rows="5" animated v-else/>
+              </div>
             </el-card>
 
             <el-card style="margin-top: 1%">

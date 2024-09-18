@@ -2,11 +2,11 @@
 import {useRouter} from 'vue-router';
 import {reactive, ref, onMounted, onBeforeUnmount, watchEffect, watch, onUnmounted, toRefs, computed} from 'vue';
 import TypeIt from 'typeit'
-import backApi from '../Api/backApi.ts';
 import 'element-plus/theme-chalk/display.css'
 import {useStore} from "vuex";
 import 'animate.css';
 import WOW from "wow.js";
+import { Postlist,GoogleUVPV,fetchBlogIndex } from  "@/Api/Blog/blog"
 
 //自动布局修改适配手机端平板端屏幕
 const useXlLayout = () => {
@@ -44,7 +44,7 @@ const data = reactive({
 
 async function getData() {
   try {
-    const response = await backApi.get('/views/blog/BlogIndex');
+    const response = await Postlist();
     data.data = response.data;
   } catch (error) {
     console.error(error);
@@ -54,7 +54,7 @@ async function getData() {
 // 创建函数来获取 UV 和 PV 数据
 const fetchUvPvData = async () => {
   try {
-    const response = await backApi.get('/views/blogs/total_uvpv');
+    const response = await GoogleUVPV({});
     if (response.data.code === 20000) {
       totalUV.value = response.data.data['UV'];
       totalPV.value = response.data.data['PV'];
@@ -70,7 +70,9 @@ const loadedCards = ref(pageSize);
 
 const loadData = async (page = 0) => {
   try {
-    const response = await backApi.get(`/views/blog/BlogIndex?initialLoad=false&page=${page}&pageSize=${pageSize}`);
+    // 调用 fetchBlogIndex 函数并传入参数
+    const response = await fetchBlogIndex({ page, pageSize });
+
     if (response.data.length > 0) {
       response.data.forEach(blog => {
         // 判断博客是否已加载，根据 BlogID 判断
@@ -140,7 +142,7 @@ const VerseGetting = async () => {
 
 
 onMounted(async () => {
-  fetchUvPvData();
+  await fetchUvPvData();
   const content = await VerseGetting();
   new (TypeIt)(text.value, {
     strings: [content],
