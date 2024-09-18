@@ -7,7 +7,7 @@ import type {UploadProps} from 'element-plus'
 import {useRouter} from 'vue-router';
 import type {FormInstance} from 'element-plus'
 import _ from 'lodash';
-import { UploadUserAvatar,RegUser,CheckUserName,SentMailCod } from '@/Api/User/user'
+import { UploadUserAvatar,RegUser,CheckUserName,SentMailCod } from '@/Api/User/userapi'
 
 
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
