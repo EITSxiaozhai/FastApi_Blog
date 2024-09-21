@@ -10,6 +10,7 @@
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="跨域接口测试">
       <change beforePath="$PROJECT_DIR$/vue-element-admin-master/.env.production" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/.env.production" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/vue.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/vue.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -1037,7 +1038,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="548" />
+    <option name="localTasksCounter" value="549" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
