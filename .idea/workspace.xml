@@ -8,7 +8,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="跨域接口测试">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="Refactor Redis caching for blog data&#10;重构 Redis 博客数据缓存">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" afterDir="false" />
     </list>
@@ -700,7 +700,7 @@
       <workItem from="1727443428768" duration="100000" />
       <workItem from="1727443535897" duration="542000" />
       <workItem from="1727533814412" duration="844000" />
-      <workItem from="1727614836149" duration="319000" />
+      <workItem from="1727614836149" duration="585000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -1045,7 +1045,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="550" />
+    <option name="localTasksCounter" value="551" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1101,7 +1101,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="添加跨域ip" />
     <MESSAGE value="修改报错日志" />
     <MESSAGE value="修改重复启动" />
     <MESSAGE value="添加新Google包" />
@@ -1126,7 +1125,8 @@
     <MESSAGE value="设置生产接口" />
     <MESSAGE value=" 回滚测试" />
     <MESSAGE value="跨域接口测试" />
-    <option name="LAST_COMMIT_MESSAGE" value="跨域接口测试" />
+    <MESSAGE value="Refactor Redis caching for blog data&#10;重构 Redis 博客数据缓存" />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor Redis caching for blog data&#10;重构 Redis 博客数据缓存" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

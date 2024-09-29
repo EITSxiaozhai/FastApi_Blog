@@ -5,7 +5,7 @@ import json
 import os
 import pickle
 from typing import Union
-
+import pytz
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from Fast_blog.database.databaseconnection import engine, db_session
@@ -70,10 +70,16 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4):
             data_dicts = []
             for row in data:
                 taglist = await GetBlogTaginfo(blog_id=row[0])
+
+                utc_time = row[2]
+                local_tz = pytz.timezone('Asia/Shanghai')
+                local_time = utc_time.astimezone(local_tz)
+                formatted_time = local_time.strftime('%Y-%m-%d')
+
                 data_dict = {
                     "BlogId": row[0],
                     "title": row[1],
-                    "created_at": row[2],
+                    "created_at": formatted_time,
                     "author": row[3],
                     "BlogIntroductionPicture": row[4],
                     "tag": taglist,
