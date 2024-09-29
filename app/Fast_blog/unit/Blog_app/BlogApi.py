@@ -114,8 +114,9 @@ async def update_redis_cache():
         results = await session.execute(select(Blog))
         blogs = results.scalars().all()
 
+        # Prepare data for blogs
+        blog_data = []
         for blog in blogs:
-            redis_key = f"blog_{blog.BlogId}"
             data = {
                 "BlogId": blog.BlogId,
                 "title": blog.title,
@@ -124,6 +125,10 @@ async def update_redis_cache():
                 "BlogIntroductionPicture": blog.BlogIntroductionPicture,
                 "created_at": blog.created_at,
             }
+            blog_data.append((f"blog_{blog.BlogId}", data))
+
+        # Sync Blogs to Redis
+        for redis_key, data in blog_data:
             blog_cache.redis_client.set(redis_key, pickle.dumps([data]))
             blog_cache.redis_client.expire(redis_key, 86400)  # Set expiration time to 24 hours
 

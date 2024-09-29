@@ -9,8 +9,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="跨域接口测试">
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/.env.production" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/.env.production" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/vue.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/vue.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,7 +170,7 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.linters.eslint&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
     &quot;ts.external.directory.path&quot;: &quot;E:\\pytest\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
@@ -349,8 +349,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-PY-242.21829.153" />
-        <option value="bundled-python-sdk-464836ebc622-b74155a9e76b-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.21829.153" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PY-242.23339.19" />
+        <option value="bundled-python-sdk-0029f7779945-399fe30bd8c1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.23339.19" />
       </set>
     </attachedChunks>
   </component>
@@ -694,6 +694,13 @@
       <workItem from="1726666752415" duration="1904000" />
       <workItem from="1726797596976" duration="3512000" />
       <workItem from="1726908694523" duration="908000" />
+      <workItem from="1726982442510" duration="1043000" />
+      <workItem from="1727442399084" duration="718000" />
+      <workItem from="1727443245096" duration="166000" />
+      <workItem from="1727443428768" duration="100000" />
+      <workItem from="1727443535897" duration="542000" />
+      <workItem from="1727533814412" duration="844000" />
+      <workItem from="1727614836149" duration="319000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -1038,7 +1045,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="549" />
+    <option name="localTasksCounter" value="550" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
