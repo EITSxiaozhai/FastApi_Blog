@@ -32,7 +32,7 @@ Fastapi_deploy_test:
   stage: test
   script:
     - docker run -d -p 80 --name myfastapi-test-$CI_PIPELINE_ID fastapi:$CI_PIPELINE_ID
-    - sleep 10 && curl $(ip add show  eth0 | grep "inet " | sed -e 's/.* inet //g' | sed -e 's/ .*//g'):$(docker port myfastapi-test-$CI_PIPELINE_ID | grep 0.0.0 | grep "8999/tcp" |  sed -e 's/.*://g')
+    # - sleep 10 && curl $(ip add show  eth0 | grep "inet " | sed -e 's/.* inet //g' | sed -e 's/ .*//g'):$(docker port myfastapi-test-$CI_PIPELINE_ID | grep 0.0.0 | grep "8999/tcp" |  sed -e 's/.*://g')
     - docker stop myfastapi-test-$CI_PIPELINE_ID
     - docker rm myfastapi-test-$CI_PIPELINE_ID
 
