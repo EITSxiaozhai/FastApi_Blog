@@ -99,8 +99,9 @@ blog_cache = BlogCache()
 @event.listens_for(Blog, 'after_insert')
 @event.listens_for(Blog, 'after_update')
 @event.listens_for(Blog, 'after_delete')
-async def update_cache(mapper, connection, target):
+def update_cache(mapper, connection, target):
     redis_key = f"blog_{target.BlogId}"
+    print(f"刷新了缓存{target.BlogId}")
     data = {
         "BlogId": target.BlogId,
         "title": target.title,
@@ -109,6 +110,7 @@ async def update_cache(mapper, connection, target):
         "BlogIntroductionPicture": target.BlogIntroductionPicture,
         "created_at": target.created_at,
     }
+
     blog_cache.redis_client.set(redis_key, pickle.dumps([data]))
     blog_cache.redis_client.expire(redis_key, 86400)  # Set expiration time to 24 hour
 
