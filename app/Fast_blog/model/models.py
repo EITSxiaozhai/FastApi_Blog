@@ -1,11 +1,12 @@
 import datetime
 from dataclasses import dataclass
 
-from Fast_blog.database.databaseconnection import Base
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinary, Float, \
     UniqueConstraint, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils import EmailType, ChoiceType, PasswordType
+
+from Fast_blog.database.databaseconnection import Base
 
 
 @dataclass

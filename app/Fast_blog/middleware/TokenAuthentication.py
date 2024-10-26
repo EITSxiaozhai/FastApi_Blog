@@ -2,9 +2,10 @@ import datetime
 import os
 
 import jwt
-from Fast_blog.middleware.backtasks import Adminoauth2_scheme
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
+
+from Fast_blog.middleware.backtasks import Adminoauth2_scheme
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 REFRESHSECRET_KEY = os.getenv("REFSECRET_KEY")
@@ -53,6 +54,7 @@ class AccessTokenMiddleware(BaseHTTPMiddleware):
             return JSONResponse(status_code=500, content={"code": 50000, "message": "服务器验证错误"})
         response = await call_next(request)
         return response
+
 
 async def verify_Refresh_token(Refreshtoken: str):
     try:

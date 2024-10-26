@@ -15,8 +15,6 @@ from celery import Celery
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
 
-
-
 load_dotenv()
 
 db_password = os.getenv("REDIS_DB_PASSWORD")
@@ -48,7 +46,8 @@ ALGORITHM = "HS256"
 celery_app = Celery('task', broker=f'amqp://{mq_username}:{mq_password}@{mq_host}:{mq_port}/{mq_dbname}',
                     backend=f'redis://:{db_password}@{redis_host}:{redis_port}/{redis_db}')
 
-#邮件发送任务
+
+# 邮件发送任务
 @celery_app.task(name="sentmail")
 def send_activation_email(email, activation_code):
     print("Sending activation email")
@@ -77,11 +76,13 @@ def send_activation_email(email, activation_code):
         server.login(smtp_user, smtp_password)
         server.sendmail(sender_email, receiver_email, msg.as_string())
 
+
 @celery_app.task(name="update_redis_cache")
 async def update_redis_cache_task():
     from Fast_blog.unit.Blog_app.BlogApi import update_redis_cache
     await update_redis_cache()
     return 0
+
 
 ##token缓存到redis中，暂时还没有使用
 class TokenManager():
@@ -107,6 +108,7 @@ class TokenManager():
             return True
 
         return False
+
 
 ##Google验证码验证
 async def verify_recaptcha(UserreCAPTCHA, SecretKeyTypology):
@@ -146,12 +148,14 @@ class BlogCache:
         # 创建Redis连接
         self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, password=db_password)
 
-#几个认证接口
+
+# 几个认证接口
 Adminoauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/token")
 Useroauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/generaluser/token")
 Refresh_scheme = OAuth2PasswordBearer(tokenUrl="/api/refreshtoken")
 
-#阿里云操作基类
+
+# 阿里云操作基类
 class AliOssBase:
     def __init__(self, bucket_name, upload_path, region='cn-hangzhou'):
         access_key_id = os.getenv('ACCESS_KEY_ID')
@@ -170,7 +174,8 @@ class AliOssBase:
     async def async_upload(self, func, *args, **kwargs):
         await asyncio.to_thread(func, *args, **kwargs)
 
-#阿里云博客文章主页介绍图片
+
+# 阿里云博客文章主页介绍图片
 class AliOssUpload(AliOssBase):
     def __init__(self):
         super().__init__('zpwl002', 'blog/maincare/')
@@ -192,7 +197,8 @@ class AliOssUpload(AliOssBase):
             self.bucket.put_object(oss_path, file_obj)
         return self._get_full_url(file_name)
 
-#私有文档读取地址
+
+# 私有文档读取地址
 class AliOssPrivateDocument(AliOssBase):
     def __init__(self):
         super().__init__('privatedocument', '/')
@@ -200,11 +206,13 @@ class AliOssPrivateDocument(AliOssBase):
     def CrawlerKeyAcquisition(self):
         result = self.bucket.get_object('google.json')
         return result.read()
+
     def GoogleAnalytics(self):
         result = self.bucket.get_object('blog-uvpv.json')
         return result.read()
 
-#markdown文章读取
+
+# markdown文章读取
 class AliOssBlogMarkdownImg(AliOssBase):
     def __init__(self):
         super().__init__('blogmarkdown', 'blogimg/', region='cn-shanghai')
@@ -216,4 +224,3 @@ class AliOssBlogMarkdownImg(AliOssBase):
 
     async def Binaryfileuploadmarkdownimg(self, bitsfile, current_blogimgconunt):
         return await self.async_upload(self.upload_bitsfile_markdown_img, bitsfile, current_blogimgconunt)
-

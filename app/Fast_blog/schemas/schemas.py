@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional, List
-from pydantic import BaseModel, EmailStr, constr,Field
+
+from pydantic import BaseModel, EmailStr, constr, Field
 
 
 class UserCredentials(BaseModel):
@@ -16,7 +17,8 @@ class UserRegCredentials(BaseModel):
     googlerecaptcha: str
     email: EmailStr
     EmailverificationCod: int
-    UserAvatar: Optional[str] = Field(default="https://bkimg.cdn.bcebos.com/pic/a2cc7cd98d1001e952722fb2ba0e7bec55e797c4?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080")
+    UserAvatar: Optional[str] = Field(
+        default="https://bkimg.cdn.bcebos.com/pic/a2cc7cd98d1001e952722fb2ba0e7bec55e797c4?x-bce-process=image/format,f_auto/watermark,image_d2F0ZXIvYmFpa2UyNzI,g_7,xp_5,yp_5,P_20/resize,m_lfit,limit_1,h_1080")
 
 
 class Token(BaseModel):
@@ -36,8 +38,6 @@ class SchemasUser(BaseModel):
     gender: bool
     UserUuid: str
     UserEmail: EmailStr
-
-
 
 
 class UserPrivilegesModel(BaseModel):
@@ -75,7 +75,7 @@ class AdminUserModel(BaseModel):
     username: str
     userpassword: constr(min_length=8)
     UserEmail: EmailStr
-    gender:str
+    gender: str
     userprivilegesData: int
 
 

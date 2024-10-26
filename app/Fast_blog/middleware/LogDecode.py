@@ -1,10 +1,12 @@
 import json
 import logging
 import os
+
 from dotenv import load_dotenv
 
 load_dotenv()
 LogStash_ip = os.getenv("LogStathIP")
+
 
 class JSONLogFormatter(logging.Formatter):
     def format(self, record):
@@ -21,4 +23,3 @@ class JSONLogFormatter(logging.Formatter):
             "request_time": record.__dict__.get("request_time", None)
         }
         return json.dumps(log_record)
-

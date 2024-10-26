@@ -6,16 +6,16 @@ import random
 import uuid
 
 import jwt
-from Fast_blog.database.databaseconnection import engine, db_session
-from Fast_blog.middleware.backtasks import TokenManager, Useroauth2_scheme, verify_recaptcha, send_activation_email, \
-    AliOssUpload
-from Fast_blog.model import models
-from Fast_blog.model.models import User, Comment, Blog
-from Fast_blog.schemas.schemas import UserCredentials, UserRegCredentials
 from fastapi import APIRouter, Request, HTTPException, Depends, UploadFile, File
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import select, update
 from sqlalchemy.orm import sessionmaker
+
+from Fast_blog.database.databaseconnection import engine, db_session
+from Fast_blog.middleware.backtasks import TokenManager, Useroauth2_scheme, verify_recaptcha, send_activation_email
+from Fast_blog.model import models
+from Fast_blog.model.models import User, Comment, Blog
+from Fast_blog.schemas.schemas import UserCredentials, UserRegCredentials
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Session = SessionLocal()

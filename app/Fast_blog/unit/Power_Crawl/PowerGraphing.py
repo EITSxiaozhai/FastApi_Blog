@@ -4,14 +4,15 @@ import datetime
 
 import bs4
 import requests
+from fastapi import APIRouter
+from sqlalchemy import select, func, desc
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from Fast_blog.database.databaseconnection import db_session
 from Fast_blog.database.databaseconnection import engine
 from Fast_blog.middleware import celery_app
 from Fast_blog.model import models
 from Fast_blog.model.models import PowerMeters
-from fastapi import APIRouter
-from sqlalchemy import select, func, desc
-from sqlalchemy.ext.asyncio import AsyncSession
 
 PowerApp = APIRouter()
 
