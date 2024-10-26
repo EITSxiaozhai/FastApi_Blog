@@ -6,27 +6,26 @@ import uuid
 import httplib2
 import jwt
 import requests
-from Fast_blog.database.databaseconnection import db_session
-from Fast_blog.middleware import verify_Refresh_token
-from Fast_blog.middleware.backtasks import Adminoauth2_scheme, AliOssUpload, verify_recaptcha, \
-    AliOssBlogMarkdownImg,AliOssPrivateDocument
-from Fast_blog.model import models
-from Fast_blog.model.models import AdminUser, UserPrivileges, Blog, ReptileInclusion, BlogTag
-from Fast_blog.schemas.schemas import BlogCreate,BlogTagModel
-from Fast_blog.schemas.schemas import UserCredentials
-from Fast_blog.unit.Blog_app.BlogApi import uploadoss
 from fastapi import APIRouter, Request, Depends, File
 from fastapi import HTTPException, UploadFile
 from fastapi.security import OAuth2PasswordRequestForm
 from oauth2client.service_account import ServiceAccountCredentials
-from pydantic import EmailStr
 from sqlalchemy import select, update
 from sqlalchemy.exc import NoResultFound, IntegrityError
 from sqlalchemy.orm import joinedload
 from starlette.background import BackgroundTasks
 from starlette.responses import JSONResponse
 
+from Fast_blog.database.databaseconnection import db_session
+from Fast_blog.middleware import verify_Refresh_token
+from Fast_blog.middleware.backtasks import Adminoauth2_scheme, verify_recaptcha, \
+    AliOssBlogMarkdownImg, AliOssPrivateDocument
+from Fast_blog.model import models
+from Fast_blog.model.models import AdminUser, UserPrivileges, Blog, ReptileInclusion, BlogTag
 from Fast_blog.schemas.schemas import AdminUserModel
+from Fast_blog.schemas.schemas import BlogCreate, BlogTagModel
+from Fast_blog.schemas.schemas import UserCredentials
+from Fast_blog.unit.Blog_app.BlogApi import uploadoss
 
 AdminApi = APIRouter()
 
@@ -261,19 +260,21 @@ async def GetUser(inputusername: str, token: str = Depends(Adminoauth2_scheme)):
 
 
 @AdminApi.post("/user/Adminadd")
-async def AdminUserAdd(inputuser:AdminUserModel):
+async def AdminUserAdd(inputuser: AdminUserModel):
     async with db_session() as session:
         try:
             UserQurey = await GetUser(inputusername=inputuser.username)
             if UserQurey != None:
                 return ({"用户已经存在,存在值为:": UserQurey['username']})
             elif UserQurey == None:
-                x = models.AdminUser(username=inputuser.username, userpassword=inputuser.userpassword, UserEmail=inputuser.UserEmail, gender=inputuser.gender,
-                                     userPrivileges=inputuser.userprivilegesData, UserUuid=str((UUID_crt(inputuser.username))))
+                x = models.AdminUser(username=inputuser.username, userpassword=inputuser.userpassword,
+                                     UserEmail=inputuser.UserEmail, gender=inputuser.gender,
+                                     userPrivileges=inputuser.userprivilegesData,
+                                     UserUuid=str((UUID_crt(inputuser.username))))
                 session.add(x)
                 await session.commit()
                 print("用户添加成功")
-                return ({"用户添加成功,你的用户名为:":  inputuser.username})
+                return ({"用户添加成功,你的用户名为:": inputuser.username})
         except jwt.ExpiredSignatureError:
             return {"code": 50012, "message": "Token已过期", "error": "Token已经过期"}
         except jwt.InvalidTokenError:
@@ -417,12 +418,14 @@ async def BlogTagList():
         except Exception as e:
             return {"code": 50000, "message": "内部服务器错误", "error": str(e)}
 
-#从文章中创建Tag
+
+# 从文章中创建Tag
 @AdminApi.post('/Blogtagcreate/{blog_id}/{type}')
-async def BlogTagcreate(data:BlogTagModel):
+async def BlogTagcreate(data: BlogTagModel):
     async with db_session() as session:
         try:
-            new_type = models.BlogTag(Article_Type=data.Article_Type, blog_id=data.blog_id,tag_created_at=data.tag_created_at)
+            new_type = models.BlogTag(Article_Type=data.Article_Type, blog_id=data.blog_id,
+                                      tag_created_at=data.tag_created_at)
             session.add(new_type)
             await session.commit()
             return {"data": new_type, "code": 20000}
@@ -432,6 +435,7 @@ async def BlogTagcreate(data:BlogTagModel):
             return {"code": 40003, "message": "无效的Token"}
         except Exception as e:
             return {"code": 50000, "message": "内部服务器错误"}
+
 
 @AdminApi.post('/Newtagcreate/')
 async def NewTagcreate(data: BlogTagModel):

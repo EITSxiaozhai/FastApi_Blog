@@ -1,32 +1,27 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
-import ast
 import json
-import os
 import pickle
 from typing import Union
+
 import pytz
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-from Fast_blog.database.databaseconnection import engine, db_session
-from Fast_blog.middleware.backtasks import BlogCache, AliOssUpload, celery_app
-from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag
 from fastapi import APIRouter
 from fastapi import HTTPException
-from sqlalchemy import event
-from sqlalchemy import select
-from sqlalchemy.orm import sessionmaker
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
-from google.auth.exceptions import GoogleAuthError
 from google.analytics.data_v1beta.types import (
-    DateRange,
-    Dimension,
-    Metric,
     RunReportRequest,
 )
-from Fast_blog.middleware.backtasks import AliOssPrivateDocument
+from google.auth.exceptions import GoogleAuthError
+from google.oauth2 import service_account
+from sqlalchemy import event
 from sqlalchemy import func
+from sqlalchemy import select
+from sqlalchemy.orm import sessionmaker
 
+from Fast_blog.database.databaseconnection import engine, db_session
+from Fast_blog.middleware.backtasks import AliOssPrivateDocument
+from Fast_blog.middleware.backtasks import BlogCache, AliOssUpload
+from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
@@ -34,9 +29,9 @@ session = SessionLocal()
 BlogApp = APIRouter()
 aliOssPrivateDocument = AliOssPrivateDocument()
 uploadoss = AliOssUpload()
+
+
 ## 博客游客用户主页显示
-
-
 
 
 async def GetBlogTaginfo(blog_id: int):
