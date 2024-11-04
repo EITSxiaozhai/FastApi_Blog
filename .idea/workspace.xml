@@ -8,14 +8,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="将异步同步函数修改为同步，否则会出现重复更新旧缓存">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="优化前端标题以及详情显示方法">
       <change beforePath="$PROJECT_DIR$/.idea/fast-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fast-api.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/components.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/components.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,12 +116,12 @@
       </RecentBranches>
     </option>
   </component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/EITSxiaozhai/FastApi_Blog.git&quot;,
-    &quot;accountId&quot;: &quot;36022d86-9adc-49d0-a995-0c9399f95491&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/EITSxiaozhai/FastApi_Blog.git",
+    "accountId": "a06dbe82-b78d-4f86-9d17-bf48118d2360"
   }
-}</component>
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/.env" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/app/Fast_blog/database/databaseconnection.py" root0="FORCE_HIGHLIGHTING" />
@@ -176,7 +174,7 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "com.intellij.pycharm.community.ide.impl.configuration.PythonContentEntriesConfigurable",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
     "ts.external.directory.path": "C:\\Users\\dreame\\PycharmProjects\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   },
@@ -583,7 +581,7 @@
       <workItem from="1728209618787" duration="5000" />
       <workItem from="1728213851931" duration="4029000" />
       <workItem from="1729947139715" duration="102000" />
-      <workItem from="1730700485521" duration="1458000" />
+      <workItem from="1730700485521" duration="3303000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -928,7 +926,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="553" />
+    <option name="localTasksCounter" value="555" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -984,7 +982,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="添加新Google包" />
     <MESSAGE value="完成从oss获取证书验证" />
     <MESSAGE value="添加UVPV接口" />
     <MESSAGE value="调整Celery启动方式" />
@@ -1009,7 +1006,19 @@
     <MESSAGE value="Refactor Redis caching for blog data&#10;重构 Redis 博客数据缓存" />
     <MESSAGE value="Format blog creation time to local timezone&#10;将博客创建时间格式化为当地时区" />
     <MESSAGE value="将异步同步函数修改为同步，否则会出现重复更新旧缓存" />
-    <option name="LAST_COMMIT_MESSAGE" value="将异步同步函数修改为同步，否则会出现重复更新旧缓存" />
+    <MESSAGE value="优化前端标题以及详情显示方法" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化前端标题以及详情显示方法" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py</url>
+          <line>2</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$backlist.coverage" NAME="backlist Coverage Results" MODIFIED="1690608378490" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/BackList" />
