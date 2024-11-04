@@ -134,14 +134,6 @@ const convertMarkdown = (markdownText) => {
   return renderedContent;
 };
 
-// const handleStepClick = (index) => {
-//   const anchor = `#anchor-${index}`;
-//   const targetElement = document.querySelector(anchor);
-//   if (targetElement) {
-//     // Use smooth scroll effect, remove options if you don't need smooth scrolling
-//     targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
-//   }
-// };
 
 // 生成目录
 const generateTableOfContents = (markdownContent) => {
@@ -557,18 +549,19 @@ const redirectToUserProfile = () => {
     </el-header>
   </el-container>
   <div>
-    <el-card style="margin-top: 3%; display: flex; justify-content: center;margin-right: 0" v-if="!isLoading" pa>
-      <div v-for="(item, index) in data.data" :key="index" class="text item">
-        <div>
-          <div style="display: flex; flex-direction: column; align-items: center;">
-            <h1 style="font-size: 200%" class="el-title">{{ item.title }}</h1>
-          </div>
-          <div style="display: flex; justify-content: center; align-items: center;">
-            <h3 style="padding-right: 50px">作者:{{ item.author }}</h3>
-            <h3>总体评分:</h3>
-            <el-rate style="padding-right: 50px" v-model="averageRating" allow-half disabled/>
-            <h3 style="padding-right: 50px">发布时间：{{ item.created_at }}</h3>
-          </div>
+    <el-card
+        style="margin: 3% auto; width: 100%; box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);"
+        v-if="!isLoading"
+    >
+      <div v-for="(item, index) in data.data" :key="index" class="text-item">
+        <h1 class="title">{{ item.title }}</h1>
+        <div class="info">
+          <span class="author">作者: {{ item.author }}</span>
+          <span class="rating">
+          总体评分:
+          <el-rate v-model="averageRating" allow-half disabled style="margin-left: 10px;"/>
+        </span>
+          <span class="date">发布时间：{{ item.created_at }}</span>
         </div>
       </div>
     </el-card>
@@ -616,7 +609,7 @@ const redirectToUserProfile = () => {
         </el-aside>
       </el-col>
 
-      <el-col :xs="24" :sm="24" :md="24" :lg="18" :xl="19">
+      <el-col :xs="24" :sm="24" :md="24" :lg="18" :xl="17">
 
         <el-main>
           <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
@@ -666,6 +659,24 @@ const redirectToUserProfile = () => {
   z-index: 2;
 }
 
+.text-item {
+  text-align: center;
+}
+
+.title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-size: 16px;
+}
 
 </style>
 
