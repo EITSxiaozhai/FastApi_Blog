@@ -171,7 +171,7 @@ async def CAPTCHAByEmail(request: Request,db: AsyncSession = Depends(get_db)):
 ##查询全部用户名
 @UserApp.get("/alluser")
 async def AllUser(db: AsyncSession = Depends(get_db)):
-    sql = select(models.User).where(models.User.gender is not None)
+    sql = select(models.User).where(models.User.ActivationStateType is not None)
     reult = await db.execute(sql)
     x = reult.scalars()
     for i in x:
