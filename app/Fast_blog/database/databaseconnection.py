@@ -1,6 +1,5 @@
 import os
 from asyncio import current_task
-from contextlib import asynccontextmanager
 from urllib import parse
 
 from dotenv import load_dotenv
@@ -32,13 +31,13 @@ SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False, clas
 db_session = async_scoped_session(SessionLocal, scopefunc=current_task)
 
 
-# 使用contextmanager来简化事务处理
-@asynccontextmanager
-async def get_db() -> AsyncSession:
-    async with db_session() as session:
+
+async def get_db():
+    async with SessionLocal() as session:
         try:
-            await session.begin()
-            yield session
-            await session.commit()
-        except Exception as e:
+            yield session   # 这里传递的session是AsyncSession的实例
+        except Exception:
             await session.rollback()
+            raise
+        finally:
+            await session.close()
