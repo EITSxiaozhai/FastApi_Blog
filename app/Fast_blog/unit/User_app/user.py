@@ -12,7 +12,8 @@ from sqlalchemy import select, update
 from sqlalchemy.orm import sessionmaker
 
 from Fast_blog.database.databaseconnection import engine, db_session
-from Fast_blog.middleware.backtasks import TokenManager, Useroauth2_scheme, verify_recaptcha, send_activation_email
+from Fast_blog.middleware.backtasks import TokenManager, Useroauth2_scheme, verify_recaptcha, send_activation_email, \
+    AliOssUpload
 from Fast_blog.model import models
 from Fast_blog.model.models import User, Comment, Blog
 from Fast_blog.schemas.schemas import UserCredentials, UserRegCredentials
@@ -79,7 +80,7 @@ async def PutUser(file: UploadFile = File(...)):
         try:
             contents = await file.read()
             # Process the contents, e.g., upload to storage, etc.
-            image_url = await aliOssUpload().Binaryfileuploadavatar(bitsfile=contents)
+            image_url = await AliOssUpload().upload_bitsfile_avatar(bitsfile=contents)
             # Respond with any necessary data
             print(image_url)
             return {"file_name": file.filename, "content_type": file.content_type, "image_url": image_url}
