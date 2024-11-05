@@ -12,6 +12,7 @@ from logstash_async.handler import AsynchronousLogstashHandler
 from sqlalchemy.orm import sessionmaker
 
 from Fast_blog.database.databaseconnection import engine
+from Fast_blog.middleware import celery_app
 from Fast_blog.middleware.LogDecode import JSONLogFormatter
 from Fast_blog.middleware.TokenAuthentication import AccessTokenMiddleware
 from Fast_blog.unit import AdminApp, Blog_app, Power_Crawl, SystemMonitoring, User_app
@@ -39,52 +40,27 @@ app.add_middleware(
                    "https://blogapi.exploitblog.eu.org", 'http://192.168.190.43:9527', 'http://192.168.0.149:9527',
                    'https://zpwl002.oss-cn-hangzhou.aliyuncs.com',
                    "https://static.cloudflareinsights.com", "http://192.168.190.43:5173", "http://127.0.0.1:8000",
-                   "http://192.168.0.149:5173"],
+                   "http://192.168.0.149:5173","http://172.29.92.17:5173"],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# 定义全局变量，用于存储进程对象
-worker_process = None
-beat_process = None
-
-
-def start_celery_worker():
-    try:
-        celery_command = ["celery", "-A", "Fast_blog.middleware.backtasks", "worker", "-l", "info"]
-        subprocess.run(celery_command, check=True)
-    except KeyboardInterrupt:
-        print("Celery worker process interrupted. Exiting...")
-
-
-def start_celery_beat():
-    try:
-        celery_beat_command = ["celery", "-A", "Fast_blog.middleware.celerybeat-schedule", "beat", "--loglevel=info"]
-        subprocess.run(celery_beat_command, check=True)
-    except KeyboardInterrupt:
-        print("Celery beat process interrupted. Exiting...")
-
-
 @app.get("/")
 async def root():
+    """
+    接收两个整数参数x和y，通过Celery在后台服务计算它们的和。
+    """
+    task = celery_app.signature('tasks.add', args=(10, 10))
+    result = task.apply_async()
+    # 等待并获取结果
+    data = {'result': result.get()}
     return {"message": "Hello world"}
 
 
 # 设置日志通过 Logstash 发送到后端 ELK 集群上去
 @app.on_event("startup")
 async def startup_event():
-    global worker_process, beat_process  # 使用 global 关键字声明全局变量
-
-    # 启动 Celery 进程，只在进程不存在时启动
-    if worker_process is None or not worker_process.is_alive():
-        worker_process = multiprocessing.Process(target=start_celery_worker)
-        worker_process.start()
-
-    if beat_process is None or not beat_process.is_alive():
-        beat_process = multiprocessing.Process(target=start_celery_beat)
-        beat_process.start()
-
     logger = logging.getLogger("uvicorn")
     # 使用自定义的 JSON 格式化器
     formatter = JSONLogFormatter()
@@ -96,25 +72,6 @@ async def startup_event():
     logstash_handler.setFormatter(formatter)
     logger.addHandler(logstash_handler)
     logger.setLevel(logging.INFO)
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    global worker_process, beat_process  # 使用 global 关键字声明全局变量
-
-    # 检查 Celery worker 进程是否存在且存活，然后终止它
-    if worker_process is not None:
-        if worker_process.is_alive():
-            worker_process.terminate()  # 尽量使用 terminate() 正常终止进程
-            worker_process.join()  # 确保进程完全退出
-
-    # 检查 Celery beat 进程是否存在且存活，然后终止它
-    if beat_process is not None:
-        if beat_process.is_alive():
-            beat_process.terminate()  # 正常终止 beat 进程
-            beat_process.join()  # 等待进程退出
-
-    logging.getLogger("uvicorn").info("Celery processes terminated.")
 
 
 @app.middleware("http")

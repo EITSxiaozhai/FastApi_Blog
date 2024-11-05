@@ -28,4 +28,27 @@ Base = declarative_base()
 
 # 实例化异步操作
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False, class_=AsyncSession)
+
+# 创建异步作用域会话
 db_session = async_scoped_session(SessionLocal, scopefunc=current_task)
+
+# # 这种方式适合需要精确控制事务的场景，例如复杂的业务逻辑或需要细粒度错误处理的操作：
+# @asynccontextmanager
+# async def get_db():
+#     session = SessionLocal()
+#     try:
+#         # 注意在生成器里显式开启事务
+#         await session.begin()
+#         yield session
+#     except Exception as e:
+#         # 如果有错误，进行回滚
+#         await session.rollback()
+#         raise e
+#     finally:
+#         # 无论如何都要关闭 session
+#         await session.close()
+
+# 执行一些简单的数据库操作
+async def get_db():
+    async with db_session() as session:  # 自动获得当前任务的会话
+        yield session
