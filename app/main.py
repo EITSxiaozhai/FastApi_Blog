@@ -46,12 +46,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 定义全局变量，用于存储进程对象
-worker_process = None
-beat_process = None
-
-
-
 @app.get("/")
 async def root():
     """
@@ -67,9 +61,6 @@ async def root():
 # 设置日志通过 Logstash 发送到后端 ELK 集群上去
 @app.on_event("startup")
 async def startup_event():
-    global worker_process, beat_process  # 使用 global 关键字声明全局变量
-
-
     logger = logging.getLogger("uvicorn")
     # 使用自定义的 JSON 格式化器
     formatter = JSONLogFormatter()
@@ -81,25 +72,6 @@ async def startup_event():
     logstash_handler.setFormatter(formatter)
     logger.addHandler(logstash_handler)
     logger.setLevel(logging.INFO)
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    global worker_process, beat_process  # 使用 global 关键字声明全局变量
-
-    # 检查 Celery worker 进程是否存在且存活，然后终止它
-    if worker_process is not None:
-        if worker_process.is_alive():
-            worker_process.terminate()  # 尽量使用 terminate() 正常终止进程
-            worker_process.join()  # 确保进程完全退出
-
-    # 检查 Celery beat 进程是否存在且存活，然后终止它
-    if beat_process is not None:
-        if beat_process.is_alive():
-            beat_process.terminate()  # 正常终止 beat 进程
-            beat_process.join()  # 等待进程退出
-
-    logging.getLogger("uvicorn").info("Celery processes terminated.")
 
 
 @app.middleware("http")
