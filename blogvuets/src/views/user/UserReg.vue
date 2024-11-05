@@ -93,13 +93,12 @@ const getVerificationCode = async () => {
   // 检查邮箱是否为空
   if (!RegisterUserForm.email) {
     // 如果邮箱为空，不发送请求
-
     return;
   }
 
-  const response = await SentMailCod({
-    email: RegisterUserForm.email,
-  });
+const response = await SentMailCod({
+  data: { email: RegisterUserForm.email },
+});
 
   // 在这里执行获取验证码的逻辑
   // 可以向后端发送请求获取验证码
