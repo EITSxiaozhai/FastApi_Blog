@@ -1,6 +1,6 @@
 import backApi  from "@/utils/backApi";
 
-export function UserLogin({data}: { data: any }) {
+export function UserLogin(data: {  data: any }) {
   return backApi({
     url: '/generaluser/login',
     method: 'post',
@@ -9,7 +9,7 @@ export function UserLogin({data}: { data: any }) {
 }
 
 
-export function RegUser({data}: { data: any }) {
+export function RegUser(data: {  data: any }) {
   return backApi({
     url: '/generaluser/reguser',
     method: 'post',
@@ -18,7 +18,7 @@ export function RegUser({data}: { data: any }) {
 }
 
 
-export function CheckUserName({data}: { data: any }) {
+export function CheckUserName(data: {  data: any }) {
   return backApi({
     url: '/generaluser/check-username',
     method: 'post',
@@ -26,7 +26,7 @@ export function CheckUserName({data}: { data: any }) {
   })
 }
 
-export function SentMailCod({data}: { data: any }) {
+export function SentMailCod(data: {  data: any }) {
   return backApi({
     url: '/generaluser/emailcod',
     method: 'post',
@@ -34,7 +34,7 @@ export function SentMailCod({data}: { data: any }) {
   })
 }
 
-export function UploadUserAvatar({data}: { data: any }) {
+export function UploadUserAvatar(data: {  data: any }) {
   return backApi({
     url: '/generaluser/reg',
     method: 'post',
