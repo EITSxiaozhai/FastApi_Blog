@@ -96,9 +96,9 @@ const getVerificationCode = async () => {
     return;
   }
 
-const response = await SentMailCod({
-  data: { email: RegisterUserForm.email },
-});
+  const response = await SentMailCod({
+    email: RegisterUserForm.email,
+  });
 
   // 在这里执行获取验证码的逻辑
   // 可以向后端发送请求获取验证码
