@@ -47,42 +47,11 @@ celery_app = Celery('task', broker=f'amqp://{mq_username}:{mq_password}@{mq_host
                     backend=f'redis://:{db_password}@{redis_host}:{redis_port}/{redis_db}')
 
 
-# 邮件发送任务
-@celery_app.task(name="sentmail")
-def send_activation_email(email, activation_code):
-    print("Sending activation email")
-    smtp_server = SMTPSERVER
-    smtp_port = 465
-    smtp_user = SMTPUSER
-    smtp_password = SMTPPASSWORD
-
-    sender_email = SMTPUSER
-    receiver_email = email
-    subject = 'Account Activation'
-    # Convert activation_code to string
-    activation_code_str = str(activation_code)
-
-    # 构建邮件内容
-    msg = MIMEMultipart()
-    msg['From'] = sender_email
-    msg['To'] = receiver_email
-    msg['Subject'] = subject
-
-    body = f'Your activation code is: {activation_code_str}'
-    msg.attach(MIMEText(body, 'plain'))
-
-    # 连接到 SMTP 服务器并发送邮件
-    with smtplib.SMTP_SSL(smtp_server, smtp_port) as server:
-        server.login(smtp_user, smtp_password)
-        server.sendmail(sender_email, receiver_email, msg.as_string())
-
-
 @celery_app.task(name="update_redis_cache")
 async def update_redis_cache_task():
     from Fast_blog.unit.Blog_app.BlogApi import update_redis_cache
     await update_redis_cache()
     return 0
-
 
 ##token缓存到redis中，暂时还没有使用
 class TokenManager():
