@@ -14,7 +14,7 @@ from sqlalchemy.orm import sessionmaker
 
 from Fast_blog.database.databaseconnection import engine, get_db
 from Fast_blog.middleware.backtasks import TokenManager, Useroauth2_scheme, verify_recaptcha, send_activation_email, \
-    AliOssUpload
+    AliOssUpload, celery_app
 from Fast_blog.model import models
 from Fast_blog.model.models import User, Comment, Blog
 from Fast_blog.schemas.schemas import UserCredentials, UserRegCredentials
@@ -159,7 +159,8 @@ async def CAPTCHAByEmail(request: Request,db: AsyncSession = Depends(get_db)):
         update_sql = update(User).where(User.UserEmail == x["email"]).values(ActivationCode=verification_code)
         result = await db.execute(update_sql)
         await db.commit()
-        send_activation_email.delay(email=x["email"], activation_code=verification_code)
+        task = celery_app.signature('tasks.sentmail',email=x["email"],activation_code=verification_code)
+        result = task.apply_async()
         return {"data": 'Notification sent'}
     else:
         new_user = User(UserEmail=x["email"], ActivationCode=verification_code)
