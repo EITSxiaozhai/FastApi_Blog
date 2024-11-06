@@ -13,7 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
 from Fast_blog.database.databaseconnection import engine, get_db
-from Fast_blog.middleware.backtasks import TokenManager, Useroauth2_scheme, verify_recaptcha, send_activation_email, \
+from Fast_blog.middleware.backtasks import TokenManager, Useroauth2_scheme, verify_recaptcha, \
     AliOssUpload, celery_app
 from Fast_blog.model import models
 from Fast_blog.model.models import User, Comment, Blog
