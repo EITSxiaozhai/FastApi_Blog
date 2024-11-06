@@ -159,7 +159,7 @@ async def CAPTCHAByEmail(request: Request,db: AsyncSession = Depends(get_db)):
         update_sql = update(User).where(User.UserEmail == x["email"]).values(ActivationCode=verification_code)
         result = await db.execute(update_sql)
         await db.commit()
-        task = celery_app.signature('task.sentmail',email=x["email"],activation_code=verification_code)
+        task = celery_app.signature('task.sendmail',email=x["email"],activation_code=verification_code)
         result = task.apply_async()
         return {"data": 'Notification sent'}
     else:
