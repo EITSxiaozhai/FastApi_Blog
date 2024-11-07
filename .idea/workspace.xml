@@ -8,10 +8,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="删除无用celery命令">
-      <change beforePath="$PROJECT_DIR$/.idea/fast-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fast-api.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="设置任务名称">
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +115,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/EITSxiaozhai/FastApi_Blog.git&quot;,
-    &quot;accountId&quot;: &quot;a06dbe82-b78d-4f86-9d17-bf48118d2360&quot;
+    &quot;accountId&quot;: &quot;36022d86-9adc-49d0-a995-0c9399f95491&quot;
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
@@ -172,7 +170,7 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;org.jetbrains.plugins.github.ui.GithubSettingsConfigurable&quot;,
     &quot;ts.external.directory.path&quot;: &quot;E:\\pytest\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
@@ -207,6 +205,7 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="$PROJECT_DIR$/venv/Scripts/python.exe" />
+      <option name="SDK_NAME" value="Python 3.12 (FastApi_Blog)" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/app" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -219,8 +218,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PY-242.23339.19" />
-        <option value="bundled-python-sdk-0029f7779945-399fe30bd8c1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.23339.19" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-PY-242.23726.102" />
+        <option value="bundled-python-sdk-5e1850174b45-399fe30bd8c1-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.23726.102" />
       </set>
     </attachedChunks>
   </component>
@@ -581,9 +580,8 @@
       <workItem from="1730700485521" duration="7540000" />
       <workItem from="1730709157507" duration="20602000" />
       <workItem from="1730795828254" duration="2418000" />
-      <workItem from="1730854991901" duration="230000" />
-      <workItem from="1730855313027" duration="517000" />
-      <workItem from="1730857896228" duration="680000" />
+      <workItem from="1730901599055" duration="776000" />
+      <workItem from="1730904671920" duration="2499000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -928,7 +926,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="569" />
+    <option name="localTasksCounter" value="576" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -984,11 +982,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="设置接口从Request文件发起" />
-    <MESSAGE value="修改为新建页面打开" />
-    <MESSAGE value="配置路径别名，修改Request名称" />
-    <MESSAGE value="测试api调用方法" />
-    <MESSAGE value="添加reques-ts" />
     <MESSAGE value="修改接口文件地址" />
     <MESSAGE value="移动接口" />
     <MESSAGE value="设置生产接口" />
@@ -1009,7 +1002,12 @@
     <MESSAGE value="修改接口传递方式" />
     <MESSAGE value="设置邮件发送" />
     <MESSAGE value="版本管理" />
-    <option name="LAST_COMMIT_MESSAGE" value="版本管理" />
+    <MESSAGE value="设置email传输格式" />
+    <MESSAGE value="抽离任务" />
+    <MESSAGE value="设置发布任务" />
+    <MESSAGE value="删除无用任务" />
+    <MESSAGE value="设置任务名称" />
+    <option name="LAST_COMMIT_MESSAGE" value="设置任务名称" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/FastApi_Blog$.coverage" NAME="未命名 覆盖结果" MODIFIED="1730818214468" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
