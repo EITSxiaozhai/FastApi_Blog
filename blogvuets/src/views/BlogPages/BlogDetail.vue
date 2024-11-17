@@ -14,7 +14,7 @@ import {
   postCommentSave,
   getAverageRatingRequest
 } from '@/api/Blog/blogapig';
-import {Discount} from "@element-plus/icons-vue";
+
 import {ChatDotRound, ChatLineRound, ChatRound} from '@element-plus/icons-vue'
 import Fingerprint2 from "fingerprintjs2";
 import {useStore} from 'vuex';
