@@ -5,5 +5,5 @@ RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 RUN pip install --no-cache-dir --upgrade -r /requirements.txt
 COPY ./app  /app
 WORKDIR /app
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80","--proxy-headers","--forwarded-allow-ips", "172.17.0.1"]
 
