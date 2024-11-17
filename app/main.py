@@ -80,8 +80,12 @@ async def log_requests(request: Request, call_next):
     response = await call_next(request)
     process_time = (datetime.utcnow() - start_time).total_seconds()
 
+    # 获取真实 IP 地址
+    x_real_ip = request.headers.get("x-real-ip")
+    x_forwarded_for = request.headers.get("x-forwarded-for")
+    client_host = x_real_ip or (x_forwarded_for.split(",")[0] if x_forwarded_for else request.client.host)
+
     # 解析请求信息
-    client_host = request.client.host
     request_method = request.method
     request_path = request.url.path
     status_code = response.status_code
@@ -89,20 +93,14 @@ async def log_requests(request: Request, call_next):
     # 记录日志
     logger = logging.getLogger("uvicorn")
 
-    # 详细记录logger信息
-    logger_info = (
-        f"Logger Level: {logging.getLevelName(logger.level)}"
-    )
-
-    # 记录详细的logger信息和请求相关信息
     logger.info(
-        f"Logger Details: {logger_info}",  # 将logger的详细信息记录到日志中
+        f"Request processed in {process_time}s",
         extra={
             "response_code": status_code,
             "request_method": request_method,
             "request_path": request_path,
             "request_ip": client_host,
-            "request_time": process_time
+            "request_time": process_time,
         }
     )
 
