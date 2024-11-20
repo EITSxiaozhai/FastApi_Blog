@@ -126,7 +126,7 @@ Refresh_scheme = OAuth2PasswordBearer(tokenUrl="/api/refreshtoken")
 
 # 阿里云操作基类
 class AliOssBase:
-    def __init__(self, bucket_name, upload_path, region='cn-hangzhou'):
+    def __init__(self, bucket_name, upload_path, region='cn-shanghai'):
         access_key_id = os.getenv('ACCESS_KEY_ID')
         access_key_secret = os.getenv('ACCESS_KEY_SECRET')
 
@@ -147,7 +147,7 @@ class AliOssBase:
 # 阿里云博客文章主页介绍图片
 class AliOssUpload(AliOssBase):
     def __init__(self):
-        super().__init__('zpwl002', 'blog/maincare/')
+        super().__init__('blogcardbucket', 'blog/maincard/')
 
     async def upload_bitsfile(self, blogid, bitsfile):
         file_name = f'{blogid}-maincard.jpg'
@@ -170,7 +170,7 @@ class AliOssUpload(AliOssBase):
 # 私有文档读取地址
 class AliOssPrivateDocument(AliOssBase):
     def __init__(self):
-        super().__init__('privatedocument', '/')
+        super().__init__('privatekeyjson', '/')
 
     def CrawlerKeyAcquisition(self):
         result = self.bucket.get_object('google.json')
@@ -184,7 +184,7 @@ class AliOssPrivateDocument(AliOssBase):
 # markdown文章读取
 class AliOssBlogMarkdownImg(AliOssBase):
     def __init__(self):
-        super().__init__('blogmarkdown', 'blogimg/', region='cn-shanghai')
+        super().__init__('blogmarkdownimg', 'img/', region='cn-shanghai')
 
     async def upload_bitsfile_markdown_img(self, bitsfile, current_blogimgconunt):
         file_name = f'{current_blogimgconunt}.jpg'
