@@ -189,28 +189,40 @@ async def CommentListUserNameGet(user, db: AsyncSession = Depends(get_db)):
 @UserApp.post("/{vueblogid}/commentlist")
 async def CommentList(vueblogid: int, db: AsyncSession = Depends(get_db)):
     try:
-        sql = select(models.Comment).join(models.Blog).filter(models.Blog.BlogId == vueblogid)
-        result = await db.execute(sql)
+        # 使用 select_from 显式指定查询起点
+        comments_query = (
+            select(Comment, User)
+            .select_from(Comment)
+            .join(Blog, Comment.blog_id == Blog.BlogId)  # 明确连接条件
+            .join(User, Comment.uid == User.UserId)  # 明确连接条件
+            .options(joinedload(Comment.user))
+            .where(Blog.BlogId == vueblogid)  # 添加过滤条件
+        )
+
+        result = await db.execute(comments_query)
+        comments = result.scalars().all()
+
         comment_dict = {}
-        for i in result.scalars().all():
-            x = i.__dict__['uid']
-            user = await CommentListUserNameGet(user=x)
+        for comment in comments:
             comment_data = {
-                'id': i.__dict__['id'],
-                'parentId': i.__dict__['parentId'],
-                'uid': i.__dict__['uid'],
-                'content': i.__dict__['content'],
-                'likes': i.__dict__['likes'],
-                'address': i.__dict__['address'],
-                "user": {"homeLink": '1', "username": f"{user}",
-                         'avatar': "https://api.vvhan.com/api/avatar"},
+                'id': comment.id,
+                'parentId': comment.parentId,
+                'uid': comment.uid,
+                'content': comment.content,
+                'likes': comment.likes,
+                'address': comment.address,
+                "user": {
+                    "homeLink": '1',
+                    "username": comment.user.username if comment.user else 'Unknown',
+                    'avatar': "https://api.vvhan.com/api/avatar"
+                },
                 'reply': {'total': 0, 'list': []}
             }
 
-            if i.__dict__['parentId'] is None:
-                comment_dict[i.__dict__['id']] = comment_data
+            if comment.parentId is None:
+                comment_dict[comment.id] = comment_data
             else:
-                parent_id = i.__dict__['parentId']
+                parent_id = comment.parentId
                 if parent_id in comment_dict:
                     comment_dict[parent_id]['reply']['list'].append(comment_data)
                     comment_dict[parent_id]['reply']['total'] += 1
