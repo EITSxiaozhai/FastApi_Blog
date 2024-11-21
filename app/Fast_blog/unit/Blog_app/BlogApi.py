@@ -210,14 +210,22 @@ async def get_average_rating(blog_id: int, db: AsyncSession = Depends(get_db)):
 
 
 @BlogApp.post("/blogs/{blog_id}/submitcomments/")
-async def SubmitComments(blog_id: int, comment: Comment, db: AsyncSession = Depends(get_db)):
-    user = db.query(User).filter_by(UserId=comment.uid).first()
+async def SubmitComments(blog_id: int, comment: dict, db: AsyncSession = Depends(get_db)):
+    # 使用 select() 创建选择语句
+    stmt = select(User).filter(User.UserId == comment['uid'])
+    result = await db.execute(stmt)
+    user = result.scalars().first()
+
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
 
-    new_comment = Comment(**comment.dict(), uid=user.UserId)
+    # 将 comment 字典中的数据传递给 Comment 实例化
+    new_comment = Comment(**comment, uid=user.UserId)
+    # 添加新评论到会话
     db.add(new_comment)
-    db.commit()
+    # 提交事务
+    await db.commit()
+
     return {"message": "Comment submitted successfully!"}
 
 
