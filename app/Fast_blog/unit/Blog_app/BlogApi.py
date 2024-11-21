@@ -137,11 +137,11 @@ async def Blogid(blog_id: int, db: AsyncSession = Depends(get_db)):
     redis_key = f"blog_{blog_id}"
     cached_data = blog_cache.redis_client.get(redis_key)
     if cached_data:
-        print('从缓存中读取')
+        print(f'缓存命中ID为:{blog_id}数据')
         cached_data_obj = pickle.loads(cached_data)
         return cached_data_obj
     else:
-        print('从数据库中读取')
+        print(f'缓存未命中,从数据库中读取{blog_id}数据')
         results = await db.execute(select(Blog).filter(Blog.BlogId == blog_id))
         data = results.scalars().all()
         data = [item.to_dict() for item in data]
