@@ -223,7 +223,6 @@ useHead({
   // computed (not recommended)
 })
 
-getData()
 
 // 阅读进度变量
 const readingProgress = ref(0);
