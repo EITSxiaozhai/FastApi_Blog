@@ -81,11 +81,11 @@ const login = async () => {
   try {
 
     const response = await UserLogin({
-      data: {
+
         username: LoginUserForm.value.username,
         password: LoginUserForm.value.password,
         googlerecaptcha: LoginUserForm.value.googlerecaptcha
-      }
+
     });
 
     if (response.data.success) {
