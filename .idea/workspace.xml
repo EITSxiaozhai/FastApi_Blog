@@ -8,10 +8,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="设置日志提示">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="数据库链接依赖注入">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/database/databaseconnection.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/database/databaseconnection.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -607,7 +607,7 @@
       <workItem from="1731822240078" duration="5685000" />
       <workItem from="1731843984421" duration="1230000" />
       <workItem from="1732107385484" duration="2830000" />
-      <workItem from="1732159002808" duration="613000" />
+      <workItem from="1732159002808" duration="4765000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -952,7 +952,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="582" />
+    <option name="localTasksCounter" value="584" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1008,8 +1008,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Format blog creation time to local timezone&#10;将博客创建时间格式化为当地时区" />
-    <MESSAGE value="将异步同步函数修改为同步，否则会出现重复更新旧缓存" />
     <MESSAGE value="优化前端标题以及详情显示方法" />
     <MESSAGE value="修改调用方法" />
     <MESSAGE value="添加数据库依赖注入" />
@@ -1033,7 +1031,9 @@
     <MESSAGE value="修改dockerfile" />
     <MESSAGE value="删除数据重复请求" />
     <MESSAGE value="设置日志提示" />
-    <option name="LAST_COMMIT_MESSAGE" value="设置日志提示" />
+    <MESSAGE value="修改评论提交方法" />
+    <MESSAGE value="数据库链接依赖注入" />
+    <option name="LAST_COMMIT_MESSAGE" value="数据库链接依赖注入" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$backlist.coverage" NAME="backlist Coverage Results" MODIFIED="1690608378490" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/BackList" />
