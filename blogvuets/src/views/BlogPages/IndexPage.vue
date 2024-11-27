@@ -42,14 +42,6 @@ const data = reactive({
   data: []
 });
 
-async function getData() {
-  try {
-    const response = await Postlist();
-    data.data = response.data;
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 // 创建函数来获取 UV 和 PV 数据
 const fetchUvPvData = async () => {
@@ -118,7 +110,6 @@ const loadMoreCards = () => {
 };
 
 
-getData();
 
 
 const showFloatingWindow = ref(false);
