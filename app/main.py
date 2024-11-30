@@ -46,16 +46,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
+@app.get("/health")
 async def root():
-    """
-    接收两个整数参数x和y，通过Celery在后台服务计算它们的和。
-    """
-    task = celery_app.signature('tasks.add', args=(10, 10))
-    result = task.apply_async()
-    # 等待并获取结果
-    data = {'result': result.get()}
-    return {"message": "Hello world"}
+    return {"data":200}
 
 
 # 设置日志通过 Logstash 发送到后端 ELK 集群上去
