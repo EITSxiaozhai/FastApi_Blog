@@ -8,10 +8,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="健康检查接口">
-      <change beforePath="$PROJECT_DIR$/.gitlab-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.gitlab-ci.yml" afterDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改跨域设置">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/IndexPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/CreateArticle.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/CreateArticle.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -602,7 +603,7 @@
       <workItem from="1735362538206" duration="2225000" />
       <workItem from="1736087785693" duration="149000" />
       <workItem from="1737032918304" duration="35000" />
-      <workItem from="1737124021052" duration="344000" />
+      <workItem from="1737124021052" duration="1541000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -947,7 +948,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="583" />
+    <option name="localTasksCounter" value="584" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1003,7 +1004,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="将异步同步函数修改为同步，否则会出现重复更新旧缓存" />
     <MESSAGE value="优化前端标题以及详情显示方法" />
     <MESSAGE value="修改调用方法" />
     <MESSAGE value="添加数据库依赖注入" />
@@ -1028,7 +1028,8 @@
     <MESSAGE value="删除重复请求" />
     <MESSAGE value="css优化" />
     <MESSAGE value="健康检查接口" />
-    <option name="LAST_COMMIT_MESSAGE" value="健康检查接口" />
+    <MESSAGE value="修改跨域设置" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改跨域设置" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$backlist.coverage" NAME="backlist Coverage Results" MODIFIED="1690608378490" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/BackList" />

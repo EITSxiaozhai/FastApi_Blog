@@ -1,10 +1,10 @@
 <script setup>
-import {ref, onBeforeMount, nextTick, onMounted, onBeforeUnmount, computed} from 'vue';
-import {RouterLink, RouterView} from 'vue-router'
+import {ref, nextTick, onMounted, onBeforeUnmount, computed} from 'vue';
+import {RouterLink,} from 'vue-router'
 import {useRoute} from "vue-router";
 import MarkdownIt from 'markdown-it';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/atom-one-dark-reasonable.css'; // Import the style you prefer
+import 'highlight.js/styles/atom-one-dark-reasonable.css';
 import {useRouter} from "vue-router";
 import {reactive} from "vue";
 import {
@@ -483,20 +483,8 @@ const like = (id, finish) => {
 }
 
 config.comments = []
-
-
 const isLoggedIn = computed(() => !!usernames.value);
-// 跳转到注册页面
-const redirectToRegister = () => {
-  // 在这里编写跳转逻辑
-  router.push('/register');
-};
 
-// 跳转到用户个人资料页面
-const redirectToUserProfile = () => {
-  // 在这里编写跳转逻辑
-  router.push('/user-profile');
-};
 
 
 </script>

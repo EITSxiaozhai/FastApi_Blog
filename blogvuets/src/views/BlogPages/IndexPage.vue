@@ -1,12 +1,12 @@
 <script setup>
 import {useRouter} from 'vue-router';
-import {reactive, ref, onMounted, onBeforeUnmount, watchEffect, watch, onUnmounted, toRefs, computed} from 'vue';
+import {reactive, ref, onMounted, onBeforeUnmount, watch, onUnmounted, computed} from 'vue';
 import TypeIt from 'typeit'
 import 'element-plus/theme-chalk/display.css'
 import {useStore} from "vuex";
 import 'animate.css';
 import WOW from "wow.js";
-import { Postlist,GoogleUVPV,fetchBlogIndex } from "@/api/Blog/blogapig"
+import { GoogleUVPV,fetchBlogIndex } from "@/api/Blog/blogapig"
 
 //自动布局修改适配手机端平板端屏幕
 const useXlLayout = () => {
