@@ -137,11 +137,11 @@ async def Blogid(blog_id: int, db: AsyncSession = Depends(get_db)):
     redis_key = f"blog_{blog_id}"
     cached_data = blog_cache.redis_client.get(redis_key)
     if cached_data:
-        print('从缓存中读取')
+        print(f'缓存命中ID为:{blog_id}数据')
         cached_data_obj = pickle.loads(cached_data)
         return cached_data_obj
     else:
-        print('从数据库中读取')
+        print(f'缓存未命中,从数据库中读取{blog_id}数据')
         results = await db.execute(select(Blog).filter(Blog.BlogId == blog_id))
         data = results.scalars().all()
         data = [item.to_dict() for item in data]
@@ -210,14 +210,22 @@ async def get_average_rating(blog_id: int, db: AsyncSession = Depends(get_db)):
 
 
 @BlogApp.post("/blogs/{blog_id}/submitcomments/")
-async def SubmitComments(blog_id: int, comment: Comment, db: AsyncSession = Depends(get_db)):
-    user = db.query(User).filter_by(UserId=comment.uid).first()
+async def SubmitComments(blog_id: int, comment: dict, db: AsyncSession = Depends(get_db)):
+    # 使用 select() 创建选择语句
+    stmt = select(User).filter(User.UserId == comment['uid'])
+    result = await db.execute(stmt)
+    user = result.scalars().first()
+
     if user is None:
         raise HTTPException(status_code=400, detail="User not found")
 
-    new_comment = Comment(**comment.dict(), uid=user.UserId)
+    # 将 comment 字典中的数据传递给 Comment 实例化
+    new_comment = Comment(**comment, uid=user.UserId)
+    # 添加新评论到会话
     db.add(new_comment)
-    db.commit()
+    # 提交事务
+    await db.commit()
+
     return {"message": "Comment submitted successfully!"}
 
 

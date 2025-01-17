@@ -48,7 +48,9 @@ db_session = async_scoped_session(SessionLocal, scopefunc=current_task)
 #         # 无论如何都要关闭 session
 #         await session.close()
 
-# 执行一些简单的数据库操作
 async def get_db():
-    async with db_session() as session:  # 自动获得当前任务的会话
-        yield session
+    try:
+        db = db_session()
+        yield db
+    finally:
+       await db.close()
