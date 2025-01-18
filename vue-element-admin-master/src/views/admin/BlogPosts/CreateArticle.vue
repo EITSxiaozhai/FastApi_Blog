@@ -23,7 +23,7 @@
             />
           </el-select>
           <div style="padding-top: 20px" />
-          <markdown-editor v-model="post.content" style="height: 70vh" />
+          <markdown-editor v-model="post.content" style="height: 85vh" />
           <div style="padding-top: 20px">
             <el-upload
               :before-upload="beforeUpload"

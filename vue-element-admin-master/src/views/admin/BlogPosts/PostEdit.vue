@@ -33,7 +33,7 @@
               <div class="grid-content bg-purple-light" />
             </el-col>
           </el-row>
-          <markdown-editor v-model="post.content" style="height: 1500px" />
+          <markdown-editor v-model="post.content" style="height: 85vh" />
           <div><h1>文章首页图片</h1>
           </div>
           <div>
