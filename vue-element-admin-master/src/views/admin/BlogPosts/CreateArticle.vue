@@ -72,7 +72,7 @@
         <template v-else>
           <h3>编辑文章</h3>
           <el-input v-model="post.title" placeholder="请输入标题" />
-          <markdown-editor v-model="post.content" style="height: 1500px" />
+          <markdown-editor v-model="post.content" style="height: 75vh" />
           <el-button type="success" @click="savePost">保存</el-button>
           <el-button type="warning" @click="cancelEdit">取消</el-button>
         </template>
