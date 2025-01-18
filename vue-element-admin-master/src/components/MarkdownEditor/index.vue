@@ -42,7 +42,7 @@ export default {
     height: {
       type: String,
       required: false,
-      default: '300px'
+      default: '75vh'
     },
     language: {
       type: String,
