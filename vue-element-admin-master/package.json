@@ -18,6 +18,8 @@
   "dependencies": {
     "@achrinza/node-ipc": "^10.1.10",
     "@toast-ui/editor": "^2.2.0",
+    "@toast-ui/editor-plugin-chart": "^3.0.1",
+    "@toast-ui/editor-plugin-uml": "^3.0.1",
     "axios": "0.18.1",
     "clipboard": "2.0.4",
     "codemirror": "5.45.0",
