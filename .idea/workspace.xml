@@ -9,9 +9,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改跨域设置">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/IndexPage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/CreateArticle.vue" beforeDir="false" afterPath="$PROJECT_DIR$/vue-element-admin-master/src/views/admin/BlogPosts/CreateArticle.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -604,6 +601,7 @@
       <workItem from="1736087785693" duration="149000" />
       <workItem from="1737032918304" duration="35000" />
       <workItem from="1737124021052" duration="1541000" />
+      <workItem from="1737205668976" duration="48000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
