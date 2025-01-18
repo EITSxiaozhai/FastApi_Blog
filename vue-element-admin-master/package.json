@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@achrinza/node-ipc": "^10.1.10",
-    "@toast-ui/editor": "^2.2.0",
+    "@toast-ui/editor": "^3.2.2",
     "@toast-ui/editor-plugin-chart": "^3.0.1",
     "@toast-ui/editor-plugin-uml": "^3.0.1",
     "axios": "0.18.1",

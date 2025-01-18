@@ -3,17 +3,15 @@
 </template>
 
 <script>
-// deps for editor
-// import 'codemirror/lib/codemirror.css' // codemirror
-// import 'tui-editor/dist/tui-editor.css' // editor ui
-// import 'tui-editor/dist/tui-editor-contents.css' // editor content
+import 'codemirror/lib/codemirror.css' // codemirror
+import '@toast-ui/editor/dist/toastui-editor.css'
 
-import 'codemirror/lib/codemirror.css' // Editor's Dependency Style
-import '@toast-ui/editor/dist/toastui-editor.css' // Editor's Style
-// import Editor from 'tui-editor'
 import Editor from '@toast-ui/editor'
 import defaultOptions from './default-options'
 import { uploadImg } from '@/api/admin/upload'
+
+import uml from '@toast-ui/editor-plugin-uml'
+import chart from '@toast-ui/editor-plugin-chart'
 
 export default {
   name: 'MarkdownEditor',
@@ -91,6 +89,7 @@ export default {
     initEditor() {
       this.editor = new Editor({
         el: document.getElementById(this.id),
+        plugins: [uml, chart],
         ...this.editorOptions
       })
       if (this.value) {
@@ -104,7 +103,7 @@ export default {
     destroyEditor() {
       if (!this.editor) return
       this.editor.off('change')
-      this.editor.remove()
+      this.editor.destroy()
     },
     setValue(value) {
       this.editor.setMarkdown(value)
@@ -116,7 +115,7 @@ export default {
       this.editor.setHtml(value)
     },
     getHtml() {
-      return this.editor.getHtml()
+      return this.editor.getHTML()
     },
     uploadImg() {
       this.editor.removeHook('addImageBlobHook')
