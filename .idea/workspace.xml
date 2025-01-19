@@ -8,7 +8,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加前端uml图标，暂时还有&gt;号转义问题">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="格式化代码">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" afterDir="false" />
@@ -605,7 +605,7 @@
       <workItem from="1737124021052" duration="1541000" />
       <workItem from="1737205668976" duration="7521000" />
       <workItem from="1737250378438" duration="28000" />
-      <workItem from="1737250413420" duration="9523000" />
+      <workItem from="1737250413420" duration="20020000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -950,7 +950,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="595" />
+    <option name="localTasksCounter" value="598" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1006,8 +1006,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="redis 容器测试" />
-    <MESSAGE value="修改接口传递方式" />
     <MESSAGE value="设置邮件发送" />
     <MESSAGE value="版本管理" />
     <MESSAGE value="设置email传输格式" />
@@ -1031,7 +1029,9 @@
     <MESSAGE value="优化跳转到视图中心" />
     <MESSAGE value="优化点击目录变色" />
     <MESSAGE value="添加前端uml图标，暂时还有&gt;号转义问题" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加前端uml图标，暂时还有&gt;号转义问题" />
+    <MESSAGE value="修复&gt; 被转义问题" />
+    <MESSAGE value="格式化代码" />
+    <option name="LAST_COMMIT_MESSAGE" value="格式化代码" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$backlist.coverage" NAME="backlist Coverage Results" MODIFIED="1690608378490" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/BackList" />

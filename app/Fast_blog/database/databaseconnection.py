@@ -32,6 +32,7 @@ SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False, clas
 # 创建异步作用域会话
 db_session = async_scoped_session(SessionLocal, scopefunc=current_task)
 
+
 # # 这种方式适合需要精确控制事务的场景，例如复杂的业务逻辑或需要细粒度错误处理的操作：
 # @asynccontextmanager
 # async def get_db():
@@ -53,4 +54,4 @@ async def get_db():
         db = db_session()
         yield db
     finally:
-       await db.close()
+        await db.close()

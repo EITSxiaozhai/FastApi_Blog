@@ -35,7 +35,7 @@ def UUID_crt(UuidApi):
 
 
 @UserApp.post("/check-username")
-async def GetUser(request: Request,db: AsyncSession = Depends(get_db)):
+async def GetUser(request: Request, db: AsyncSession = Depends(get_db)):
     try:
         icomeuser = await request.json()
         stmt = select(models.User).filter_by(username=icomeuser['username'])
@@ -54,7 +54,7 @@ def create_jwt_token(data: dict) -> str:
     return token
 
 
-async def verify_password(username: str, password: str,db: AsyncSession = Depends(get_db)) -> bool:
+async def verify_password(username: str, password: str, db: AsyncSession = Depends(get_db)) -> bool:
     getusername = username
     getpassword = password
     results = await db.execute(select(User).filter(User.username == getusername))
@@ -84,7 +84,7 @@ async def PutUser(file: UploadFile = File(...)):
 
 
 @UserApp.post("/reguser")
-async def RegUser(reg: UserRegCredentials,db: AsyncSession = Depends(get_db)):
+async def RegUser(reg: UserRegCredentials, db: AsyncSession = Depends(get_db)):
     try:
 
         RecaptchaResponse = await verify_recaptcha(UserreCAPTCHA=reg.googlerecaptcha, SecretKeyTypology="user")
@@ -114,7 +114,7 @@ async def RegUser(reg: UserRegCredentials,db: AsyncSession = Depends(get_db)):
 
 
 @UserApp.post("/login")
-async def UserLogin(x: UserCredentials,db: AsyncSession = Depends(get_db)):
+async def UserLogin(x: UserCredentials, db: AsyncSession = Depends(get_db)):
     try:
         RecaptchaResponse = await verify_recaptcha(UserreCAPTCHA=x.googlerecaptcha, SecretKeyTypology="user")
         if RecaptchaResponse["message"]["success"]:
@@ -149,7 +149,7 @@ def generate_numeric_verification_code(length=6):
 
 ##查询全部用户名
 @UserApp.post("/emailcod")
-async def CAPTCHAByEmail(request: Request,db: AsyncSession = Depends(get_db)):
+async def CAPTCHAByEmail(request: Request, db: AsyncSession = Depends(get_db)):
     x = await request.json()
     print(x)
     sql = select(User).filter(User.UserEmail == x["email"])

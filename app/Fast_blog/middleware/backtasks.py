@@ -2,10 +2,7 @@
 # author: YAO XU time:
 import asyncio
 import os
-import smtplib
 from datetime import datetime
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
 import httpx
 import jwt
@@ -52,6 +49,7 @@ async def update_redis_cache_task():
     from Fast_blog.unit.Blog_app.BlogApi import update_redis_cache
     await update_redis_cache()
     return 0
+
 
 ##token缓存到redis中，暂时还没有使用
 class TokenManager():
