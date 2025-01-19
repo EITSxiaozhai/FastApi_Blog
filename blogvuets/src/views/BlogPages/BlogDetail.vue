@@ -3,6 +3,7 @@ import {ref, nextTick, onMounted, onBeforeUnmount, computed} from 'vue';
 import {RouterLink,} from 'vue-router'
 import {useRoute} from "vue-router";
 import MarkdownIt from 'markdown-it';
+import {plantuml} from "@mdit/plugin-plantuml";
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark-reasonable.css';
 import {useRouter} from "vue-router";
@@ -37,7 +38,7 @@ const md = new MarkdownIt({
   html: true,
   linkify: true,
   typographer: true
-})
+}).use(plantuml);
 const tableOfContents = ref([]);
 const router = useRouter()
 const data = reactive({
@@ -94,6 +95,10 @@ const handleScroll = () => {
   }
 };
 
+//计算UML hex编码
+const stringToHex = str => [...str].map(char => char.charCodeAt(0).toString(16)).join('');
+
+
 // 转换markdown操作代码高亮和目录生成
 const convertMarkdown = (markdownText) => {
   // 生成 HTML 内容
@@ -112,6 +117,18 @@ const convertMarkdown = (markdownText) => {
   const codeBlocks = renderedContent.match(/<pre><code class="lang-(.*?)">([\s\S]*?)<\/code><\/pre>/gm);
   renderedContent = renderedContent.replace(/<img(.*?)src="(.*?)"(.*?)>/g, '<img$1src="$2"$3 class="markdown-image" style="display: block;  margin: 0 auto;">');
 
+// 正则表达式匹配 PlantUML 代码块
+renderedContent = renderedContent.replace(/\$\$uml\s*(.*?)\$\$/gs, (match, umlCode) => {
+  // 对 UML 代码进行 Hex 编码
+  const hexUml = stringToHex(umlCode);
+
+  // 创建 PlantUML 图表 URL
+  const plantUmlUrl = `https://www.plantuml.com/plantuml/png/~h${hexUml}`;
+
+  // 返回图像标签
+  return `<img src="${plantUmlUrl}" alt="PlantUML 图表" style="display: block; margin: 0 auto;">`;
+});
+
   if (codeBlocks) {
     codeBlocks.forEach(codeBlock => {
       const langMatch = codeBlock.match(/<code class="lang-(.*?)">/);
@@ -127,10 +144,8 @@ const convertMarkdown = (markdownText) => {
       }
     });
   }
-
   // 更新目录
   tableOfContents.value = buildTreeStructure(toc);
-
   return renderedContent;
 };
 
@@ -204,8 +219,6 @@ const handleNodeClick = (data) => {
     }, 2000); // 2秒后恢复原来的颜色
   }
 };
-
-
 
 
 // 博客内容获取操作
@@ -502,7 +515,6 @@ config.comments = []
 const isLoggedIn = computed(() => !!usernames.value);
 
 
-
 </script>
 
 <template>
@@ -548,7 +560,7 @@ const isLoggedIn = computed(() => !!usernames.value);
         </el-sub-menu>
 
       </el-menu>
-      <el-progress :percentage="Math.max(0, Math.min(100, readingProgress))" :show-text="false" />
+      <el-progress :percentage="Math.max(0, Math.min(100, readingProgress))" :show-text="false"/>
     </el-header>
   </el-container>
   <div>

@@ -14,7 +14,7 @@
     "production": "vue-cli-service build --mode production && npm run serve -s dist"
   },
   "dependencies": {
-    "@toast-ui/editor": "^3.2.2",
+    "@mdit/plugin-plantuml": "^0.16.0",
     "@unhead/vue": "^1.8.9",
     "@vitejs/plugin-vue": "^4.3.4",
     "animate.css": "^4.1.1",
@@ -25,7 +25,7 @@
     "grecaptcha": "^1.0.3",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
-    "markdown-it": "^13.0.1",
+    "markdown-it": "^14.1.0",
     "os": "^0.1.2",
     "sass": "^1.70.0",
     "sass-loader": "^14.0.0",
