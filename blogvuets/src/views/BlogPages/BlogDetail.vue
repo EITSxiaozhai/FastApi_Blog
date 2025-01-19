@@ -532,7 +532,7 @@ const isLoggedIn = computed(() => !!usernames.value);
         </el-sub-menu>
 
       </el-menu>
-      <el-progress :percentage="readingProgress" :show-text="false"/>
+      <el-progress :percentage="Math.max(0, Math.min(100, readingProgress))" :show-text="false" />
     </el-header>
   </el-container>
   <div>
