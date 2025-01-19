@@ -99,7 +99,6 @@ const handleScroll = () => {
 const stringToHex = str => [...str].map(char => char.charCodeAt(0).toString(16)).join('');
 
 
-
 // 转换markdown操作代码高亮和目录生成
 const convertMarkdown = (markdownText) => {
 
@@ -128,16 +127,16 @@ const convertMarkdown = (markdownText) => {
   renderedContent = renderedContent.replace(/<img(.*?)src="(.*?)"(.*?)>/g, '<img$1src="$2"$3 class="markdown-image" style="display: block;  margin: 0 auto;">');
 
 // 正则表达式匹配 PlantUML 代码块
-renderedContent = renderedContent.replace(/\$\$uml\s*(.*?)\$\$/gs, (match, umlCode) => {
-  // 对 UML 代码进行 Hex 编码
-  const hexUml = stringToHex(umlCode);
+  renderedContent = renderedContent.replace(/\$\$uml\s*(.*?)\$\$/gs, (match, umlCode) => {
+    // 对 UML 代码进行 Hex 编码
+    const hexUml = stringToHex(umlCode);
 
-  // 创建 PlantUML 图表 URL
-  const plantUmlUrl = `https://www.plantuml.com/plantuml/png/~h${hexUml}`;
+    // 创建 PlantUML 图表 URL
+    const plantUmlUrl = `https://www.plantuml.com/plantuml/png/~h${hexUml}`;
 
-  // 返回图像标签
-  return `<img src="${plantUmlUrl}" alt="PlantUML 图表" style="display: block; margin: 0 auto;">`;
-});
+    // 返回图像标签
+    return `<img src="${plantUmlUrl}" alt="PlantUML 图表" style="display: block; margin: 0 auto;">`;
+  });
 
   if (codeBlocks) {
     codeBlocks.forEach(codeBlock => {
@@ -529,22 +528,22 @@ const isLoggedIn = computed(() => !!usernames.value);
 
 <template>
   <el-container>
-    <el-header :class="{ 'hidden': scrollDirection === 'down' }" id="top-mains">
+    <el-header id="top-mains" :class="{ 'hidden': scrollDirection === 'down' }">
       <el-menu
           class="el-menu-demo"
           mode="horizontal">
 
         <el-menu-item index="1">
           <h1>
-            <router-link to="/" style="text-decoration: none;">Exp1oit Blog</router-link>
+            <router-link style="text-decoration: none;" to="/">Exp1oit Blog</router-link>
           </h1>
         </el-menu-item>
 
 
-        <el-autocomplete style="margin-right: auto"
-                         v-model="state"
+        <el-autocomplete v-model="state"
                          :fetch-suggestions="querySearchAsync"
                          placeholder="搜索你感兴趣的"
+                         style="margin-right: auto"
                          @select="handleSelect"
         />
 
@@ -575,8 +574,8 @@ const isLoggedIn = computed(() => !!usernames.value);
   </el-container>
   <div>
     <el-card
-        style="margin: 3% auto; width: 99%; box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);"
         v-if="!isLoading"
+        style="margin: 3% auto; width: 99%; box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);"
     >
       <div v-for="(item, index) in data.data" :key="index" class="text-item">
         <h1 class="title">{{ item.title }}</h1>
@@ -599,24 +598,24 @@ const isLoggedIn = computed(() => !!usernames.value);
 
   <el-row>
     <el-container class="affix-container">
-      <el-col :xs="0" :sm="0" :md="4" :lg="6" :xl="5">
+      <el-col :lg="6" :md="4" :sm="0" :xl="5" :xs="0">
         <el-aside>
-          <el-affix target=".affix-container" :offset="270">
+          <el-affix :offset="270" target=".affix-container">
             <el-card style="height: 30vh">
               <div>
                 <el-tree
-                    ref="elTreeRef"
-                    :data="tableOfContents"
-                    :props="treeProps"
-                    :highlight-current="treeProps.highlightCurrent"
-                    :default-expand-all="treeProps['default-expand-all']"
-                    :current-node-key="currentAnchor"
-                    @node-click="handleNodeClick"
-                    node-key="anchor"
                     v-if="!isLoading"
+                    ref="elTreeRef"
+                    :current-node-key="currentAnchor"
+                    :data="tableOfContents"
+                    :default-expand-all="treeProps['default-expand-all']"
+                    :highlight-current="treeProps.highlightCurrent"
+                    :props="treeProps"
+                    node-key="anchor"
+                    @node-click="handleNodeClick"
                 />
 
-                <el-skeleton :rows="5" animated v-else/>
+                <el-skeleton v-else :rows="5" animated/>
               </div>
             </el-card>
 
@@ -624,9 +623,9 @@ const isLoggedIn = computed(() => !!usernames.value);
               <h4>喜欢该文章吗？</h4>
               <el-rate
                   v-model="value"
+                  :colors="['#409eff', '#67c23a', '#FF9900']"
                   :icons="icons"
                   :void-icon="ChatRound"
-                  :colors="['#409eff', '#67c23a', '#FF9900']"
                   @change="submitRating"
               />
             </el-card>
@@ -634,10 +633,10 @@ const isLoggedIn = computed(() => !!usernames.value);
         </el-aside>
       </el-col>
 
-      <el-col :xs="24" :sm="24" :md="24" :lg="18" :xl="17">
+      <el-col :lg="18" :md="24" :sm="24" :xl="17" :xs="24">
 
         <el-main>
-          <el-card style="margin-top: 20px;padding-bottom: 10%" v-if="!isLoading">
+          <el-card v-if="!isLoading" style="margin-top: 20px;padding-bottom: 10%">
             <div v-for="(item, index) in data.data" :key="index" class="text item">
               <div>
                 <div v-html="convertMarkdown(item.content)"></div>
@@ -651,7 +650,7 @@ const isLoggedIn = computed(() => !!usernames.value);
 
           <div ref="commentx">
             <el-card style="margin-top: 1%">
-              <u-comment :config="config" @submit="submit" @like="like">
+              <u-comment :config="config" @like="like" @submit="submit">
               </u-comment>
             </el-card>
           </div>

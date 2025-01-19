@@ -15,13 +15,13 @@ useHead({
 
 <template>
   <head>
-    <meta name="keywords" content="">
+    <meta content="" name="keywords">
   </head>
 
   <div id="app">
 
     <router-view/>
-<!--    <div v-for="item of 500" :key="item" class="snowflake"></div>-->
+    <!--    <div v-for="item of 500" :key="item" class="snowflake"></div>-->
   </div>
 </template>
 
