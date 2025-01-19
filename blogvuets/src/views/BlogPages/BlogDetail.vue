@@ -187,9 +187,14 @@ const buildTreeStructure = (toc) => {
 const handleNodeClick = (data) => {
   const targetElement = document.querySelector(data.anchor);
   if (targetElement) {
-    targetElement.scrollIntoView({behavior: 'smooth', block: 'start'});
+    targetElement.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',  // 将元素对齐到视口的中心
+      inline: 'nearest' // 保持水平方向上的自然对齐
+    });
   }
 };
+
 
 
 // 博客内容获取操作
