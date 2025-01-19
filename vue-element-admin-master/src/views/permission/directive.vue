@@ -36,11 +36,12 @@
 
     <div :key="'checkPermission'+key" style="margin-top:60px;">
       <aside>
-        In some cases, using v-permission will have no effect. For example: Element-UI's Tab component or el-table-column and other scenes that dynamically render dom. You can only do this with v-if.
+        In some cases, using v-permission will have no effect. For example: Element-UI's Tab component or
+        el-table-column and other scenes that dynamically render dom. You can only do this with v-if.
         <br> e.g.
       </aside>
 
-      <el-tabs type="border-card" style="width:550px;">
+      <el-tabs style="width:550px;" type="border-card">
         <el-tab-pane v-if="checkPermission(['admin'])" label="Admin">
           Admin can see this
           <el-tag class="permission-sourceCode" type="info">
@@ -100,9 +101,11 @@ export default {
     border-radius: 4px;
     display: inline-block;
   }
+
   ::v-deep .permission-sourceCode {
     margin-left: 15px;
   }
+
   ::v-deep .permission-tag {
     background-color: #ecf5ff;
   }

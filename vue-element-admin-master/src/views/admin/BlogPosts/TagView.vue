@@ -9,22 +9,22 @@
         style="width: 100%"
       >
         <el-table-column
-          prop="Blog_id"
           label="关联博客ID"
+          prop="Blog_id"
         />
         <el-table-column
-          prop="Blog_title"
           label="关联标题"
+          prop="Blog_title"
         />
         <el-table-column
-          prop="Date"
-          sortable
           column-key="date"
           label="创建时间"
+          prop="Date"
+          sortable
         />
         <el-table-column
-          :filters="tagFilters"
           :filter-method="filterTag"
+          :filters="tagFilters"
           label="标签名"
           prop="Tags"
         >
@@ -40,8 +40,8 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="OtherOperation"
           label="其他操作"
+          prop="OtherOperation"
           width="auto"
         >
           <template v-slot="">

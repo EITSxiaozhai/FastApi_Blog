@@ -11,7 +11,7 @@ export default createStore({
         token: '', // 初始状态为空令牌
         username: '', // 添加一个用于用户名的新属性
         lastVisitedRoute: '',
-        PagingRecord:'',
+        PagingRecord: '',
     },
     mutations: {
         setLastVisitedRoute(state, route) {

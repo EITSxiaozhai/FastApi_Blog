@@ -10,28 +10,28 @@
           <ul>
             <!-- 使用v-for指令遍历adminData数组，并渲染列表 -->
             <el-table :data="adminData" border style="width: 100%">
-              <el-table-column fixed prop="username" label="用户名" width="150">
+              <el-table-column fixed label="用户名" prop="username" width="150">
                 <!-- 绑定点击事件，点击用户名时打开修改信息的对话框 -->
                 <template slot-scope="scope">
                   <span @click="openEditDialog(scope.row)">{{ scope.row.username }}</span>
                 </template>
               </el-table-column>
-              <el-table-column fixed prop="UserEmail" label="用户邮箱" width="240" />
-              <el-table-column prop="privilegeName.code" label="用户权限" width="100" />
-              <el-table-column prop="UserUuid" label="用户唯一ID" width="300" />
-              <el-table-column prop="province" label="禁用状态" width="120">
-                <el-button type="success" icon="el-icon-check" circle />
+              <el-table-column fixed label="用户邮箱" prop="UserEmail" width="240" />
+              <el-table-column label="用户权限" prop="privilegeName.code" width="100" />
+              <el-table-column label="用户唯一ID" prop="UserUuid" width="300" />
+              <el-table-column label="禁用状态" prop="province" width="120">
+                <el-button circle icon="el-icon-check" type="success" />
               </el-table-column>
-              <el-table-column prop="province" label="其他操作" width="auto">
-                <el-button type="primary" icon="el-icon-edit">编辑用户</el-button>
-                <el-button type="primary" icon="el-icon-delete">删除用户</el-button>
-                <el-button type="primary" icon="el-icon-search">重置密码</el-button>
+              <el-table-column label="其他操作" prop="province" width="auto">
+                <el-button icon="el-icon-edit" type="primary">编辑用户</el-button>
+                <el-button icon="el-icon-delete" type="primary">删除用户</el-button>
+                <el-button icon="el-icon-search" type="primary">重置密码</el-button>
               </el-table-column>
             </el-table>
           </ul>
         </div>
         <el-button-group style="">
-          <el-button type="primary" icon="el-icon-arrow-left">上一页</el-button>
+          <el-button icon="el-icon-arrow-left" type="primary">上一页</el-button>
           <el-button type="primary">下一页<i class="el-icon-arrow-right el-icon--right" /></el-button>
         </el-button-group>
       </el-card>

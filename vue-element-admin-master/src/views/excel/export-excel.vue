@@ -5,15 +5,25 @@
       <FilenameOption v-model="filename" />
       <AutoWidthOption v-model="autoWidth" />
       <BookTypeOption v-model="bookType" />
-      <el-button :loading="downloadLoading" style="margin:0 0 20px 20px;" type="primary" icon="el-icon-document" @click="handleDownload">
+      <el-button
+        :loading="downloadLoading"
+        icon="el-icon-document"
+        style="margin:0 0 20px 20px;"
+        type="primary"
+        @click="handleDownload"
+      >
         Export Excel
       </el-button>
-      <a href="https://panjiachen.github.io/vue-element-admin-site/feature/component/excel.html" target="_blank" style="margin-left:15px;">
+      <a
+        href="https://panjiachen.github.io/vue-element-admin-site/feature/component/excel.html"
+        style="margin-left:15px;"
+        target="_blank"
+      >
         <el-tag type="info">Documentation</el-tag>
       </a>
     </div>
 
-    <el-table v-loading="listLoading" :data="list" element-loading-text="Loading..." border fit highlight-current-row>
+    <el-table v-loading="listLoading" :data="list" border element-loading-text="Loading..." fit highlight-current-row>
       <el-table-column align="center" label="Id" width="95">
         <template slot-scope="scope">
           {{ scope.$index }}
@@ -24,12 +34,12 @@
           {{ scope.row.title }}
         </template>
       </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
+      <el-table-column align="center" label="Author" width="110">
         <template slot-scope="scope">
           <el-tag>{{ scope.row.author }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="Readings" width="115" align="center">
+      <el-table-column align="center" label="Readings" width="115">
         <template slot-scope="scope">
           {{ scope.row.pageviews }}
         </template>

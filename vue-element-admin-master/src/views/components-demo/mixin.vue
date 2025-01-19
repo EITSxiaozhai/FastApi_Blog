@@ -64,7 +64,11 @@
             <span>图片hover效果</span>
           </div>
           <div class="component-item">
-            <pan-thumb width="100px" height="100px" image="https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191">
+            <pan-thumb
+              height="100px"
+              image="https://wpimg.wallstcn.com/577965b9-bb9e-4e02-9f0c-095b41417191"
+              width="100px"
+            >
               vue-element-admin
             </pan-thumb>
           </div>
@@ -163,7 +167,8 @@ export default {
   padding: 30px;
   min-height: calc(100vh - 84px);
 }
-.component-item{
+
+.component-item {
   min-height: 100px;
 }
 </style>

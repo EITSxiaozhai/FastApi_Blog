@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-button type="primary" @click="handleAddRole">New Role</el-button>
 
-    <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
+    <el-table :data="rolesList" border style="width: 100%;margin-top:30px;">
       <el-table-column align="center" label="Role Key" width="220">
         <template slot-scope="scope">
           {{ scope.row.key }}
@@ -20,14 +20,14 @@
       </el-table-column>
       <el-table-column align="center" label="Operations">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope)">Edit</el-button>
-          <el-button type="danger" size="small" @click="handleDelete(scope)">Delete</el-button>
+          <el-button size="small" type="primary" @click="handleEdit(scope)">Edit</el-button>
+          <el-button size="small" type="danger" @click="handleDelete(scope)">Delete</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'Edit Role':'New Role'">
-      <el-form :model="role" label-width="80px" label-position="left">
+    <el-dialog :title="dialogType==='edit'?'Edit Role':'New Role'" :visible.sync="dialogVisible">
+      <el-form :model="role" label-position="left" label-width="80px">
         <el-form-item label="Name">
           <el-input v-model="role.name" placeholder="Role Name" />
         </el-form-item>
@@ -35,8 +35,8 @@
           <el-input
             v-model="role.description"
             :autosize="{ minRows: 2, maxRows: 4}"
-            type="textarea"
             placeholder="Role Description"
+            type="textarea"
           />
         </el-form-item>
         <el-form-item label="Menus">
@@ -45,9 +45,9 @@
             :check-strictly="checkStrictly"
             :data="routesData"
             :props="defaultProps"
-            show-checkbox
-            node-key="path"
             class="permission-tree"
+            node-key="path"
+            show-checkbox
           />
         </el-form-item>
       </el-form>
@@ -113,7 +113,9 @@ export default {
 
       for (let route of routes) {
         // skip some route
-        if (route.hidden) { continue }
+        if (route.hidden) {
+          continue
+        }
 
         const onlyOneShowingChild = this.onlyOneShowingChild(route.children, route)
 
@@ -182,7 +184,9 @@ export default {
             message: 'Delete succed!'
           })
         })
-        .catch(err => { console.error(err) })
+        .catch(err => {
+          console.error(err)
+        })
     },
     generateTree(routes, basePath = '/', checkedKeys) {
       const res = []
@@ -248,7 +252,7 @@ export default {
 
       // Show parent if there are no child route to display
       if (showingChildren.length === 0) {
-        onlyOneChild = { ... parent, path: '', noShowingChildren: true }
+        onlyOneChild = { ...parent, path: '', noShowingChildren: true }
         return onlyOneChild
       }
 
@@ -263,6 +267,7 @@ export default {
   .roles-table {
     margin-top: 30px;
   }
+
   .permission-tree {
     margin-bottom: 30px;
   }

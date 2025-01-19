@@ -1,13 +1,12 @@
 <script lang="ts" setup>
-import {ref, reactive, watch, onBeforeMount, nextTick, onMounted, defineProps} from 'vue';
+import {defineProps, nextTick, onBeforeMount, onMounted, reactive, ref} from 'vue';
 import vueRecaptcha from 'vue3-recaptcha2';
-import {ElNotification, ElUpload, ElMessage} from 'element-plus';
+import type {FormInstance, UploadProps} from 'element-plus'
+import {ElMessage, ElNotification, ElUpload} from 'element-plus';
 import {Plus} from '@element-plus/icons-vue'
-import type {UploadProps} from 'element-plus'
 import {useRouter} from 'vue-router';
-import type {FormInstance} from 'element-plus'
 import _ from 'lodash';
-import { UploadUserAvatar,RegUser,CheckUserName,SentMailCod } from '@/api/User/userapi'
+import {CheckUserName, RegUser, SentMailCod, UploadUserAvatar} from '@/api/User/userapi'
 
 
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
@@ -123,7 +122,7 @@ const ruleFormRef = ref<FormInstance>()
 
 const debouncedCheckUsername = _.debounce(async (username, callback) => {
   try {
-    const response = await CheckUserName( {username: username});
+    const response = await CheckUserName({username: username});
     if (response.data.exists) {
       callback(new Error('用户名已存在'));
     } else {
@@ -191,7 +190,13 @@ const rules = reactive({
     {required: true, type: 'password', message: "请填写你的密码", validator: validatePass, trigger: 'change'}
   ],
   confirmPassword: [
-    {required: true, type: 'password', message: "确认密码和你输入的密码不同", validator: validatePass2, trigger: 'change'}
+    {
+      required: true,
+      type: 'password',
+      message: "确认密码和你输入的密码不同",
+      validator: validatePass2,
+      trigger: 'change'
+    }
   ],
   verificationCode: [{required: true, message: '请输入正确邮箱验证码', trigger: 'blur', min: 6, max: 6}],
   email: [{
@@ -275,36 +280,36 @@ const ossUpload = async (param: any) => {
     <el-main>
       <h1 style="padding-left:40%">注册页面</h1>
       <el-form
-          :model="RegisterUserForm"
-          label-width="80px"
-          class="register-form"
-          :rules="rules"
-          @submit.prevent="register"
           ref="registerFormRef"
+          :model="RegisterUserForm"
+          :rules="rules"
+          class="register-form"
+          label-width="80px"
+          @submit.prevent="register"
       >
-        <el-form-item label="用户名" prop="username" :rules="rules.username">
+        <el-form-item :rules="rules.username" label="用户名" prop="username">
           <el-input v-model.trim="RegisterUserForm.username" placeholder="请输入用户名"></el-input>
         </el-form-item>
 
-        <el-form-item label="密码" prop="password" :rules="rules.password">
+        <el-form-item :rules="rules.password" label="密码" prop="password">
           <el-input
-              type="password"
               v-model.trim="RegisterUserForm.password"
+              :show-password="true"
               placeholder="请输入密码"
-              :show-password="true"
-          ></el-input>
-        </el-form-item>
-
-        <el-form-item label="确认密码" prop="confirmPassword" :rules="rules.confirmPassword">
-          <el-input
               type="password"
-              v-model.trim="RegisterUserForm.confirmPassword"
-              placeholder="请确认密码"
-              :show-password="true"
           ></el-input>
         </el-form-item>
 
-        <el-form-item label="邮箱" prop="email" :rules="rules.email">
+        <el-form-item :rules="rules.confirmPassword" label="确认密码" prop="confirmPassword">
+          <el-input
+              v-model.trim="RegisterUserForm.confirmPassword"
+              :show-password="true"
+              placeholder="请确认密码"
+              type="password"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item :rules="rules.email" label="邮箱" prop="email">
           <el-input v-model.trim="RegisterUserForm.email" placeholder="请输入邮箱"></el-input>
         </el-form-item>
 
@@ -315,9 +320,9 @@ const ossUpload = async (param: any) => {
           ></el-input>
 
           <el-button
+              :disabled="verificationCodeDisabled"
               class="get-verification-code"
               @click="getVerificationCode"
-              :disabled="verificationCodeDisabled"
           >
             {{ verificationCodeButtonText }}
           </el-button>
@@ -326,26 +331,26 @@ const ossUpload = async (param: any) => {
           <div>
             <vueRecaptcha
                 :sitekey="v2Sitekey"
+                hl="zh-CN"
                 size="normal"
                 theme="light"
-                hl="zh-CN"
-                @verify="recaptchaVerified"
                 @expire="recaptchaExpired"
                 @fail="recaptchaFailed"
+                @verify="recaptchaVerified"
             >
             </vueRecaptcha>
           </div>
         </el-form-item>
         <el-form-item label="你的头像">
           <el-upload
-              class="avatar-uploader"
-              action=#
-              v-model="RegisterUserForm.UserAvatar"
               ref="uploadavatar"
-              :show-file-list="false"
+              v-model="RegisterUserForm.UserAvatar"
+              :before-upload="beforeAvatarUpload"
               :http-request="ossUpload"
               :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
+              :show-file-list="false"
+              action=#
+              class="avatar-uploader"
           >
             <img v-if="imageUrl" :src="imageUrl" class="avatar"/>
             <el-icon v-else class="avatar-uploader-icon">
@@ -354,7 +359,7 @@ const ossUpload = async (param: any) => {
           </el-upload>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" native-type="submit">注册</el-button>
+          <el-button native-type="submit" type="primary">注册</el-button>
         </el-form-item>
       </el-form>
     </el-main>

@@ -5,7 +5,7 @@
       <i class="el-icon-caret-bottom el-icon--right" />
     </el-button>
     <el-dropdown-menu slot="dropdown" class="no-padding no-border" style="width:400px">
-      <el-form-item label-width="0px" style="margin-bottom: 0px" prop="source_uri">
+      <el-form-item label-width="0px" prop="source_uri" style="margin-bottom: 0px">
         <el-input v-model="source_uri" placeholder="Please enter the content">
           <template slot="prepend">
             URL

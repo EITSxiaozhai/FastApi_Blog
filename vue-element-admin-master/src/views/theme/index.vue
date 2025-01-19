@@ -2,7 +2,11 @@
   <div class="app-container">
     <el-card class="box-card">
       <div slot="header">
-        <a class="link-type link-title" target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/guide/advanced/theme.html">
+        <a
+          class="link-type link-title"
+          href="https://panjiachen.github.io/vue-element-admin-site/guide/advanced/theme.html"
+          target="_blank"
+        >
           Theme documentation
         </a>
       </div>
@@ -10,7 +14,8 @@
         <span class="field-label">Change Theme : </span>
         <el-switch v-model="theme" />
         <aside style="margin-top:15px;">
-          Tips: It is different from the theme-pick on the navbar is two different skinning methods, each with different application scenarios. Refer to the documentation for details.
+          Tips: It is different from the theme-pick on the navbar is two different skinning methods, each with different
+          application scenarios. Refer to the documentation for details.
         </aside>
       </div>
     </el-card>
@@ -34,10 +39,10 @@
     </div>
 
     <div class="block">
-      <el-button type="primary" icon="el-icon-edit" />
-      <el-button type="primary" icon="el-icon-share" />
-      <el-button type="primary" icon="el-icon-delete" />
-      <el-button type="primary" icon="el-icon-search">
+      <el-button icon="el-icon-edit" type="primary" />
+      <el-button icon="el-icon-share" type="primary" />
+      <el-button icon="el-icon-delete" type="primary" />
+      <el-button icon="el-icon-search" type="primary">
         Search
       </el-button>
       <el-button type="primary">
@@ -101,9 +106,10 @@ export default {
 </script>
 
 <style scoped>
-.field-label{
+.field-label {
   vertical-align: middle;
 }
+
 .box-card {
   width: 400px;
   max-width: 100%;

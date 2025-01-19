@@ -15,9 +15,9 @@
       v-focus="editing"
       :value="todo.text"
       class="edit"
+      @blur="doneEdit"
       @keyup.enter="doneEdit"
       @keyup.esc="cancelEdit"
-      @blur="doneEdit"
     >
   </li>
 </template>

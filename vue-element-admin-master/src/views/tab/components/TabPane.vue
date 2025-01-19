@@ -3,35 +3,35 @@
     <el-table-column
       v-loading="loading"
       align="center"
+      element-loading-text="请给我点时间！"
       label="ID"
       width="65"
-      element-loading-text="请给我点时间！"
     >
       <template slot-scope="scope">
         <span>{{ scope.row.id }}</span>
       </template>
     </el-table-column>
 
-    <el-table-column width="180px" align="center" label="Date">
+    <el-table-column align="center" label="Date" width="180px">
       <template slot-scope="scope">
         <span>{{ scope.row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
       </template>
     </el-table-column>
 
-    <el-table-column min-width="300px" label="Title">
+    <el-table-column label="Title" min-width="300px">
       <template slot-scope="{row}">
         <span>{{ row.title }}</span>
         <el-tag>{{ row.type }}</el-tag>
       </template>
     </el-table-column>
 
-    <el-table-column width="110px" align="center" label="Author">
+    <el-table-column align="center" label="Author" width="110px">
       <template slot-scope="scope">
         <span>{{ scope.row.author }}</span>
       </template>
     </el-table-column>
 
-    <el-table-column width="120px" label="Importance">
+    <el-table-column label="Importance" width="120px">
       <template slot-scope="scope">
         <svg-icon v-for="n in +scope.row.importance" :key="n" icon-class="star" />
       </template>

@@ -2,7 +2,7 @@
   <div class="createPost-container">
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
 
-      <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
+      <sticky :class-name="'sub-navbar '+postForm.status" :z-index="10">
         <CommentDropdown v-model="postForm.comment_disabled" />
         <PlatformDropdown v-model="postForm.platforms" />
         <SourceUrlDropdown v-model="postForm.source_uri" />
@@ -19,7 +19,7 @@
           <Warning />
 
           <el-col :span="24">
-            <el-form-item style="margin-bottom: 40px;" prop="title">
+            <el-form-item prop="title" style="margin-bottom: 40px;">
               <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
                 Title
               </MDinput>
@@ -28,27 +28,39 @@
             <div class="postInfo-container">
               <el-row>
                 <el-col :span="8">
-                  <el-form-item label-width="60px" label="Author:" class="postInfo-container-item">
-                    <el-select v-model="postForm.author" :remote-method="getRemoteUserList" filterable default-first-option remote placeholder="Search user">
+                  <el-form-item class="postInfo-container-item" label="Author:" label-width="60px">
+                    <el-select
+                      v-model="postForm.author"
+                      :remote-method="getRemoteUserList"
+                      default-first-option
+                      filterable
+                      placeholder="Search user"
+                      remote
+                    >
                       <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item" />
                     </el-select>
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="10">
-                  <el-form-item label-width="120px" label="Publish Time:" class="postInfo-container-item">
-                    <el-date-picker v-model="displayTime" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="Select date and time" />
+                  <el-form-item class="postInfo-container-item" label="Publish Time:" label-width="120px">
+                    <el-date-picker
+                      v-model="displayTime"
+                      format="yyyy-MM-dd HH:mm:ss"
+                      placeholder="Select date and time"
+                      type="datetime"
+                    />
                   </el-form-item>
                 </el-col>
 
                 <el-col :span="6">
-                  <el-form-item label-width="90px" label="Importance:" class="postInfo-container-item">
+                  <el-form-item class="postInfo-container-item" label="Importance:" label-width="90px">
                     <el-rate
                       v-model="postForm.importance"
-                      :max="3"
                       :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                      :low-threshold="1"
                       :high-threshold="3"
+                      :low-threshold="1"
+                      :max="3"
                       style="display:inline-block"
                     />
                   </el-form-item>
@@ -58,8 +70,15 @@
           </el-col>
         </el-row>
 
-        <el-form-item style="margin-bottom: 40px;" label-width="70px" label="Summary:">
-          <el-input v-model="postForm.content_short" :rows="1" type="textarea" class="article-textarea" autosize placeholder="Please enter the content" />
+        <el-form-item label="Summary:" label-width="70px" style="margin-bottom: 40px;">
+          <el-input
+            v-model="postForm.content_short"
+            :rows="1"
+            autosize
+            class="article-textarea"
+            placeholder="Please enter the content"
+            type="textarea"
+          />
           <span v-show="contentShortLength" class="word-counter">{{ contentShortLength }}words</span>
         </el-form-item>
 

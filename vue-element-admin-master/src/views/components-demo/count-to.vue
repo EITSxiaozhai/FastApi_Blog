@@ -5,25 +5,25 @@
     </aside>
     <count-to
       ref="example"
-      :start-val="_startVal"
-      :end-val="_endVal"
-      :duration="_duration"
-      :decimals="_decimals"
-      :separator="_separator"
-      :prefix="_prefix"
-      :suffix="_suffix"
       :autoplay="false"
+      :decimals="_decimals"
+      :duration="_duration"
+      :end-val="_endVal"
+      :prefix="_prefix"
+      :separator="_separator"
+      :start-val="_startVal"
+      :suffix="_suffix"
       class="example"
     />
     <div style="margin-left: 25%;margin-top: 40px;">
       <label class="label" for="startValInput">startVal:
-        <input v-model.number="setStartVal" type="number" name="startValInput">
+        <input v-model.number="setStartVal" name="startValInput" type="number">
       </label>
       <label class="label" for="endValInput">endVal:
-        <input v-model.number="setEndVal" type="number" name="endVaInput">
+        <input v-model.number="setEndVal" name="endVaInput" type="number">
       </label>
       <label class="label" for="durationInput">duration:
-        <input v-model.number="setDuration" type="number" name="durationInput">
+        <input v-model.number="setDuration" name="durationInput" type="number">
       </label>
       <div class="startBtn example-btn" @click="start">
         Start
@@ -33,7 +33,7 @@
       </div>
       <br>
       <label class="label" for="decimalsInput">decimals:
-        <input v-model.number="setDecimals" type="number" name="decimalsInput">
+        <input v-model.number="setDecimals" name="decimalsInput" type="number">
       </label>
       <label class="label" for="separatorInput">separator:
         <input v-model="setSeparator" name="separatorInput">
@@ -45,9 +45,12 @@
         <input v-model="setSuffix" name="suffixInput">
       </label>
     </div>
-    <aside>&lt;count-to :start-val=&#x27;{{ _startVal }}&#x27; :end-val=&#x27;{{ _endVal }}&#x27; :duration=&#x27;{{ _duration }}&#x27;
-      :decimals=&#x27;{{ _decimals }}&#x27; :separator=&#x27;{{ _separator }}&#x27; :prefix=&#x27;{{ _prefix }}&#x27; :suffix=&#x27;{{ _suffix }}&#x27;
-      :autoplay=false&gt;</aside>
+    <aside>&lt;count-to :start-val=&#x27;{{ _startVal }}&#x27; :end-val=&#x27;{{ _endVal }}&#x27;
+      :duration=&#x27;{{ _duration }}&#x27;
+      :decimals=&#x27;{{ _decimals }}&#x27; :separator=&#x27;{{ _separator }}&#x27; :prefix=&#x27;{{ _prefix }}&#x27;
+      :suffix=&#x27;{{ _suffix }}&#x27;
+      :autoplay=false&gt;
+    </aside>
   </div>
 </template>
 
@@ -155,6 +158,7 @@ export default {
   background-color: #fff;
   border-color: #4AB7BD;
 }
+
 .example {
   font-size: 50px;
   color: #F6416C;

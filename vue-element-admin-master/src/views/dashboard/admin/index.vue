@@ -3,7 +3,7 @@
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <h1>基于websocket的实时图形监控</h1>
-      <line-chart :chart-data="lineChartData" :expected-legend="'CPU 利用率'" :actual-legend="'内存利用率'" />
+      <line-chart :actual-legend="'内存利用率'" :chart-data="lineChartData" :expected-legend="'CPU 利用率'" />
     </el-row>
   </div>
 </template>

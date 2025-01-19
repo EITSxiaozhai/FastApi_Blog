@@ -1,34 +1,43 @@
 <template>
   <div class="app-container">
     <!-- Note that row-key is necessary to get a correct row order. -->
-    <el-table ref="dragTable" v-loading="listLoading" :data="list" row-key="id" border fit highlight-current-row style="width: 100%">
+    <el-table
+      ref="dragTable"
+      v-loading="listLoading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      row-key="id"
+      style="width: 100%"
+    >
       <el-table-column align="center" label="ID" width="65">
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="180px" align="center" label="Date">
+      <el-table-column align="center" label="Date" width="180px">
         <template slot-scope="{row}">
           <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column min-width="300px" label="Title">
+      <el-table-column label="Title" min-width="300px">
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="110px" align="center" label="Author">
+      <el-table-column align="center" label="Author" width="110px">
         <template slot-scope="{row}">
           <span>{{ row.author }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="100px" label="Importance">
+      <el-table-column label="Importance" width="100px">
         <template slot-scope="{row}">
-          <svg-icon v-for="n in + row.importance" :key="n" icon-class="star" class="icon-star" />
+          <svg-icon v-for="n in + row.importance" :key="n" class="icon-star" icon-class="star" />
         </template>
       </el-table-column>
 
@@ -53,10 +62,12 @@
       </el-table-column>
     </el-table>
     <div class="show-d">
-      <el-tag>The default order :</el-tag> {{ oldList }}
+      <el-tag>The default order :</el-tag>
+      {{ oldList }}
     </div>
     <div class="show-d">
-      <el-tag>The after dragging order :</el-tag> {{ newList }}
+      <el-tag>The after dragging order :</el-tag>
+      {{ newList }}
     </div>
   </div>
 </template>
@@ -131,23 +142,25 @@ export default {
 </script>
 
 <style>
-.sortable-ghost{
+.sortable-ghost {
   opacity: .8;
-  color: #fff!important;
-  background: #42b983!important;
+  color: #fff !important;
+  background: #42b983 !important;
 }
 </style>
 
 <style scoped>
-.icon-star{
-  margin-right:2px;
+.icon-star {
+  margin-right: 2px;
 }
-.drag-handler{
+
+.drag-handler {
   width: 20px;
   height: 20px;
   cursor: pointer;
 }
-.show-d{
+
+.show-d {
   margin-top: 15px;
 }
 </style>

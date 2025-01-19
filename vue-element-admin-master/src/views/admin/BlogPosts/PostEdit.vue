@@ -6,16 +6,16 @@
           <h3>标题</h3>
           <el-input
             v-model="post.title"
-            type="textarea"
             autosize
             placeholder="请输入标题"
+            type="textarea"
           />
           <el-select
             v-model="value"
-            multiple
-            filterable
             allow-create
             default-first-option
+            filterable
+            multiple
             placeholder="请选择文章标签"
           >
             <el-option
@@ -26,10 +26,10 @@
             />
           </el-select>
           <el-row :gutter="10" style="margin-top: 20px">
-            <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
+            <el-col :lg="3" :md="4" :sm="6" :xl="1" :xs="8">
               <div class="grid-content bg-purple" />
             </el-col>
-            <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1">
+            <el-col :lg="3" :md="4" :sm="6" :xl="1" :xs="8">
               <div class="grid-content bg-purple-light" />
             </el-col>
           </el-row>
@@ -38,17 +38,17 @@
           </div>
           <div>
             <el-upload
+              :auto-upload="true"
               :before-upload="beforeUpload"
+              :file-list="fileList"
               action="#"
               list-type="picture-card"
-              :auto-upload="true"
-              :file-list="fileList"
             >
               <i slot="default" class="el-icon-plus" />
               <div slot="file" slot-scope="{file}">
                 <img
-                  class="el-upload-list__item-thumbnail"
                   :src="file.url"
+                  class="el-upload-list__item-thumbnail"
                 >
                 <span class="el-upload-list__item-actions">
                   <span
@@ -75,7 +75,7 @@
               </div>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt="">
+              <img :src="dialogImageUrl" alt="" width="100%">
             </el-dialog>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </div>
@@ -200,7 +200,7 @@ export default {
     },
     async loadHomepageImage(blog_id) {
       try {
-      // 在此处调用您的 API 来加载文章首页图片的URL，假设该 API 是 loadHomepageImage
+        // 在此处调用您的 API 来加载文章首页图片的URL，假设该 API 是 loadHomepageImage
         const response = this.post.BlogIntroductionPicture
         const imgUrl = response
         // 创建一个文件对象并设置URL

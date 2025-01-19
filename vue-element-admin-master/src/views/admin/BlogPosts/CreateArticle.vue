@@ -9,10 +9,10 @@
           </h1>
           <el-select
             v-model="value"
-            multiple
-            filterable
             allow-create
             default-first-option
+            filterable
+            multiple
             placeholder="请选择文章标签"
           >
             <el-option
@@ -26,17 +26,17 @@
           <markdown-editor v-model="post.content" style="height: 85vh" />
           <div style="padding-top: 20px">
             <el-upload
+              :auto-upload="true"
               :before-upload="beforeUpload"
+              :file-list="fileList"
               action="#"
               list-type="picture-card"
-              :auto-upload="true"
-              :file-list="fileList"
             >
               <i slot="default" class="el-icon-plus" />
               <div slot="file" slot-scope="{file}">
                 <img
-                  class="el-upload-list__item-thumbnail"
                   :src="file.url"
+                  class="el-upload-list__item-thumbnail"
                 >
                 <span class="el-upload-list__item-actions">
                   <span
@@ -63,11 +63,11 @@
               </div>
             </el-upload>
             <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt="">
+              <img :src="dialogImageUrl" alt="" width="100%">
             </el-dialog>
             <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
           </div>
-          <el-button type="primary" style="margin-top: 20px" @click="createPost">保存</el-button>
+          <el-button style="margin-top: 20px" type="primary" @click="createPost">保存</el-button>
         </template>
         <template v-else>
           <h3>编辑文章</h3>

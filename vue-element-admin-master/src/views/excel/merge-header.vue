@@ -1,14 +1,21 @@
 <template>
   <div class="app-container">
 
-    <el-button :loading="downloadLoading" style="margin-bottom:20px" type="primary" icon="el-icon-document" @click="handleDownload">Export</el-button>
+    <el-button
+      :loading="downloadLoading"
+      icon="el-icon-document"
+      style="margin-bottom:20px"
+      type="primary"
+      @click="handleDownload"
+    >Export
+    </el-button>
 
     <el-table
       ref="multipleTable"
       v-loading="listLoading"
       :data="list"
-      element-loading-text="Loading"
       border
+      element-loading-text="Loading"
       fit
       highlight-current-row
     >
@@ -17,18 +24,18 @@
           {{ scope.$index }}
         </template>
       </el-table-column>
-      <el-table-column label="Main Information" align="center">
+      <el-table-column align="center" label="Main Information">
         <el-table-column label="Title">
           <template slot-scope="scope">
             {{ scope.row.title }}
           </template>
         </el-table-column>
-        <el-table-column label="Author" width="110" align="center">
+        <el-table-column align="center" label="Author" width="110">
           <template slot-scope="scope">
             <el-tag>{{ scope.row.author }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="Readings" width="115" align="center">
+        <el-table-column align="center" label="Readings" width="115">
           <template slot-scope="scope">
             {{ scope.row.pageviews }}
           </template>

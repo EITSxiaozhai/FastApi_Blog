@@ -25,12 +25,12 @@
       <el-card class="box-card">
         <div>
           <el-table :data="adminData" style="width: 100%">
-            <el-table-column prop="BlogId" label="文章id" />
-            <el-table-column prop="title" label="标题" />
-            <el-table-column prop="author" label="作者" />
-            <el-table-column prop="created_at" label="创建时间" />
-            <el-table-column prop="xxx" label="阅读量" />
-            <el-table-column prop="xxx" label="评分值">
+            <el-table-column label="文章id" prop="BlogId" />
+            <el-table-column label="标题" prop="title" />
+            <el-table-column label="作者" prop="author" />
+            <el-table-column label="创建时间" prop="created_at" />
+            <el-table-column label="阅读量" prop="xxx" />
+            <el-table-column label="评分值" prop="xxx">
               <template>
                 <!-- 在这里自定义列内容 -->
                 <el-rate v-model="testrate" disabled>测试</el-rate>

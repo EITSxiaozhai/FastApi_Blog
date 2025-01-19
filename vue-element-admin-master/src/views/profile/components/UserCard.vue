@@ -6,7 +6,7 @@
 
     <div class="user-profile">
       <div class="box-center">
-        <pan-thumb :image="user.avatar" :height="'100px'" :width="'100px'" :hoverable="false">
+        <pan-thumb :height="'100px'" :hoverable="false" :image="user.avatar" :width="'100px'">
           <div>Hello</div>
           {{ user.role }}
         </pan-thumb>
@@ -19,7 +19,9 @@
 
     <div class="user-bio">
       <div class="user-education user-bio-section">
-        <div class="user-bio-section-header"><svg-icon icon-class="education" /><span>Education</span></div>
+        <div class="user-bio-section-header">
+          <svg-icon icon-class="education" />
+          <span>Education</span></div>
         <div class="user-bio-section-body">
           <div class="text-muted">
             JS in Computer Science from the University of Technology
@@ -28,7 +30,9 @@
       </div>
 
       <div class="user-skills user-bio-section">
-        <div class="user-bio-section-header"><svg-icon icon-class="skill" /><span>Skills</span></div>
+        <div class="user-bio-section-header">
+          <svg-icon icon-class="skill" />
+          <span>Skills</span></div>
         <div class="user-bio-section-body">
           <div class="progress-item">
             <span>Vue</span>

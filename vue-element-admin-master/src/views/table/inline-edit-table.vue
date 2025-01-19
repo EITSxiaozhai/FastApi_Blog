@@ -7,21 +7,21 @@
         </template>
       </el-table-column>
 
-      <el-table-column width="180px" align="center" label="Date">
+      <el-table-column align="center" label="Date" width="180px">
         <template slot-scope="{row}">
           <span>{{ row.timestamp | parseTime('{y}-{m}-{d} {h}:{i}') }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="120px" align="center" label="Author">
+      <el-table-column align="center" label="Author" width="120px">
         <template slot-scope="{row}">
           <span>{{ row.author }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="100px" label="Importance">
+      <el-table-column label="Importance" width="100px">
         <template slot-scope="{row}">
-          <svg-icon v-for="n in + row.importance" :key="n" icon-class="star" class="meta-item__icon" />
+          <svg-icon v-for="n in + row.importance" :key="n" class="meta-item__icon" icon-class="star" />
         </template>
       </el-table-column>
 
@@ -33,14 +33,14 @@
         </template>
       </el-table-column>
 
-      <el-table-column min-width="300px" label="Title">
+      <el-table-column label="Title" min-width="300px">
         <template slot-scope="{row}">
           <template v-if="row.edit">
             <el-input v-model="row.title" class="edit-input" size="small" />
             <el-button
               class="cancel-btn"
-              size="small"
               icon="el-icon-refresh"
+              size="small"
               type="warning"
               @click="cancelEdit(row)"
             >
@@ -55,18 +55,18 @@
         <template slot-scope="{row}">
           <el-button
             v-if="row.edit"
-            type="success"
-            size="small"
             icon="el-icon-circle-check-outline"
+            size="small"
+            type="success"
             @click="confirmEdit(row)"
           >
             Ok
           </el-button>
           <el-button
             v-else
-            type="primary"
-            size="small"
             icon="el-icon-edit"
+            size="small"
+            type="primary"
             @click="row.edit=!row.edit"
           >
             Edit
@@ -141,6 +141,7 @@ export default {
 .edit-input {
   padding-right: 100px;
 }
+
 .cancel-btn {
   position: absolute;
   right: 15px;

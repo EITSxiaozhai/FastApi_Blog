@@ -4,7 +4,8 @@
       When the page is scrolled to the specified position, the Back to Top button appears in the lower right corner
     </aside>
     <aside>
-      You can customize the style of the button, show / hide, height of appearance, height of the return. If you need a text prompt, you can use element-ui el-tooltip elements externally
+      You can customize the style of the button, show / hide, height of appearance, height of the return. If you need a
+      text prompt, you can use element-ui el-tooltip elements externally
     </aside>
     <div class="placeholder-container">
       <div>placeholder</div>
@@ -118,8 +119,13 @@
       <div>placeholder</div>
     </div>
     <!-- you can add element-ui's tooltip -->
-    <el-tooltip placement="top" content="tooltip">
-      <back-to-top :custom-style="myBackToTopStyle" :visibility-height="300" :back-position="50" transition-name="fade" />
+    <el-tooltip content="tooltip" placement="top">
+      <back-to-top
+        :back-position="50"
+        :custom-style="myBackToTopStyle"
+        :visibility-height="300"
+        transition-name="fade"
+      />
     </el-tooltip>
   </div>
 </template>

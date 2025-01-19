@@ -2,20 +2,26 @@
   <section class="todoapp">
     <!-- header -->
     <header class="header">
-      <input class="new-todo" autocomplete="off" placeholder="Todo List" @keyup.enter="addTodo">
+      <input autocomplete="off" class="new-todo" placeholder="Todo List" @keyup.enter="addTodo">
     </header>
     <!-- main section -->
     <section v-show="todos.length" class="main">
-      <input id="toggle-all" :checked="allChecked" class="toggle-all" type="checkbox" @change="toggleAll({ done: !allChecked })">
+      <input
+        id="toggle-all"
+        :checked="allChecked"
+        class="toggle-all"
+        type="checkbox"
+        @change="toggleAll({ done: !allChecked })"
+      >
       <label for="toggle-all" />
       <ul class="todo-list">
         <todo
           v-for="(todo, index) in filteredTodos"
           :key="index"
           :todo="todo"
-          @toggleTodo="toggleTodo"
-          @editTodo="editTodo"
           @deleteTodo="deleteTodo"
+          @editTodo="editTodo"
+          @toggleTodo="toggleTodo"
         />
       </ul>
     </section>
@@ -123,5 +129,5 @@ export default {
 </script>
 
 <style lang="scss">
-  @import './index.scss';
+@import './index.scss';
 </style>

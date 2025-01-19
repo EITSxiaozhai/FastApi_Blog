@@ -1,8 +1,8 @@
 <template>
   <div class="components-container board">
-    <Kanban :key="1" :list="list1" :group="group" class="kanban todo" header-text="Todo" />
-    <Kanban :key="2" :list="list2" :group="group" class="kanban working" header-text="Working" />
-    <Kanban :key="3" :list="list3" :group="group" class="kanban done" header-text="Done" />
+    <Kanban :key="1" :group="group" :list="list1" class="kanban todo" header-text="Todo" />
+    <Kanban :key="2" :group="group" :list="list2" class="kanban working" header-text="Working" />
+    <Kanban :key="3" :group="group" :list="list3" class="kanban done" header-text="Done" />
   </div>
 </template>
 <script>
@@ -45,17 +45,20 @@ export default {
   flex-direction: row;
   align-items: flex-start;
 }
+
 .kanban {
   &.todo {
     .board-column-header {
       background: #4A9FF9;
     }
   }
+
   &.working {
     .board-column-header {
       background: #f9944a;
     }
   }
+
   &.done {
     .board-column-header {
       background: #2ac06d;
