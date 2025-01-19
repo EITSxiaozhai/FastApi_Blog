@@ -186,14 +186,25 @@ const buildTreeStructure = (toc) => {
 // 处理树节点点击
 const handleNodeClick = (data) => {
   const targetElement = document.querySelector(data.anchor);
+
   if (targetElement) {
+    // 滚动到目标元素
     targetElement.scrollIntoView({
       behavior: 'smooth',
-      block: 'center',  // 将元素对齐到视口的中心
-      inline: 'nearest' // 保持水平方向上的自然对齐
+      block: 'center',
+      inline: 'nearest'
     });
+
+    // 给目标元素添加选中样式
+    targetElement.classList.add('selected');
+
+    // 在一定时间后移除选中样式
+    setTimeout(() => {
+      targetElement.classList.remove('selected');
+    }, 2000); // 2秒后恢复原来的颜色
   }
 };
+
 
 
 
@@ -668,6 +679,11 @@ const isLoggedIn = computed(() => !!usernames.value);
   flex-wrap: wrap;
   gap: 20px;
   font-size: 16px;
+}
+
+.selected {
+  color: rgb(121.3, 187.1, 255); /* 设置变色的颜色 */
+  transition: color 0.3s ease; /* 添加过渡效果 */
 }
 
 </style>
