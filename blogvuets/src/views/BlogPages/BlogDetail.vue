@@ -99,8 +99,18 @@ const handleScroll = () => {
 const stringToHex = str => [...str].map(char => char.charCodeAt(0).toString(16)).join('');
 
 
+
 // 转换markdown操作代码高亮和目录生成
 const convertMarkdown = (markdownText) => {
+
+  // 使用 'replace' 方法修改转义行为
+  md.renderer.rules.text = function (tokens, idx) {
+    let content = tokens[idx].content;
+    // 恢复 '>' 字符
+    content = content.replace(/&gt;/g, '>');
+    return content;
+  };
+
   // 生成 HTML 内容
   let renderedContent = md.render(markdownText);
 
