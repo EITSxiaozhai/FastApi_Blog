@@ -534,20 +534,18 @@ const isLoggedIn = computed(() => !!usernames.value);
           class="el-menu-demo"
           mode="horizontal">
 
-        <el-menu-item index="1">
-          <h1>
-            <router-link style="text-decoration: none;" to="/">Exp1oit Blog</router-link>
-          </h1>
-        </el-menu-item>
+<h1 style="display: flex; justify-content: center; align-items: center; margin: 0;">
+        <router-link style="text-decoration: none;" to="/">Exp1oit Blog</router-link>
+      </h1>
 
 
-        <el-autocomplete v-model="state"
-                         :fetch-suggestions="querySearchAsync"
-                         placeholder="搜索你感兴趣的"
-                         style="margin-right: auto"
-                         @select="handleSelect"
-        />
-
+      <!-- Autocomplete Centered -->
+      <el-autocomplete v-model="state"
+                       :fetch-suggestions="querySearchAsync"
+                       placeholder="搜索你感兴趣的"
+                       style="margin-right: auto;margin-left: auto;margin-top: auto;margin-bottom: auto;"
+                       @select="handleSelect"
+      />
 
         <el-sub-menu index="4">
           <template #title>
