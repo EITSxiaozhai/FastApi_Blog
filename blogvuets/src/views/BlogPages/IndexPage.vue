@@ -673,7 +673,7 @@ body {
 
 .background-image {
   /* 背景图片样式，替换为您的背景图片样式 */
-  background-image: url("https://api.vvhan.com/api/bing?rand=sj");
+  background-image: url("https://bing.ee123.net/img/rand");
   background-size: cover;
   width: 100%;
   height: 100%;
