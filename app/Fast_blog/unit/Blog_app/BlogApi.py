@@ -279,10 +279,11 @@ async def get_total_uvpv():
     except Exception as e:
         return {"error": "Internal Server Error", "message": str(e), "code": 50000}
 
-# 搜索博客的端点
 @BlogApp.get("/blogs/search")
 async def get_blogs(q: str, db: AsyncSession = Depends(get_db)):
     # 使用过滤条件和排序
     sql = select(Blog).filter(Blog.title.ilike(f"%{q}%")).order_by(Blog.title.asc())
     result = await db.execute(sql)
-    return result.scalars().all()
+    blogs = result.scalars().all()
+    # 将每个 Blog 对象转换为字典
+    return [blog.to_dict() for blog in blogs]
