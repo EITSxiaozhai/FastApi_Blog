@@ -243,17 +243,6 @@ const usernames = computed(() => store.getters.getUsername);
 const tokens = computed(() => store.getters.getToken);
 const isLoggedIn = computed(() => !!usernames.value);
 
-// 跳转到注册页面
-const redirectToRegister = () => {
-  // 在这里编写跳转逻辑
-  router.push('/register');
-};
-
-// 跳转到用户个人资料页面
-const redirectToUserProfile = () => {
-  // 在这里编写跳转逻辑
-  router.push('/user-profile');
-};
 
 const sendEmail = () => {
   // 替换以下邮箱地址为你的目标邮箱
@@ -263,7 +252,6 @@ const sendEmail = () => {
 };
 
 const state = ref(''); // 用于绑定输入框的值
-
 // 提供搜索建议的函数
 const querySearchAsync = async (queryString, cb) => {
   if (queryString.trim() === '') {
@@ -276,7 +264,7 @@ const querySearchAsync = async (queryString, cb) => {
     const suggestions = response.data || []; // 调整根据实际响应格式
     cb(suggestions.map(blog => ({
       value: blog.title, // 回显的值
-      id: blog.id,       // 可以附加其他数据
+      id: blog.BlogId,       // 可以附加其他数据
     })));
   } catch (error) {
     console.error('获取建议失败:', error);
@@ -289,7 +277,7 @@ debounce(querySearchAsync, 300);
 
 // 处理用户选择
 const handleSelect = (item) => {
-  console.log('选择了:', item); // 可以根据需要处理选择的项
+  window.location.href = `https://blog.exploit-db.xyz/blog/${item.id}`; // 跳转到该 URL
 };
 </script>
 
