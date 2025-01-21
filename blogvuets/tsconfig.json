@@ -15,9 +15,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmitOnError": true,
-    "baseUrl": ".", // 设定 baseUrl
+    "baseUrl": ".",
+    // 设定 baseUrl
     "paths": {
-      "@/*": ["src/*"] // 配置路径别名
+      "@/*": [
+        "src/*"
+      ]
+      // 配置路径别名
     }
   },
   "include": [

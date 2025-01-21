@@ -427,7 +427,8 @@ const sendEmail = () => {
                           </template>
                           <template v-else>
                             <!-- 使用你的布局 -->
-                            <el-card id="main-boxcard" class="wow animate__bounce bounceInDown box-card" data-wow-duration="2s"
+                            <el-card id="main-boxcard" class="wow animate__bounce bounceInDown box-card"
+                                     data-wow-duration="2s"
                                      shadow="hover">
                               <el-container>
                                 <img id="blog-image" :src="blog.BlogIntroductionPicture" alt="图像描述">
