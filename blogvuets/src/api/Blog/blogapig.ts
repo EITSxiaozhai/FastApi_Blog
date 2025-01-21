@@ -67,7 +67,7 @@ export function postCommentSave(blogId: string, str: string, token: string) {
 
 export function searchBlogs(query: string) {
     return backApi({
-        url: `/views/blogs/search`, // 更新为适合搜索的 API 端点
+        url: `/blogs/search`, // 更新为适合搜索的 API 端点
         method: 'get',
         params: { q: query } // 使用 query 参数传递搜索关键字
     });

@@ -278,3 +278,11 @@ async def get_total_uvpv():
         return {"error": "Authentication failed", "message": str(auth_error), "code": 40002}
     except Exception as e:
         return {"error": "Internal Server Error", "message": str(e), "code": 50000}
+
+# 搜索博客的端点
+@BlogApp.get("/blogs/search")
+async def get_blogs(q: str, db: AsyncSession = Depends(get_db)):
+    # 使用过滤条件和排序
+    sql = select(Blog).filter(Blog.title.ilike(f"%{q}%")).order_by(Blog.title.asc())
+    result = await db.execute(sql)
+    return result.scalars().all()
