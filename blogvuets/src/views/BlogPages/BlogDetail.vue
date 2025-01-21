@@ -8,6 +8,7 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark-reasonable.css';
 import {useRouter} from "vue-router";
 import {reactive} from "vue";
+import '@/assets/css/BlogDetail.css';
 import {
   postBlogRatings,
   postUserBlogId,
@@ -661,51 +662,4 @@ const isLoggedIn = computed(() => !!usernames.value);
   </el-row>
 </template>
 
-
-<style>
-.markdown-image {
-  max-width: 100%; /* Ensure images don't exceed the container width */
-  height: auto; /* Maintain the aspect ratio */
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-
-#top-mains {
-  opacity: 0.8;
-  position: fixed;
-  padding-left: 0;
-  padding-right: 0;
-  width: 100%;
-  height: 60px;
-  right: 0;
-  top: 0;
-  z-index: 2;
-}
-
-.text-item {
-  text-align: center;
-}
-
-.title {
-  font-size: 24px;
-  color: #333;
-  margin-bottom: 16px;
-}
-
-.info {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 20px;
-  font-size: 16px;
-}
-
-.selected {
-  color: rgb(121.3, 187.1, 255); /* 设置变色的颜色 */
-  transition: color 0.3s ease; /* 添加过渡效果 */
-}
-
-</style>
 
