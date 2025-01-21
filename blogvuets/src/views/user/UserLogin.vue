@@ -6,6 +6,7 @@ import vueRecaptcha from 'vue3-recaptcha2';
 import {useStore} from 'vuex';
 import VueJwtDecode from 'vue-jwt-decode';
 import {UserLogin} from '@/api/User/userapi';
+import '@/assets/css/UserLogin.css';
 
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
 
@@ -173,20 +174,3 @@ const login = async () => {
   </el-container>
 
 </template>
-
-<style scoped>
-.login-form {
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#app .el-main form {
-  background-color: #faf9f9;
-  opacity: 0.9;
-
-}
-</style>
