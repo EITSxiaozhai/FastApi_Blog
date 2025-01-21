@@ -11,8 +11,15 @@
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="css 文件拆解">
       <change beforePath="$PROJECT_DIR$/.idea/fast-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fast-api.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/UserReg.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserReg.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/components.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/components.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/assets/css/BlogDetail.css" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/assets/css/BlogDetail.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/assets/css/IndexPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/assets/css/IndexPage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/assets/css/UserLogin.css" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/assets/css/UserLogin.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/assets/css/UserReg.css" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/assets/css/UserReg.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/IndexPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/tsconfig.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -951,7 +958,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="598" />
+    <option name="localTasksCounter" value="599" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
