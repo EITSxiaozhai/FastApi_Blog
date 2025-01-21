@@ -7,7 +7,8 @@ import {useStore} from "vuex";
 import 'animate.css';
 import WOW from "wow.js";
 import '@/assets/css/IndexPage.css';
-import {GoogleUVPV, fetchBlogIndex} from "@/api/Blog/blogapig"
+import {GoogleUVPV, fetchBlogIndex, searchBlogs} from "@/api/Blog/blogapig"
+import {debounce} from "lodash";
 
 //自动布局修改适配手机端平板端屏幕
 const useXlLayout = () => {
@@ -261,6 +262,35 @@ const sendEmail = () => {
   window.location.href = `mailto:${emailAddress}`;
 };
 
+const state = ref(''); // 用于绑定输入框的值
+
+// 提供搜索建议的函数
+const querySearchAsync = async (queryString, cb) => {
+  if (queryString.trim() === '') {
+    cb([]); // 如果输入为空，返回空数组
+    return;
+  }
+
+  try {
+    const response = await searchBlogs(queryString); // 调用后端 API
+    const suggestions = response.data || []; // 调整根据实际响应格式
+    cb(suggestions.map(blog => ({
+      value: blog.title, // 回显的值
+      id: blog.id,       // 可以附加其他数据
+    })));
+  } catch (error) {
+    console.error('获取建议失败:', error);
+    cb([]); // 出现错误时返回空数组
+  }
+};
+
+// 创建防抖函数，设置延迟时间为 300 毫秒
+const debouncedQuerySearch = debounce(querySearchAsync, 300);
+
+// 处理用户选择
+const handleSelect = (item) => {
+  console.log('选择了:', item); // 可以根据需要处理选择的项
+};
 </script>
 
 <template>
