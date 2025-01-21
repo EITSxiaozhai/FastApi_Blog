@@ -285,7 +285,7 @@ const querySearchAsync = async (queryString, cb) => {
 };
 
 // 创建防抖函数，设置延迟时间为 300 毫秒
-const debouncedQuerySearch = debounce(querySearchAsync, 300);
+debounce(querySearchAsync, 300);
 
 // 处理用户选择
 const handleSelect = (item) => {
