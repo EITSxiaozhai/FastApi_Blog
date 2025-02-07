@@ -610,13 +610,20 @@ async def publish_url_notification(notification_type="URL_UPDATED"):
 
 @AdminApi.post('/markdown/uploadimg/')
 async def markdown_img_upload(file: UploadFile = File(...), ):
-    x = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-    waitmarkdownimg = await file.read()
-    # 创建 AliOssBlogMarkdownImg 的实例
-    oss_client = AliOssBlogMarkdownImg()
-    # 调用实例方法上传图片
-    image_url = await oss_client.upload_bitsfile_markdown_img(bitsfile=waitmarkdownimg, current_blogimgconunt=x)
-    return {"code": 20000, "msg": "图片上传成功", "file": file.filename, "url": image_url}
+    try:
+        x = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+        waitmarkdownimg = await file.read()
+        # 创建 AliOssBlogMarkdownImg 的实例
+        oss_client = AliOssBlogMarkdownImg()
+        # 调用实例方法上传图片
+        image_url = await oss_client.upload_bitsfile_markdown_img(bitsfile=waitmarkdownimg, current_blogimgconunt=x)
+        return {"code": 20000, "msg": "图片上传成功", "file": file.filename, "url": image_url}
+    except jwt.ExpiredSignatureError:
+        return {"code": 50012, "message": "Token已过期"}
+    except jwt.InvalidTokenError:
+        return {"code": 40003, "message": "无效的Token"}
+    except Exception as e:
+        return {"code": 50000, "message": "内部服务器错误"}
 
 
 @AdminApi.post("/blog/Blogtagget")
