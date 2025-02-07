@@ -623,6 +623,7 @@ async def markdown_img_upload(file: UploadFile = File(...), ):
     except jwt.InvalidTokenError:
         return {"code": 40003, "message": "无效的Token"}
     except Exception as e:
+        print(e)
         return {"code": 50000, "message": "内部服务器错误"}
 
 
