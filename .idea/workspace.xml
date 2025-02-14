@@ -8,32 +8,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加是否发布状态">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/03838bf25b55_addpic.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/0746105551ae_test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/180b8acee31f_add_comment_table.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/1dbac0b0c955_userprivileges.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/21c7bce50e66_userprivileges.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/2ebc5950aaf8_test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/3299accd9bac_add_column_age.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/37a2e35daa23_userprivileges.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/3a2bcc686083_added_account_table.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/53b7e7d117d5_add_comment_table.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/61aeec431142_key.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/7fb33342b3fb_ratingsql.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/81a5bb71a9fd_addpic.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/9947cb700365_add.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/9b805a2ec3d5_create_account_table.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/a47cbb28a60b_add_comment_table.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/aba3909b57ee_rating.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/c1667e41aa7d_test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/c654528bf64a_add.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/d976a2beb686_added_account_table.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/e6543b83b896_userprivileges.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/f1d9abeef694_test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/f619edf51436_test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/alembic/versions/f85feb084344_create_account_table.py" beforeDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="提交数据库变更文件">
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -646,7 +622,7 @@
       <workItem from="1737250413420" duration="9523000" />
       <workItem from="1738913384454" duration="7381000" />
       <workItem from="1738978931430" duration="14471000" />
-      <workItem from="1739431303230" duration="8416000" />
+      <workItem from="1739431303230" duration="9798000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -991,7 +967,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="613" />
+    <option name="localTasksCounter" value="615" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1047,8 +1023,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="删除重复请求" />
-    <MESSAGE value="css优化" />
     <MESSAGE value="健康检查接口" />
     <MESSAGE value="修改跨域设置" />
     <MESSAGE value="修改markdown视图" />
@@ -1072,7 +1046,9 @@
     <MESSAGE value="添加搜索跳转功能" />
     <MESSAGE value="优化异常捕获设置" />
     <MESSAGE value="添加是否发布状态" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加是否发布状态" />
+    <MESSAGE value="修改数据库文件提交" />
+    <MESSAGE value="提交数据库变更文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="提交数据库变更文件" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

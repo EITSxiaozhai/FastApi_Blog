@@ -619,7 +619,7 @@ const isLoggedIn = computed(() => !!usernames.value);
             </el-card>
 
             <el-card style="margin-top: 1%">
-              <h4>喜欢该文章吗？</h4>
+              <h4>对你有帮助吗？</h4>
               <el-rate
                   v-model="value"
                   :colors="['#409eff', '#67c23a', '#FF9900']"
