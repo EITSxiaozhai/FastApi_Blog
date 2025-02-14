@@ -1,9 +1,6 @@
 #!/bin/bash
 set -e  # 如果任何命令失败，则退出脚本
 
-# 替换 alembic.ini 中的占位符
-sed -i "s|^sqlalchemy.url.*$|sqlalchemy.url = ${SQL_URL}|g" /app/alembic.ini
-
 # 执行数据库迁移
 alembic upgrade head
 
