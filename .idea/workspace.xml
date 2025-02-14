@@ -8,9 +8,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加搜索跳转功能">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="优化异常捕获设置">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/superuserAdmin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/03838bf25b55_addpic.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/0746105551ae_test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/180b8acee31f_add_comment_table.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/1dbac0b0c955_userprivileges.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/21c7bce50e66_userprivileges.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/2ebc5950aaf8_test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/3299accd9bac_add_column_age.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/37a2e35daa23_userprivileges.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/3a2bcc686083_added_account_table.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/53b7e7d117d5_add_comment_table.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/61aeec431142_key.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/7fb33342b3fb_ratingsql.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/81a5bb71a9fd_addpic.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/9947cb700365_add.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/9b805a2ec3d5_create_account_table.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/a47cbb28a60b_add_comment_table.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/aba3909b57ee_rating.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/c1667e41aa7d_test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/c654528bf64a_add.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/d976a2beb686_added_account_table.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/e6543b83b896_userprivileges.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/f1d9abeef694_test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/f619edf51436_test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/f85feb084344_create_account_table.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/model/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -83,22 +107,22 @@
     &quot;assignee&quot;: &quot;EITSxiaozhai&quot;
   }
 }</component>
-  <component name="GitLabMergeRequestFiltersHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPENED",
-    "assignee": {
-      "type": "org.jetbrains.plugins.gitlab.mergerequest.ui.filters.GitLabMergeRequestsFiltersValue.MergeRequestsMemberFilterValue.MergeRequestsAssigneeFilterValue",
-      "username": "root",
-      "fullname": "Exp1oit"
+  <component name="GitLabMergeRequestFiltersHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPENED&quot;,
+    &quot;assignee&quot;: {
+      &quot;type&quot;: &quot;org.jetbrains.plugins.gitlab.mergerequest.ui.filters.GitLabMergeRequestsFiltersValue.MergeRequestsMemberFilterValue.MergeRequestsAssigneeFilterValue&quot;,
+      &quot;username&quot;: &quot;root&quot;,
+      &quot;fullname&quot;: &quot;Exp1oit&quot;
     }
   }
-}]]></component>
-  <component name="GitLabMergeRequestsSettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "first": "https://www.exploit-db.xyz:15007/gitlab-instance-40b2b1f0/fast_api.git",
-    "second": "ac371e44-bd6f-4181-be8b-ea0a64f01551"
+}</component>
+  <component name="GitLabMergeRequestsSettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;first&quot;: &quot;https://www.exploit-db.xyz:15007/gitlab-instance-40b2b1f0/fast_api.git&quot;,
+    &quot;second&quot;: &quot;ac371e44-bd6f-4181-be8b-ea0a64f01551&quot;
   }
-}]]></component>
+}</component>
   <component name="GitToolBoxStore">
     <option name="projectConfigVersion" value="5" />
     <option name="recentBranches">
@@ -209,11 +233,11 @@
       <recent name="D:\项目备份\fast-api\blogvuets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog\alembic" />
       <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog\blogvuets\src\assets\css" />
       <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog\app\Fast_blog\unit\Power_Crawl" />
       <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog\app\Fast_blog\unit\SystemMonitoring" />
       <recent name="D:\FastApi_Blog\blogvuets\src\views\BlogPages" />
-      <recent name="D:\FastApi_Blog\blogvuets\src\utils" />
     </key>
   </component>
   <component name="RunManager">
@@ -621,7 +645,9 @@
       <workItem from="1737205668976" duration="7521000" />
       <workItem from="1737250378438" duration="28000" />
       <workItem from="1737250413420" duration="9523000" />
-      <workItem from="1738913384454" duration="383000" />
+      <workItem from="1738913384454" duration="7381000" />
+      <workItem from="1738978931430" duration="14471000" />
+      <workItem from="1739431303230" duration="8349000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -966,7 +992,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="610" />
+    <option name="localTasksCounter" value="612" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1022,7 +1048,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="设置获取用户真实ip" />
     <MESSAGE value="修改dockerfile" />
     <MESSAGE value="删除重复请求" />
     <MESSAGE value="css优化" />
@@ -1047,12 +1072,13 @@
     <MESSAGE value="模糊搜索后端接口" />
     <MESSAGE value="完成模糊搜索功能" />
     <MESSAGE value="添加搜索跳转功能" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加搜索跳转功能" />
+    <MESSAGE value="优化异常捕获设置" />
+    <option name="LAST_COMMIT_MESSAGE" value="优化异常捕获设置" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
     <SUITE FILE_PATH="coverage/fast_api$models.coverage" NAME="models Coverage Results" MODIFIED="1679217759819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/model" />
-    <SUITE FILE_PATH="coverage/FastApi_Blog$.coverage" NAME="未命名 覆盖结果" MODIFIED="1737448179397" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
+    <SUITE FILE_PATH="coverage/FastApi_Blog$.coverage" NAME="未命名 覆盖结果" MODIFIED="1738919079040" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
     <SUITE FILE_PATH="coverage/FastApi_Blog$Fastapi_blog.coverage" NAME="Fastapi_blog Coverage Results" MODIFIED="1711953424270" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
     <SUITE FILE_PATH="coverage/fast_api$backlist__1_.coverage" NAME="backlist (1) Coverage Results" MODIFIED="1693735059923" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/middleware" />
     <SUITE FILE_PATH="coverage/fast_api$user.coverage" NAME="user Coverage Results" MODIFIED="1679322055192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/apps/User_app" />
