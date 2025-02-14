@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e  # 如果任何命令失败，则退出脚本
-
+echo "SQL_URL is set to ${SQL_URL}"
 # 执行数据库迁移
 alembic upgrade head
 

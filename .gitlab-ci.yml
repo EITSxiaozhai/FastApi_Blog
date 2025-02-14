@@ -8,7 +8,8 @@ Fastapi_image_build:
     - echo "FastApi build, Dockerfile:"
     - export Sql_URL="mysql+asyncmy://$DB_USERNAME:$DB_PASSWORD@$DB_HOSTNAME:$DB_PORT/$DB_NAME?charset=utf8mb4"
     - cat Dockerfile
-    - docker build  -t fastapi:$CI_PIPELINE_ID .
+    - echo Sql_URL
+    - docker build  --build-arg Sql_URL=${Sql_URL} -t fastapi:$CI_PIPELINE_ID .
 
 Fastapi_container_deploy1:
     stage: deploy
