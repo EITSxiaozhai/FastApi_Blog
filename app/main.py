@@ -11,7 +11,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from logstash_async.handler import AsynchronousLogstashHandler
 from sqlalchemy.orm import sessionmaker
 
-from Fast_blog.database.alembic_automatic import ConfigGeneration
 from Fast_blog.database.databaseconnection import engine
 from Fast_blog.middleware import celery_app
 from Fast_blog.middleware.LogDecode import JSONLogFormatter
@@ -52,7 +51,6 @@ async def root():
 # 设置日志通过 Logstash 发送到后端 ELK 集群上去
 @app.on_event("startup")
 async def startup_event():
-    ConfigGeneration()
     logger = logging.getLogger("uvicorn")
     # 使用自定义的 JSON 格式化器
     formatter = JSONLogFormatter()
