@@ -1,8 +1,4 @@
 app/.env
-/alembic.ini
-celerybeat-schedule.bak
-celerybeat-schedule.dat
-celerybeat-schedule.dir
 /.env
 .env
 app/google.json
@@ -10,8 +6,6 @@ app/google.json
 *.json
 google.json
 .jpg
-*.ini
 *.yml
 /logstash.yml
 logstash.yml
-alembic.ini
