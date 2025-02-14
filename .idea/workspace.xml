@@ -9,7 +9,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="提交数据库变更文件">
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/README" beforeDir="false" afterPath="$PROJECT_DIR$/app/alembic/README" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/env.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/alembic/env.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/script.py.mako" beforeDir="false" afterPath="$PROJECT_DIR$/app/alembic/script.py.mako" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/alembic/versions/fb08fd5e50f1_added_publishstatus_column.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/alembic/versions/fb08fd5e50f1_added_publishstatus_column.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,8 +30,8 @@
         <option value="Vue Composition API Component" />
         <option value="JavaScript File" />
         <option value="TypeScript File" />
-        <option value="Python Script" />
         <option value="CSS File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -208,11 +213,11 @@
       <recent name="D:\项目备份\fast-api\blogvuets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog" />
+      <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog\app" />
       <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog\alembic" />
       <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog\blogvuets\src\assets\css" />
       <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog\app\Fast_blog\unit\Power_Crawl" />
-      <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog\app\Fast_blog\unit\SystemMonitoring" />
-      <recent name="D:\FastApi_Blog\blogvuets\src\views\BlogPages" />
     </key>
   </component>
   <component name="RunManager">
