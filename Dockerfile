@@ -6,5 +6,6 @@ RUN python -m pip install --upgrade pip
 RUN pip install --no-cache-dir --upgrade -r /requirements.txt
 COPY ./app  /app
 WORKDIR /app
+RUN sed -i "s|sqlalchemy.url = .*|sqlalchemy.url = ${Sql_URL}|g" alembic.ini
 CMD ["/start.sh"]
 
