@@ -5,7 +5,6 @@ celerybeat-schedule.dat
 celerybeat-schedule.dir
 /.env
 .env
-alembic/versions
 app/google.json
 .png
 *.json
