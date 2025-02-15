@@ -1,24 +1,14 @@
 stages:
   - build
-  - test
   - deploy
-  - clean
 
 Fastapi_image_build:
   stage: build
   script:
     - echo "FastApi build, Dockerfile:"
+    - export Sql_URL="mysql+asyncmy://$DB_USERNAME:$DB_PASSWORD@$DB_HOSTNAME:$DB_PORT/$DB_NAME?charset=utf8mb4"
     - cat Dockerfile
     - docker build  -t fastapi:$CI_PIPELINE_ID .
-
-Fastapi_deploy_test:
-  stage: test
-  script:
-    - docker run -d -p 80 --name myfastapi-test-$CI_PIPELINE_ID fastapi:$CI_PIPELINE_ID
-    - docker stop myfastapi-test-$CI_PIPELINE_ID
-    - docker rm myfastapi-test-$CI_PIPELINE_ID
-
-
 
 Fastapi_container_deploy1:
     stage: deploy

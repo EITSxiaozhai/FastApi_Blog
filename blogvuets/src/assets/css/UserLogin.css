@@ -1,0 +1,14 @@
+.login-form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#app .el-main form {
+    background-color: #faf9f9;
+    opacity: 0.9;
+
+}

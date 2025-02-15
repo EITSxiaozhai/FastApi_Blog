@@ -23,6 +23,7 @@ class AccessTokenMiddleware(BaseHTTPMiddleware):
             "/openapi.json",
             "/favicon.ico",
             "/api/generaluser",
+            "/api/blogs/search",
         ]
         # Check if the request path starts with any of the skip_paths
         if any(request.url.path.startswith(path) for path in skip_paths):

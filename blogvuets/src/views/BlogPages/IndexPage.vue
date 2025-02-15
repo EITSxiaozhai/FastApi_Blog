@@ -6,7 +6,9 @@ import 'element-plus/theme-chalk/display.css'
 import {useStore} from "vuex";
 import 'animate.css';
 import WOW from "wow.js";
-import {GoogleUVPV, fetchBlogIndex} from "@/api/Blog/blogapig"
+import '@/assets/css/IndexPage.css';
+import {GoogleUVPV, fetchBlogIndex, searchBlogs} from "@/api/Blog/blogapig"
+import {debounce} from "lodash";
 
 //自动布局修改适配手机端平板端屏幕
 const useXlLayout = () => {
@@ -241,17 +243,6 @@ const usernames = computed(() => store.getters.getUsername);
 const tokens = computed(() => store.getters.getToken);
 const isLoggedIn = computed(() => !!usernames.value);
 
-// 跳转到注册页面
-const redirectToRegister = () => {
-  // 在这里编写跳转逻辑
-  router.push('/register');
-};
-
-// 跳转到用户个人资料页面
-const redirectToUserProfile = () => {
-  // 在这里编写跳转逻辑
-  router.push('/user-profile');
-};
 
 const sendEmail = () => {
   // 替换以下邮箱地址为你的目标邮箱
@@ -260,6 +251,34 @@ const sendEmail = () => {
   window.location.href = `mailto:${emailAddress}`;
 };
 
+const state = ref(''); // 用于绑定输入框的值
+// 提供搜索建议的函数
+const querySearchAsync = async (queryString, cb) => {
+  if (queryString.trim() === '') {
+    cb([]); // 如果输入为空，返回空数组
+    return;
+  }
+
+  try {
+    const response = await searchBlogs(queryString); // 调用后端 API
+    const suggestions = response.data || []; // 调整根据实际响应格式
+    cb(suggestions.map(blog => ({
+      value: blog.title, // 回显的值
+      id: blog.BlogId,       // 可以附加其他数据
+    })));
+  } catch (error) {
+    console.error('获取建议失败:', error);
+    cb([]); // 出现错误时返回空数组
+  }
+};
+
+// 创建防抖函数，设置延迟时间为 300 毫秒
+debounce(querySearchAsync, 300);
+
+// 处理用户选择
+const handleSelect = (item) => {
+  window.location.href = `https://blog.exploit-db.xyz/blog/${item.id}`; // 跳转到该 URL
+};
 </script>
 
 <template>
@@ -279,19 +298,20 @@ const sendEmail = () => {
             class="el-menu-demo"
             mode="horizontal">
 
-          <el-menu-item index="1">
-            <h1>
-              <router-link style="text-decoration: none;" to="/">Exp1oit Blog</router-link>
-            </h1>
-          </el-menu-item>
+
+      <h1 style="display: flex; justify-content: center; align-items: center; margin: 0;">
+        <router-link style="text-decoration: none;" to="/">Exp1oit Blog</router-link>
+      </h1>
 
 
-          <el-autocomplete v-model="state"
-                           :fetch-suggestions="querySearchAsync"
-                           placeholder="搜索你感兴趣的"
-                           style="margin-right: auto"
-                           @select="handleSelect"
-          />
+
+      <!-- Autocomplete Centered -->
+      <el-autocomplete v-model="state"
+                       :fetch-suggestions="querySearchAsync"
+                       placeholder="搜索你感兴趣的"
+                       style="margin-right: auto;margin-left: auto;margin-top: auto;margin-bottom: auto;"
+                       @select="handleSelect"
+      />
 
           <el-menu-item index="3">
             <router-link style="text-decoration: none;" to="/about-me">关于我</router-link>
@@ -426,7 +446,8 @@ const sendEmail = () => {
                           </template>
                           <template v-else>
                             <!-- 使用你的布局 -->
-                            <el-card id="main-boxcard" class="wow animate__bounce bounceInDown box-card" data-wow-duration="2s"
+                            <el-card id="main-boxcard" class="wow animate__bounce bounceInDown box-card"
+                                     data-wow-duration="2s"
                                      shadow="hover">
                               <el-container>
                                 <img id="blog-image" :src="blog.BlogIntroductionPicture" alt="图像描述">
@@ -536,157 +557,5 @@ const sendEmail = () => {
 
 </template>
 
-
-<style>
-
-#app .background-container h1 {
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
-  color: #eeeeee;
-  font-weight: 300;
-}
-
-/* 脚注内容的样式 */
-.footer-content {
-  max-width: 1200px; /* 设置最大宽度，根据需要调整 */
-  margin: 0 auto; /* 居中对齐 */
-}
-
-.footer-content h3 {
-  font-size: 24px; /* 设置标题字体大小 */
-}
-
-.footer-content p {
-  font-size: 16px; /* 设置段落字体大小 */
-  margin: 5px 0; /* 减小段落上下边距 */
-}
-
-/* 链接的样式 */
-.footer-content a {
-  color: #fff; /* 设置链接颜色 */
-  text-decoration: underline; /* 添加下划线 */
-  margin-right: 10px; /* 设置链接右侧间距 */
-}
-
-/* 脚注底部样式 */
-.footer-bottom {
-  max-width: 1200px; /* 设置最大宽度，根据需要调整 */
-  margin: 10px auto 0; /* 减小上外边距 */
-  font-size: 14px; /* 设置字体大小 */
-  text-align: center; /* 文本居中对齐 */
-}
-
-/* 版权信息样式 */
-.footer-bottom p {
-  margin: 5px 0; /* 设置段落上下边距 */
-}
-
-/* 建站时间样式 */
-.footer-bottom p:last-child {
-  margin-top: 10px; /* 设置最后一个段落的上外边距 */
-}
-
-
-.el-footer {
-  padding-top: 100px;
-  display: flex;
-  height: 4vh;
-  width: 100%;
-  align-items: center;
-}
-
-
-.about div img {
-  height: 200px;
-  margin-left: 50px;
-}
-
-#top-mains {
-  z-index: 999;
-}
-
-
-.el-header {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-
-.el-card .el-card__body a {
-  color: black;
-  text-decoration: none;
-}
-
-body {
-  background: rgb(233, 233, 235);
-}
-
-#blog-image {
-  display: inline-block;
-  width: 232px;
-}
-
-#svg-icon svg {
-  margin-left: 30px;
-}
-
-
-#footer {
-  background: #79bbff;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
-  color: #fff; /* 设置文本颜色 */
-  padding: 10px 0; /* 减小上下边距 */
-  position: absolute;
-  left: 0;
-  right: 0;
-  box-shadow: #a0cfff 0px 0px 150px;
-}
-
-
-.floating-window {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 20%;
-  height: 20%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.84);
-  border: 1px solid rgba(204, 204, 204, 0.35);
-  padding: 10px;
-  display: none;
-  z-index: 9999;
-}
-
-.floating-window.show {
-  display: block; /* 当 "showFloatingWindow" 为 true 时显示 */
-}
-
-
-.background-container {
-  position: relative;
-  margin-left: 0;
-  margin-right: 0;
-  width: 100%;
-  height: 100vh; /* 设置容器高度为视口高度 */
-  overflow: hidden; /* 隐藏溢出的内容 */
-  z-index: -9999;
-}
-
-.background-image {
-  /* 背景图片样式，替换为您的背景图片样式 */
-  background-image: url("https://api.vvhan.com/api/bing?rand=sj");
-  background-size: cover;
-  width: 100%;
-  height: 100%;
-  transition: transform 10s ease; /* 添加过渡效果 */
-}
-
-.hidden {
-  display: none;
-}
-
-.el-menu--horizontal > .el-menu-item:nth-child(1) {
-  margin-right: auto;
-}
-</style>
 
 <style src="wow.js/css/libs/animate.css"></style>
