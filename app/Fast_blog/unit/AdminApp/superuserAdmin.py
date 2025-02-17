@@ -767,7 +767,7 @@ async def AdminBlogCreate(blog_create: BlogCreate):
                 blog_tag = BlogTag(Article_Type=tag, blog_id=blog_id)
                 session.add(blog_tag)
             await session.commit()
-            return {"code": 20000, "message": "更新成功"}
+            return {"code": 20000, "message": "创建成功"}
         except jwt.ExpiredSignatureError:
             return {"code": 50012, "message": "Token已过期", "error": "Token已经过期"}
         except jwt.InvalidTokenError:

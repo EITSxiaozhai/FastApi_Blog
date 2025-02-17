@@ -49,24 +49,27 @@ async def GetBlogTaginfo(blog_id: int):
 async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4, db: AsyncSession = Depends(get_db)):
     try:
         columns = [Blog.BlogId, Blog.title, Blog.created_at, Blog.author, Blog.BlogIntroductionPicture]
-        # 查询实际数据库中的文章总数
-        total_articles = await db.scalar(select(func.count()).select_from(Blog))
-        # 根据实际数据库中的文章总数调整 pageSize
-        adjusted_page_size = min(pageSize, total_articles)
-        # 计算合法的 offset，确保不超过实际文章数量
-        offset = (page - 1) * adjusted_page_size if page > 0 else 0
-        stmt = select(*columns).offset(offset).limit(adjusted_page_size)
+        # 查询数据库中发布状态为1的文章总数
+        total_articles = await db.scalar(select(func.count()).select_from(Blog).where(Blog.PublishStatus == 1))
+        # 确保pageSize不超过实际文章总数，避免无效查询
+        adjusted_page_size = min(pageSize, total_articles) if total_articles > 0 else 0
+        # 计算offset，确保合理的分页
+        offset = max((page - 1) * adjusted_page_size, 0)  # 保证offset不为负值
+        # 添加查询条件，仅查询发布状态为1的文章
+        stmt = select(*columns).where(Blog.PublishStatus == 1).offset(offset).limit(adjusted_page_size)
         results = await db.execute(stmt)
         data = results.fetchall()
         data_dicts = []
         for row in data:
-            taglist = await GetBlogTaginfo(blog_id=row[0])
+            taglist = await GetBlogTaginfo(blog_id=row[0])  # 补充获取标签信息
 
+            # 时间处理部分转换为当地时间
             utc_time = row[2]
             local_tz = pytz.timezone('Asia/Shanghai')
             local_time = utc_time.astimezone(local_tz)
             formatted_time = local_time.strftime('%Y-%m-%d')
 
+            # 构造输出字典
             data_dict = {
                 "BlogId": row[0],
                 "title": row[1],
@@ -80,7 +83,7 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4, 
     except Exception as e:
         print("我们遇到了下面的问题")
         print(e)
-        return {"errorCode": 500}
+        return {"errorCode": 500, "message": str(e)}
 
 
 blog_cache = BlogCache()
