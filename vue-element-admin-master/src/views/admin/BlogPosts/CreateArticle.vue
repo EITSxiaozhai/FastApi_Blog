@@ -25,7 +25,7 @@
               />
             </el-select>
             <h3>是否发布</h3>
-            <el-select v-model="post.publishStatus" allow-create default-first-option filterable placeholder="是否发布？">
+            <el-select v-model="post.PublishStatus" allow-create default-first-option filterable placeholder="是否发布？">
               <el-option v-for="item in publishOptions" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
             <div style="padding-top: 20px" />
@@ -105,7 +105,7 @@ export default {
         content: '',
         BlogIntroductionPicture: '',
         author: '',
-        publishStatus: ''
+        PublishStatus: ''
       },
       dialogImageUrl: '',
       dialogVisible: false,
@@ -126,8 +126,8 @@ export default {
       value: [],
       // 发布状态选择器的选项与选中值
       publishOptions: [
-        { value: 'draft', label: '草稿' },
-        { value: 'publish', label: '发布' }
+        { value: 'False', label: '草稿' },
+        { value: 'True', label: '发布' }
       ],
       publishStatus: []
     }
@@ -187,7 +187,7 @@ export default {
     },
     async createPost() {
       // 检查标题和内容是否为空
-      if (!this.post.title || !this.post.content || !this.post.publishStatus) {
+      if (!this.post.title || !this.post.content || !this.post.PublishStatus) {
         this.$message.error('标题和内容不能为空,且发布状态必须选择')
         return
       }
