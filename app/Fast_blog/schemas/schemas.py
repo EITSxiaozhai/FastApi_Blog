@@ -133,4 +133,4 @@ class BlogCreate(BaseModel):
     BlogIntroductionPicture: str
     author: str
     tags: List[str]
-    publishStatus: bool
+    PublishStatus: bool
