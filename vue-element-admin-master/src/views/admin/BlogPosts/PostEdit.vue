@@ -10,6 +10,7 @@
             placeholder="请输入标题"
             type="textarea"
           />
+          <h3>添加相关的标签</h3>
           <el-select
             v-model="value"
             allow-create
@@ -24,6 +25,10 @@
               :label="item.label"
               :value="item.value"
             />
+          </el-select>
+          <h3>是否发布</h3>
+          <el-select v-model="post.PublishStatus" allow-create default-first-option filterable placeholder="是否发布？">
+            <el-option v-for="item in publishOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
           <el-row :gutter="10" style="margin-top: 20px">
             <el-col :lg="3" :md="4" :sm="6" :xl="1" :xs="8">
@@ -114,7 +119,8 @@ export default {
         content: '',
         BlogIntroductionPicture: '',
         author: '',
-        tags: ''
+        tags: '',
+        PublishStatus: ''
       },
       editMode: false,
       value1: '',
@@ -134,7 +140,13 @@ export default {
           value: 'JavaScript',
           label: 'JavaScript'
         }],
-      value: []
+      value: [],
+      // 发布状态选择器的选项与选中值
+      publishOptions: [
+        { value: 'False', label: '草稿' },
+        { value: 'True', label: '发布' }
+      ],
+      publishStatus: []
     }
   },
   created() {

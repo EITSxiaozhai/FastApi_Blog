@@ -1,82 +1,89 @@
 <template>
   <el-container>
     <el-main>
-      <div>
-        <template v-if="!editMode">
-          <h3>创建文章</h3>
-          <h1>
-            <el-input v-model="post.title" placeholder="请输入标题" />
-          </h1>
-          <el-select
-            v-model="value"
-            allow-create
-            default-first-option
-            filterable
-            multiple
-            placeholder="请选择文章标签"
-          >
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
-          </el-select>
-          <div style="padding-top: 20px" />
-          <markdown-editor v-model="post.content" style="height: 85vh" />
-          <div style="padding-top: 20px">
-            <el-upload
-              :auto-upload="true"
-              :before-upload="beforeUpload"
-              :file-list="fileList"
-              action="#"
-              list-type="picture-card"
+      <el-card>
+        <div>
+          <template v-if="!editMode">
+            <h3>创建文章</h3>
+            <h1>
+              <el-input v-model="post.title" placeholder="请输入标题" />
+            </h1>
+            <h3>添加相关的标签</h3>
+            <el-select
+              v-model="value"
+              allow-create
+              default-first-option
+              filterable
+              multiple
+              placeholder="请选择文章标签"
             >
-              <i slot="default" class="el-icon-plus" />
-              <div slot="file" slot-scope="{file}">
-                <img
-                  :src="file.url"
-                  class="el-upload-list__item-thumbnail"
-                >
-                <span class="el-upload-list__item-actions">
-                  <span
-                    class="el-upload-list__item-preview"
-                    @click="handlePictureCardPreview(file)"
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+            <h3>是否发布</h3>
+            <el-select v-model="post.PublishStatus" allow-create default-first-option filterable placeholder="是否发布？">
+              <el-option v-for="item in publishOptions" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+            <div style="padding-top: 20px" />
+            <markdown-editor v-model="post.content" style="height: 85vh" />
+            <div style="padding-top: 20px">
+              <el-upload
+                :auto-upload="true"
+                :before-upload="beforeUpload"
+                :file-list="fileList"
+                action="#"
+                list-type="picture-card"
+              >
+                <i slot="default" class="el-icon-plus" />
+                <div slot="file" slot-scope="{file}">
+                  <img
+                    :src="file.url"
+                    class="el-upload-list__item-thumbnail"
                   >
-                    <i class="el-icon-zoom-in" />
+                  <span class="el-upload-list__item-actions">
+                    <span
+                      class="el-upload-list__item-preview"
+                      @click="handlePictureCardPreview(file)"
+                    >
+                      <i class="el-icon-zoom-in" />
+                    </span>
+                    <span
+                      v-if="!disabled"
+                      class="el-upload-list__item-delete"
+                      @click="handleDownload(file.url)"
+                    >
+                      <i class="el-icon-download" />
+                    </span>
+                    <span
+                      v-if="!disabled"
+                      class="el-upload-list__item-delete"
+                      @click="handleRemove(file)"
+                    >
+                      <i class="el-icon-delete" />
+                    </span>
                   </span>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleDownload(file.url)"
-                  >
-                    <i class="el-icon-download" />
-                  </span>
-                  <span
-                    v-if="!disabled"
-                    class="el-upload-list__item-delete"
-                    @click="handleRemove(file)"
-                  >
-                    <i class="el-icon-delete" />
-                  </span>
-                </span>
-              </div>
-            </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
-              <img :src="dialogImageUrl" alt="" width="100%">
-            </el-dialog>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-          </div>
-          <el-button style="margin-top: 20px" type="primary" @click="createPost">保存</el-button>
-        </template>
-        <template v-else>
-          <h3>编辑文章</h3>
-          <el-input v-model="post.title" placeholder="请输入标题" />
-          <markdown-editor v-model="post.content" style="height: 75vh" />
-          <el-button type="success" @click="savePost">保存</el-button>
-          <el-button type="warning" @click="cancelEdit">取消</el-button>
-        </template>
-      </div>
+                </div>
+              </el-upload>
+              <el-dialog :visible.sync="dialogVisible">
+                <img :src="dialogImageUrl" alt="" width="100%">
+              </el-dialog>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </div>
+            <el-button style="margin-top: 20px" type="primary" @click="createPost">保存</el-button>
+          </template>
+          <template v-else>
+            <h3>编辑文章</h3>
+            <el-input v-model="post.title" placeholder="请输入标题" />
+            <markdown-editor v-model="post.content" style="height: 75vh" />
+            <el-button type="success" @click="savePost">保存</el-button>
+            <el-button type="warning" @click="cancelEdit">取消</el-button>
+          </template>
+        </div>
+      </el-card>
     </el-main>
   </el-container>
 </template>
@@ -97,7 +104,8 @@ export default {
         title: '',
         content: '',
         BlogIntroductionPicture: '',
-        author: ''
+        author: '',
+        PublishStatus: ''
       },
       dialogImageUrl: '',
       dialogVisible: false,
@@ -115,7 +123,13 @@ export default {
           value: 'JavaScript',
           label: 'JavaScript'
         }],
-      value: []
+      value: [],
+      // 发布状态选择器的选项与选中值
+      publishOptions: [
+        { value: 'False', label: '草稿' },
+        { value: 'True', label: '发布' }
+      ],
+      publishStatus: []
     }
   },
   created() {
@@ -173,8 +187,8 @@ export default {
     },
     async createPost() {
       // 检查标题和内容是否为空
-      if (!this.post.title || !this.post.content) {
-        this.$message.error('标题和内容不能为空')
+      if (!this.post.title || !this.post.content || !this.post.PublishStatus) {
+        this.$message.error('标题和内容不能为空,且发布状态必须选择')
         return
       }
       this.post.tags = this.value
