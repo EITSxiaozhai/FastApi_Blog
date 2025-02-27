@@ -147,12 +147,16 @@ async def Blogid(blog_id: int, db: AsyncSession = Depends(get_db)):
             return cached_data_obj
         else:
             print(f'缓存未命中,从数据库中读取{blog_id}数据')
-            results = await db.execute(select(Blog).filter(Blog.BlogId == blog_id,Blog.PublishStatus == 1))
-            data = results.scalars().all()
-            data = [item.to_dict() for item in data]
-            blog_cache.redis_client.set(redis_key, pickle.dumps(data))
-            blog_cache.redis_client.expire(redis_key, 3600)
-            return data
+            try:
+                results = await db.execute(select(Blog).filter(Blog.BlogId == blog_id,Blog.PublishStatus == 1))
+                data = results.scalars().all()
+                data = [item.to_dict() for item in data]
+                blog_cache.redis_client.set(redis_key, pickle.dumps(data))
+                blog_cache.redis_client.expire(redis_key, 3600)
+                return data
+            except Exception as e:
+                print(e)
+                return HTTPException(status_code=500, detail="服务器异常，请联系管理员 watch.dog@qq.com")
     except redis.exceptions.ConnectionError as e:
         print(f"Redis连接失败，无法设置缓存: {e}")
         results = await db.execute(select(Blog).filter(Blog.BlogId == blog_id,Blog.PublishStatus == 1))
