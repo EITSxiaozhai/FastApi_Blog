@@ -9,6 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="增加redis无法链接捕获异常">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -626,7 +627,7 @@
       <workItem from="1739928163366" duration="74000" />
       <workItem from="1740128288361" duration="995000" />
       <workItem from="1740465091568" duration="1131000" />
-      <workItem from="1740636910731" duration="483000" />
+      <workItem from="1740636910731" duration="2457000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -971,7 +972,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="641" />
+    <option name="localTasksCounter" value="642" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
