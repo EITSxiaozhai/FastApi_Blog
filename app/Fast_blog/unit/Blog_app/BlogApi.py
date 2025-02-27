@@ -158,8 +158,6 @@ async def Blogid(blog_id: int, db: AsyncSession = Depends(get_db)):
         results = await db.execute(select(Blog).filter(Blog.BlogId == blog_id))
         data = results.scalars().all()
         data = [item.to_dict() for item in data]
-        blog_cache.redis_client.set(redis_key, pickle.dumps(data))
-        blog_cache.redis_client.expire(redis_key, 3600)
         return data
 
 
