@@ -5,6 +5,7 @@ import pickle
 from typing import Union
 
 import pytz
+import redis
 from fastapi import APIRouter, Depends
 from fastapi import HTTPException
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
@@ -137,20 +138,31 @@ async def update_redis_cache(db: AsyncSession = Depends(get_db)):
 ### 数据库缓存读取判断
 @BlogApp.post("/user/Blogid")
 async def Blogid(blog_id: int, db: AsyncSession = Depends(get_db)):
-    redis_key = f"blog_{blog_id}"
-    cached_data = blog_cache.redis_client.get(redis_key)
-    if cached_data:
-        print(f'缓存命中ID为:{blog_id}数据')
-        cached_data_obj = pickle.loads(cached_data)
-        return cached_data_obj
-    else:
-        print(f'缓存未命中,从数据库中读取{blog_id}数据')
+    try:
+        redis_key = f"blog_{blog_id}"
+        cached_data = blog_cache.redis_client.get(redis_key)
+        if cached_data:
+            print(f'缓存命中ID为:{blog_id}数据')
+            cached_data_obj = pickle.loads(cached_data)
+            return cached_data_obj
+        else:
+            print(f'缓存未命中,从数据库中读取{blog_id}数据')
+            results = await db.execute(select(Blog).filter(Blog.BlogId == blog_id))
+            data = results.scalars().all()
+            data = [item.to_dict() for item in data]
+            blog_cache.redis_client.set(redis_key, pickle.dumps(data))
+            blog_cache.redis_client.expire(redis_key, 3600)
+            return data
+    except redis.exceptions.ConnectionError as e:
+        print(f"Redis连接失败，无法设置缓存: {e}")
         results = await db.execute(select(Blog).filter(Blog.BlogId == blog_id))
         data = results.scalars().all()
         data = [item.to_dict() for item in data]
         blog_cache.redis_client.set(redis_key, pickle.dumps(data))
         blog_cache.redis_client.expire(redis_key, 3600)
         return data
+
+
 
 
 ## 将数据存入数据库

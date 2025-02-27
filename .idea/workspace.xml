@@ -8,9 +8,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改字段名称">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="草稿blog不会显示到前端">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/superuserAdmin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -180,7 +179,7 @@
     &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/dreame/PycharmProjects/FastApi_Blog/app/main.py&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/dreame/dreame-cvat&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
@@ -625,6 +624,10 @@
       <workItem from="1738913384454" duration="7381000" />
       <workItem from="1738978931430" duration="14471000" />
       <workItem from="1739431303230" duration="9798000" />
+      <workItem from="1739928163366" duration="74000" />
+      <workItem from="1740128288361" duration="995000" />
+      <workItem from="1740465091568" duration="1131000" />
+      <workItem from="1740636910731" duration="345000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -969,7 +972,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="639" />
+    <option name="localTasksCounter" value="640" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1025,7 +1028,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="添加模糊搜索功能-增加防抖" />
     <MESSAGE value="模糊搜索接口跳过" />
     <MESSAGE value="模糊搜索后端接口" />
     <MESSAGE value="完成模糊搜索功能" />
@@ -1050,7 +1052,8 @@
     <MESSAGE value="增加前端选择是否存储为草稿" />
     <MESSAGE value="修改发布状态为bool" />
     <MESSAGE value="修改字段名称" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改字段名称" />
+    <MESSAGE value="草稿blog不会显示到前端" />
+    <option name="LAST_COMMIT_MESSAGE" value="草稿blog不会显示到前端" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
