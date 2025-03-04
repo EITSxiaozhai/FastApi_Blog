@@ -3,6 +3,7 @@ import BlogDetail from '../views/BlogPages/BlogDetail.vue';
 import Index from '../views/BlogPages/IndexPage.vue';
 import UserLogin from '../views/user/UserLogin.vue';
 import UserReg from '../views/user/UserReg.vue';
+import error from '../views/errorpage/Error.vue';
 
 const router = createRouter({
     history: createWebHistory('/'),
@@ -45,6 +46,15 @@ const router = createRouter({
                 // description: 'Exp1oit 注册页面',
             },
         },
+        {
+            path: '/errorpage',
+            component: error,
+            name: 'errorPage',
+            meta: {
+                cacheable: false,
+                title: "404页面未找到"
+            },
+        }
     ]
 });
 
