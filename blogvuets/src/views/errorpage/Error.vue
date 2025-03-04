@@ -3,7 +3,7 @@
 
 <template>
   <div class="not-found">
-    <img src="public/404.gif" alt="" />
+    <img src="/404.gif" alt="" />
   </div>
 </template>
 
