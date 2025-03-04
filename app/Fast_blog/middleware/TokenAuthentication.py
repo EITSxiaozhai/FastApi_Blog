@@ -1,78 +1,81 @@
 import datetime
 import os
+from typing import Set
 
 import jwt
+from jwt import PyJWTError
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
+from fastapi import Depends, HTTPException, status
 
 from Fast_blog.middleware.backtasks import Adminoauth2_scheme
 
+# 环境变量
 SECRET_KEY = os.getenv("SECRET_KEY")
 REFRESHSECRET_KEY = os.getenv("REFSECRET_KEY")
 ALGORITHM = "HS256"
 
+# 预定义路径集合
+SKIP_PATHS: Set[str] = {
+    "/api/user/",
+    "/api/admin/user/login",
+    "/api/admin/user/refreshtoken",
+    "/api/views",
+    "/docs",
+    "/openapi.json",
+    "/favicon.ico",
+    "/api/generaluser",
+    "/api/blogs/search",
+}
+
+
+# 错误响应模板
+def error_response(code: int, message: str) -> JSONResponse:
+    return JSONResponse(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        content={"code": code, "message": message}
+    )
+
 
 class AccessTokenMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
-        skip_paths = [
-            "/api/user/",
-            "/api/admin/user/login",
-            "/api/admin/user/refreshtoken",
-            "/api/views",
-            "/docs",
-            "/openapi.json",
-            "/favicon.ico",
-            "/api/generaluser",
-            "/api/blogs/search",
-        ]
-        # Check if the request path starts with any of the skip_paths
-        if any(request.url.path.startswith(path) for path in skip_paths):
+        # 路径检查
+        if any(request.url.path.startswith(path) for path in SKIP_PATHS):
             return await call_next(request)
+
         try:
-            Access_token = await Adminoauth2_scheme(request)
-            detoken_username = ""
-            # 将 Access_token 转换为字节类型
-            Access_token_bytes = Access_token.encode('utf-8')
-            payload = jwt.decode(Access_token_bytes, SECRET_KEY, algorithms=["HS256"])
-            exp_timestamp = payload['exp']
-            current_timestamp = datetime.datetime.utcnow().timestamp()
-            detoken_username = payload['username']
-            print(detoken_username)
-            if current_timestamp > exp_timestamp:
-                print("Access_token 已经过期。执行重新续期操作")
-                return JSONResponse(status_code=401, content={"code": 50014, "message": "过期的 Access_token"})
-            else:
-                print("Access_token 未过期。执行后续请求")
-                return await call_next(request)
+            token = await Adminoauth2_scheme(request)
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+
+            # 验证过期时间
+            if datetime.datetime.utcnow().timestamp() > payload['exp']:
+                return error_response(50014, "Expired access token")
+
+            return await call_next(request)
+
         except jwt.ExpiredSignatureError:
-            print("Access_token 已过期,执行重新续期操作")
-            return JSONResponse(status_code=401, content={"code": 50014, "message": "无效的 Access_token"})
-        except jwt.InvalidTokenError:
-            print("无效的 Access_token，执行重新续期操作")
-            return JSONResponse(status_code=401, content={"code": 50014, "message": "无效的 Access_token"})
+            return error_response(50014, "Expired access token")
+        except PyJWTError:
+            return error_response(50014, "Invalid access token")
         except Exception as e:
-            print(f"服务器验证错误:{e}")
-            return JSONResponse(status_code=500, content={"code": 50000, "message": "服务器验证错误"})
-        response = await call_next(request)
-        return response
+            print(f"Authentication error: {str(e)}")
+            return JSONResponse(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                content={"code": 50000, "message": "Server authentication error"}
+            )
 
 
-async def verify_Refresh_token(Refreshtoken: str):
+async def validate_refresh_token(token: str) -> str:
     try:
-        detoken_username = ""
-        payload = jwt.decode(Refreshtoken, REFRESHSECRET_KEY, algorithms=["HS256"])
-        # 获取过期时间（exp 字段）
-        exp_timestamp = payload['exp']
-        # 获取当前时间戳
-        current_timestamp = datetime.datetime.utcnow().timestamp()
-        detoken_username = payload['username']
-        # 检查是否过期
-        if current_timestamp > exp_timestamp:
-            print("refresh_token 已经过期。执行返回登录页面操作")
-            return JSONResponse(status_code=401, content={"code": 50015, "message": "无效的refresh_token退出登录"})
-        else:
-            print("refresh_token 未过期")
-            return {"expired": False, "username": detoken_username}
-    except jwt.ExpiredSignatureError:
-        print("refresh_token 已过期")
-        return JSONResponse(status_code=401, content={"code": 50015, "message": "无效的refresh_token退出登录"})
+        payload = jwt.decode(token, REFRESHSECRET_KEY, algorithms=[ALGORITHM])
+        if datetime.datetime.utcnow().timestamp() > payload['exp']:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Expired refresh token"
+            )
+        return payload['username']
+    except PyJWTError as e:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid refresh token"
+        )
