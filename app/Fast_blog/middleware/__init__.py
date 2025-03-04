@@ -2,5 +2,5 @@
 # author: YAO XU time:
 
 
-from .TokenAuthentication import AccessTokenMiddleware, verify_Refresh_token
+from .TokenAuthentication import AccessTokenMiddleware, validate_refresh_token
 from .backtasks import celery_app
