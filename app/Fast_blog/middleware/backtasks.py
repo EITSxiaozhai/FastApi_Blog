@@ -2,10 +2,7 @@
 # author: YAO XU time:
 import asyncio
 import os
-import smtplib
 from datetime import datetime
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
 import httpx
 import jwt

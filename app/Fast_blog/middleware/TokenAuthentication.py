@@ -3,10 +3,10 @@ import os
 from typing import Set
 
 import jwt
+from fastapi import HTTPException, status
 from jwt import PyJWTError
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
-from fastapi import Depends, HTTPException, status
 
 from Fast_blog.middleware.backtasks import Adminoauth2_scheme
 
