@@ -17,7 +17,7 @@ from starlette.background import BackgroundTasks
 from starlette.responses import JSONResponse
 
 from Fast_blog.database.databaseconnection import db_session
-from Fast_blog.middleware import verify_Refresh_token
+from Fast_blog.middleware.TokenAuthentication import validate_refresh_token, error_response
 from Fast_blog.middleware.backtasks import Adminoauth2_scheme, verify_recaptcha, \
     AliOssBlogMarkdownImg, AliOssPrivateDocument
 from Fast_blog.model import models
@@ -112,38 +112,39 @@ async def UserLogin(x: UserCredentials, request: Request):
 
 
 @AdminApi.post("/user/refreshtoken")
-async def Refreshtoken(request: Request):
-    # 获取请求头中的 Authorization 值
-    authorization_header = request.headers.get('authorization')
-    # 检查是否存在 Authorization 头
-    if authorization_header:
-        # 使用空格分割字符串，并获取第二部分（即令牌内容）
-        token = authorization_header.split('Bearer ')[1]
-        Refreshtoken_verification = await verify_Refresh_token(Refreshtoken=token)
-        print(Refreshtoken_verification)
-        if Refreshtoken_verification["expired"] == False and Refreshtoken_verification["username"] != "":
-            token = create_jwt_token(data={"username": Refreshtoken_verification["username"],
-                                           "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=40)},
-                                     typology="main_token")
-            refresh_token = create_jwt_token(data={"username": Refreshtoken_verification["username"],
-                                                   "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60)},
-                                             typology="refresh_token")
-            return \
-                {
-                    "code": 20000,
-                    "data":
-                        {
-                            "token": token,
-                            "refresh_token": refresh_token,
-                            "message": "token刷新成功",
-                            "code": 20000,
-                        }
-                }
-        else:
-            return JSONResponse(status_code=401, content={"code": 50015, "message": "无效的refresh_token退出登录"})
-    else:
-        print("Authorization Header not found.")
-        return JSONResponse(status_code=401, content={"code": 50015, "message": "无效的refresh_token退出登录"})
+async def refresh_token(request: Request):
+    # 安全提取Bearer token
+    auth_header = request.headers.get("authorization")
+    if not auth_header or not auth_header.startswith("Bearer "):
+        return error_response(50015, "Missing or invalid authorization header")
+
+    try:
+        refresh_token = auth_header.split(" ", 1)[1]
+        username = await validate_refresh_token(refresh_token)
+
+        # 生成新token（假设create_jwt_token已正确处理时间戳）
+        new_access_token = create_jwt_token(
+            data={"username": username, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=40)},
+            typology="main_token"
+        )
+        new_refresh_token = create_jwt_token(
+            data={"username": username, "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=60)},
+            typology="refresh_token"
+        )
+
+        return {
+            "code": 20000,
+            "data": {
+                "token": new_access_token,
+                "refresh_token": new_refresh_token,
+                "message": "Token refreshed successfully"
+            }
+        }
+
+    except HTTPException as e:
+        return error_response(50015, e.detail)
+    except IndexError:
+        return error_response(50015, "Invalid token format")
 
 
 @AdminApi.get("/user/info")
