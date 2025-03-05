@@ -8,13 +8,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改静态文件地址">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="格式化代码">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/database/databaseconnection.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/database/databaseconnection.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/TokenAuthentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/TokenAuthentication.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/backtasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/backtasks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/superuserAdmin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -632,7 +628,7 @@
       <workItem from="1740128288361" duration="995000" />
       <workItem from="1740465091568" duration="1131000" />
       <workItem from="1740636910731" duration="16957000" />
-      <workItem from="1740973421461" duration="23043000" />
+      <workItem from="1740973421461" duration="25715000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -977,7 +973,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="651" />
+    <option name="localTasksCounter" value="652" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1033,7 +1029,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="增加自动迁移脚本" />
     <MESSAGE value="删除无用脚本" />
     <MESSAGE value="修改流水线部署" />
     <MESSAGE value="删除无用代码" />
@@ -1058,7 +1053,8 @@
     <MESSAGE value="增加404路由" />
     <MESSAGE value="增加id判断，若id不存在则重定向到404" />
     <MESSAGE value="修改静态文件地址" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改静态文件地址" />
+    <MESSAGE value="格式化代码" />
+    <option name="LAST_COMMIT_MESSAGE" value="格式化代码" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
