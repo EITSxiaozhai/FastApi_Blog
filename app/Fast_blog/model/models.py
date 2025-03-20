@@ -1,9 +1,10 @@
 import datetime
 from dataclasses import dataclass
+from typing import List
 
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinary, Float, \
     UniqueConstraint, Text, Boolean
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy_utils import EmailType, ChoiceType, PasswordType
 
 from Fast_blog.database.databaseconnection import Base
@@ -18,8 +19,12 @@ class UserPrivileges(Base):
     ]
     __tablename__ = "AdminPrivileges"
     __table_args__ = {'extend_existing': True}
-    NameId = Column(Integer, primary_key=True, index=True)
-    privilegeName = Column(ChoiceType(Typeofuserchoices), default="1")
+    NameId: int = Column(Integer, primary_key=True, index=True)
+    privilegeName: str = Column(ChoiceType(Typeofuserchoices), default="1")
+    admin_users: Mapped[list["AdminUser"]] = relationship("AdminUser", back_populates="privileges")
+
+    def to_dict(self):
+        return dict(NameId=self.NameId, privilegeName=self.privilegeName)
 
 
 @dataclass
@@ -31,44 +36,50 @@ class User(Base):
     ]
     __tablename__ = "usertable"
     __table_args__ = {'extend_existing': True}
-    UserId = Column(Integer, primary_key=True, index=True)
-    username = Column(String(255), unique=True)
-    userpassword = Column(PasswordType(schemes=['pbkdf2_sha256']))
-    creation_time = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    Last_Login_Time = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    UserUuid = Column(String(255))
-    UserEmail = Column(EmailType(255))
-    UserAvatar = Column(String(255), unique=True)
-    comments = relationship("Comment", back_populates="user")
-    ActivationCode = Column(Integer, default=None)
-    ActivationState = Column(ChoiceType(ActivationStateType), default="NA")
+    UserId: int = Column(Integer, primary_key=True, index=True)
+    username: str = Column(String(255), unique=True)
+    userpassword: str = Column(PasswordType(schemes=['pbkdf2_sha256']))
+    creation_time: datetime.datetime = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    Last_Login_Time: datetime.datetime = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    UserUuid: str = Column(String(255))
+    UserEmail: str = Column(EmailType(255))
+    UserAvatar: str = Column(String(255), unique=True)
+    comments: Mapped[List["Comment"]] = relationship("Comment", back_populates="user")
+    ActivationCode: int = Column(Integer, default=None)
+    ActivationState: str = Column(ChoiceType(ActivationStateType), default="NA")
 
     def to_dict(self):
         return dict(UserId=self.UserId, username=self.username, userpassword=self.userpassword,
-                    UserEmail=self.UserEmail, UserUuid=self.UserUuid, ActivationCode=self.ActivationCode,
-                    ActivationState=self.ActivationState)
+                    creation_time=self.creation_time, Last_Login_Time=self.Last_Login_Time,
+                    UserUuid=self.UserUuid, UserEmail=self.UserEmail, UserAvatar=self.UserAvatar,
+                    ActivationCode=self.ActivationCode, ActivationState=self.ActivationState)
+
 
 
 @dataclass
 class Comment(Base):
     __tablename__ = "comments"
-    id = Column(Integer, primary_key=True, index=True)
-    parentId = Column(Integer, ForeignKey('comments.id'), nullable=True)
-
-    uid = Column(Integer, ForeignKey('usertable.UserId'))
-    blog_id = Column(Integer, ForeignKey('blogtable.BlogId'))
-    blog = relationship("Blog", back_populates="comments")
-    address = Column(String(255))
-    content = Column(String(255), nullable=False)  # 修改此行，为 content 指定长度
-    likes = Column(Integer, default=0)
-    createTime = Column(DateTime, default=datetime.datetime.now)  # 修改此行，为 createTime 指定长度
-    contentImg = Column(String(255))  # 修改此行，为 contentImg 指定长度
-    user = relationship("User", back_populates="comments")
-    replies = relationship("Comment", backref="parent_comment", remote_side=[id])
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    parentId: int = Column(Integer, ForeignKey('comments.id'), nullable=True)
+    uid: int = Column(Integer, ForeignKey('usertable.UserId'))
+    blog_id: Mapped[int] = mapped_column(Integer, ForeignKey('blogtable.BlogId'))
+    blog: Mapped["Blog"] = relationship("Blog", back_populates="comments")
+    address: str = Column(String(255))
+    content: str = Column(String(255), nullable=False)
+    likes: int = Column(Integer, default=0)
+    createTime: datetime.datetime = Column(DateTime, default=datetime.datetime.now)
+    contentImg: str = Column(String(255))
+    user: Mapped["User"] = relationship("User", back_populates="comments")
+    replies: Mapped[List["Comment"]] = relationship(
+        "Comment",
+        backref="parent_comment",
+        remote_side=[id]
+    )
 
     def to_dict(self):
-        return dict(parentId=self.parentId, uid=self.uid, blog_id=self.blog_id, content=self.content, likes=self,
-                    createTime=self.createTime, contentImg=self.contentImg, user=self.user, replies=self.replies)
+        return dict(id=self.id, parentId=self.parentId, uid=self.uid, blog_id=self.blog_id,
+                    address=self.address, content=self.content, likes=self.likes,
+                    createTime=self.createTime, contentImg=self.contentImg)
 
 
 @dataclass
@@ -80,108 +91,178 @@ class AdminUser(Base):
     ]
     __tablename__ = "Admintable"
     __table_args__ = {'extend_existing': True}
-    UserId = Column(Integer, primary_key=True, index=True)
-    username = Column(String(255), unique=True)
-    userpassword = Column(PasswordType(schemes=['pbkdf2_sha256']))
-    gender = Column(ChoiceType(choices), default="2")
-    creation_time = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    Last_Login_Time = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    UserUuid = Column(String(255))
-    UserEmail = Column(EmailType(255))
-    userPrivileges = Column(Integer, ForeignKey('AdminPrivileges.NameId'))
-    privileges = relationship("UserPrivileges", foreign_keys=[userPrivileges], lazy="select")
+    UserId: int = Column(Integer, primary_key=True, index=True)
+    username: str = Column(String(255), unique=True)
+    userpassword: str = Column(PasswordType(schemes=['pbkdf2_sha256']))
+    gender: str = Column(ChoiceType(choices), default="2")
+    creation_time: datetime.datetime = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    Last_Login_Time: datetime.datetime = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    UserUuid: str = Column(String(255))
+    UserEmail: str = Column(EmailType(255))
+    userPrivileges: int = Column(Integer, ForeignKey('AdminPrivileges.NameId'))
+    privileges: Mapped["UserPrivileges"] = relationship(
+        "UserPrivileges",
+        foreign_keys=[userPrivileges],
+        lazy="select",
+        back_populates="admin_users"  # 需要同时在 UserPrivileges 添加对应关系
+    )
 
     def to_dict(self):
-        return dict(UserId=self.UserId, username=self.username, gender=self.gender, UserEmail=self.UserEmail,
-                    UserUuid=self.UserUuid, userPrivileges=self.userPrivileges)
+        return dict(UserId=self.UserId, username=self.username, userpassword=self.userpassword,
+                    creation_time=self.creation_time, Last_Login_Time=self.Last_Login_Time,
+                    UserUuid=self.UserUuid, UserEmail=self.UserEmail, userPrivileges=self.userPrivileges)
 
+
+# @dataclass
+# class Blog(Base):
+#     __tablename__ = "blogtable"
+#     __table_args__ = {'extend_existing': True}
+#     BlogId: int = Column(Integer, primary_key=True, index=True)
+#     title: str = Column(String(255))
+#     content: bytes = Column(LargeBinary)
+#     BlogIntroductionPicture: str = Column(String(255))
+#     created_at: datetime.datetime = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+#     NumberLikes: int = Column(Integer)
+#     NumberViews: int = Column(Integer)
+#     author: str = Column(String(255))
+#     BlogTags: Mapped[List["BlogTag"]] = relationship(
+#         "BlogTag",
+#         back_populates="blogs",
+#         primaryjoin="Blog.BlogId == BlogTag.blog_id"
+#     )
+#     admin_id: int = Column(Integer, ForeignKey('Admintable.UserId'))
+#     ratings: list = relationship("BlogRating", back_populates="blog")
+#     comments: list = relationship("Comment", back_populates="blog")
+#     PublishStatus: bool = Column(Boolean, default=False)
+#
+#     def to_dict(self):
+#         return dict(BlogId=self.BlogId, title=self.title, content=self.content,
+#                     BlogIntroductionPicture=self.BlogIntroductionPicture, created_at=self.created_at,
+#                     NumberLikes=self.NumberLikes, NumberViews=self.NumberViews, author=self.author,
+#                     admin_id=self.admin_id, PublishStatus=self.PublishStatus)
 
 @dataclass
 class Blog(Base):
     __tablename__ = "blogtable"
     __table_args__ = {'extend_existing': True}
 
-    BlogId = Column(Integer, primary_key=True, index=True)
-    title = Column(String(255))
-    content = Column(LargeBinary)
-    BlogIntroductionPicture = Column(String(255))
-    created_at = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    NumberLikes = Column(Integer)
-    NumberViews = Column(Integer)
-    author = Column(String(255))
-    BlogTags = relationship("BlogTag", back_populates="blogs", primaryjoin="Blog.BlogId == BlogTag.blog_id")
-    admin_id = Column(Integer, ForeignKey('Admintable.UserId'))
-    ratings = relationship("BlogRating", back_populates="blog")
-    comments = relationship("Comment", back_populates="blog")
-    PublishStatus: bool = Column(Boolean, default=False)
+    # 使用 mapped_column 替代 Column
+    BlogId: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    title: Mapped[str] = mapped_column(String(255))
+    content: Mapped[bytes] = mapped_column(LargeBinary)
+    BlogIntroductionPicture: Mapped[str] = mapped_column(String(255))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.datetime.now)  # 移除 strftime
+    NumberLikes: Mapped[int] = mapped_column(Integer)
+    NumberViews: Mapped[int] = mapped_column(Integer)
+    author: Mapped[str] = mapped_column(String(255))
+    admin_id: Mapped[int] = mapped_column(Integer, ForeignKey('Admintable.UserId'))
+    PublishStatus: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    # 修正关系定义（关键修改点）
+    BlogTags: Mapped[List["BlogTag"]] = relationship(
+        "BlogTag",
+        back_populates="blogs",
+        primaryjoin="Blog.BlogId == BlogTag.blog_id"
+    )
+
+    ratings: Mapped[List["BlogRating"]] = relationship(
+        "BlogRating",
+        back_populates="blog"
+    )
+
+    comments: Mapped[List["Comment"]] = relationship(
+        "Comment",
+        back_populates="blog"
+    )
 
     def to_dict(self):
-        return dict(BlogId=self.BlogId, title=self.title, content=self.content, author=self.author,
-                    BlogIntroductionPicture=self.BlogIntroductionPicture, created_at=self.created_at)
+        return {
+            "BlogId": self.BlogId,
+            "title": self.title,
+            "content": self.content.decode('utf-8') if self.content else None,  # 二进制转字符串示例
+            "BlogIntroductionPicture": self.BlogIntroductionPicture,
+            "created_at": self.created_at.isoformat(),
+            "NumberLikes": self.NumberLikes,
+            "NumberViews": self.NumberViews,
+            "author": self.author,
+            "admin_id": self.admin_id,
+            "PublishStatus": self.PublishStatus
+        }
 
 
+@dataclass
 class BlogTag(Base):
     __tablename__ = "blogtag"
     __allow_unmapped__ = True
-    id = Column(Integer, primary_key=True, index=True)
-    Article_Type = Column(String(255), index=True)
-    tag_created_at = Column(DateTime, default=datetime.datetime.now)
-    blog_id = Column(Integer, ForeignKey('blogtable.BlogId'))
-    blogs = relationship("Blog", back_populates="BlogTags", primaryjoin="BlogTag.blog_id == Blog.BlogId", uselist=True)
+    id: int = Column(Integer, primary_key=True, index=True)
+    Article_Type: str = Column(String(255), index=True)
+    tag_created_at: datetime.datetime = Column(DateTime, default=datetime.datetime.now)
+    blog_id: int = Column(Integer, ForeignKey('blogtable.BlogId'))
+    blogs: list = relationship("Blog", back_populates="BlogTags", primaryjoin="BlogTag.blog_id == Blog.BlogId", uselist=True)
 
     def to_dict(self):
-        return dict(blog_id=self.blog_id, id=self.id, blog_type=self.Article_Type,
-                    tag_created_at=self.tag_created_at.timestamp(),
-                    Related_Blogs=[blog.to_dict() for blog in self.blogs])
+        return dict(id=self.id, Article_Type=self.Article_Type, tag_created_at=self.tag_created_at, blog_id=self.blog_id)
 
 
 @dataclass
 class PowerMeters(Base):
     __tablename__ = "powertable"
     __table_args__ = {'extend_existing': True}
-    PowerId = Column(Integer, primary_key=True, index=True)
-    DataNum = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d"))
-    electricityNum = Column(String(255))
-    PowerConsumption = Column(String(255))
-    AveragePower = Column(String(255))
+    PowerId: int = Column(Integer, primary_key=True, index=True)
+    DataNum: datetime.datetime = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d"))
+    electricityNum: str = Column(String(255))
+    PowerConsumption: str = Column(String(255))
+    AveragePower: str = Column(String(255))
 
     def to_dict(self):
-        return dict(DataNum=self.DataNum, electricityNum=self.electricityNum, PowerConsumption=self.PowerConsumption,
-                    AveragePower=self.AveragePower)
+        return dict(PowerId=self.PowerId, DataNum=self.DataNum, electricityNum=self.electricityNum,
+                    PowerConsumption=self.PowerConsumption, AveragePower=self.AveragePower)
 
+
+# @dataclass
+# class BlogRating(Base):
+#     __tablename__ = "blog_ratings"
+#     id: int = Column(Integer, primary_key=True, index=True)
+#     blog_id: int = Column(Integer, ForeignKey("blogtable.BlogId"))
+#     ratings: Mapped[List["BlogRating"]] = relationship("BlogRating", back_populates="blog")
+#     blog: 'Blog' = relationship("Blog", back_populates="ratings")
+#
+#     def to_dict(self):
+#         return dict(id=self.id, blog_id=self.blog_id, rating=self.rating)
 
 @dataclass
 class BlogRating(Base):
     __tablename__ = "blog_ratings"
-    id = Column(Integer, primary_key=True, index=True)
-    blog_id = Column(Integer, ForeignKey("blogtable.BlogId"))
-    rating = Column(Float)
-    blog = relationship("Blog", back_populates="ratings")
 
-    def to_dict(self):
-        return dict(blog_id=self.blog_id, rating=self.rating, blog=self.blog)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    blog_id: Mapped[int] = mapped_column(Integer, ForeignKey("blogtable.BlogId"))
+    rating: Mapped[float] = mapped_column(Float)
+
+    blog: Mapped["Blog"] = relationship("Blog", back_populates="ratings")
 
 
 @dataclass
 class Vote(Base):
     __tablename__ = "votes"
-    id = Column(Integer, primary_key=True, index=True)
-    device_id = Column(String(255), index=True)  # 指定了长度为 255 字符
-    blog_id = Column(String(255), index=True)
-    vote_count = Column(Integer, default=0)
+    id: int = Column(Integer, primary_key=True, index=True)
+    device_id: str = Column(String(255), index=True)
+    blog_id: str = Column(String(255), index=True)
+    vote_count: int = Column(Integer, default=0)
     __table_args__ = (UniqueConstraint('device_id', 'blog_id'),)
+    def to_dict(self):
+        return dict(id=self.id, device_id=self.device_id, blog_id=self.blog_id, vote_count=self.vote_count)
 
 
 @dataclass
 class ReptileInclusion(Base):
     __tablename__ = "ReptileInclusion"
-    id = Column(Integer, primary_key=True, index=True)
-    blog_id = Column(Integer, ForeignKey("blogtable.BlogId"))
-    GoogleSubmissionStatus = Column(String(255))
-    BingSubmissionStatus = Column(String(255))
-    Submissiontime = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    ReturnLog = Column(Text)
+    id: int = Column(Integer, primary_key=True, index=True)
+    blog_id: int = Column(Integer, ForeignKey("blogtable.BlogId"))
+    GoogleSubmissionStatus: str = Column(String(255))
+    BingSubmissionStatus: str = Column(String(255))
+    Submissiontime: datetime.datetime = Column(DateTime, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    ReturnLog: str = Column(Text)
 
     def to_dict(self):
-        return dict(id=self.id, blog_id=self.blog_id, GoogleSubmissionStatus=self.googleSubmissionStatus,
-                    BingSubmissionStatus=self.bingSubmissionStatus, Submissiontime=self.Submissiontime)
+        return dict(id=self.id, blog_id=self.blog_id, GoogleSubmissionStatus=self.GoogleSubmissionStatus,
+                    BingSubmissionStatus=self.BingSubmissionStatus, Submissiontime=self.Submissiontime)
