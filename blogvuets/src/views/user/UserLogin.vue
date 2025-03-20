@@ -205,6 +205,28 @@ onMounted(() => {
     <el-main>
 
       <el-form :model="LoginUserForm" class="login-form" label-width="80px">
+              <div class="qrcode-section">
+        <div class="qrcode-container">
+          <img
+            v-if="qrCodeImage"
+            :src="qrCodeImage"
+            alt="GitHub扫码登录"
+            class="qrcode-image"
+          />
+          <div v-else class="qrcode-loading">
+            <el-icon class="is-loading"><Loading /></el-icon>
+            生成二维码中...
+          </div>
+          <div v-if="isPolling" class="qrcode-status">
+            <el-icon class="is-loading"><Loading /></el-icon>
+            等待扫码...
+          </div>
+        </div>
+        <div class="qrcode-tips">
+          <p>使用 GitHub 扫码登录</p>
+          <p>首次扫码将自动创建账号</p>
+        </div>
+      </div>
         <el-form-item label="用户名" prop="username">
           <el-input v-model="LoginUserForm.username" placeholder="请输入用户名"></el-input>
         </el-form-item>
@@ -235,28 +257,7 @@ onMounted(() => {
         </el-form-item>
       </el-form>
 
-      <div class="qrcode-section">
-        <div class="qrcode-container">
-          <img
-            v-if="qrCodeImage"
-            :src="qrCodeImage"
-            alt="GitHub扫码登录"
-            class="qrcode-image"
-          />
-          <div v-else class="qrcode-loading">
-            <el-icon class="is-loading"><Loading /></el-icon>
-            生成二维码中...
-          </div>
-          <div v-if="isPolling" class="qrcode-status">
-            <el-icon class="is-loading"><Loading /></el-icon>
-            等待扫码...
-          </div>
-        </div>
-        <div class="qrcode-tips">
-          <p>使用 GitHub 扫码登录</p>
-          <p>首次扫码将自动创建账号</p>
-        </div>
-      </div>
+
     </el-main>
 
   </el-container>
