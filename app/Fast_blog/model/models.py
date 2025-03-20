@@ -152,7 +152,13 @@ class Blog(Base):
     content: Mapped[bytes] = mapped_column(LargeBinary)
     BlogIntroductionPicture: Mapped[str] = mapped_column(String(255))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.datetime.now)  # 移除 strftime
-    NumberLikes: Mapped[int] = mapped_column(Integer)
+    # 修改后定义（添加 nullable=False 和 default）
+    NumberLikes: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,  # 明确非空约束
+        default=0,  # 设置默认值
+        server_default="0"  # 可选：数据库层面的默认值
+    )
     NumberViews: Mapped[int] = mapped_column(Integer)
     author: Mapped[str] = mapped_column(String(255))
     admin_id: Mapped[int] = mapped_column(Integer, ForeignKey('Admintable.UserId'))
