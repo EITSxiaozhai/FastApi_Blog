@@ -8,16 +8,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="自动获取新二维码">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改接口读取数据">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/backtasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/backtasks.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/assets/css/BlogDetail.css" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/assets/css/BlogDetail.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -987,7 +983,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="666" />
+    <option name="localTasksCounter" value="670" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1043,10 +1039,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改发布状态为bool" />
-    <MESSAGE value="修改字段名称" />
-    <MESSAGE value="草稿blog不会显示到前端" />
-    <MESSAGE value="增加redis无法链接捕获异常" />
     <MESSAGE value="设置只能查询到已经发布状态的" />
     <MESSAGE value="其他异常捕获" />
     <MESSAGE value="修改函数名称" />
@@ -1068,7 +1060,11 @@
     <MESSAGE value="修改运行参数" />
     <MESSAGE value="增加包版本" />
     <MESSAGE value="自动获取新二维码" />
-    <option name="LAST_COMMIT_MESSAGE" value="自动获取新二维码" />
+    <MESSAGE value="增加代码行数包" />
+    <MESSAGE value="修改为异步redis链接" />
+    <MESSAGE value="增加代码行数css" />
+    <MESSAGE value="修改接口读取数据" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改接口读取数据" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

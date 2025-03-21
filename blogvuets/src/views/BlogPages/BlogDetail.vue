@@ -126,7 +126,6 @@ const convertMarkdown = (markdownText) => {
 
   // 生成 HTML 内容
   let renderedContent = md.render(markdownText);
-
   // 解析目录并添加锚点
   const toc = [];
   renderedContent = renderedContent.replace(/<h([1-6])[^>]*>(.*?)<\/h\1>/gmi, (match, level, title, offset) => {
