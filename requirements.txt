@@ -33,5 +33,5 @@ SQLAlchemy-Utils~=0.40.0
 pytz~=2024.2
 protobuf~=5.29.3
 qrcode~=8.0
-itsdangerous~=2.2.
+itsdangerous~=2.2.0
 Pillow~=10.3.0
