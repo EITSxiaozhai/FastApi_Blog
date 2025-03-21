@@ -58,3 +58,32 @@
 .hljs-ln-code {
   padding-left: 10px !important;
 }
+
+/* 代码块容器添加相对定位 */
+pre {
+  position: relative;
+  margin: 1em 0;
+}
+
+/* 复制按钮样式 */
+.copy-button {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+pre:hover .copy-button {
+  opacity: 1;
+}
+
+.copy-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}

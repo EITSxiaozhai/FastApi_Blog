@@ -220,6 +220,42 @@ const buildTreeStructure = (toc) => {
 };
 
 
+const addCopyButtons = () => {
+  nextTick(() => {
+    document.querySelectorAll('pre').forEach(pre => {
+      // 防止重复添加按钮
+      if (pre.querySelector('.copy-button')) return;
+
+      const button = document.createElement('button');
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.onclick = async () => {
+        try {
+          const code = pre.querySelector('code').textContent;
+          await navigator.clipboard.writeText(code);
+          ElNotification({
+            title: '成功',
+            message: '代码已复制到剪贴板',
+            type: 'success',
+            duration: 2000
+          });
+        } catch (err) {
+          ElNotification({
+            title: '错误',
+            message: '无法复制代码',
+            type: 'error',
+            duration: 2000
+          });
+        }
+      };
+
+      pre.appendChild(button);
+    });
+  });
+};
+
+
 // 处理树节点点击
 const handleNodeClick = (data) => {
   const targetElement = document.querySelector(data.anchor);
@@ -273,6 +309,7 @@ const getData = async () => {
       document.querySelectorAll('pre code').forEach((block) => {
         hljs.highlightElement(block);
       });
+      addCopyButtons();
     });
 
   } catch (error) {
