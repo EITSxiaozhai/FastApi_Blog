@@ -8,12 +8,11 @@ import uuid
 from io import BytesIO
 import httpx
 import jwt
-from fastapi import APIRouter, Request, HTTPException, Depends, UploadFile, File, Body
+from fastapi import APIRouter, Request, HTTPException, Depends, UploadFile, File
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker, joinedload
-from starlette.responses import RedirectResponse
 
 from Fast_blog.database.databaseconnection import engine, get_db
 from Fast_blog.middleware.backtasks import TokenManager, Useroauth2_scheme, verify_recaptcha, \
@@ -23,8 +22,7 @@ from Fast_blog.model.models import User, Comment, Blog
 from Fast_blog.schemas.schemas import UserCredentials, UserRegCredentials
 import base64
 import qrcode
-from fastapi.responses import HTMLResponse
-from itsdangerous import serializer, URLSafeSerializer
+from fastapi.responses import RedirectResponse
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Session = SessionLocal()
@@ -302,9 +300,9 @@ async def CommentSave(vueblogid: int, request: Request, token: str = Depends(Use
         return {"code": 40003, "message": "无效的Token"}
 
 
+# 这里应存在类似定义（可能是你代码中遗漏的部分）
 login_sessions = {}  # 核心存储结构
 lock = asyncio.Lock()  # 异步锁，防止并发冲突
-serializer = URLSafeSerializer(os.getenv("URLKEY")) # 用于加密和解密数据
 
 @UserApp.get("/github-qrcode")
 async def generate_github_qrcode(db: AsyncSession = Depends(get_db)):
@@ -406,21 +404,4 @@ async def github_callback(
         login_sessions[state]["user_info"] = user_data
         login_sessions[state]["token"] = token
 
-    # 生成加密回调参数
-    encrypted_data = serializer.dumps({
-        "state": state,
-        "timestamp": datetime.datetime.utcnow().timestamp(),
-        "username": user_data["login"][:3] + "****"  # 部分隐藏用户名
-    })
-
-    # 重定向到前端处理页面
-    frontend_url = f"https://blog.exploit-db.xyz/oauth-callback?payload={encrypted_data}"  # 改用查询参数
-    return RedirectResponse(url=frontend_url)
-
-# 新增解密端点
-@UserApp.post("/decrypt")
-async def decrypt_data(data: dict = Body(...)):
-    try:
-        return serializer.loads(data["payload"])
-    except:
-        raise HTTPException(status_code=400, detail="Invalid payload")
+    return RedirectResponse(url=f"https://blog.exploit-db.xyz")
