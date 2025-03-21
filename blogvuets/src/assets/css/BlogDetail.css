@@ -41,3 +41,20 @@
     color: rgb(121.3, 187.1, 255); /* 设置变色的颜色 */
     transition: color 0.3s ease; /* 添加过渡效果 */
 }
+
+/* 在 assets/css/BlogDetail.css 中添加 */
+.hljs-ln-numbers {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-align: right;
+  color: #999;
+  border-right: 1px solid #CCC;
+  vertical-align: top;
+  padding-right: 5px !important;
+}
+
+.hljs-ln-code {
+  padding-left: 10px !important;
+}
