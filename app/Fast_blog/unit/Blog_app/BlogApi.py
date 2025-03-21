@@ -182,7 +182,6 @@ async def Blogid(blog_id: int, db: AsyncSession = Depends(get_db)):
 
     if cached_data:
         print(f'缓存命中 ID: {blog_id}')
-        print(cached_data)
         return json.loads(cached_data)
 
     # 缓存未命中时查询数据库
