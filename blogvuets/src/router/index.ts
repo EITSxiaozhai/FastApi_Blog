@@ -4,6 +4,7 @@ import Index from '../views/BlogPages/IndexPage.vue';
 import UserLogin from '../views/user/UserLogin.vue';
 import UserReg from '../views/user/UserReg.vue';
 import error from '../views/errorpage/Error.vue';
+import OAuthCallback from '@/views/user/OAuthCallback.vue';
 
 const router = createRouter({
     history: createWebHistory('/'),
@@ -54,6 +55,14 @@ const router = createRouter({
                 cacheable: false,
                 title: "404页面未找到"
             },
+        },
+        {
+            path: '/oauth-callback',
+            component : OAuthCallback ,
+            meta: {
+                requiresAuth: false,
+                hideHeader: true
+            }
         }
     ]
 });
