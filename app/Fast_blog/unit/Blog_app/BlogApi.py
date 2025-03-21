@@ -1,5 +1,6 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
+import asyncio
 import json
 import pickle
 from typing import Union
@@ -90,85 +91,126 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4, 
 blog_cache = BlogCache()
 
 
-# Create event listener to update cache
+# 添加FastAPI生命周期事件
+@BlogApp.on_event("startup")
+async def startup_event():
+    await blog_cache.initialize()
+    print("Redis缓存已初始化" if blog_cache.is_ready() else "Redis初始化失败")
+
+
+# 改进版ORM事件监听
 @event.listens_for(Blog, 'after_insert')
 @event.listens_for(Blog, 'after_update')
 @event.listens_for(Blog, 'after_delete')
 def update_cache(mapper, connection, target):
-    redis_key = f"blog_{target.BlogId}"
-    print(f"刷新了缓存{target.BlogId}")
+    """同步事件触发异步任务"""
+    redis_key = f"blog:{target.BlogId}"
+
+    # 将更新操作提交到后台任务队列
+    loop = asyncio.get_event_loop()
+    if loop.is_running():
+        loop.create_task(async_cache_update(redis_key, target))
+    else:
+        asyncio.run(async_cache_update(redis_key, target))
+
+
+async def async_cache_update(redis_key: str, blog: Blog):
+    """实际执行缓存更新的异步方法"""
+    if not blog_cache.is_ready():
+        return
+
+    print(blog)
+
     data = {
-        "BlogId": target.BlogId,
-        "title": target.title,
-        "content": target.content,
-        "author": target.author,
-        "BlogIntroductionPicture": target.BlogIntroductionPicture,
-        "created_at": target.created_at,
+        "BlogId": blog.BlogId,
+        "title": blog.title,
+        "content": blog.content,
+        "author": blog.author,
+        "BlogIntroductionPicture": blog.BlogIntroductionPicture,
+        "created_at": blog.created_at.isoformat(),
     }
 
-    blog_cache.redis_client.set(redis_key, pickle.dumps([data]))
-    blog_cache.redis_client.expire(redis_key, 86400)  # Set expiration time to 24 hour
+    try:
+        # 使用管道批量操作
+        async with blog_cache.redis_client.pipeline() as pipe:
+            await pipe.set(redis_key, json.dumps(data))  # JSON序列化
+            await pipe.expire(redis_key, 86400)
+            await pipe.execute()
+        print(f"成功更新缓存: {redis_key}")
+    except Exception as e:
+        print(f"缓存更新失败: {str(e)}")
 
 
-# 定时同步任务
+# 增强版缓存同步任务
 async def update_redis_cache(db: AsyncSession = Depends(get_db)):
-    print("开始同步")
-    results = await db.execute(select(Blog))
-    blogs = results.scalars().all()
+    print("启动全量缓存同步")
+    try:
+        result = await db.execute(select(Blog))
+        blogs = result.scalars().all()
 
-    # Prepare data for blogs
-    blog_data = []
-    for blog in blogs:
-        data = {
-            "BlogId": blog.BlogId,
-            "title": blog.title,
-            "content": blog.content,
-            "author": blog.author,
-            "BlogIntroductionPicture": blog.BlogIntroductionPicture,
-            "created_at": blog.created_at,
-        }
-        blog_data.append((f"blog_{blog.BlogId}", data))
+        # 批量管道操作
+        if blog_cache.is_ready():
+            async with blog_cache.redis_client.pipeline() as pipe:
+                for blog in blogs:
+                    data = {
+                        "BlogId": blog.BlogId,
+                        "title": blog.title,
+                        # ...其他字段...
+                    }
+                    redis_key = f"blog:{blog.BlogId}"
+                    pipe.set(redis_key, json.dumps(data))
+                    pipe.expire(redis_key, 86400)
+                await pipe.execute()
+        return {"status": f"同步完成，处理{len(blogs)}条记录"}
+    except Exception as e:
+        print(f"全量同步失败: {str(e)}")
+        return {"status": "同步失败"}
 
-    # Sync Blogs to Redis
-    for redis_key, data in blog_data:
-        blog_cache.redis_client.set(redis_key, pickle.dumps([data]))
-        blog_cache.redis_client.expire(redis_key, 86400)  # Set expiration time to 24 hours
 
-
-### 数据库缓存读取判断
+# 改进版缓存读取接口
 @BlogApp.post("/user/Blogid")
 async def Blogid(blog_id: int, db: AsyncSession = Depends(get_db)):
+    redis_key = f"blog:{blog_id}"
+
+    # 尝试读取缓存
+    cached_data = None
+    if blog_cache.is_ready():
+        try:
+            cached_data = await blog_cache.redis_client.get(redis_key)
+        except Exception as e:
+            print(f"缓存读取异常: {str(e)}")
+
+    if cached_data:
+        print(f'缓存命中 ID: {blog_id}')
+        return json.loads(cached_data)
+
+    # 缓存未命中时查询数据库
     try:
-        redis_key = f"blog_{blog_id}"
-        cached_data = blog_cache.redis_client.get(redis_key)
-        if cached_data:
-            print(f'缓存命中ID为:{blog_id}数据')
-            cached_data_obj = pickle.loads(cached_data)
-            return cached_data_obj
-        else:
-            id_results = await db.execute(select(Blog).where(Blog.BlogId == blog_id))
-            if id_results.scalars().first() is None:
-                raise HTTPException(status_code=404, detail="ID未找到")
-            else:
-                print(f'缓存未命中,从数据库中读取{blog_id}数据')
-                try:
-                    results = await db.execute(select(Blog).filter(Blog.BlogId == blog_id, Blog.PublishStatus == 1))
-                    data = results.scalars().all()
-                    data = [item.to_dict() for item in data]
-                    blog_cache.redis_client.set(redis_key, pickle.dumps(data))
-                    blog_cache.redis_client.expire(redis_key, 3600)
-                    return data
-                except Exception as e:
-                    print(e)
-                    raise HTTPException(status_code=500, detail="服务器异常，请联系管理员 watch.dog@qq.com")
+        result = await db.execute(
+            select(Blog).where(Blog.BlogId == blog_id, Blog.PublishStatus == 1)
+        )
+        blog = result.scalars().first()
 
-    except redis.exceptions.ConnectionError as e:
-        print(f"Redis连接失败，无法设置缓存: {e}")
-        results = await db.execute(select(Blog).filter(Blog.BlogId == blog_id, Blog.PublishStatus == 1))
-        data = results.scalars().all()
-        data = [item.to_dict() for item in data]
-        return data
+        if not blog:
+            raise HTTPException(status_code=404, detail="内容不存在")
 
+        response_data = blog.to_dict()
+
+        # 异步更新缓存
+        if blog_cache.is_ready():
+            try:
+                await blog_cache.redis_client.set(
+                    redis_key,
+                    json.dumps(response_data),
+                    ex=3600
+                )
+            except Exception as e:
+                print(f"缓存写入失败: {str(e)}")
+
+        return response_data
+    except Exception as e:
+        print(f"数据库查询失败: {str(e)}")
+        raise HTTPException(status_code=500, detail="服务器内部错误")
 
 ## 将数据存入数据库
 @BlogApp.post("/blogs/{blog_id}/ratings/")

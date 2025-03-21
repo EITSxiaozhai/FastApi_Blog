@@ -1,5 +1,5 @@
 <script setup>
-import {ref, onMounted, onBeforeMount, nextTick, onActivated, defineProps} from 'vue';
+import {ref, onMounted, onBeforeMount, nextTick, onActivated, defineProps , onBeforeUnmount} from 'vue';
 import {useRouter} from 'vue-router'; // 导入useRouter函数
 import {ElNotification} from 'element-plus';
 import vueRecaptcha from 'vue3-recaptcha2';
@@ -136,10 +136,19 @@ const login = async () => {
 const qrCodeImage = ref('');
 const githubLoginState = ref('');
 const isPolling = ref(false);
+let pollInterval = null;
 
 // 获取GitHub登录二维码
+// 二维码获取与轮询逻辑
 const fetchGithubQRCode = async () => {
   try {
+    // 重置状态
+    qrCodeImage.value = '';
+    githubLoginState.value = '';
+    isPolling.value = false;
+    if (pollInterval) clearInterval(pollInterval);
+
+    // 发起新请求
     const response = await GetQrcode();
     qrCodeImage.value = response.data.qrCodeUrl;
     githubLoginState.value = response.data.state;
@@ -147,21 +156,22 @@ const fetchGithubQRCode = async () => {
   } catch (error) {
     ElNotification({
       title: '错误',
-      message: '获取二维码失败',
+      message: '获取二维码失败，3秒后重试',
       type: 'error'
     });
+    setTimeout(fetchGithubQRCode, 3000);
   }
 };
 
 // 轮询检查登录状态
 const startPolling = () => {
   isPolling.value = true;
-  const interval = setInterval(async () => {
+  pollInterval = setInterval(async () => {
     try {
       const response = await CheckLogin(githubLoginState.value)
 
       if (response.data.status === 'confirmed') {
-        clearInterval(interval);
+        clearInterval(pollInterval);
         isPolling.value = false;
 
         // 处理登录成功逻辑
@@ -179,16 +189,17 @@ const startPolling = () => {
 
         router.push('/');
       } else if (response.data.status === 'expired') {
-        clearInterval(interval);
+        clearInterval(pollInterval);
         isPolling.value = false;
         ElNotification({
           title: '过期',
           message: '二维码已过期，请刷新页面',
           type: 'warning'
         });
+        await fetchGithubQRCode(); // 重新获取二维码
       }
     } catch (error) {
-      clearInterval(interval);
+      clearInterval(pollInterval);
       isPolling.value = false;
     }
   }, 2000);
@@ -196,6 +207,12 @@ const startPolling = () => {
 
 onMounted(() => {
   fetchGithubQRCode();
+});
+
+onBeforeUnmount(() => {
+  if (pollInterval) {
+    clearInterval(pollInterval);
+  }
 });
 </script>
 

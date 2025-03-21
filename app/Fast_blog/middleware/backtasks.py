@@ -1,16 +1,17 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
 import asyncio
+import json
 import os
-from datetime import datetime
-
+from typing import Optional, Dict
+from datetime import datetime, timedelta
 import httpx
 import jwt
 import oss2
-import redis
 from celery import Celery
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
+from redis.asyncio import Redis
 
 load_dotenv()
 
@@ -51,30 +52,65 @@ async def update_redis_cache_task():
     return 0
 
 
-##token缓存到redis中，暂时还没有使用
-class TokenManager():
-    def __init__(self, secret_key=secret_key):
+class AsyncTokenManager:
+    def __init__(self, secret_key: str, redis_client: Redis):
+        """
+        参数说明：
+        secret_key: JWT加密密钥
+        redis_client: 已初始化的异步Redis客户端
+        """
         self.secret_key = secret_key
-        self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, username=redis_user,
-                                              password=db_password)
+        self.redis = redis_client
 
-    def create_jwt_token(self, data: dict) -> str:
-        token = jwt.encode(data, self.secret_key, algorithm=ALGORITHM)
-        return token
+    async def initialize(self):
+        """可选连接验证方法"""
+        await self.redis.ping()
 
-    def store_token_in_redis(self, username: str, token: str, expiration: datetime):
-        remaining_seconds = max((expiration - datetime.now()).total_seconds(), 100)
-        # 将剩余过期时间转换为整数
-        remaining_seconds = int(remaining_seconds)
-        self.redis_client.setex(username, remaining_seconds, token)
+    async def create_jwt_token(self, data: dict, expires_delta: timedelta = None) -> str:
+        """生成带过期时间的JWT令牌"""
+        to_encode = data.copy()
+        expire_time = datetime.utcnow() + (expires_delta or timedelta(minutes=15))
+        to_encode.update({"exp": expire_time})
+        return jwt.encode(to_encode, self.secret_key, algorithm=ALGORITHM)
 
-    def validate_token(self, username: str, token: str) -> bool:
-        stored_token = self.redis_client.get(username)
+    async def store_token(self, user_key: str, token: str, expiration: datetime) -> bool:
+        """异步存储令牌到Redis（原子化操作）"""
+        try:
+            # 计算剩余秒数（包含最小存活时间保护）
+            remaining = max(int((expiration - datetime.utcnow()).total_seconds()), 10)
 
-        if stored_token and stored_token.decode("utf-8") == token:
+            # 使用事务管道保证原子性
+            async with self.redis.pipeline(transaction=True) as pipe:
+                await pipe.setex(
+                    name=f"token:{user_key}",
+                    time=remaining,
+                    value=token
+                ).execute()
             return True
+        except Exception as e:
+            print(f"令牌存储失败: {str(e)}")
+            return False
 
-        return False
+    async def validate_token(self, user_key: str, token: str) -> bool:
+        """异步验证令牌有效性"""
+        try:
+            stored_token = await self.redis.get(f"token:{user_key}")
+
+            # 双重验证机制
+            return stored_token and stored_token == token and self._verify_expiration(token)
+        except Exception as e:
+            print(f"令牌验证异常: {str(e)}")
+            return False
+
+    def _verify_expiration(self, token: str) -> bool:
+        """内部方法验证JWT有效期"""
+        try:
+            payload = jwt.decode(token, self.secret_key, algorithms=[ALGORITHM])
+            return datetime.utcnow() < datetime.fromtimestamp(payload["exp"])
+        except jwt.ExpiredSignatureError:
+            return False
+        except jwt.InvalidTokenError:
+            return False
 
 
 ##Google验证码验证
@@ -112,8 +148,123 @@ async def verify_recaptcha(UserreCAPTCHA, SecretKeyTypology):
 ###将命中率高的数据同步到redis中
 class BlogCache:
     def __init__(self):
-        # 创建Redis连接
-        self.redis_client = redis.StrictRedis(host=redis_host, port=redis_port, db=redis_db, password=db_password)
+        self.redis_client: Redis = None
+
+    async def initialize(self):
+        """使用连接池初始化"""
+        self.redis_client = Redis(
+            host=os.getenv("REDIS_DB_HOSTNAME"),
+            port=int(os.getenv("REDIS_DB_PORT")),
+            db=int(os.getenv("REDIS_DB_NAME")),
+            password=os.getenv("REDIS_DB_PASSWORD"),
+            decode_responses=True,
+            socket_connect_timeout=5  # 添加超时设置
+        )
+        # 测试连接
+        await self.redis_client.ping()
+
+    def is_ready(self):
+        return self.redis_client is not None
+
+class SessionStorage:
+    def __init__(self, redis_client: Redis):  # 直接接收 Redis 客户端
+        self.redis_client = redis_client
+        self.memory_cache: Dict[str, dict] = {}
+        self.lock = asyncio.Lock()
+        self.local_ttl = 60  # 本地缓存60秒
+
+    async def _redis_key(self, state: str) -> str:
+        return f"oauth:{state}"
+
+    async def create_session(self, state: str) -> bool:
+        """创建新会话（修复参数传递）"""
+        session_data = {
+            "status": "pending",
+            "expire_time": (datetime.now() + timedelta(minutes=5)).isoformat(),
+            "user_info": None,
+            "created_at": datetime.now().isoformat()
+        }
+
+        async with self.lock:
+            self.memory_cache[state] = session_data
+
+            # 正确传递参数
+            asyncio.create_task(
+                self._async_redis_set(
+                    await self._redis_key(state),
+                    json.dumps(session_data),
+                    ex=300  # 现在可以正确传递关键字参数
+                )
+            )
+
+        return True
+
+    async def get_session(self, state: str) -> Optional[dict]:
+        """获取会话（本地缓存优先）"""
+        # 检查本地缓存
+        async with self.lock:
+            if state in self.memory_cache:
+                session = self.memory_cache[state]
+                if datetime.fromisoformat(session["expire_time"]) > datetime.now():
+                    return session
+                del self.memory_cache[state]
+
+        # 从Redis获取（使用直接持有的客户端）
+        redis_data = await self.redis_client.get(  # 修改这里
+            await self._redis_key(state)
+        )
+
+        if redis_data:
+            try:
+                session = json.loads(redis_data)
+                # 更新本地缓存
+                async with self.lock:
+                    self.memory_cache[state] = session
+                return session
+            except json.JSONDecodeError:
+                print("Redis数据反序列化失败")
+                return None
+        return None
+
+    async def update_session(self, state: str, updates: dict) -> bool:
+        """原子化更新会话（修复版）"""
+        lua_script = """
+        local key = KEYS[1]
+        local updates = cjson.decode(ARGV[1])
+        local data = cjson.decode(redis.call('GET', key) or '{}')
+
+        for k, v in pairs(updates) do
+            data[k] = v
+        end
+
+        redis.call('SET', key, cjson.encode(data), 'EX', 300)
+        return 1
+        """
+
+        async with self.lock:
+            if state in self.memory_cache:
+                self.memory_cache[state].update(updates)
+
+            # 使用直接持有的客户端
+            return bool(await self.redis_client.eval(
+                lua_script,
+                1,
+                await self._redis_key(state),
+                json.dumps(updates)
+            ))
+
+    async def _async_redis_set(self, key: str, value: str, **kwargs):
+        """适配新版客户端的写入方法"""
+        try:
+            # 使用官方客户端的参数格式
+            await self.redis_client.set(
+                name=key,
+                value=value,
+                ex=kwargs.get('ex')  # 明确指定参数名
+            )
+        except Exception as e:
+            print(f"Redis写入失败: {str(e)}")
+
 
 
 # 几个认证接口

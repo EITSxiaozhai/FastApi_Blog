@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@mdit/plugin-plantuml": "^0.16.0",
+    "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@unhead/vue": "^1.8.9",
     "@vitejs/plugin-vue": "^4.3.4",
     "animate.css": "^4.1.1",
@@ -23,6 +24,8 @@
     "element-plus": "^2.4.0",
     "fingerprintjs2": "^2.1.4",
     "grecaptcha": "^1.0.3",
+    "highlight.js": "^11.9.0",
+    "highlightjs-line-numbers.js": "^2.9.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "markdown-it": "^14.1.0",

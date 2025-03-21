@@ -5,7 +5,7 @@ import {useRoute} from "vue-router";
 import MarkdownIt from 'markdown-it';
 import {plantuml} from "@mdit/plugin-plantuml";
 import hljs from 'highlight.js';
-import 'highlight.js/styles/atom-one-dark-reasonable.css';
+import 'highlight.js/styles/atom-one-dark.css';
 import {useRouter} from "vue-router";
 import {reactive} from "vue";
 import '@/assets/css/BlogDetail.css';
@@ -16,7 +16,6 @@ import {
   postCommentSave,
   getAverageRatingRequest
 } from '@/api/Blog/blogapig';
-
 import {ChatDotRound, ChatLineRound, ChatRound} from '@element-plus/icons-vue'
 import Fingerprint2 from "fingerprintjs2";
 import {useStore} from 'vuex';
@@ -38,12 +37,22 @@ const md = new MarkdownIt({
   langPrefix: 'language-',
   html: true,
   linkify: true,
-  typographer: true
+  typographer: true,
+  highlight: function (str, lang) { // 新增highlight配置
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(str, {language: lang}).value;
+      } catch (__) {
+        console.warn('代码高亮失败:', __);
+      }
+    }
+    return ''; // 使用额外的默认转义
+  }
 }).use(plantuml);
 const tableOfContents = ref([]);
 const router = useRouter()
 const data = reactive({
-  data: []
+  blogData: null // 从数组改为单体对象
 })
 
 const treeProps = {
@@ -57,6 +66,11 @@ const treeProps = {
   'default-expand-all': true,
 };
 
+nextTick(() => {
+  document.querySelectorAll('pre code').forEach((block) => {
+    hljs.highlightElement(block);
+  });
+});
 
 // 滚动 el-tree 组件，使当前节点保持在视图中间
 const scrollToCurrentNode = () => {
@@ -102,7 +116,6 @@ const stringToHex = str => [...str].map(char => char.charCodeAt(0).toString(16))
 
 // 转换markdown操作代码高亮和目录生成
 const convertMarkdown = (markdownText) => {
-
   // 使用 'replace' 方法修改转义行为
   md.renderer.rules.text = function (tokens, idx) {
     let content = tokens[idx].content;
@@ -113,7 +126,6 @@ const convertMarkdown = (markdownText) => {
 
   // 生成 HTML 内容
   let renderedContent = md.render(markdownText);
-
   // 解析目录并添加锚点
   const toc = [];
   renderedContent = renderedContent.replace(/<h([1-6])[^>]*>(.*?)<\/h\1>/gmi, (match, level, title, offset) => {
@@ -208,6 +220,42 @@ const buildTreeStructure = (toc) => {
 };
 
 
+const addCopyButtons = () => {
+  nextTick(() => {
+    document.querySelectorAll('pre').forEach(pre => {
+      // 防止重复添加按钮
+      if (pre.querySelector('.copy-button')) return;
+
+      const button = document.createElement('button');
+      button.className = 'copy-button';
+      button.textContent = '复制';
+
+      button.onclick = async () => {
+        try {
+          const code = pre.querySelector('code').textContent;
+          await navigator.clipboard.writeText(code);
+          ElNotification({
+            title: '成功',
+            message: '代码已复制到剪贴板',
+            type: 'success',
+            duration: 2000
+          });
+        } catch (err) {
+          ElNotification({
+            title: '错误',
+            message: '无法复制代码',
+            type: 'error',
+            duration: 2000
+          });
+        }
+      };
+
+      pre.appendChild(button);
+    });
+  });
+};
+
+
 // 处理树节点点击
 const handleNodeClick = (data) => {
   const targetElement = document.querySelector(data.anchor);
@@ -231,29 +279,45 @@ const handleNodeClick = (data) => {
 };
 
 
-// 博客内容获取操作
+// 重构数据获取方法
 const getData = async () => {
   const blogId = route.params.blogId;
   try {
     const response = await postUserBlogId(blogId);
-    data.data = response.data;
+
+    // 添加数据校验
+    if (!response?.data) {
+      throw new Error('接口返回数据格式异常');
+    }
+
+    // 直接存储对象
+    data.blogData = response.data;
     isLoading.value = false;
-    document.title = data.data[0].title;
-    myPage.value.description = data.data[0].content;
 
-    // Ensure content is converted to HTML if it's Markdown
-    const htmlContent = convertMarkdown(response.data[0].content);
+    // 安全设置标题
+    document.title = data.blogData.title || '默认标题';
 
-    // Trigger table of contents generation
+    // 转换内容时添加防御
+    const content = data.blogData.content ? String(data.blogData.content) : '';
+    const htmlContent = convertMarkdown(content);
+
     generateTableOfContents(htmlContent);
 
-    setTimeout(() => {
-      hljs.highlightAll();
-    }, 0);
+    // 使用nextTick确保DOM更新
+    nextTick(() => {
+      // 手动触发代码块高亮
+      document.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightElement(block);
+      });
+      addCopyButtons();
+    });
+
   } catch (error) {
-    console.error('Error fetching blog data:', error);
+    console.error('数据加载失败:', error);
+    ElNotification.error('内容加载失败，请刷新重试');
   }
 };
+
 // 页面元数据变量
 const myPage = ref({description: ''})
 // 操作页面元数据
@@ -269,6 +333,9 @@ let totalCharacters = 0;
 
 // 获取阅读进度操作
 const updateReadingProgress = () => {
+
+  const content = data.blogData?.content || '';
+  totalCharacters = content.length;
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
   const windowHeight = window.innerHeight;
   const documentHeight = document.documentElement.scrollHeight - commentx.value;
@@ -293,10 +360,14 @@ const stepMarginTop = ref(); // 创建响应式变量来存储步骤条的 margi
 
 // 获取数据并计算阅读进度
 getData().then(() => {
-  // 获取文章内容的总字符数，确保 data.data[0] 有值
-  totalCharacters = data.data[0].content.length;
-  // 监听滚动事件，更新阅读进度
-  window.addEventListener('scroll', updateReadingProgress)
+  // 添加三级空值保护
+  if (data.blogData?.content) {
+    totalCharacters = data.blogData.content.length;
+    window.addEventListener('scroll', updateReadingProgress);
+  } else {
+    console.warn('内容数据异常，无法计算阅读进度');
+    totalCharacters = 0;
+  }
 });
 
 
@@ -534,18 +605,18 @@ const isLoggedIn = computed(() => !!usernames.value);
           class="el-menu-demo"
           mode="horizontal">
 
-<h1 style="display: flex; justify-content: center; align-items: center; margin: 0;">
-        <router-link style="text-decoration: none;" to="/">Exp1oit Blog</router-link>
-      </h1>
+        <h1 style="display: flex; justify-content: center; align-items: center; margin: 0;">
+          <router-link style="text-decoration: none;" to="/">Exp1oit Blog</router-link>
+        </h1>
 
 
-      <!-- Autocomplete Centered -->
-      <el-autocomplete v-model="state"
-                       :fetch-suggestions="querySearchAsync"
-                       placeholder="搜索你感兴趣的"
-                       style="margin-right: auto;margin-left: auto;margin-top: auto;margin-bottom: auto;"
-                       @select="handleSelect"
-      />
+        <!-- Autocomplete Centered -->
+        <el-autocomplete v-model="state"
+                         :fetch-suggestions="querySearchAsync"
+                         placeholder="搜索你感兴趣的"
+                         style="margin-right: auto;margin-left: auto;margin-top: auto;margin-bottom: auto;"
+                         @select="handleSelect"
+        />
 
         <el-sub-menu index="4">
           <template #title>
@@ -576,15 +647,11 @@ const isLoggedIn = computed(() => !!usernames.value);
         v-if="!isLoading"
         style="margin: 3% auto; width: 99%; box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);"
     >
-      <div v-for="(item, index) in data.data" :key="index" class="text-item">
-        <h1 class="title">{{ item.title }}</h1>
+      <div class="text-item">
+        <h1 class="title">{{ data.blogData.title }}</h1>
         <div class="info">
-          <span class="author">作者: {{ item.author }}</span>
-          <span class="rating">
-          总体评分:
-          <el-rate v-model="averageRating" allow-half disabled style="margin-left: 10px;"/>
-        </span>
-          <span class="date">发布时间：{{ item.created_at }}</span>
+          <span class="author">作者: {{ data.blogData.author }}</span>
+          <span class="date">发布时间：{{ data.blogData.created_at }}</span>
         </div>
       </div>
     </el-card>
@@ -636,10 +703,8 @@ const isLoggedIn = computed(() => !!usernames.value);
 
         <el-main>
           <el-card v-if="!isLoading" style="margin-top: 20px;padding-bottom: 10%">
-            <div v-for="(item, index) in data.data" :key="index" class="text item">
-              <div>
-                <div v-html="convertMarkdown(item.content)"></div>
-              </div>
+            <div class="blog-content">
+              <div v-html="convertMarkdown(data.blogData.content)"/>
             </div>
           </el-card>
 
