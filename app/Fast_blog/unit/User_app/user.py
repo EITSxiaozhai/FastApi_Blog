@@ -1,7 +1,7 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
 import asyncio
-import datetime
+from datetime import datetime, timedelta
 import os
 import random
 import uuid
@@ -16,8 +16,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker, joinedload
 
 from Fast_blog.database.databaseconnection import engine, get_db
-from Fast_blog.middleware.backtasks import TokenManager, Useroauth2_scheme, verify_recaptcha, \
-    AliOssUpload, celery_app
+from Fast_blog.middleware.backtasks import AsyncTokenManager, Useroauth2_scheme, verify_recaptcha, \
+    AliOssUpload, celery_app, SessionStorage, BlogCache
 from Fast_blog.model import models
 from Fast_blog.model.models import User, Comment, Blog
 from Fast_blog.schemas.schemas import UserCredentials, UserRegCredentials
@@ -140,7 +140,7 @@ async def UserLogin(x: UserCredentials, db: AsyncSession = Depends(get_db)):
                 return {'data': '用户名或者密码错误'}
             else:
 
-                usertoken = TokenManager()
+                usertoken = AsyncTokenManager()
                 token_data = {
                     "username": x.username,
                     "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
@@ -305,10 +305,33 @@ login_sessions = {}  # 核心存储结构
 lock = asyncio.Lock()  # 异步锁，防止并发冲突
 serializer = URLSafeSerializer(os.getenv("URLKEY")) # 用于加密和解密数据
 
+# 在应用启动时初始化
+async def init_redis():
+    cache = BlogCache()
+    await cache.initialize()
+    return cache
+
+# 确保全局单例连接
+_redis_pool = None
+
+async def get_session_storage() -> SessionStorage:
+    global _redis_pool
+    if not _redis_pool:
+        cache = BlogCache()
+        await cache.initialize()
+        _redis_pool = cache.redis_client
+    return SessionStorage(_redis_pool)
+
+
 @UserApp.get("/github-qrcode")
-async def generate_github_qrcode(db: AsyncSession = Depends(get_db)):
+async def generate_github_qrcode(
+        storage: SessionStorage = Depends(get_session_storage)
+):
     state = str(uuid.uuid4())
-    expire_time = datetime.datetime.now() + datetime.timedelta(minutes=5)
+
+    # 创建新会话
+    if not await storage.create_session(state):
+        raise HTTPException(500, detail="Session creation failed")
 
     # 生成GitHub OAuth URL
     auth_url = (
@@ -325,14 +348,6 @@ async def generate_github_qrcode(db: AsyncSession = Depends(get_db)):
     img.save(buf, format="PNG")
     buf.seek(0)
 
-    # 存储会话状态
-    async with lock:
-        login_sessions[state] = {
-            "status": "pending",
-            "expire_time": expire_time,
-            "user_info": None
-        }
-
     return {
         "state": state,
         "qrCodeUrl": f"data:image/png;base64,{base64.b64encode(buf.getvalue()).decode()}"
@@ -340,35 +355,36 @@ async def generate_github_qrcode(db: AsyncSession = Depends(get_db)):
 
 
 @UserApp.get("/check-login")
-async def check_github_login(state: str):
-    async with lock:
-        session = login_sessions.get(state)
-        if not session:
-            return {"status": "expired"}
+async def check_github_login(
+        state: str,
+        storage: SessionStorage = Depends(get_session_storage)
+):
+    session = await storage.get_session(state)
+    if not session:
+        return {"status": "expired"}
 
-        if datetime.datetime.now() > session["expire_time"]:
-            del login_sessions[state]
-            return {"status": "expired"}
+    expire_time = datetime.fromisoformat(session["expire_time"])
+    if datetime.now() > expire_time:
+        await storage.delete_session(state)
+        return {"status": "expired"}
 
-        return {
-            "status": session["status"],
-            "username": session["user_info"]["login"] if session["user_info"] else None,
-            "token": session.get("token")
-        }
+    return {
+        "status": session["status"],
+        "username": session["user_info"]["login"] if session["user_info"] else None,
+        "token": session.get("token")
+    }
 
 
-# 修改现有的GitHub回调处理
 @UserApp.get("/auth/github/callback")
 async def github_callback(
         code: str,
         state: str,
-        request: Request
+        storage: SessionStorage = Depends(get_session_storage)
 ):
-    # 验证 state 有效性
-    async with lock:
-        session = login_sessions.get(state)
-        if not session:
-            raise HTTPException(status_code=400, detail="无效的state参数")
+    # 验证会话状态
+    session = await storage.get_session(state)
+    if not session:
+        raise HTTPException(400, detail="无效的state参数")
 
     # 获取access_token
     async with httpx.AsyncClient() as client:
@@ -396,30 +412,32 @@ async def github_callback(
     # 生成JWT token
     token = create_jwt_token({
         "username": user_data["login"],
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+        "exp": datetime.utcnow() + datetime.timedelta(hours=1)
     })
 
     # 更新会话状态
-    async with lock:
-        login_sessions[state]["status"] = "confirmed"
-        login_sessions[state]["user_info"] = user_data
-        login_sessions[state]["token"] = token
+    updates = {
+        "status": "confirmed",
+        "user_info": user_data,
+        "token": token
+    }
+    if not await storage.update_session(state, updates):
+        raise HTTPException(500, detail="Session update failed")
 
     # 生成加密回调参数
     encrypted_data = serializer.dumps({
         "state": state,
-        "timestamp": datetime.datetime.utcnow().timestamp(),
-        "username": user_data["login"][:3] + "****"  # 部分隐藏用户名
+        "timestamp": datetime.utcnow().timestamp(),
+        "username": user_data["login"][:3] + "****"
     })
 
-    # 重定向到前端处理页面
-    frontend_url = f"https://blog.exploit-db.xyz/oauth-callback?payload={encrypted_data}"  # 改用查询参数
+    frontend_url = f"https://blog.exploit-db.xyz/oauth-callback?payload={encrypted_data}"
     return RedirectResponse(url=frontend_url)
 
-# 新增解密端点
+
 @UserApp.post("/decrypt")
 async def decrypt_data(data: dict = Body(...)):
     try:
         return serializer.loads(data["payload"])
     except:
-        raise HTTPException(status_code=400, detail="Invalid payload")
+        raise HTTPException(400, detail="Invalid payload")
