@@ -8,10 +8,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="增加id判断，若id不存在则重定向到404">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="增加新页面">
+      <change beforePath="$PROJECT_DIR$/.gitlab-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.gitlab-ci.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/components.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/components.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/errorpage/Error.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/errorpage/Error.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +179,7 @@
     &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/dreame/dreame-cvat&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/dreame/PycharmProjects/FastApi_Blog&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
@@ -190,7 +189,7 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.github.copilot.settings.ApplicationConfigurable&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\dreame\\PycharmProjects\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
@@ -203,11 +202,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog" />
       <recent name="E:\pytest\FastApi_Blog" />
       <recent name="D:\FastApi_Blog" />
       <recent name="D:\FastApi_Blog\blogvuets\public" />
       <recent name="D:\FastApi_Blog\blogvuets\src\views\pages" />
-      <recent name="D:\项目备份\fast-api\blogvuets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog\blogvuets\public" />
@@ -238,8 +237,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-PY-243.22562.220" />
-        <option value="bundled-python-sdk-0fc6c617c4bd-9a18a617cbe4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.22562.220" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.25659.43" />
+        <option value="bundled-python-sdk-181015f7ab06-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.25659.43" />
       </set>
     </attachedChunks>
   </component>
@@ -629,7 +628,14 @@
       <workItem from="1740128288361" duration="995000" />
       <workItem from="1740465091568" duration="1131000" />
       <workItem from="1740636910731" duration="16957000" />
-      <workItem from="1740973421461" duration="17603000" />
+      <workItem from="1740973421461" duration="26054000" />
+      <workItem from="1741315036761" duration="322000" />
+      <workItem from="1741315371781" duration="356000" />
+      <workItem from="1741315749973" duration="1835000" />
+      <workItem from="1741317652700" duration="5248000" />
+      <workItem from="1741743180301" duration="2071000" />
+      <workItem from="1742364239281" duration="10301000" />
+      <workItem from="1742456361856" duration="2856000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -974,7 +980,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="650" />
+    <option name="localTasksCounter" value="662" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1030,16 +1036,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="移动数据库迁移目录" />
-    <MESSAGE value="增加自动迁移脚本" />
-    <MESSAGE value="删除无用脚本" />
-    <MESSAGE value="修改流水线部署" />
-    <MESSAGE value="删除无用代码" />
-    <MESSAGE value="设置包导入" />
-    <MESSAGE value="修改数据库配置" />
-    <MESSAGE value="修改自动提交数据库配置" />
-    <MESSAGE value="修改读取配置" />
-    <MESSAGE value="删除无效索引" />
     <MESSAGE value="修改启动脚本" />
     <MESSAGE value="增加是否存储草稿字段" />
     <MESSAGE value="增加前端选择是否存储为草稿" />
@@ -1055,12 +1051,22 @@
     <MESSAGE value="添加404页面" />
     <MESSAGE value="增加404路由" />
     <MESSAGE value="增加id判断，若id不存在则重定向到404" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加id判断，若id不存在则重定向到404" />
+    <MESSAGE value="修改静态文件地址" />
+    <MESSAGE value="格式化代码" />
+    <MESSAGE value="启动celery-beat" />
+    <MESSAGE value="增加扫码登录接口" />
+    <MESSAGE value="修改模型设计" />
+    <MESSAGE value="同步包版本" />
+    <MESSAGE value="增加扫码登录" />
+    <MESSAGE value="更新数据库" />
+    <MESSAGE value="title修改" />
+    <MESSAGE value="增加新页面" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加新页面" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
     <SUITE FILE_PATH="coverage/fast_api$models.coverage" NAME="models Coverage Results" MODIFIED="1679217759819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/model" />
-    <SUITE FILE_PATH="coverage/FastApi_Blog$.coverage" NAME="未命名 覆盖结果" MODIFIED="1741073767770" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
+    <SUITE FILE_PATH="coverage/FastApi_Blog$.coverage" NAME="未命名 覆盖结果" MODIFIED="1742520912752" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
     <SUITE FILE_PATH="coverage/FastApi_Blog$Fastapi_blog.coverage" NAME="Fastapi_blog Coverage Results" MODIFIED="1711953424270" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
     <SUITE FILE_PATH="coverage/fast_api$backlist__1_.coverage" NAME="backlist (1) Coverage Results" MODIFIED="1693735059923" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/middleware" />
     <SUITE FILE_PATH="coverage/fast_api$user.coverage" NAME="user Coverage Results" MODIFIED="1679322055192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/apps/User_app" />

@@ -148,7 +148,7 @@ async def Blogid(blog_id: int, db: AsyncSession = Depends(get_db)):
         else:
             id_results = await db.execute(select(Blog).where(Blog.BlogId == blog_id))
             if id_results.scalars().first() is None:
-                raise  HTTPException(status_code=404,detail="ID未找到")
+                raise HTTPException(status_code=404, detail="ID未找到")
             else:
                 print(f'缓存未命中,从数据库中读取{blog_id}数据')
                 try:
@@ -160,16 +160,14 @@ async def Blogid(blog_id: int, db: AsyncSession = Depends(get_db)):
                     return data
                 except Exception as e:
                     print(e)
-                    raise  HTTPException(status_code=500, detail="服务器异常，请联系管理员 watch.dog@qq.com")
+                    raise HTTPException(status_code=500, detail="服务器异常，请联系管理员 watch.dog@qq.com")
 
     except redis.exceptions.ConnectionError as e:
         print(f"Redis连接失败，无法设置缓存: {e}")
-        results = await db.execute(select(Blog).filter(Blog.BlogId == blog_id,Blog.PublishStatus == 1))
+        results = await db.execute(select(Blog).filter(Blog.BlogId == blog_id, Blog.PublishStatus == 1))
         data = results.scalars().all()
         data = [item.to_dict() for item in data]
         return data
-
-
 
 
 ## 将数据存入数据库
@@ -300,6 +298,7 @@ async def get_total_uvpv():
         return {"error": "Authentication failed", "message": str(auth_error), "code": 40002}
     except Exception as e:
         return {"error": "Internal Server Error", "message": str(e), "code": 50000}
+
 
 @BlogApp.get("/blogs/search")
 async def get_blogs(q: str, db: AsyncSession = Depends(get_db)):

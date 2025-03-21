@@ -23,9 +23,14 @@ redis~=5.0.0
 psutil~=5.9.5
 oss2~=2.18.0
 oauth2client~=4.1.3
-httplib2
+httplib2~=0.22.0
 elastic-apm
 python-logstash-async~=3.0.0
-google-api-python-client
+google-api-python-client~=2.159.0
 google-auth
 google-analytics-data
+SQLAlchemy-Utils~=0.40.0
+pytz~=2024.2
+protobuf~=5.29.3
+qrcode~=8.0
+itsdangerous~=2.2.0

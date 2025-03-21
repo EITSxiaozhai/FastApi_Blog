@@ -12,3 +12,117 @@
     opacity: 0.9;
 
 }
+
+
+/* 二维码登录主容器 */
+.qrcode-section {
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+/* 二维码容器 */
+.qrcode-container {
+  position: relative;
+  padding: 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #ebeef5;
+  transition: all 0.3s ease;
+}
+
+/* 鼠标悬停效果 */
+.qrcode-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* 二维码图片样式 */
+.qrcode-image {
+  width: 220px;
+  height: 220px;
+  display: block;
+  border-radius: 8px;
+  background: white;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 加载状态 */
+.qrcode-loading {
+  width: 220px;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #909399;
+  font-size: 14px;
+  gap: 8px;
+}
+
+/* 加载动画 */
+.qrcode-loading .el-icon {
+  font-size: 32px;
+  animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 扫码状态提示 */
+.qrcode-status {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #409eff;
+  padding: 8px 16px;
+  background: rgba(64, 158, 255, 0.1);
+  border-radius: 20px;
+}
+
+/* 提示文字 */
+.qrcode-tips {
+  text-align: center;
+  line-height: 1.6;
+}
+
+.qrcode-tips p:first-child {
+  color: #303133;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.qrcode-tips p:last-child {
+  color: #909399;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* 响应式处理 */
+@media (max-width: 768px) {
+  .qrcode-container {
+    padding: 1rem;
+  }
+
+  .qrcode-image {
+    width: 180px;
+    height: 180px;
+  }
+
+  .qrcode-loading {
+    width: 180px;
+    height: 180px;
+    font-size: 13px;
+  }
+}

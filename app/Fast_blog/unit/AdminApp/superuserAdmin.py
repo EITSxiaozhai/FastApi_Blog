@@ -14,7 +14,6 @@ from sqlalchemy import select, update
 from sqlalchemy.exc import NoResultFound, IntegrityError
 from sqlalchemy.orm import joinedload
 from starlette.background import BackgroundTasks
-from starlette.responses import JSONResponse
 
 from Fast_blog.database.databaseconnection import db_session
 from Fast_blog.middleware.TokenAuthentication import validate_refresh_token, error_response

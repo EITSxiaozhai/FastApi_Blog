@@ -1,13 +1,16 @@
 # ----- coding: utf-8 ------
 # author: YAO XU time:
+import asyncio
 import datetime
 import os
 import random
 import uuid
-
+from io import BytesIO
+import httpx
 import jwt
-from fastapi import APIRouter, Request, HTTPException, Depends, UploadFile, File
+from fastapi import APIRouter, Request, HTTPException, Depends, UploadFile, File, Body
 from fastapi.security import OAuth2PasswordRequestForm
+from itsdangerous import URLSafeSerializer
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker, joinedload
@@ -18,6 +21,9 @@ from Fast_blog.middleware.backtasks import TokenManager, Useroauth2_scheme, veri
 from Fast_blog.model import models
 from Fast_blog.model.models import User, Comment, Blog
 from Fast_blog.schemas.schemas import UserCredentials, UserRegCredentials
+import base64
+import qrcode
+from fastapi.responses import RedirectResponse
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Session = SessionLocal()
@@ -25,6 +31,11 @@ Session = SessionLocal()
 UserApp = APIRouter()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
+GITHUB_CLIENT_ID = os.getenv("GITHUB_CLIENT_ID")
+GITHUB_CLIENT_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
+REDIRECT_URI = os.getenv("REDIRECT_URI")
+
+
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -288,3 +299,127 @@ async def CommentSave(vueblogid: int, request: Request, token: str = Depends(Use
         return {"code": 40002, "message": "Token已过期"}
     except jwt.InvalidTokenError:
         return {"code": 40003, "message": "无效的Token"}
+
+
+login_sessions = {}  # 核心存储结构
+lock = asyncio.Lock()  # 异步锁，防止并发冲突
+serializer = URLSafeSerializer(os.getenv("URLKEY")) # 用于加密和解密数据
+
+@UserApp.get("/github-qrcode")
+async def generate_github_qrcode(db: AsyncSession = Depends(get_db)):
+    state = str(uuid.uuid4())
+    expire_time = datetime.datetime.now() + datetime.timedelta(minutes=5)
+
+    # 生成GitHub OAuth URL
+    auth_url = (
+        "https://github.com/login/oauth/authorize"
+        f"?client_id={GITHUB_CLIENT_ID}"
+        f"&redirect_uri={REDIRECT_URI}"
+        f"&state={state}"
+        "&scope=user:email"
+    )
+
+    # 生成二维码
+    img = qrcode.make(auth_url)
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    buf.seek(0)
+
+    # 存储会话状态
+    async with lock:
+        login_sessions[state] = {
+            "status": "pending",
+            "expire_time": expire_time,
+            "user_info": None
+        }
+
+    return {
+        "state": state,
+        "qrCodeUrl": f"data:image/png;base64,{base64.b64encode(buf.getvalue()).decode()}"
+    }
+
+
+@UserApp.get("/check-login")
+async def check_github_login(state: str):
+    async with lock:
+        session = login_sessions.get(state)
+        if not session:
+            return {"status": "expired"}
+
+        if datetime.datetime.now() > session["expire_time"]:
+            del login_sessions[state]
+            return {"status": "expired"}
+
+        return {
+            "status": session["status"],
+            "username": session["user_info"]["login"] if session["user_info"] else None,
+            "token": session.get("token")
+        }
+
+
+# 修改现有的GitHub回调处理
+@UserApp.get("/auth/github/callback")
+async def github_callback(
+        code: str,
+        state: str,
+        request: Request
+):
+    # 验证 state 有效性
+    async with lock:
+        session = login_sessions.get(state)
+        if not session:
+            raise HTTPException(status_code=400, detail="无效的state参数")
+
+    # 获取access_token
+    async with httpx.AsyncClient() as client:
+        token_response = await client.post(
+            "https://github.com/login/oauth/access_token",
+            headers={"Accept": "application/json"},
+            data={
+                "client_id": GITHUB_CLIENT_ID,
+                "client_secret": GITHUB_CLIENT_SECRET,
+                "code": code,
+                "redirect_uri": REDIRECT_URI
+            }
+        )
+
+        token_data = token_response.json()
+        access_token = token_data["access_token"]
+
+        # 获取用户信息
+        user_response = await client.get(
+            "https://api.github.com/user",
+            headers={"Authorization": f"token {access_token}"}
+        )
+        user_data = user_response.json()
+
+    # 生成JWT token
+    token = create_jwt_token({
+        "username": user_data["login"],
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+    })
+
+    # 更新会话状态
+    async with lock:
+        login_sessions[state]["status"] = "confirmed"
+        login_sessions[state]["user_info"] = user_data
+        login_sessions[state]["token"] = token
+
+    # 生成加密回调参数
+    encrypted_data = serializer.dumps({
+        "state": state,
+        "timestamp": datetime.datetime.utcnow().timestamp(),
+        "username": user_data["login"][:3] + "****"  # 部分隐藏用户名
+    })
+
+    # 重定向到前端处理页面
+    frontend_url = f"https://blog.exploit-db.xyz/oauth-callback?payload={encrypted_data}"  # 改用查询参数
+    return RedirectResponse(url=frontend_url)
+
+# 新增解密端点
+@UserApp.post("/decrypt")
+async def decrypt_data(data: dict = Body(...)):
+    try:
+        return serializer.loads(data["payload"])
+    except:
+        raise HTTPException(status_code=400, detail="Invalid payload")

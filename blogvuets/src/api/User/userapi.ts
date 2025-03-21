@@ -41,3 +41,19 @@ export function UploadUserAvatar(data: { data: any }) {
         data
     })
 }
+
+export function CheckLogin(state: string) {
+    return backApi({
+        url: '/generaluser/check-login',
+        method: 'get',
+        params: { state }
+    })
+}
+
+export function GetQrcode(data: { data: any }) {
+    return backApi({
+        url: '/generaluser/github-qrcode',
+        method: 'get',
+        data
+    })
+}

@@ -51,6 +51,13 @@ async def root():
 # 设置日志通过 Logstash 发送到后端 ELK 集群上去
 @app.on_event("startup")
 async def startup_event():
+
+    # # 启动Celery Beat子进程
+    # celery_process = subprocess.Popen([
+    #     "celery", "-A", "Fast_blog.middleware.celerybeat-schedule",
+    #     "beat", "--loglevel=info"
+    # ])
+
     logger = logging.getLogger("uvicorn")
     # 使用自定义的 JSON 格式化器
     formatter = JSONLogFormatter()

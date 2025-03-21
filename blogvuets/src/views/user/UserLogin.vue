@@ -5,7 +5,7 @@ import {ElNotification} from 'element-plus';
 import vueRecaptcha from 'vue3-recaptcha2';
 import {useStore} from 'vuex';
 import VueJwtDecode from 'vue-jwt-decode';
-import {UserLogin} from '@/api/User/userapi';
+import {UserLogin, CheckLogin,GetQrcode} from '@/api/User/userapi';
 import '@/assets/css/UserLogin.css';
 
 const v2Sitekey = '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq';
@@ -131,6 +131,72 @@ const login = async () => {
 };
 
 
+
+// 新增二维码相关状态
+const qrCodeImage = ref('');
+const githubLoginState = ref('');
+const isPolling = ref(false);
+
+// 获取GitHub登录二维码
+const fetchGithubQRCode = async () => {
+  try {
+    const response = await GetQrcode();
+    qrCodeImage.value = response.data.qrCodeUrl;
+    githubLoginState.value = response.data.state;
+    startPolling();
+  } catch (error) {
+    ElNotification({
+      title: '错误',
+      message: '获取二维码失败',
+      type: 'error'
+    });
+  }
+};
+
+// 轮询检查登录状态
+const startPolling = () => {
+  isPolling.value = true;
+  const interval = setInterval(async () => {
+    try {
+      const response = await CheckLogin(githubLoginState.value)
+
+      if (response.data.status === 'confirmed') {
+        clearInterval(interval);
+        isPolling.value = false;
+
+        // 处理登录成功逻辑
+        localStorage.setItem('token', response.data.token);
+        store.commit('setTokenAndUsername', {
+          token: response.data.token,
+          username: response.data.username
+        });
+
+        ElNotification({
+          title: '成功',
+          message: 'GitHub登录成功',
+          type: 'success'
+        });
+
+        router.push('/');
+      } else if (response.data.status === 'expired') {
+        clearInterval(interval);
+        isPolling.value = false;
+        ElNotification({
+          title: '过期',
+          message: '二维码已过期，请刷新页面',
+          type: 'warning'
+        });
+      }
+    } catch (error) {
+      clearInterval(interval);
+      isPolling.value = false;
+    }
+  }, 2000);
+};
+
+onMounted(() => {
+  fetchGithubQRCode();
+});
 </script>
 
 <template>
@@ -139,6 +205,28 @@ const login = async () => {
     <el-main>
 
       <el-form :model="LoginUserForm" class="login-form" label-width="80px">
+              <div class="qrcode-section">
+        <div class="qrcode-container">
+          <img
+            v-if="qrCodeImage"
+            :src="qrCodeImage"
+            alt="GitHub扫码登录"
+            class="qrcode-image"
+          />
+          <div v-else class="qrcode-loading">
+            <el-icon class="is-loading"><Loading /></el-icon>
+            生成二维码中...
+          </div>
+          <div v-if="isPolling" class="qrcode-status">
+            <el-icon class="is-loading"><Loading /></el-icon>
+            等待扫码...
+          </div>
+        </div>
+        <div class="qrcode-tips">
+          <p>使用 GitHub 扫码登录</p>
+          <p>首次扫码将自动创建账号</p>
+        </div>
+      </div>
         <el-form-item label="用户名" prop="username">
           <el-input v-model="LoginUserForm.username" placeholder="请输入用户名"></el-input>
         </el-form-item>
@@ -168,6 +256,7 @@ const login = async () => {
           </el-button>
         </el-form-item>
       </el-form>
+
 
     </el-main>
 
