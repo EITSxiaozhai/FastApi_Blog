@@ -8,12 +8,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="更新数据库">
-      <change beforePath="$PROJECT_DIR$/.gitlab-ci.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.gitlab-ci.yml" afterDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改css">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/assets/css/UserLogin.css" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/assets/css/UserLogin.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/user/UserLogin.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/components.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/components.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/router/index.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -638,7 +638,7 @@
       <workItem from="1741317652700" duration="5248000" />
       <workItem from="1741743180301" duration="2071000" />
       <workItem from="1742364239281" duration="10301000" />
-      <workItem from="1742456361856" duration="2856000" />
+      <workItem from="1742456361856" duration="11281000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -983,7 +983,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="660" />
+    <option name="localTasksCounter" value="662" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1039,8 +1039,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改读取配置" />
-    <MESSAGE value="删除无效索引" />
     <MESSAGE value="修改启动脚本" />
     <MESSAGE value="增加是否存储草稿字段" />
     <MESSAGE value="增加前端选择是否存储为草稿" />
@@ -1064,12 +1062,14 @@
     <MESSAGE value="同步包版本" />
     <MESSAGE value="增加扫码登录" />
     <MESSAGE value="更新数据库" />
-    <option name="LAST_COMMIT_MESSAGE" value="更新数据库" />
+    <MESSAGE value="修改容器运行参数" />
+    <MESSAGE value="修改css" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改css" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
     <SUITE FILE_PATH="coverage/fast_api$models.coverage" NAME="models Coverage Results" MODIFIED="1679217759819" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/model" />
-    <SUITE FILE_PATH="coverage/FastApi_Blog$.coverage" NAME="未命名 覆盖结果" MODIFIED="1742458767251" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
+    <SUITE FILE_PATH="coverage/FastApi_Blog$.coverage" NAME="未命名 覆盖结果" MODIFIED="1742520912752" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
     <SUITE FILE_PATH="coverage/FastApi_Blog$Fastapi_blog.coverage" NAME="Fastapi_blog Coverage Results" MODIFIED="1711953424270" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
     <SUITE FILE_PATH="coverage/fast_api$backlist__1_.coverage" NAME="backlist (1) Coverage Results" MODIFIED="1693735059923" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/middleware" />
     <SUITE FILE_PATH="coverage/fast_api$user.coverage" NAME="user Coverage Results" MODIFIED="1679322055192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app/Fast_blog/apps/User_app" />
