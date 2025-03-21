@@ -61,7 +61,8 @@ const router = createRouter({
             component : OAuthCallback ,
             meta: {
                 requiresAuth: false,
-                hideHeader: true
+                hideHeader: true,
+                title: "OAuth回调",
             }
         }
     ]
