@@ -62,7 +62,7 @@ const router = createRouter({
             meta: {
                 requiresAuth: false,
                 hideHeader: true,
-                title: "OAuth回调",
+                title: "授权成功等待跳转",
             }
         }
     ]
