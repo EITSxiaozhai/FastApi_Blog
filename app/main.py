@@ -1,7 +1,5 @@
 import logging
-import multiprocessing
 import os
-import subprocess
 from datetime import datetime
 from urllib.request import Request
 
@@ -12,7 +10,6 @@ from logstash_async.handler import AsynchronousLogstashHandler
 from sqlalchemy.orm import sessionmaker
 
 from Fast_blog.database.databaseconnection import engine
-from Fast_blog.middleware import celery_app
 from Fast_blog.middleware.LogDecode import JSONLogFormatter
 from Fast_blog.middleware.TokenAuthentication import AccessTokenMiddleware
 from Fast_blog.unit import AdminApp, Blog_app, Power_Crawl, SystemMonitoring, User_app
@@ -43,29 +40,34 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/health")
 async def root():
-    return {"data":200}
+    return {"data": 200}
 
 
 # 设置日志通过 Logstash 发送到后端 ELK 集群上去
 @app.on_event("startup")
-async def startup_event():
-
-    # # 启动Celery Beat子进程
-    # celery_process = subprocess.Popen([
-    #     "celery", "-A", "Fast_blog.middleware.celerybeat-schedule",
-    #     "beat", "--loglevel=info"
-    # ])
-
+async def configure_logging():
     logger = logging.getLogger("uvicorn")
-    # 使用自定义的 JSON 格式化器
     formatter = JSONLogFormatter()
+
+    # 配置异步Logstash处理器
     logstash_handler = AsynchronousLogstashHandler(
-        host=LogStash_ip,
-        port=5044,
-        database_path=None
+        host=os.getenv("LOGSTASH_NGINX_HOST", "hkyc.exploit-db.xyz"),
+        port=int(os.getenv("LOGSTASH_NGINX_PORT", 443)),
+        transport='logstash_async.transport.HttpTransport',
+        ssl_enable=True,
+        username=os.getenv("LOGSTASH_USER"),
+        password=os.getenv("LOGSTASH_PASS"),
+        database_path=None,
+        transport_options={
+            'timeout': 30,
+            'verify_ssl': False,
+            'http_path': '/'  # 对应Nginx配置的location
+        }
     )
+
     logstash_handler.setFormatter(formatter)
     logger.addHandler(logstash_handler)
     logger.setLevel(logging.INFO)
