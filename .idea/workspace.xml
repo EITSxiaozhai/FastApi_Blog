@@ -8,8 +8,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加运行变量">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改exp创建">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/backtasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/middleware/backtasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -635,7 +637,7 @@
       <workItem from="1741743180301" duration="2071000" />
       <workItem from="1742364239281" duration="10301000" />
       <workItem from="1742456361856" duration="2856000" />
-      <workItem from="1742785113119" duration="7884000" />
+      <workItem from="1742785113119" duration="8541000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -980,7 +982,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="678" />
+    <option name="localTasksCounter" value="679" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1036,7 +1038,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改静态文件地址" />
     <MESSAGE value="格式化代码" />
     <MESSAGE value="启动celery-beat" />
     <MESSAGE value="增加扫码登录接口" />
@@ -1061,7 +1062,8 @@
     <MESSAGE value="优化返回参数" />
     <MESSAGE value="设置异步日志传输" />
     <MESSAGE value="添加运行变量" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加运行变量" />
+    <MESSAGE value="修改exp创建" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改exp创建" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
