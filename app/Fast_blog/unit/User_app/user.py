@@ -363,17 +363,26 @@ async def check_github_login(
     if not session:
         return {"status": "expired"}
 
+    # 检查过期时间
     expire_time = datetime.fromisoformat(session["expire_time"])
     if datetime.now() > expire_time:
         await storage.delete_session(state)
         return {"status": "expired"}
 
-    return {
-        "status": session["status"],
-        "username": session["user_info"]["login"] if session["user_info"] else None,
-        "token": session.get("token")
-    }
+    # 根据状态返回不同结构
+    base_response = {"status": session["status"]}
 
+    if session["status"] == "confirmed":
+        base_response.update({
+            "username": session["user_info"]["login"],
+            "token": session["token"],
+            "data": {
+                "username": session["user_info"]["login"],
+                "token": session["token"]
+            }
+        })
+
+    return base_response
 
 @UserApp.get("/auth/github/callback")
 async def github_callback(
