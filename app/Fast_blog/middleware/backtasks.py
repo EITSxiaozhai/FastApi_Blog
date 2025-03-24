@@ -265,6 +265,18 @@ class SessionStorage:
         except Exception as e:
             print(f"Redis写入失败: {str(e)}")
 
+    async def delete_session(self, state: str) -> bool:
+        """删除会话数据（内存+Redis）"""
+        async with self.lock:  # 使用锁保证原子性
+            # 删除内存缓存
+            if state in self.memory_cache:
+                del self.memory_cache[state]
+
+            # 删除Redis数据
+            redis_key = await self._redis_key(state)
+            await self.redis_client.delete(redis_key)
+            return True
+
 
 
 # 几个认证接口

@@ -22,7 +22,6 @@ app = FastAPI()
 app.add_middleware(AccessTokenMiddleware)
 
 load_dotenv()
-LogStash_ip = os.getenv("LogStathIP")
 allowed_origins = os.getenv("ALLOWED_ORIGINS", "").split(",")
 
 app.include_router(User_app.UserApp, prefix='/api/generaluser', tags=["普通用户页面"])
@@ -54,7 +53,7 @@ async def configure_logging():
 
     # 配置异步Logstash处理器
     logstash_handler = AsynchronousLogstashHandler(
-        host=os.getenv("LOGSTASH_NGINX_HOST", "hkyc.exploit-db.xyz"),
+        host=os.getenv("LOGSTASH_NGINX_HOST"),
         port=int(os.getenv("LOGSTASH_NGINX_PORT", 443)),
         transport='logstash_async.transport.HttpTransport',
         ssl_enable=True,

@@ -143,7 +143,7 @@ async def UserLogin(x: UserCredentials, db: AsyncSession = Depends(get_db)):
                 usertoken = AsyncTokenManager()
                 token_data = {
                     "username": x.username,
-                    "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+                    "exp": datetime.utcnow() + timedelta(hours=1)
                 }
                 token_cont = usertoken.create_jwt_token(data=token_data)
                 print(token_cont)
@@ -254,7 +254,7 @@ async def Token(Incoming: OAuth2PasswordRequestForm = Depends()):
         raise HTTPException(status_code=401, detail="验证未通过")
     token_data = {
         "username": Incoming.username,
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+        "exp": datetime.utcnow() + timedelta(hours=1)
     }
     token = create_jwt_token(data=token_data)
     return {"access_token": token, "token_type": 'Bearer', "token": token}
@@ -278,7 +278,7 @@ async def CommentSave(vueblogid: int, request: Request, token: str = Depends(Use
                     commentUp = Comment(
                         uid=i.UserId,
                         content=x['content']['content'],
-                        createTime=datetime.datetime.now(),
+                        createTime=datetime.now(),
                         parentId=x['content']['parentId'],
                         blog_id=vueblogid
                     )
@@ -363,17 +363,26 @@ async def check_github_login(
     if not session:
         return {"status": "expired"}
 
+    # 检查过期时间
     expire_time = datetime.fromisoformat(session["expire_time"])
     if datetime.now() > expire_time:
         await storage.delete_session(state)
         return {"status": "expired"}
 
-    return {
-        "status": session["status"],
-        "username": session["user_info"]["login"] if session["user_info"] else None,
-        "token": session.get("token")
-    }
+    # 根据状态返回不同结构
+    base_response = {"status": session["status"]}
 
+    if session["status"] == "confirmed":
+        base_response.update({
+            "username": session["user_info"]["login"],
+            "token": session["token"],
+            "data": {
+                "username": session["user_info"]["login"],
+                "token": session["token"]
+            }
+        })
+
+    return base_response
 
 @UserApp.get("/auth/github/callback")
 async def github_callback(
@@ -412,7 +421,7 @@ async def github_callback(
     # 生成JWT token
     token = create_jwt_token({
         "username": user_data["login"],
-        "exp": datetime.utcnow() + datetime.timedelta(hours=1)
+        "exp": datetime.utcnow() + timedelta(hours=1)
     })
 
     # 更新会话状态
