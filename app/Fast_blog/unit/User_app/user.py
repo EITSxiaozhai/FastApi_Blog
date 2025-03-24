@@ -421,7 +421,7 @@ async def github_callback(
     # 生成JWT token
     token = create_jwt_token({
         "username": user_data["login"],
-        "exp": datetime.utcnow() + datetime.timedelta(hours=1)
+        "exp": datetime.utcnow() + timedelta(hours=1)
     })
 
     # 更新会话状态
