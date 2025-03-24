@@ -42,11 +42,11 @@ export function UploadUserAvatar(data: { data: any }) {
     })
 }
 
-export function CheckLogin(state: string) {
+export function CheckLogin(params: { state: string }) {
     return backApi({
         url: '/generaluser/check-login',
         method: 'get',
-        params: { state }
+        params: params
     })
 }
 

@@ -168,7 +168,8 @@ const startPolling = () => {
   isPolling.value = true;
   pollInterval = setInterval(async () => {
     try {
-      const response = await CheckLogin(githubLoginState.value)
+
+    const response = await CheckLogin({ state: githubLoginState.value });
 
       if (response.data.status === 'confirmed') {
         clearInterval(pollInterval);
