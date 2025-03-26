@@ -302,7 +302,7 @@ const getData = async () => {
     const htmlContent = convertMarkdown(content);
 
     generateTableOfContents(htmlContent);
-
+    myPage.value.description = content;
     // 使用nextTick确保DOM更新
     nextTick(() => {
       // 手动触发代码块高亮
