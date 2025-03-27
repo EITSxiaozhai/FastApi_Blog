@@ -1,5 +1,5 @@
 <script setup>
-import {ref, nextTick, onMounted, onBeforeUnmount, computed} from 'vue';
+import {ref, nextTick, onMounted, onBeforeUnmount, computed, watch, watchEffect} from 'vue';
 import {RouterLink,} from 'vue-router'
 import {useRoute} from "vue-router";
 import MarkdownIt from 'markdown-it';
@@ -16,13 +16,60 @@ import {
   postCommentSave,
   getAverageRatingRequest
 } from '@/api/Blog/blogapig';
-import {ChatDotRound, ChatLineRound, ChatRound} from '@element-plus/icons-vue'
+import {ChatDotRound, ChatLineRound, ChatRound, Sunny, Moon} from '@element-plus/icons-vue'
 import Fingerprint2 from "fingerprintjs2";
 import {useStore} from 'vuex';
 import emoji from '@/assets/emoji';
 import {UToast, createObjectURL} from 'undraw-ui';
-import {ElNotification} from "element-plus";
+import {ElMessage, ElNotification} from "element-plus";
 import {useHead} from '@unhead/vue';
+
+// 响应式状态
+const isDark = ref(false)
+
+// 初始化时检查本地存储和系统偏好
+const initializeTheme = () => {
+  const savedTheme = localStorage.getItem('element-plus-theme');
+
+  // 优先使用手动保存的主题
+  if (savedTheme) {
+    isDark.value = savedTheme === 'dark';
+  } else {
+    // 自动根据时间设置 (18:00-6:00 为深色模式)
+    const currentHour = new Date().getHours();
+    isDark.value = currentHour >= 18 || currentHour < 6;
+  }
+
+  toggleDarkMode(isDark.value);
+};
+
+
+// 切换暗黑模式
+const toggleDarkMode = (dark) => {
+  const html = document.documentElement
+  dark ? html.classList.add('dark') : html.classList.remove('dark')
+  localStorage.setItem('element-plus-theme', dark ? 'dark' : 'light')
+}
+
+onMounted(() => {
+  initializeTheme();
+
+  // 每小时检查一次时间变化
+  const timeCheckTimer = setInterval(initializeTheme, 60 * 60 * 1000);
+
+  // 添加 visibilitychange 监听
+  const handleVisibilityChange = () => {
+    if (!document.hidden) initializeTheme();
+  };
+
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+
+  onBeforeUnmount(() => {
+    clearInterval(timeCheckTimer);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+  });
+});
+
 
 // 常用变量操作
 const route = useRoute()
@@ -599,130 +646,140 @@ const isLoggedIn = computed(() => !!usernames.value);
 </script>
 
 <template>
-  <el-container>
-    <el-header id="top-mains" :class="{ 'hidden': scrollDirection === 'down' }">
-      <el-menu
-          class="el-menu-demo"
-          mode="horizontal">
+  <div class="theme-transition">
+    <el-container>
+      <el-header id="top-mains" :class="{ 'hidden': scrollDirection === 'down' }">
+        <el-menu
+            class="el-menu-demo"
+            mode="horizontal">
 
-        <h1 style="display: flex; justify-content: center; align-items: center; margin: 0;">
-          <router-link style="text-decoration: none;" to="/">Exp1oit Blog</router-link>
-        </h1>
+          <h1 style="display: flex; justify-content: center; align-items: center; margin: 0;">
+            <router-link style="text-decoration: none;" to="/">Exp1oit Blog</router-link>
+          </h1>
 
 
-        <!-- Autocomplete Centered -->
-        <el-autocomplete v-model="state"
-                         :fetch-suggestions="querySearchAsync"
-                         placeholder="搜索你感兴趣的"
-                         style="margin-right: auto;margin-left: auto;margin-top: auto;margin-bottom: auto;"
-                         @select="handleSelect"
-        />
+          <!-- Autocomplete Centered -->
+          <el-autocomplete v-model="state"
+                           :fetch-suggestions="querySearchAsync"
+                           placeholder="搜索你感兴趣的"
+                           style="margin-right: auto;margin-left: auto;margin-top: auto;margin-bottom: auto;"
+                           @select="handleSelect"
+          />
 
-        <el-sub-menu index="4">
-          <template #title>
-            {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
-          </template>
-          <router-link style="text-decoration:none" to="/user-profile">
-            <el-menu-item v-if="isLoggedIn" index="2-4-2">
-              个人资料
-            </el-menu-item>
-          </router-link>
-          <router-link style="text-decoration:none" to="/reg">
-            <el-menu-item index="2-4-1">
-              注册
-            </el-menu-item>
-          </router-link>
-          <router-link style="text-decoration:none" to="/login">
-            <el-menu-item index="2-4-1">登录
-            </el-menu-item>
-          </router-link>
-        </el-sub-menu>
+          <el-sub-menu index="4">
+            <template #title>
+              {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
+            </template>
+            <router-link style="text-decoration:none" to="/user-profile">
+              <el-menu-item v-if="isLoggedIn" index="2-4-2">
+                个人资料
+              </el-menu-item>
+            </router-link>
+            <router-link style="text-decoration:none" to="/reg">
+              <el-menu-item index="2-4-1">
+                注册
+              </el-menu-item>
+            </router-link>
+            <router-link style="text-decoration:none" to="/login">
+              <el-menu-item index="2-4-1">登录
+              </el-menu-item>
+            </router-link>
+          </el-sub-menu>
 
-      </el-menu>
-      <el-progress :percentage="Math.max(0, Math.min(100, readingProgress))" :show-text="false"/>
-    </el-header>
-  </el-container>
-  <div>
-    <el-card
-        v-if="!isLoading"
-        style="margin: 3% auto; width: 99%; box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);"
-    >
-      <div class="text-item">
-        <h1 class="title">{{ data.blogData.title }}</h1>
-        <div class="info">
-          <span class="author">作者: {{ data.blogData.author }}</span>
-          <span class="date">发布时间：{{ data.blogData.created_at }}</span>
+        </el-menu>
+        <el-progress :percentage="Math.max(0, Math.min(100, readingProgress))" :show-text="false"/>
+      </el-header>
+    </el-container>
+    <div>
+      <el-card
+          v-if="!isLoading"
+          style="margin: 3% auto; width: 99%; box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);"
+      >
+        <div class="text-item">
+          <h1 class="title">{{ data.blogData.title }}</h1>
+          <div class="info">
+            <span class="author">作者: {{ data.blogData.author }}</span>
+            <span class="date">发布时间：{{ data.blogData.created_at }}</span>
+          </div>
         </div>
-      </div>
-    </el-card>
+      </el-card>
 
-    <el-card v-else>
-      <!-- 骨架屏 -->
-      <el-skeleton :rows="5" animated/>
-    </el-card>
-  </div>
+      <el-card v-else>
+        <!-- 骨架屏 -->
+        <el-skeleton :rows="5" animated/>
+      </el-card>
+    </div>
 
-  <el-row>
-    <el-container class="affix-container">
-      <el-col :lg="6" :md="4" :sm="0" :xl="5" :xs="0">
-        <el-aside>
-          <el-affix :offset="270" target=".affix-container">
-            <el-card style="height: 30vh">
-              <div>
-                <el-tree
-                    v-if="!isLoading"
-                    ref="elTreeRef"
-                    :current-node-key="currentAnchor"
-                    :data="tableOfContents"
-                    :default-expand-all="treeProps['default-expand-all']"
-                    :highlight-current="treeProps.highlightCurrent"
-                    :props="treeProps"
-                    node-key="anchor"
-                    @node-click="handleNodeClick"
+    <el-row>
+      <el-container class="affix-container">
+        <el-col :lg="6" :md="4" :sm="0" :xl="5" :xs="0">
+          <el-aside>
+            <el-affix :offset="270" target=".affix-container">
+              <el-card style="height: 30vh">
+                <div>
+                  <el-tree
+                      v-if="!isLoading"
+                      ref="elTreeRef"
+                      :current-node-key="currentAnchor"
+                      :data="tableOfContents"
+                      :default-expand-all="treeProps['default-expand-all']"
+                      :highlight-current="treeProps.highlightCurrent"
+                      :props="treeProps"
+                      node-key="anchor"
+                      @node-click="handleNodeClick"
+                  />
+
+                  <el-skeleton v-else :rows="5" animated/>
+                </div>
+              </el-card>
+
+              <el-card style="margin-top: 1%">
+                <h4>对你有帮助吗？</h4>
+                <el-rate
+                    v-model="value"
+                    :colors="['#409eff', '#67c23a', '#FF9900']"
+                    :icons="icons"
+                    :void-icon="ChatRound"
+                    @change="submitRating"
                 />
 
-                <el-skeleton v-else :rows="5" animated/>
+                <el-switch
+                    v-model="isDark"
+                    inline-prompt
+                    :active-icon="Moon"
+                    :inactive-icon="Sunny"
+                    @change="toggleDarkMode"
+                />
+              </el-card>
+            </el-affix>
+          </el-aside>
+        </el-col>
+
+        <el-col :lg="18" :md="24" :sm="24" :xl="17" :xs="24">
+
+          <el-main>
+            <el-card v-if="!isLoading" style="margin-top: 20px;padding-bottom: 10%">
+              <div class="blog-content">
+                <div v-html="convertMarkdown(data.blogData.content)"/>
               </div>
             </el-card>
 
-            <el-card style="margin-top: 1%">
-              <h4>对你有帮助吗？</h4>
-              <el-rate
-                  v-model="value"
-                  :colors="['#409eff', '#67c23a', '#FF9900']"
-                  :icons="icons"
-                  :void-icon="ChatRound"
-                  @change="submitRating"
-              />
+            <el-card v-else>
+              <el-skeleton :rows="10" animated/>
             </el-card>
-          </el-affix>
-        </el-aside>
-      </el-col>
 
-      <el-col :lg="18" :md="24" :sm="24" :xl="17" :xs="24">
-
-        <el-main>
-          <el-card v-if="!isLoading" style="margin-top: 20px;padding-bottom: 10%">
-            <div class="blog-content">
-              <div v-html="convertMarkdown(data.blogData.content)"/>
+            <div ref="commentx">
+              <el-card style="margin-top: 1%">
+                <u-comment :config="config" @like="like" @submit="submit">
+                </u-comment>
+              </el-card>
             </div>
-          </el-card>
-
-          <el-card v-else>
-            <el-skeleton :rows="10" animated/>
-          </el-card>
-
-          <div ref="commentx">
-            <el-card style="margin-top: 1%">
-              <u-comment :config="config" @like="like" @submit="submit">
-              </u-comment>
-            </el-card>
-          </div>
-        </el-main>
-      </el-col>
-      <el-backtop/>
-    </el-container>
-  </el-row>
+          </el-main>
+        </el-col>
+        <el-backtop/>
+      </el-container>
+    </el-row>
+  </div>
 </template>
 
 

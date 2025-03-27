@@ -16,15 +16,20 @@ const isDark = ref(false)
 
 // 初始化时检查本地存储和系统偏好
 const initializeTheme = () => {
-  const savedTheme = localStorage.getItem('element-plus-theme')
-  const systemIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+  const savedTheme = localStorage.getItem('element-plus-theme');
 
+  // 优先使用手动保存的主题
   if (savedTheme) {
-    isDark.value = savedTheme === 'dark'
+    isDark.value = savedTheme === 'dark';
   } else {
-    isDark.value = systemIsDark
+    // 自动根据时间设置 (18:00-6:00 为深色模式)
+    const currentHour = new Date().getHours();
+    isDark.value = currentHour >= 18 || currentHour < 6;
   }
-}
+
+  toggleDarkMode(isDark.value);
+};
+
 
 // 切换暗黑模式
 const toggleDarkMode = (dark) => {
@@ -33,19 +38,25 @@ const toggleDarkMode = (dark) => {
   localStorage.setItem('element-plus-theme', dark ? 'dark' : 'light')
 }
 
-// 自动跟随系统设置
-watchEffect(() => {
-  if (!localStorage.getItem('element-plus-theme')) {
-    const systemIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    isDark.value = systemIsDark
-  }
-})
-
-// 初始化主题
 onMounted(() => {
-  initializeTheme()
-  toggleDarkMode(isDark.value)
-})
+  initializeTheme();
+
+  // 每小时检查一次时间变化
+  const timeCheckTimer = setInterval(initializeTheme, 60 * 60 * 1000);
+
+  // 添加 visibilitychange 监听
+  const handleVisibilityChange = () => {
+    if (!document.hidden) initializeTheme();
+  };
+
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+
+  onBeforeUnmount(() => {
+    clearInterval(timeCheckTimer);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+  });
+});
+
 
 //自动布局修改适配手机端平板端屏幕
 const useXlLayout = () => {

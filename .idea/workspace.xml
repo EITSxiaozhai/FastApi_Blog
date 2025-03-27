@@ -8,14 +8,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="修改日期生成包">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="注释无用css">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/auto-imports.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/components.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/components.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/assets/css/IndexPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/assets/css/IndexPage.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/blogvuets/src/assets/css/BlogDetail.css" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/assets/css/BlogDetail.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/router/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/IndexPage.vue" afterDir="false" />
@@ -646,7 +641,7 @@
       <workItem from="1742364239281" duration="10301000" />
       <workItem from="1742456361856" duration="2856000" />
       <workItem from="1742785113119" duration="42654000" />
-      <workItem from="1743054913778" duration="5882000" />
+      <workItem from="1743054913778" duration="10962000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -991,7 +986,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="681" />
+    <option name="localTasksCounter" value="685" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1047,10 +1042,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="增加扫码登录接口" />
-    <MESSAGE value="修改模型设计" />
-    <MESSAGE value="同步包版本" />
-    <MESSAGE value="增加扫码登录" />
     <MESSAGE value="更新数据库" />
     <MESSAGE value="title修改" />
     <MESSAGE value="增加新页面" />
@@ -1072,7 +1063,11 @@
     <MESSAGE value="修改exp创建" />
     <MESSAGE value="增加删除redis令牌" />
     <MESSAGE value="修改日期生成包" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改日期生成包" />
+    <MESSAGE value="增加暗色模式，手动切换按钮" />
+    <MESSAGE value="添加暗色css" />
+    <MESSAGE value="增加暗色切换按钮，增加箭头滚动提示" />
+    <MESSAGE value="注释无用css" />
+    <option name="LAST_COMMIT_MESSAGE" value="注释无用css" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
