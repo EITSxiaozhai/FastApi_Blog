@@ -16,16 +16,18 @@
   "dependencies": {
     "@mdit/plugin-plantuml": "^0.16.0",
     "@originjs/vite-plugin-commonjs": "^1.0.3",
+    "@shikijs/transformers": "^3.2.1",
     "@unhead/vue": "^1.8.9",
     "@vitejs/plugin-vue": "^4.3.4",
+    "@vueuse/core": "^13.0.0",
     "animate.css": "^4.1.1",
     "axios": "^1.6.0",
     "core-js": "^3.8.3",
+    "dompurify": "^3.2.4",
     "element-plus": "^2.4.0",
     "fingerprintjs2": "^2.1.4",
     "grecaptcha": "^1.0.3",
     "highlight.js": "^11.9.0",
-    "highlightjs-line-numbers.js": "^2.9.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "markdown-it": "^14.1.0",
@@ -45,6 +47,7 @@
     "wow.js": "^1.2.2"
   },
   "devDependencies": {
+    "@shikijs/markdown-it": "^3.2.1",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
     "@vue/cli-plugin-babel": "~5.0.0",
@@ -56,6 +59,7 @@
     "@vue/eslint-config-typescript": "^9.1.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
+    "shiki": "^3.2.1",
     "typescript": "~4.5.5",
     "unplugin-auto-import": "^0.18.3",
     "unplugin-vue-components": "^0.27.4"
