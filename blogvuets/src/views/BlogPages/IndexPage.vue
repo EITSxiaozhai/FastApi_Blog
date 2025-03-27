@@ -1,6 +1,6 @@
 <script setup>
 import {useRouter} from 'vue-router';
-import {reactive, ref, onMounted, onBeforeUnmount, watch, onUnmounted, computed} from 'vue';
+import {reactive, ref, onMounted, onBeforeUnmount, watch, onUnmounted, computed, watchEffect} from 'vue';
 import TypeIt from 'typeit'
 import 'element-plus/theme-chalk/display.css'
 import {useStore} from "vuex";
@@ -9,6 +9,43 @@ import WOW from "wow.js";
 import '@/assets/css/IndexPage.css';
 import {GoogleUVPV, fetchBlogIndex, searchBlogs} from "@/api/Blog/blogapig"
 import {debounce} from "lodash";
+import {Moon, Sunny, ArrowDownBold} from "@element-plus/icons-vue";
+
+// 响应式状态
+const isDark = ref(false)
+
+// 初始化时检查本地存储和系统偏好
+const initializeTheme = () => {
+  const savedTheme = localStorage.getItem('element-plus-theme')
+  const systemIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+  if (savedTheme) {
+    isDark.value = savedTheme === 'dark'
+  } else {
+    isDark.value = systemIsDark
+  }
+}
+
+// 切换暗黑模式
+const toggleDarkMode = (dark) => {
+  const html = document.documentElement
+  dark ? html.classList.add('dark') : html.classList.remove('dark')
+  localStorage.setItem('element-plus-theme', dark ? 'dark' : 'light')
+}
+
+// 自动跟随系统设置
+watchEffect(() => {
+  if (!localStorage.getItem('element-plus-theme')) {
+    const systemIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    isDark.value = systemIsDark
+  }
+})
+
+// 初始化主题
+onMounted(() => {
+  initializeTheme()
+  toggleDarkMode(isDark.value)
+})
 
 //自动布局修改适配手机端平板端屏幕
 const useXlLayout = () => {
@@ -282,16 +319,25 @@ const handleSelect = (item) => {
 </script>
 
 <template>
-
+  <div class="theme-transition">
   <div :style="{ transform: `translateY(-${scrollY}px)` }" class="background-container" style="z-index: 3">
-    <div class="background-image"></div>
     <h1 ref="text" class="msg" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></h1>
+    <div class="background-image"></div>
+    <h1>
+      <el-icon
+          class="arrow-down animate-arrow"
+          style="position: absolute; top: 80%; left: 50%; transform: translate(-50%, -50%); font-size: 4rem; color: white"
+      >
+        <ArrowDownBold/>
+      </el-icon>
+    </h1>
   </div>
 
 
   <el-container id="left-my" style="margin-top: 3%;">
 
     <el-header id="top-mains" :class="{ 'hidden': isHeaderHidden }"
+
                :style="{ 'background-color': headerBackgroundColor }" style="padding-right: 0;padding-left: 0">
       <transition name="fade">
         <el-menu
@@ -299,24 +345,30 @@ const handleSelect = (item) => {
             mode="horizontal">
 
 
-      <h1 style="display: flex; justify-content: center; align-items: center; margin: 0;">
-        <router-link style="text-decoration: none;" to="/">Exp1oit Blog</router-link>
-      </h1>
+          <h1 style="display: flex; justify-content: center; align-items: center; margin: 0;">
+            <router-link style="text-decoration: none;" to="/">Exp1oit Blog</router-link>
+          </h1>
 
 
+          <!-- Autocomplete Centered -->
+          <el-autocomplete v-model="state"
+                           :fetch-suggestions="querySearchAsync"
+                           placeholder="搜索你感兴趣的"
+                           style="margin-right: auto;margin-left: auto;margin-top: auto;margin-bottom: auto;"
+                           @select="handleSelect"
+          />
 
-      <!-- Autocomplete Centered -->
-      <el-autocomplete v-model="state"
-                       :fetch-suggestions="querySearchAsync"
-                       placeholder="搜索你感兴趣的"
-                       style="margin-right: auto;margin-left: auto;margin-top: auto;margin-bottom: auto;"
-                       @select="handleSelect"
-      />
+          <el-switch
+              v-model="isDark"
+              inline-prompt
+              :active-icon="Moon"
+              :inactive-icon="Sunny"
+              @change="toggleDarkMode"
+          />
 
           <el-menu-item index="3">
             <router-link style="text-decoration: none;" to="/about-me">关于我</router-link>
           </el-menu-item>
-
 
           <el-sub-menu index="4">
             <template #title>
@@ -552,9 +604,8 @@ const handleSelect = (item) => {
         </el-row>
       </div>
     </el-footer>
-
   </el-container>
-
+  </div>
 </template>
 
 
