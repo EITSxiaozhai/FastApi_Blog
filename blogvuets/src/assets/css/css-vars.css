@@ -1,0 +1,68 @@
+/* 系统级自适应 */
+:root {
+  /* 浅色主题变量 */
+  --bg-color: #DCDFE6;
+  --text-color: #303133;
+  --border-color: #dcdfe6;
+  --card-bg: #f5f7fa;
+  --primary-color: #409eff;
+  --hover-bg: #f5f5f5;
+
+  /* 元素过渡 */
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+/* 深色系统偏好适配 */
+@media (prefers-color-scheme: dark) {
+  :root:not([class="dark"]) {
+    --bg-color: #2b2d30;
+    --text-color: #e5e5e5;
+    --border-color: #4c4c4c;
+    --card-bg: #2d2d2d;
+    --primary-color: #66b1ff;
+    --hover-bg: #363636;
+  }
+}
+
+/* 手动切换深色模式 */
+.dark {
+  --bg-color: #606266 !important;
+  --text-color: #000000 !important;
+  --border-color: #4c4c4c !important;
+  --card-bg: #2d2d2d !important;
+  --primary-color: #66b1ff !important;
+  --hover-bg: #363636 !important;
+}
+
+/* 全局应用 */
+html, body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Element Plus 组件适配 */
+.el-card {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.el-menu {
+  background-color: var(--bg-color);
+  border-color: var(--border-color);
+}
+
+.el-button--primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+/* 自定义组件适配 */
+.custom-component {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+/* 过渡动画 */
+.theme-transition * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
