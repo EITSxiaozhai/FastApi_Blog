@@ -7,7 +7,7 @@ import MarkdownIt from 'markdown-it';
 import {plantuml} from "@mdit/plugin-plantuml";
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
-import {ChatDotRound, ChatLineRound, ChatRound, Sunny, Moon} from '@element-plus/icons-vue';
+import {ChatDotRound, ChatLineRound, ChatRound, Sunny, Moon, List} from '@element-plus/icons-vue';
 import {ElMessage, ElNotification} from "element-plus";
 import {UToast, createObjectURL} from 'undraw-ui';
 import Fingerprint2 from "fingerprintjs2";
@@ -37,6 +37,7 @@ const stepMarginTop = ref();
 const fingerprint = ref(null);
 const commentx = ref();
 const myPage = ref({description: ''});
+const isTocHidden = ref(false);
 
 // 常量定义
 const icons = [ChatRound, ChatLineRound, ChatDotRound];
@@ -252,10 +253,10 @@ const scrollToCurrentNode = () => {
       const nodeEl = tree.$el.querySelector('.is-current');
 
       if (nodeEl && currentNode) {
-        nodeEl.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center'
-        });
+        nodeEl.classList.add('highlight');
+        setTimeout(() => {
+          nodeEl.classList.remove('highlight');
+        }, 2000);
       }
     }
   });
@@ -264,17 +265,20 @@ const scrollToCurrentNode = () => {
 const handleScroll = () => {
   const headings = document.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
   let closestHeading = null;
+  let minDistance = Infinity;
 
   headings.forEach(heading => {
     const bounding = heading.getBoundingClientRect();
-    if (bounding.top >= 0 && bounding.top <= window.innerHeight / 2) {
+    const distance = Math.abs(bounding.top - window.innerHeight / 2);
+    
+    if (distance < minDistance) {
+      minDistance = distance;
       closestHeading = heading;
     }
   });
 
   if (closestHeading && closestHeading.id !== currentAnchor.value) {
     currentAnchor.value = `#${closestHeading.id}`;
-    scrollToCurrentNode();
   }
 };
 
@@ -284,8 +288,7 @@ const handleNodeClick = (data) => {
   if (targetElement) {
     targetElement.scrollIntoView({
       behavior: 'smooth',
-      block: 'center',
-      inline: 'nearest'
+      block: 'start'
     });
 
     targetElement.classList.add('selected');
@@ -489,6 +492,11 @@ const like = (id, finish) => {
   }, 200);
 };
 
+// 添加目录切换方法
+const toggleToc = () => {
+  isTocHidden.value = !isTocHidden.value;
+};
+
 // 生命周期钩子
 onMounted(() => {
   initializeTheme();
@@ -518,15 +526,24 @@ onMounted(() => {
     fingerprint.value = fingerprintId;
   });
 
+  const handleResize = () => {
+    if (window.innerWidth > 768) {
+      isTocHidden.value = false;
+    } else {
+      isTocHidden.value = true;
+    }
+  };
+  
+  handleResize();
+  window.addEventListener('resize', handleResize);
+
   onBeforeUnmount(() => {
     clearInterval(timeCheckTimer);
     document.removeEventListener('visibilitychange', handleVisibilityChange);
+    window.removeEventListener('scroll', handleScroll);
+    window.removeEventListener('scroll', updateReadingProgress);
+    window.removeEventListener('resize', handleResize);
   });
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', handleScroll);
-  window.removeEventListener('scroll', updateReadingProgress);
 });
 
 // 初始化
@@ -609,25 +626,51 @@ useHead({
       <el-skeleton :rows="5" animated/>
     </el-card>
 
-    <el-container class="affix-container">
-      <el-aside>
-        <el-affix :offset="270" target=".affix-container">
-          <el-card>
-              <el-tree
-                  v-if="!isLoading"
-                  ref="elTreeRef"
-                  :current-node-key="currentAnchor"
-                  :data="tableOfContents"
-                  :default-expand-all="treeProps['default-expand-all']"
-                  :highlight-current="treeProps.highlightCurrent"
-                  :props="treeProps"
-                  node-key="anchor"
-                  @node-click="handleNodeClick"
+    <el-container class="main-container">
+      <el-main class="content-main" :class="{'content-main-expanded': isTocHidden}">
+        <el-card v-if="!isLoading" style="padding-bottom: 10%">
+          <div class="blog-content">
+            <div v-html="convertMarkdown(data.blogData.content)"/>
+          </div>
+        </el-card>
+
+        <el-card v-else>
+          <el-skeleton :rows="10" animated/>
+        </el-card>
+
+        <div id="commentx" ref="commentx">
+          <el-card style="margin-top: 1%">
+            <u-comment :config="config" @like="like" @submit="submit" />
+          </el-card>
+        </div>
+      </el-main>
+
+      <el-aside class="toc-aside" :class="{'toc-hidden': isTocHidden}">
+        <el-affix :offset="270">
+          <el-card class="toc-card">
+            <div class="toc-header">
+              <span>目录</span>
+              <el-button 
+                type="text" 
+                @click="toggleToc"
+                :icon="isTocHidden ? 'el-icon-d-arrow-left' : 'el-icon-d-arrow-right'"
               />
-              <el-skeleton v-else :rows="5" animated/>
+            </div>
+            <el-tree
+                v-if="!isLoading"
+                ref="elTreeRef"
+                :current-node-key="currentAnchor"
+                :data="tableOfContents"
+                :default-expand-all="treeProps['default-expand-all']"
+                :highlight-current="treeProps.highlightCurrent"
+                :props="treeProps"
+                node-key="anchor"
+                @node-click="handleNodeClick"
+            />
+            <el-skeleton v-else :rows="5" animated/>
           </el-card>
 
-          <el-card style="margin-top: 1%">
+          <el-card class="rating-card" style="margin-top: 1%">
             <h4>对你有帮助吗？</h4>
             <el-rate
                 v-model="value"
@@ -646,27 +689,18 @@ useHead({
           </el-card>
         </el-affix>
       </el-aside>
-
-      <el-main>
-        <el-card v-if="!isLoading" style="padding-bottom: 10%">
-          <div class="blog-content">
-            <div v-html="convertMarkdown(data.blogData.content)"/>
-          </div>
-        </el-card>
-
-        <el-card v-else>
-          <el-skeleton :rows="10" animated/>
-        </el-card>
-
-      <div id="commentx" ref="commentx">
-        <el-card style="margin-top: 1%">
-          <u-comment :config="config" @like="like" @submit="submit" />
-        </el-card>
-      </div>
-      </el-main>
       <el-backtop/>
     </el-container>
+    
+    <!-- 添加悬浮按钮 -->
+    <el-button
+      v-if="isTocHidden"
+      class="toc-toggle-button"
+      type="primary"
+      circle
+      @click="toggleToc"
+    >
+      <el-icon><List /></el-icon>
+    </el-button>
   </el-container>
 </template>
-
-
