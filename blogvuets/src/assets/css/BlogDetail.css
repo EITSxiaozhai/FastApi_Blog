@@ -86,3 +86,112 @@ pre:hover .copy-button {
 .copy-button:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+
+.main-container {
+  position: relative;
+  min-height: calc(100vh - 120px);
+  display: flex;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.content-main {
+  padding: 20px;
+  transition: all 0.3s;
+  flex: 1;
+  min-width: 0; /* 防止内容溢出 */
+}
+
+.content-main-expanded {
+  margin-right: 0;
+}
+
+.toc-aside {
+  width: 300px;
+  transition: all 0.3s;
+  position: relative;
+  flex-shrink: 0; /* 防止目录被压缩 */
+}
+
+.toc-hidden {
+  transform: translateX(100%);
+  width: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.toc-card {
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.toc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 0 10px;
+}
+
+.rating-card {
+  margin-top: 20px;
+  width: 100%;
+}
+
+@media screen and (max-width: 768px) {
+  .toc-aside {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 1000;
+    background: var(--el-bg-color);
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+  }
+
+  .toc-hidden {
+    transform: translateX(100%);
+  }
+
+  .content-main {
+    margin-right: 0;
+  }
+
+  .toc-toggle-button {
+    right: 10px;
+    bottom: 80px;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  .toc-aside {
+    position: sticky;
+    top: 80px;
+    height: fit-content;
+    width: 300px;
+  }
+}
+
+.highlight {
+  background-color: var(--el-color-primary-light-9);
+  transition: background-color 0.3s;
+}
+
+.selected {
+  background-color: var(--el-color-primary-light-9);
+  transition: background-color 0.3s;
+}
+
+.toc-toggle-button {
+  position: fixed;
+  right: 20px;
+  bottom: 100px;
+  z-index: 1000;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+}
+
+.toc-toggle-button:hover {
+  transform: scale(1.1);
+}
