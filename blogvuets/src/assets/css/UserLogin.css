@@ -1,128 +1,255 @@
-.login-form {
+.login-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.login-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://bing.ee123.net/img/rand') center/cover no-repeat;
+    opacity: 0.05;
+    animation: backgroundZoom 20s infinite alternate;
+}
+
+@keyframes backgroundZoom {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.1);
+    }
+}
+
+.login-page .login-form {
     max-width: 400px;
     margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
 }
 
-#app .el-main form {
-    background-color: #faf9f9;
-    opacity: 0.9;
-
+.login-page .login-form:hover {
+    transform: translateY(-5px);
 }
 
+.login-page #app .el-main form {
+    background-color: transparent;
+    opacity: 1;
+}
+
+.login-page .el-input__wrapper {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.login-page .el-input__wrapper:hover {
+    border-color: #409eff;
+    box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+}
+
+.login-page .el-button {
+    width: 100%;
+    height: 44px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    background: linear-gradient(135deg, #409eff 0%, #3a8ee6 100%);
+    border: none;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.login-page .el-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+.login-page .el-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
+}
+
+.login-page .el-button:hover::before {
+    left: 100%;
+}
+
+.login-page .el-button:active {
+    transform: translateY(0);
+}
+
+.login-page .el-button--primary {
+    background: linear-gradient(135deg, #409eff 0%, #3a8ee6 100%);
+}
+
+.login-page .el-button--primary:hover {
+    background: linear-gradient(135deg, #66b1ff 0%, #4a9eff 100%);
+}
+
+.login-page .el-button--primary:active {
+    background: linear-gradient(135deg, #3a8ee6 0%, #2d7fd9 100%);
+}
+
+.login-page .el-button--default {
+    background: linear-gradient(135deg, #909399 0%, #82848a 100%);
+    color: white;
+}
+
+.login-page .el-button--default:hover {
+    background: linear-gradient(135deg, #a6a9ad 0%, #909399 100%);
+}
+
+.login-page .el-button--default:active {
+    background: linear-gradient(135deg, #82848a 0%, #6c6e72 100%);
+}
+
+.login-page .el-button[disabled] {
+    background: #c0c4cc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
 
 /* 二维码登录主容器 */
-.qrcode-section {
-  margin: 2rem 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
+.login-page .qrcode-section {
+    margin: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
 }
 
 /* 二维码容器 */
-.qrcode-container {
-  position: relative;
-  padding: 1.5rem;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid #ebeef5;
-  transition: all 0.3s ease;
+.login-page .qrcode-container {
+    position: relative;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
 }
 
 /* 鼠标悬停效果 */
-.qrcode-container:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+.login-page .qrcode-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
 /* 二维码图片样式 */
-.qrcode-image {
-  width: 220px;
-  height: 220px;
-  display: block;
-  border-radius: 8px;
-  background: white;
-  padding: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.login-page .qrcode-image {
+    width: 220px;
+    height: 220px;
+    display: block;
+    border-radius: 12px;
+    background: white;
+    padding: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* 加载状态 */
-.qrcode-loading {
-  width: 220px;
-  height: 220px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: #909399;
-  font-size: 14px;
-  gap: 8px;
+.login-page .qrcode-loading {
+    width: 220px;
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #409eff;
+    font-size: 14px;
+    gap: 8px;
 }
 
 /* 加载动画 */
-.qrcode-loading .el-icon {
-  font-size: 32px;
-  animation: spin 1.5s linear infinite;
+.login-page .qrcode-loading .el-icon {
+    font-size: 32px;
+    animation: spin 1.5s linear infinite;
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 /* 扫码状态提示 */
-.qrcode-status {
-  position: absolute;
-  bottom: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: #409eff;
-  padding: 8px 16px;
-  background: rgba(64, 158, 255, 0.1);
-  border-radius: 20px;
+.login-page .qrcode-status {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #409eff;
+    padding: 8px 16px;
+    background: rgba(64, 158, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
 }
 
 /* 提示文字 */
-.qrcode-tips {
-  text-align: center;
-  line-height: 1.6;
+.login-page .qrcode-tips {
+    text-align: center;
+    line-height: 1.6;
 }
 
-.qrcode-tips p:first-child {
-  color: #303133;
-  font-weight: 500;
-  font-size: 16px;
+.login-page .qrcode-tips p:first-child {
+    color: #303133;
+    font-weight: 500;
+    font-size: 16px;
 }
 
-.qrcode-tips p:last-child {
-  color: #909399;
-  font-size: 12px;
-  margin-top: 4px;
+.login-page .qrcode-tips p:last-child {
+    color: #909399;
+    font-size: 12px;
+    margin-top: 4px;
 }
 
 /* 响应式处理 */
 @media (max-width: 768px) {
-  .qrcode-container {
-    padding: 1rem;
-  }
+    .login-page .qrcode-container {
+        padding: 1rem;
+    }
 
-  .qrcode-image {
-    width: 180px;
-    height: 180px;
-  }
+    .login-page .qrcode-image {
+        width: 180px;
+        height: 180px;
+    }
 
-  .qrcode-loading {
-    width: 180px;
-    height: 180px;
-    font-size: 13px;
-  }
+    .login-page .qrcode-loading {
+        width: 180px;
+        height: 180px;
+        font-size: 13px;
+    }
 }
