@@ -274,9 +274,7 @@ const ossUpload = async (param: any) => {
 </script>
 
 <template>
-  <el-container
-      style="height: 100%;width: 100%;background-size: cover;background-image: url('https://api.vvhan.com/api/view');">
-
+  <el-container class="register-page">
     <el-main>
       <h1 style="padding-left:40%">注册页面</h1>
       <el-form

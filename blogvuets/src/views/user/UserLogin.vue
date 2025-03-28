@@ -218,8 +218,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <el-container
-      style="height: 100%;width: 100%;background-size: cover;background-image: url('https://api.vvhan.com/api/view');">
+  <el-container class="login-page">
     <el-main>
 
       <el-form :model="LoginUserForm" class="login-form" label-width="80px">
