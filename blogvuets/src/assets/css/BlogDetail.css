@@ -166,9 +166,14 @@ pre:hover .copy-button {
 
 @media screen and (min-width: 769px) {
   .toc-aside {
-    position: sticky;
-    top: 80px;
+    position: relative;
     height: fit-content;
+    width: 300px;
+  }
+
+  .toc-aside :deep(.el-affix) {
+    position: fixed;
+    top: 80px;
     width: 300px;
   }
 }
