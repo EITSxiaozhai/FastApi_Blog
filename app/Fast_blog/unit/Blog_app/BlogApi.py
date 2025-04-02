@@ -121,18 +121,14 @@ async def async_cache_update(redis_key: str, blog: Blog):
     """实际执行缓存更新的异步方法"""
     if not blog_cache.is_ready():
         return
-
-    print(blog)
-
     data = {
         "BlogId": blog.BlogId,
         "title": blog.title,
-        "content": blog.content,
+        "content": blog.content.decode('utf-8') if isinstance(blog.content, bytes) else blog.content,
         "author": blog.author,
         "BlogIntroductionPicture": blog.BlogIntroductionPicture,
         "created_at": blog.created_at.isoformat(),
     }
-
     try:
         # 使用管道批量操作
         async with blog_cache.redis_client.pipeline() as pipe:
@@ -142,6 +138,7 @@ async def async_cache_update(redis_key: str, blog: Blog):
         print(f"成功更新缓存: {redis_key}")
     except Exception as e:
         print(f"缓存更新失败: {str(e)}")
+
 
 
 # 增强版缓存同步任务
