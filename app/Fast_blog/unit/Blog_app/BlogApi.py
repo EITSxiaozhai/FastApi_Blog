@@ -26,6 +26,7 @@ from Fast_blog.middleware.backtasks import BlogCache, AliOssUpload
 from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag
 import aiohttp
 from datetime import datetime
+import random
 
 BlogApp = APIRouter()
 aliOssPrivateDocument = AliOssPrivateDocument()
@@ -354,24 +355,24 @@ async def get_blogs(q: str, db: AsyncSession = Depends(get_db)):
     return [blog.to_dict() for blog in blogs]
 
 @BlogApp.get("/blogs/bing-wallpaper")
-async def get_bing_wallpaper(random: bool = False):
+async def get_bing_wallpaper(is_random: bool = False):
     """获取Bing每日UHD壁纸
     Args:
-        random: 是否随机获取历史图片
+        is_random: 是否随机获取历史图片
     """
     try:
-        # 如果random为True，随机获取0-7天前的图片
-        idx = random.randint(0, 7) if random else 0
         # 添加时间戳防止缓存
         timestamp = int(datetime.now().timestamp() * 1000)
-        url = f"https://cn.bing.com/HPImageArchive.aspx?format=js&idx={idx}&n=1&nc={timestamp}&pid=hp"
+        # 获取最近8天的图片
+        url = f"https://cn.bing.com/HPImageArchive.aspx?format=js&idx=0&n=8&nc={timestamp}&pid=hp"
         
         async with aiohttp.ClientSession() as session:
             async with session.get(url) as response:
                 if response.status == 200:
                     data = await response.json()
                     if 'images' in data and len(data['images']) > 0:
-                        image = data['images'][0]
+                        # 如果is_random为True，随机选择一张图片
+                        image = data['images'][random.randint(0, len(data['images'])-1)] if is_random else data['images'][0]
                         # 直接替换为UHD格式
                         image_url = f"https://cn.bing.com{image['url'].replace('1920x1080', 'UHD')}"
                         return {
@@ -381,7 +382,7 @@ async def get_bing_wallpaper(random: bool = False):
                                 "title": image.get('title', ''),
                                 "copyright": image.get('copyright', ''),
                                 "date": image.get('startdate', datetime.now().strftime('%Y-%m-%d')),
-                                "is_random": random,
+                                "is_random": is_random,
                                 "resolution": "UHD"
                             }
                         }
