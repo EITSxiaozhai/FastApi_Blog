@@ -214,8 +214,33 @@ export default {
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
               this.loading = false
             })
-            .catch(() => {
+            .catch((error) => {
               this.loading = false
+              if (error.response && error.response.status === 401) {
+                this.$message({
+                  message: '登录失败：用户名或密码错误',
+                  type: 'error',
+                  duration: 3000
+                })
+                // 重置表单
+                this.loginForm.username = ''
+                this.loginForm.password = ''
+                this.loginForm.googlerecaptcha = ''
+                // 重置AI验证
+                window.grecaptcha.reset()
+                // 清空表单验证
+                this.$refs.loginForm.clearValidate()
+                // 聚焦到用户名输入框
+                this.$nextTick(() => {
+                  this.$refs.username.focus()
+                })
+              } else {
+                this.$message({
+                  message: error.message || '登录失败，请稍后重试',
+                  type: 'error',
+                  duration: 3000
+                })
+              }
             })
         } else {
           console.log('error submit!!')
