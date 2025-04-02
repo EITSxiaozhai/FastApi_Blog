@@ -72,3 +72,11 @@ export function searchBlogs(query: string) {
         params: { q: query } // 使用 query 参数传递搜索关键字
     });
 }
+
+export function getBingWallpaper(is_random: boolean) {
+    return backApi({
+        url: `/views/blogs/bing-wallpaper`,
+        method: 'get',
+        params: { is_random }
+    });
+}
