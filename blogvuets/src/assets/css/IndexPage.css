@@ -152,7 +152,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.3); /* 半透明黑色遮罩 */
+    background: rgba(0, 0, 0, 0.2); /* 半透明黑色遮罩 */
     z-index: -1;
 }
 
