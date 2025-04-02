@@ -1,4 +1,3 @@
-
 #app .background-container h1 {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
     color: #eeeeee;
@@ -132,12 +131,29 @@
 }
 
 .background-image {
-    /* 背景图片样式，替换为您的背景图片样式 */
-    background-image: url("https://bing.img.run/rand_uhd.php");
+    /* 背景图片样式 */
     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     width: 100%;
     height: 100%;
     transition: transform 10s ease; /* 添加过渡效果 */
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* 添加一个遮罩层，使文字更容易阅读 */
+.background-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* 半透明黑色遮罩 */
+    z-index: -1;
 }
 
 .hidden {

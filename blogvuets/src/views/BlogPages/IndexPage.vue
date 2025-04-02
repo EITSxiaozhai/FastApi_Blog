@@ -7,7 +7,7 @@ import {useStore} from "vuex";
 import 'animate.css';
 import WOW from "wow.js";
 import '@/assets/css/IndexPage.css';
-import {GoogleUVPV, fetchBlogIndex, searchBlogs} from "@/api/Blog/blogapig"
+import {GoogleUVPV, fetchBlogIndex, searchBlogs, getBingWallpaper} from "@/api/Blog/blogapig"
 import {debounce} from "lodash";
 import {Moon, Sunny, ArrowDownBold} from "@element-plus/icons-vue";
 
@@ -327,6 +327,40 @@ debounce(querySearchAsync, 300);
 const handleSelect = (item) => {
   window.location.href = `https://blog.exploit-db.xyz/blog/${item.id}`; // 跳转到该 URL
 };
+
+// 添加壁纸相关的响应式变量
+const backgroundImage = ref('');
+
+// 获取Bing壁纸
+const fetchBingWallpaper = async () => {
+  try {
+    const response = await getBingWallpaper(true); // 随机获取一张壁纸
+    if (response.data.code === 20000) {
+      backgroundImage.value = response.data.data.url;
+      // 预加载图片
+      const img = new Image();
+      img.src = response.data.data.url;
+      img.onload = () => {
+        // 图片加载完成后更新背景
+        document.querySelector('.background-image').style.backgroundImage = `url(${response.data.data.url})`;
+      };
+    }
+  } catch (error) {
+    console.error('获取壁纸失败:', error);
+  }
+};
+
+// 在组件挂载时获取壁纸
+onMounted(() => {
+  fetchBingWallpaper();
+  // 每6小时更新一次壁纸
+  const wallpaperTimer = setInterval(fetchBingWallpaper, 6 * 60 * 60 * 1000);
+  
+  // 组件卸载时清除定时器
+  onUnmounted(() => {
+    clearInterval(wallpaperTimer);
+  });
+});
 </script>
 
 <template>
@@ -621,3 +655,7 @@ const handleSelect = (item) => {
 
 
 <style src="wow.js/css/libs/animate.css"></style>
+
+<style>
+/* 移除之前的背景图片样式，因为已经在 IndexPage.css 中定义了 */
+</style>
