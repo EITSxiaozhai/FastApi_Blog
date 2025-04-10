@@ -5,7 +5,6 @@
       <div class="profile-content">
         <div class="profile-image">
           <!-- 这里可以放置您的照片 -->
-          <img src="@/assets/default-avatar.png" alt="个人照片" />
         </div>
         <div class="profile-text">
           <h2>个人简介</h2>
@@ -17,13 +16,6 @@
     <div class="resume-section">
       <h2>我的简历</h2>
       <div class="pdf-container">
-        <iframe
-          src="/resume.pdf"
-          width="100%"
-          height="800px"
-          frameborder="0"
-          title="简历PDF"
-        ></iframe>
       </div>
     </div>
   </div>
