@@ -754,6 +754,25 @@ async def AdminBlogCreate(blog_create: BlogCreate):
         try:
             content = blog_create.content.encode('utf-8')  # 将content字段转换为字节
             blog_create.content = content  # 更新blog_create中的content值
+            
+            # 确保NumberViews和NumberLikes有默认值
+            if blog_create.NumberViews is None:
+                blog_create.NumberViews = 0
+            if blog_create.NumberLikes is None:
+                blog_create.NumberLikes = 0
+                
+            # 确保admin_id是有效的整数且存在于数据库中
+            if blog_create.admin_id is None or blog_create.admin_id <= 0:
+                return {"code": 40001, "message": "管理员ID不能为空或无效"}
+                
+            # 验证admin_id是否存在于数据库中
+            admin_query = select(AdminUser.UserId).where(AdminUser.UserId == blog_create.admin_id)
+            admin_result = await session.execute(admin_query)
+            admin_exists = admin_result.scalar_one_or_none()
+            
+            if not admin_exists:
+                return {"code": 40001, "message": "管理员ID不存在"}
+                
             # 提取标签信息
             tags = blog_create.tags
             # 创建博客文章
@@ -767,7 +786,7 @@ async def AdminBlogCreate(blog_create: BlogCreate):
                 blog_tag = BlogTag(Article_Type=tag, blog_id=blog_id)
                 session.add(blog_tag)
             await session.commit()
-            return {"code": 20000, "message": "创建成功"}
+            return {"code": 20000, "message": "创建成功", "blog_id": blog_id}
         except jwt.ExpiredSignatureError:
             return {"code": 50012, "message": "Token已过期", "error": "Token已经过期"}
         except jwt.InvalidTokenError:
@@ -798,3 +817,26 @@ async def AdminBlogIndex():
             print("我们遇到了下面的问题")
             print(e)
             return {"code": 50000, "message": "内部服务器错误"}
+
+
+@AdminApi.post("/blog/getAdminId")
+async def getAdminId(request: Request):
+    async with db_session() as session:
+        try:
+            data = await request.json()
+            username = data.get('username')
+            if not username:
+                return {"code": 40001, "message": "用户名不能为空"}
+                
+            # 查询管理员用户
+            query = select(AdminUser.UserId).where(AdminUser.username == username)
+            result = await session.execute(query)
+            admin_id = result.scalar()
+            
+            if admin_id is None:
+                return {"code": 40001, "message": "管理员不存在"}
+            
+            return {"code": 20000, "data": {"admin_id": admin_id}}
+        except Exception as e:
+            print(e)
+            return {"code": 50000, "message": "获取管理员ID失败"}

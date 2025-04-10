@@ -132,5 +132,8 @@ class BlogCreate(BaseModel):
     content: str
     BlogIntroductionPicture: str
     author: str
-    tags: List[str]
-    PublishStatus: bool
+    PublishStatus: bool = False
+    NumberViews: int = 0
+    NumberLikes: int = 0
+    admin_id: int
+    tags: List[str] = []
