@@ -5,6 +5,7 @@ import UserLogin from '../views/user/UserLogin.vue';
 import UserReg from '../views/user/UserReg.vue';
 import error from '../views/errorpage/Error.vue';
 import OAuthCallback from '@/views/user/OAuthCallback.vue';
+import AboutMe from '@/views/BlogPages/aboutme.vue';
 
 const router = createRouter({
     history: createWebHistory('/'),
@@ -17,6 +18,16 @@ const router = createRouter({
                 cacheable: true,
                 title: 'Exp1oit的Blog',
                 // description: 'Exploit的Blog',
+                keepAlive: true,
+            },
+        },
+        {
+            path: '/about-me',
+            component: AboutMe,
+            name: 'aboutMe',
+            meta: {
+                cacheable: true,
+                title: '关于我',
                 keepAlive: true,
             },
         },
