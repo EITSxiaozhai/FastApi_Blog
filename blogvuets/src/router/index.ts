@@ -64,6 +64,15 @@ const router = createRouter({
                 hideHeader: true,
                 title: "授权成功等待跳转",
             }
+        },
+        {
+            path: '/apiplaygroud/bing-wallpaper',
+            name: 'BingWallpaper',
+            component: () => import('@/views/BlogPages/apiViews.vue'),
+            meta: {
+                title: 'Bing壁纸API',
+                requiresAuth: false
+            }
         }
     ]
 });
