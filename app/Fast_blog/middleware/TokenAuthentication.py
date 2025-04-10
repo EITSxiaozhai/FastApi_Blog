@@ -26,8 +26,8 @@ SKIP_PATHS: Set[str] = {
     "/favicon.ico",
     "/api/generaluser",
     "/api/blogs/search",
-    "/api/bing-wallpaper",
-    "/api/bing-wallpaper/random=true",
+    "/api/views/blogs/bing-wallpaper",
+    "/api/views/blogs/bing-wallpaper/random=true",
 }
 
 

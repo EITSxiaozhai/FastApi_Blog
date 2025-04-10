@@ -5,7 +5,7 @@
     <section class="api-section">
       <h2>获取每日壁纸</h2>
       <div class="endpoint">
-        <code>GET https://blogapi.exploit-db.xyz/api/bing-wallpaper</code>
+        <code>GET https://blogapi.exploit-db.xyz/api/views/blogs/bing-wallpaper</code>
       </div>
       <h3>返回示例</h3>
       <pre class="response-example">
@@ -21,7 +21,7 @@
     <section class="api-section">
       <h2>随机获取壁纸</h2>
       <div class="endpoint">
-        <code>GET https://blogapi.exploit-db.xyz/api/bing-wallpaper/random=true</code>
+        <code>GET https://blogapi.exploit-db.xyz/api/views/blogs/bing-wallpaper/random=true</code>
       </div>
       <h3>说明</h3>
       <p>随机返回最近7天内的任意一张壁纸</p>
