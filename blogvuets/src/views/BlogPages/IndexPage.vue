@@ -415,6 +415,13 @@ onMounted(() => {
             <router-link style="text-decoration: none;" to="/about-me">关于我</router-link>
           </el-menu-item>
 
+          <el-sub-menu index="5">
+            <template #title>共享API接口</template>
+            <el-menu-item index="5-1">
+              <router-link style="text-decoration: none;" to="/api/bing-wallpaper">API壁纸</router-link>
+            </el-menu-item>
+          </el-sub-menu>
+
           <el-sub-menu index="4">
             <template #title>
               {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
