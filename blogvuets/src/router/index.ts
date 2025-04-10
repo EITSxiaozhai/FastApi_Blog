@@ -66,14 +66,14 @@ const router = createRouter({
             }
         },
         {
-            path: '/apiplaygroud/bing-wallpaper',
+            path: '/api/bing-wallpaper',
             name: 'BingWallpaper',
             component: () => import('@/views/BlogPages/apiViews.vue'),
             meta: {
                 title: 'Bing壁纸API',
                 requiresAuth: false
             }
-        }
+        },
     ]
 });
 
