@@ -15,14 +15,12 @@ Fastapi_image_build:
 Fastapi_swarm_deploy:
   stage: deploy
   script:
-    # 检查 Swarm 状态
-    - echo "Checking Docker Swarm status..."
-    - docker node ls
-    - docker node inspect self
-    - echo "Current node role: $(docker node inspect self -f '{{.Spec.Role}}')"
-    - echo "Current node availability: $(docker node inspect self -f '{{.Spec.Availability}}')"
-    
-    # 部署服务
+    - |
+      echo "Checking Docker Swarm status..."
+      docker node ls
+      docker node inspect self
+      echo "Current node role: $(docker node inspect self -f '{{.Spec.Role}}')"
+      echo "Current node availability: $(docker node inspect self -f '{{.Spec.Availability}}')"
     - export Sql_URL="mysql://$DB_USERNAME:$DB_PASSWORD@$DB_HOSTNAME:$DB_PORT/$DB_NAME?charset=utf8mb4"
     - docker stack deploy -c docker-compose.yml fastapi-stack
     - echo "Waiting for database migration to complete..."
