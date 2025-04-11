@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  db-migration:
+    image: fastapi:latest
+    command: ["alembic", "upgrade", "head"]
+    environment:
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOSTNAME=${DB_HOSTNAME}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+    networks:
+      - fastapi-network
+    deploy:
+      restart_policy:
+        condition: none
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+
+  fastapi:
+    image: fastapi:latest
+    ports:
+      - "49200:80"
+    environment:
+      - ADMIN_RECAPTCHA_SECRET_KEY=${ADMIN_RECAPTCHA_SECRET_KEY}
+      - GENERAL_USER_RECAPTCHA_SECRET_KEY=${GENERAL_USER_RECAPTCHA_SECRET_KEY}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOSTNAME=${DB_HOSTNAME}
+      - DB_PORT=${DB_PORT}
+      - DB_NAME=${DB_NAME}
+      - REDIS_DB_PASSWORD=${REDIS_DB_PASSWORD}
+      - REDIS_DB_HOSTNAME=${REDIS_DB_HOSTNAME}
+      - REDIS_DB_PORT=${REDIS_DB_PORT}
+      - REDIS_DB_NAME=${REDIS_DB_NAME}
+      - REDIS_USER_NAME=${REDIS_USER_NAME}
+      - ACCESS_KEY_ID=${ACCESS_KEY_ID}
+      - ACCESS_KEY_SECRET=${ACCESS_KEY_SECRET}
+      - SECRET_KEY=${SECRET_KEY}
+      - USER_SECRET_KEY=${USER_SECRET_KEY}
+      - SMTPSERVER=${SMTPSERVER}
+      - SMTPUSER=${SMTPUSER}
+      - SMTPPASSWORD=${SMTPPASSWORD}
+      - MQ_HOSTNAME=${MQ_HOSTNAME}
+      - MQ_USERNAME=${MQ_USERNAME}
+      - MQ_USERPASSWORD=${MQ_USERPASSWORD}
+      - MQ_DBNAME=${MQ_DBNAME}
+      - MQ_DBPORT=${MQ_DBPORT}
+      - LogStathIP=${LogStathIP}
+      - REFSECRET_KEY=${REFSECRET_KEY}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+      - GITHUB_CLIENT_ID=${GITHUB_CLIENT_ID}
+      - GITHUB_CLIENT_SECRET=${GITHUB_CLIENT_SECRET}
+      - REDIRECT_URI=${REDIRECT_URI}
+      - URLKEY=${URLKEY}
+      - LOGSTASH_NGINX_HOST=${LOGSTASH_NGINX_HOST}
+      - LOGSTASH_USER=${LOGSTASH_USER}
+      - LOGSTASH_PASS=${LOGSTASH_PASS}
+    deploy:
+      replicas: 3
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+      healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:80/docs"]
+        interval: 30s
+        timeout: 10s
+        retries: 3
+        start_period: 40s
+    networks:
+      - fastapi-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    depends_on:
+      - db-migration
+
+networks:
+  fastapi-network:
+    driver: overlay
+    attachable: true 
