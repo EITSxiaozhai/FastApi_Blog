@@ -9,11 +9,11 @@ Fastapi_image_build:
     - export Sql_URL="mysql://$DB_USERNAME:$DB_PASSWORD@$DB_HOSTNAME:$DB_PORT/$DB_NAME?charset=utf8mb4"
     - cat Dockerfile
     - echo Sql_URL
-    - docker build --build-arg Sql_URL=${Sql_URL} -t https://hub.exploit-db.xyz/fastapi:$CI_PIPELINE_ID .
-    - docker tag https://hub.exploit-db.xyz/fastapi:$CI_PIPELINE_ID https://hub.exploit-db.xyz/fastapi:latest
-    - docker push https://hub.exploit-db.xyz/fastapi:$CI_PIPELINE_ID
-    - docker push https://hub.exploit-db.xyz/fastapi:latest
-    - docker logout https://hub.exploit-db.xyz
+    - docker build --build-arg Sql_URL=${Sql_URL} -t hub.exploit-db.xyz/fastapi:$CI_PIPELINE_ID .
+    - docker tag hub.exploit-db.xyz/fastapi:$CI_PIPELINE_ID hub.exploit-db.xyz/fastapi:latest
+    - docker push hub.exploit-db.xyz/fastapi:$CI_PIPELINE_ID
+    - docker push hub.exploit-db.xyz/fastapi:latest
+    - docker logout hub.exploit-db.xyz
 
 Fastapi_swarm_deploy:
   stage: deploy
