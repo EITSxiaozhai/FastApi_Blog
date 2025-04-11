@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db-migration:
-    image: hub.exploit-db.xyz/fastapi:latest
+    image: https://hub.exploit-db.xyz/fastapi:latest
     command: ["alembic", "upgrade", "head"]
     environment:
       - DB_USERNAME=${DB_USERNAME}
@@ -21,9 +21,12 @@ services:
           memory: 512M
 
   fastapi:
-    image: hub.exploit-db.xyz/fastapi:latest
+    image: https://hub.exploit-db.xyz/fastapi:latest
     ports:
-      - "49200:80"
+      - target: 80
+        published: 49200
+        protocol: tcp
+        mode: host
     environment:
       - ADMIN_RECAPTCHA_SECRET_KEY=${ADMIN_RECAPTCHA_SECRET_KEY}
       - GENERAL_USER_RECAPTCHA_SECRET_KEY=${GENERAL_USER_RECAPTCHA_SECRET_KEY}
@@ -78,6 +81,10 @@ services:
         reservations:
           cpus: '0.5'
           memory: 512M
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.fastapi.rule=Host(`api.yourdomain.com`)"
+        - "traefik.http.services.fastapi.loadbalancer.server.port=80"
     networks:
       - fastapi-network
     logging:
