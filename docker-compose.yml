@@ -78,12 +78,6 @@ services:
         reservations:
           cpus: '0.5'
           memory: 512M
-      healthcheck:
-        test: ["CMD", "curl", "-f", "http://localhost:80/docs"]
-        interval: 30s
-        timeout: 10s
-        retries: 3
-        start_period: 40s
     networks:
       - fastapi-network
     logging:
