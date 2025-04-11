@@ -9,7 +9,6 @@ Fastapi_image_build:
     - export Sql_URL="mysql://$DB_USERNAME:$DB_PASSWORD@$DB_HOSTNAME:$DB_PORT/$DB_NAME?charset=utf8mb4"
     - cat Dockerfile
     - echo Sql_URL
-    - echo "$DOCKER_PASSWORD" | docker login https://hub.exploit-db.xyz -u "$DOCKER_USERNAME" --password-stdin
     - docker build --build-arg Sql_URL=${Sql_URL} -t https://hub.exploit-db.xyz/fastapi:$CI_PIPELINE_ID .
     - docker tag https://hub.exploit-db.xyz/fastapi:$CI_PIPELINE_ID https://hub.exploit-db.xyz/fastapi:latest
     - docker push https://hub.exploit-db.xyz/fastapi:$CI_PIPELINE_ID
