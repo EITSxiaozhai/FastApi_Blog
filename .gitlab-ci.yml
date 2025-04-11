@@ -9,14 +9,10 @@ Fastapi_image_build:
     - export Sql_URL="mysql://$DB_USERNAME:$DB_PASSWORD@$DB_HOSTNAME:$DB_PORT/$DB_NAME?charset=utf8mb4"
     - cat Dockerfile
     - echo Sql_URL
-    - docker build --build-arg Sql_URL=${Sql_URL} -t fastapi:$CI_PIPELINE_ID .
-    - docker tag fastapi:$CI_PIPELINE_ID fastapi:latest
-    # 推送镜像到所有节点
-    - |
-      for node in $(docker node ls --format '{{.Hostname}}'); do
-        echo "Pushing image to node: $node"
-        docker save fastapi:latest | ssh $node 'docker load'
-      done
+    - docker build --build-arg Sql_URL=${Sql_URL} -t hub.exploit-db.xyz/fastapi:$CI_PIPELINE_ID .
+    - docker tag hub.exploit-db.xyz/fastapi:$CI_PIPELINE_ID hub.exploit-db.xyz/fastapi:latest
+    - docker push hub.exploit-db.xyz/fastapi:$CI_PIPELINE_ID
+    - docker push hub.exploit-db.xyz/fastapi:latest
 
 Fastapi_swarm_deploy:
   stage: deploy
