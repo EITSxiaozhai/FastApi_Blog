@@ -1,3 +1,8 @@
+variables:
+  HARBOR_URL: sggc.exploit-db.xyz:10000
+  HARBOR_PROJECT: fastapi_blog
+  IMAGE_NAME: $HARBOR_URL/$HARBOR_PROJECT/fastapi
+
 stages:
   - build
   - deploy
