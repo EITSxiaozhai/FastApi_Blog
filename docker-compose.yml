@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db-migration:
-    image: hub.exploit-db.xyz/fastapi:latest
+    image: sggc.exploit-db.xyz/fastapi_blog/fastapi:latest
     command: ["alembic", "upgrade", "head"]
     environment:
       - DB_USERNAME=${DB_USERNAME}
@@ -21,7 +21,7 @@ services:
           memory: 512M
 
   fastapi:
-    image: hub.exploit-db.xyz/fastapi:latest
+    image: sggc.exploit-db.xyz/fastapi_blog/fastapi:latest
     ports:
       - target: 80
         published: 49200

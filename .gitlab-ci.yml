@@ -8,12 +8,20 @@ Fastapi_image_build:
     - echo "FastApi build, Dockerfile:"
     - export Sql_URL="mysql://$DB_USERNAME:$DB_PASSWORD@$DB_HOSTNAME:$DB_PORT/$DB_NAME?charset=utf8mb4"
     - cat Dockerfile
-    - echo Sql_URL
-    - docker build --build-arg Sql_URL=${Sql_URL} -t hub.exploit-db.xyz/fastapi:$CI_PIPELINE_ID .
-    - docker tag hub.exploit-db.xyz/fastapi:$CI_PIPELINE_ID hub.exploit-db.xyz/fastapi:latest
-    - docker push hub.exploit-db.xyz/fastapi:$CI_PIPELINE_ID
-    - docker push hub.exploit-db.xyz/fastapi:latest
-    - docker logout hub.exploit-db.xyz
+    - echo $Sql_URL
+
+    # 登录到 Harbor
+    - echo $HARBOR_PASSWORD | docker login $HARBOR_URL -u $HARBOR_USERNAME --password-stdin
+
+    # 构建并打 tag 镜像
+    - docker build --build-arg Sql_URL=${Sql_URL} -t $IMAGE_NAME:$CI_PIPELINE_ID .
+    - docker tag $IMAGE_NAME:$CI_PIPELINE_ID $IMAGE_NAME:latest
+
+    # 推送到 Harbor
+    - docker push $IMAGE_NAME:$CI_PIPELINE_ID
+    - docker push $IMAGE_NAME:latest
+
+    - docker logout $HARBOR_URL
 
 Fastapi_swarm_deploy:
   stage: deploy
