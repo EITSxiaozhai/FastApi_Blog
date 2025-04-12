@@ -1,6 +1,29 @@
-version: '3.8'
+version: "3.8"
 
 services:
+  # Traefik 反向代理服务：统一入口，负责路由与负载均衡
+  traefik:
+    image: traefik:v2.9
+    command:
+      - "--providers.docker.swarmMode=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      # 若需要 HTTPS，可添加 HTTPS 入口配置，例如：
+      # - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80"
+      # 如果需要 HTTPS则取消下面注释
+      # - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    networks:
+      - fastapi-network
+
+  # db-migration 服务：执行数据库迁移（alembic upgrade head）
   db-migration:
     image: sggc.exploit-db.xyz:10000/fastapi_blog/fastapi:latest
     command: ["alembic", "upgrade", "head"]
@@ -17,16 +40,13 @@ services:
         condition: none
       resources:
         limits:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 512M
 
+  # fastapi 服务：业务服务，由 Traefik 根据标签进行路由
   fastapi:
     image: sggc.exploit-db.xyz:10000/fastapi_blog/fastapi:latest
-    ports:
-      - target: 80
-        published: 49200
-        protocol: tcp
-        mode: ingress
+    # 不直接发布端口，由 Traefik 做入口负载均衡
     environment:
       - ADMIN_RECAPTCHA_SECRET_KEY=${ADMIN_RECAPTCHA_SECRET_KEY}
       - GENERAL_USER_RECAPTCHA_SECRET_KEY=${GENERAL_USER_RECAPTCHA_SECRET_KEY}
@@ -76,14 +96,18 @@ services:
         window: 120s
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 1G
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 512M
       labels:
         - "traefik.enable=true"
+        # 这里设置路由规则：当访问 blogapi.exploit-db.xyz 时，将流量路由到该服务
         - "traefik.http.routers.fastapi.rule=Host(`blogapi.exploit-db.xyz`)"
+        # 指定入口，为 web 入口（即 80 端口）
+        - "traefik.http.routers.fastapi.entrypoints=web"
+        # 指定 fastapi 服务内监听的端口（80 端口）
         - "traefik.http.services.fastapi.loadbalancer.server.port=80"
     networks:
       - fastapi-network
@@ -98,4 +122,4 @@ services:
 networks:
   fastapi-network:
     driver: overlay
-    attachable: true 
+    attachable: true
