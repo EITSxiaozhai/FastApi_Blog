@@ -83,7 +83,7 @@ services:
           memory: 512M
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.fastapi.rule=Host(`api.yourdomain.com`)"
+        - "traefik.http.routers.fastapi.rule=Host(`blogapi.exploit-db.xyz`)"
         - "traefik.http.services.fastapi.loadbalancer.server.port=80"
     networks:
       - fastapi-network
