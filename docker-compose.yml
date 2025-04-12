@@ -11,7 +11,7 @@ services:
       # 若需要 HTTPS，可添加 HTTPS 入口配置，例如：
       # - "--entrypoints.websecure.address=:443"
     ports:
-      - "10000:80"
+      - "20000:80"
       # 如果需要 HTTPS则取消下面注释
       # - "443:443"
     volumes:
