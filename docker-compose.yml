@@ -26,7 +26,7 @@ services:
       - target: 80
         published: 49200
         protocol: tcp
-        mode: host
+        mode: ingress
     environment:
       - ADMIN_RECAPTCHA_SECRET_KEY=${ADMIN_RECAPTCHA_SECRET_KEY}
       - GENERAL_USER_RECAPTCHA_SECRET_KEY=${GENERAL_USER_RECAPTCHA_SECRET_KEY}
