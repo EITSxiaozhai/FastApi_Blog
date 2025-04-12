@@ -2,6 +2,12 @@ stages:
   - build
   - deploy
 
+variables:
+  DOCKER_TLS_CERTDIR: ""  # 禁用 TLS 验证
+  HARBOR_URL: sggc.exploit-db.xyz:10000
+  HARBOR_PROJECT: fastapi
+  IMAGE_NAME: $HARBOR_URL/$HARBOR_PROJECT/fastapi
+
 Fastapi_image_build:
   stage: build
   script:
