@@ -1,16 +1,3 @@
-image: docker:24.0.5
-
-services:
-  - name: docker:dind
-    command: ["--insecure-registry=sggc.exploit-db.xyz:10000"]
-
-variables:
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_TLS_CERTDIR: ""
-  HARBOR_URL: sggc.exploit-db.xyz:10000
-  HARBOR_PROJECT: fastapi
-  IMAGE_NAME: $HARBOR_URL/$HARBOR_PROJECT/fastapi
-
 stages:
   - build
   - deploy
