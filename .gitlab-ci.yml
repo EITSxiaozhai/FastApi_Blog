@@ -33,7 +33,7 @@ Fastapi_swarm_deploy:
   script:
     - echo "Deploying to Docker Swarm..."
     - export Sql_URL="mysql://$DB_USERNAME:$DB_PASSWORD@$DB_HOSTNAME:$DB_PORT/$DB_NAME?charset=utf8mb4"
-    - docker stack deploy -c docker-compose.yml fastapi-stack
+    - docker stack deploy --with-registry-auth -c docker-compose.yml fastapi-stack
     - echo "Waiting for database migration to complete..."
     - sleep 30
     - docker service ls
