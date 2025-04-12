@@ -103,8 +103,8 @@ services:
           memory: 512M
       labels:
         - "traefik.enable=true"
-        # 这里设置路由规则：当访问 blogapi.exploit-db.xyz 时，将流量路由到该服务
-        - "traefik.http.routers.fastapi.rule=Host(`blogapi.exploit-db.xyz`)"
+        # 这里设置路由规则：当访问blogapi-traefik.exploit-db.xyz 时，将流量路由到该服务
+        - "traefik.http.routers.fastapi.rule=Host(`blogapi-traefik.exploit-db.xyz`)"
         # 指定入口，为 web 入口（即 80 端口）
         - "traefik.http.routers.fastapi.entrypoints=web"
         # 指定 fastapi 服务内监听的端口（80 端口）
