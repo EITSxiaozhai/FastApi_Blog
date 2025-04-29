@@ -84,6 +84,9 @@ services:
       - LOGSTASH_PASS=${LOGSTASH_PASS}
     deploy:
       replicas: 3
+      placement:
+        constraints:
+          - node.role == worker
       update_config:
         parallelism: 1
         delay: 10s
