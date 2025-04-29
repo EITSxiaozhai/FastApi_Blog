@@ -2,6 +2,7 @@ variables:
   HARBOR_URL: sggc.exploit-db.xyz:10000
   HARBOR_PROJECT: fastapi_blog
   IMAGE_NAME: $HARBOR_URL/$HARBOR_PROJECT/fastapi
+  DOCKER_BUILDKIT: 1  # 启用 BuildKit 以支持更多优化特性
 
 stages:
   - build
@@ -18,8 +19,15 @@ Fastapi_image_build:
     # 登录到 Harbor
     - echo $HARBOR_PASSWORD | docker login $HARBOR_URL -u $HARBOR_USERNAME --password-stdin
 
-    # 构建并打 tag 镜像
-    - docker build --build-arg Sql_URL=${Sql_URL} -t $IMAGE_NAME:$CI_PIPELINE_ID .
+    # 拉取最新的基础镜像以更新缓存
+    - docker pull $IMAGE_NAME:latest || true
+
+    # 构建并打 tag 镜像（添加优化参数）
+    - docker build 
+      --build-arg BUILDKIT_INLINE_CACHE=1 
+      --cache-from $IMAGE_NAME:latest 
+      --build-arg Sql_URL=${Sql_URL} 
+      -t $IMAGE_NAME:$CI_PIPELINE_ID .
     - docker tag $IMAGE_NAME:$CI_PIPELINE_ID $IMAGE_NAME:latest
 
     # 推送到 Harbor
