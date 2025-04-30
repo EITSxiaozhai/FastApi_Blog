@@ -9,7 +9,7 @@ import WOW from "wow.js";
 import '@/assets/css/IndexPage.css';
 import {GoogleUVPV, fetchBlogIndex, searchBlogs, getBingWallpaper} from "@/api/Blog/blogapig"
 import {debounce} from "lodash";
-import {Moon, Sunny, ArrowDownBold} from "@element-plus/icons-vue";
+import {Moon, Sunny, ArrowDownBold, User, Calendar} from "@element-plus/icons-vue";
 
 // 响应式状态
 const isDark = ref(false)
@@ -89,7 +89,8 @@ const router = useRouter();
 const totalUV = ref(0);
 const totalPV = ref(0);
 const data = reactive({
-  data: []
+  data: [],
+  loadedIds: new Set() // 用于跟踪已加载的博客ID
 });
 
 
@@ -106,34 +107,83 @@ const fetchUvPvData = async () => {
   }
 };
 
-const pageSize = 4;
+// 动态页面大小设置
+const getPageSize = () => {
+  const width = window.innerWidth;
+  if (width > 1200) {
+    return 12; // 大屏幕显示12个
+  } else if (width > 768) {
+    return 8;  // 中等屏幕显示8个
+  } else {
+    return 4;  // 小屏幕显示4个
+  }
+};
+
+const pageSize = ref(getPageSize());
 let currentPage = 1;
-const loadedCards = ref(pageSize);
+const loadedCards = ref(pageSize.value);
+const loading = ref(false);
+const error = ref(null);
 
 const loadData = async (page = 0) => {
+  loading.value = true;
+  error.value = null;
   try {
-    // 调用 fetchBlogIndex 函数并传入参数
-    const response = await fetchBlogIndex({page, pageSize});
-
-    if (response.data.length > 0) {
-      response.data.forEach(blog => {
-        // 判断博客是否已加载，根据 BlogID 判断
-        const isBlogLoaded = data.data.some(loadedBlog => loadedBlog.BlogId === blog.BlogId);
-
-        if (!isBlogLoaded) {
-          // 如果博客未加载，则将其推入数据数组
-          data.data.push(blog);
-          // 可选：如果你想要跟踪已加载的 BlogID，可以将其添加到集合中
-          // loadedBlogIds.value.add(blog.BlogId);
-        }
+    const response = await fetchBlogIndex({page, pageSize: pageSize.value});
+    if (response.data && response.data.length > 0) {
+      // 过滤掉已加载的博客
+      const newBlogs = response.data.filter(blog => !data.loadedIds.has(blog.BlogId));
+      
+      // 将新博客添加到数据和已加载ID集合中
+      newBlogs.forEach(blog => {
+        data.data.push(blog);
+        data.loadedIds.add(blog.BlogId);
       });
+
+      // 如果没有新数据，说明已经加载完所有数据
+      if (newBlogs.length === 0) {
+        loadedCards.value = data.data.length;
+      }
     }
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    error.value = '加载数据失败，请稍后重试';
+    console.error(err);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const loadMoreCards = () => {
+  // 只有当还有更多数据可加载时才增加页码
+  if (data.data.length >= loadedCards.value) {
+    currentPage++;
+    loadedCards.value = pageSize.value * currentPage;
+    loadData(currentPage);
+  }
+};
+
+// 重置数据
+const resetData = () => {
+  data.data = [];
+  data.loadedIds.clear();
+  currentPage = 1;
+  loadedCards.value = pageSize.value;
+};
+
+// 监听窗口大小变化，动态调整页面大小
+const handleResize = () => {
+  const newPageSize = getPageSize();
+  if (newPageSize !== pageSize.value) {
+    pageSize.value = newPageSize;
+    // 如果当前加载的数量小于新的页面大小，则加载更多
+    if (loadedCards.value < pageSize.value) {
+      loadMoreCards();
+    }
   }
 };
 
 onMounted(() => {
+  // 初始化 WOW 动画
   const wow = new WOW({
     boxClass: 'wow',
     animateClass: 'animated',
@@ -144,21 +194,23 @@ onMounted(() => {
     resetAnimation: true,
     callback: function (box) {
       if (box.classList.contains('slideInLeft')) {
-        box.style.opacity = '1'; // 设置透明度为1，淡入
+        box.style.opacity = '1';
       }
     },
-  })
+  });
   wow.init();
-  loadData(currentPage.value);
+
+  // 重置数据并加载
+  resetData();
+  loadData(currentPage);
+  
+  // 添加窗口大小变化监听
+  window.addEventListener('resize', handleResize);
 });
 
-
-const loadMoreCards = () => {
-  currentPage++;
-  loadedCards.value = pageSize * currentPage;
-  loadData(currentPage);
-};
-
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize);
+});
 
 const showFloatingWindow = ref(false);
 
@@ -361,6 +413,49 @@ onMounted(() => {
     clearInterval(wallpaperTimer);
   });
 });
+
+// 标签类型轮换
+const getTagType = (index) => {
+  const types = ['primary', 'success', 'warning', 'danger', 'info']
+  return types[index % types.length]
+}
+
+// 瀑布流布局相关
+const blogGrid = ref(null);
+const columns = ref(3); // 默认3列
+
+// 计算列数
+const calculateColumns = () => {
+  const width = window.innerWidth;
+  if (width > 1200) {
+    columns.value = 3;
+  } else if (width > 768) {
+    columns.value = 2;
+  } else {
+    columns.value = 1;
+  }
+};
+
+// 监听窗口大小变化
+onMounted(() => {
+  calculateColumns();
+  window.addEventListener('resize', calculateColumns);
+  
+  // 在组件卸载时移除事件监听
+  onBeforeUnmount(() => {
+    window.removeEventListener('resize', calculateColumns);
+  });
+});
+
+// 将博客数据分组到不同列
+const columnBlogs = computed(() => {
+  const cols = Array.from({ length: columns.value }, () => []);
+  data.data.forEach((blog, index) => {
+    const columnIndex = index % columns.value;
+    cols[columnIndex].push(blog);
+  });
+  return cols;
+});
 </script>
 
 <template>
@@ -519,70 +614,78 @@ onMounted(() => {
 
         <el-col :lg="12" :md="12" :sm="24" :xl="10" :xs="24" class="maincaretest">
           <div class="content-container">
-
             <el-main id="maincare">
-              <div class="about">
-
-                <el-container v-for="(blog) in data.data" :key="blog.BlogId">
-                  <el-main>
-                    <keep-alive>
-                      <transition name="el-fade-in-linear">
-                        <router-link :to="`/blog/${blog.BlogId}`" style="text-decoration: none" target="_blank">
-                          <!-- 使用条件判断选择布局 -->
-                          <template v-if="xlLayout ">
-                            <el-card id="main-boxcard" class="wow animate__bounce bounceInDown box-card"
-                                     data-wow-duration="2s" shadow="hover"
-                                     style="display: flex; flex-direction: column; height: 99%;">
-                              <img id="blog-image" :src="blog.BlogIntroductionPicture" alt="图像描述"
-                                   style="flex: 1 0 auto;">
-
-                              <div style="flex: 0 0 auto; padding: 10px;">
-                                <h1 style="font-size: 25px;">{{ blog.title }}</h1>
-                                <p>作者:{{ blog.author }}</p>
-                                <p>发布日期:{{ blog.created_at }}</p>
-
-                              </div>
-                              <el-tag v-for="(tag, index) in blog.tag"
-                                      :key="index" type="primary"> {{ tag }}
+              <div class="masonry-grid" ref="blogGrid">
+                <div 
+                  v-for="(column, columnIndex) in columnBlogs" 
+                  :key="columnIndex" 
+                  class="masonry-column"
+                >
+                  <div 
+                    v-for="blog in column" 
+                    :key="blog.BlogId" 
+                    class="masonry-item"
+                  >
+                    <router-link :to="`/blog/${blog.BlogId}`" style="text-decoration: none" target="_blank">
+                      <el-card 
+                        class="blog-card wow animate__bounce bounceInDown" 
+                        data-wow-duration="2s" 
+                        shadow="hover"
+                      >
+                        <div class="blog-card-content">
+                          <div class="blog-image-container">
+                            <img 
+                              class="blog-image" 
+                              :src="blog.BlogIntroductionPicture" 
+                              alt="图像描述"
+                            >
+                          </div>
+                          <div class="blog-info">
+                            <h2 class="blog-title">{{ blog.title }}</h2>
+                            <div class="blog-meta">
+                              <span class="author">
+                                <el-icon><User /></el-icon>
+                                {{ blog.author }}
+                              </span>
+                              <span class="date">
+                                <el-icon><Calendar /></el-icon>
+                                {{ blog.created_at }}
+                              </span>
+                            </div>
+                            <div class="blog-tags">
+                              <el-tag 
+                                v-for="(tag, index) in blog.tag"
+                                :key="index" 
+                                :type="getTagType(index)"
+                                class="tag-item"
+                              >
+                                {{ tag }}
                               </el-tag>
-                            </el-card>
-
-                          </template>
-                          <template v-else>
-                            <!-- 使用你的布局 -->
-                            <el-card id="main-boxcard" class="wow animate__bounce bounceInDown box-card"
-                                     data-wow-duration="2s"
-                                     shadow="hover">
-                              <el-container>
-                                <img id="blog-image" :src="blog.BlogIntroductionPicture" alt="图像描述">
-                                <el-main>
-                                  <h1 style="font-size: 25px;">{{ blog.title }}</h1>
-                                  <p>作者:{{ blog.author }}</p>
-                                  <p>发布日期:{{ blog.created_at }}</p>
-                                </el-main>
-                              </el-container>
-                              <el-tag v-for="(tag, index) in blog.tag"
-                                      :key="index" type="primary"> {{ tag }}
-                              </el-tag>
-                            </el-card>
-                          </template>
-                        </router-link>
-                      </transition>
-                    </keep-alive>
-                  </el-main>
-                  <div>
-                    <el-backtop :bottom="100" :right="100"/>
+                            </div>
+                          </div>
+                        </div>
+                      </el-card>
+                    </router-link>
                   </div>
-                </el-container>
+                </div>
               </div>
               <div class="bt_container" style="display: flex; justify-content: center;">
                 <el-button
-                    v-if="data.data.length % pageSize === 0 && !loading"
-                    type="primary"
-                    @click="loadMoreCards">
-                  查看更多
+                  v-if="data.data.length >= loadedCards.value && !loading && data.data.length > 0"
+                  type="primary"
+                  @click="loadMoreCards"
+                >
+                  加载更多
                 </el-button>
-                <p v-else>没有更多文章可以查看了</p>
+                <el-button
+                  v-else-if="loading"
+                  type="primary"
+                  :loading="true"
+                >
+                  加载中...
+                </el-button>
+                <p v-else-if="data.data.length === 0">暂无文章</p>
+                <p v-else>没有更多文章了</p>
               </div>
             </el-main>
           </div>
@@ -662,7 +765,3 @@ onMounted(() => {
 
 
 <style src="wow.js/css/libs/animate.css"></style>
-
-<style>
-/* 移除之前的背景图片样式，因为已经在 IndexPage.css 中定义了 */
-</style>
