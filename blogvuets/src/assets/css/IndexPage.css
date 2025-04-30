@@ -231,7 +231,6 @@
   font-weight: 500;
   line-height: 1.3;
   margin: 0 0 8px 0;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 .blog-meta {
@@ -245,12 +244,10 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  text-shadow: 0 1px 1px rgba(0,0,0,0.2);
 }
 
 .blog-meta .el-icon {
   color: rgba(0, 0, 0, 0.95);
-  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
 }
 
 .blog-info {
