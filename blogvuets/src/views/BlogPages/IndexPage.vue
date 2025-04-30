@@ -128,6 +128,9 @@ const loading = ref(false);
 const error = ref(null);
 
 const loadData = async (page = 1) => {
+  // 如果正在加载，直接返回
+  if (loading.value) return;
+  
   loading.value = true;
   error.value = null;
   try {
@@ -138,14 +141,25 @@ const loadData = async (page = 1) => {
       data.totalPages = response.data.total_pages;
       data.currentPage = response.data.current_page;
       
-      // 过滤掉已加载的博客
+      // 如果是第一页，清空现有数据
+      if (page === 1) {
+        data.data = [];
+        data.loadedIds.clear();
+      }
+      
+      // 检查是否有新数据
       const newBlogs = response.data.data.filter(blog => !data.loadedIds.has(blog.BlogId));
       
-      // 将新博客添加到数据和已加载ID集合中
-      newBlogs.forEach(blog => {
-        data.data.push(blog);
-        data.loadedIds.add(blog.BlogId);
-      });
+      if (newBlogs.length > 0) {
+        // 只添加新数据
+        newBlogs.forEach(blog => {
+          data.data.push(blog);
+          data.loadedIds.add(blog.BlogId);
+        });
+      } else {
+        // 如果没有新数据，说明已经加载完所有数据
+        data.currentPage = data.totalPages;
+      }
     }
   } catch (err) {
     error.value = '加载数据失败，请稍后重试';
@@ -156,8 +170,8 @@ const loadData = async (page = 1) => {
 };
 
 const loadMoreCards = () => {
-  // 只有当还有更多数据可加载时才增加页码
-  if (data.currentPage < data.totalPages) {
+  // 只有当还有更多数据可加载且当前不在加载状态时才增加页码
+  if (data.currentPage < data.totalPages && !loading.value) {
     currentPage++;
     loadData(currentPage);
   }
@@ -438,6 +452,21 @@ const calculateColumns = () => {
   }
 };
 
+// 将博客数据分组到不同列
+const columnBlogs = computed(() => {
+  const cols = Array.from({ length: columns.value }, () => []);
+  const itemsPerColumn = Math.ceil(data.data.length / columns.value);
+  
+  data.data.forEach((blog, index) => {
+    const columnIndex = Math.floor(index / itemsPerColumn);
+    if (columnIndex < columns.value) {
+      cols[columnIndex].push(blog);
+    }
+  });
+  
+  return cols;
+});
+
 // 监听窗口大小变化
 onMounted(() => {
   calculateColumns();
@@ -449,15 +478,10 @@ onMounted(() => {
   });
 });
 
-// 将博客数据分组到不同列
-const columnBlogs = computed(() => {
-  const cols = Array.from({ length: columns.value }, () => []);
-  data.data.forEach((blog, index) => {
-    const columnIndex = index % columns.value;
-    cols[columnIndex].push(blog);
-  });
-  return cols;
-});
+// 监听数据变化，重新计算列数
+watch(() => data.data, () => {
+  calculateColumns();
+}, { deep: true });
 </script>
 
 <template>
