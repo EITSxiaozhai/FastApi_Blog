@@ -3,7 +3,7 @@ import router from '@/router'; // 确认路由实例导入正确
 
 
 const apis = {
-  production: 'https://blogapi.exploit-db.xyz/api/',
+  production: 'https://blogapi-traefik.exploit-db.xyz/api/',
   development: 'http://127.0.0.1:8000/api/',
   test: 'http://192.168.0.150:49200/api/'
 };
