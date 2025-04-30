@@ -257,26 +257,34 @@
 .blog-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .tag-item {
-  padding: 2px 8px;
-  border-radius: 3px;
+  padding: 4px 12px;
+  border-radius: 16px;
   font-size: 0.75rem;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.05);
   color: var(--el-text-color-primary);
   border: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.tag-item:hover {
+  transform: translateY(-2px);
+  background: rgba(0, 0, 0, 0.1);
 }
 
 /* 暗色模式适配 */
-.dark .blog-overlay {
-  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+.dark .tag-item {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
 }
 
-.dark .tag-item {
+.dark .tag-item:hover {
   background: rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.9);
 }
 
 /* 响应式调整 */
@@ -321,6 +329,15 @@
   
   .blog-meta {
     font-size: 0.8rem;
+  }
+  
+  .blog-tags {
+    gap: 6px;
+  }
+  
+  .tag-item {
+    padding: 3px 10px;
+    font-size: 0.7rem;
   }
 }
 
