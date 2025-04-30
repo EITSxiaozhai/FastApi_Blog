@@ -20,11 +20,22 @@
 
 .text-item {
     text-align: center;
+    padding: 20px;
+    transition: all 0.3s ease;
 }
 
 .title {
-    font-size: 24px;
-    margin-bottom: 16px;
+    font-size: clamp(20px, 5vw, 32px);
+    margin-bottom: 20px;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+    word-break: break-word;
+    line-height: 1.4;
+    font-weight: 600;
+}
+
+.title:hover {
+    color: var(--primary-color);
 }
 
 .info {
@@ -33,7 +44,32 @@
     justify-content: center;
     flex-wrap: wrap;
     gap: 20px;
-    font-size: 16px;
+    font-size: clamp(14px, 3vw, 16px);
+    color: var(--text-color);
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.info span {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.info .author {
+    position: relative;
+    padding-right: 20px;
+}
+
+.info .author::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 16px;
+    background-color: var(--border-color);
 }
 
 .selected {
@@ -161,6 +197,24 @@ pre:hover .copy-button {
   .toc-toggle-button {
     right: 10px;
     bottom: 80px;
+  }
+
+  .text-item {
+    padding: 15px;
+  }
+  
+  .info {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .info .author::after {
+    display: none;
+  }
+  
+  .info span {
+    width: 100%;
+    justify-content: center;
   }
 }
 

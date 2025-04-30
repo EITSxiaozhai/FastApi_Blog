@@ -7,7 +7,7 @@ import MarkdownIt from 'markdown-it';
 import {plantuml} from "@mdit/plugin-plantuml";
 import hljs from 'highlight.js';
 import 'highlight.js/styles/atom-one-dark.css';
-import {ChatDotRound, ChatLineRound, ChatRound, Sunny, Moon, List} from '@element-plus/icons-vue';
+import {ChatDotRound, ChatLineRound, ChatRound, Sunny, Moon, List, User, Calendar} from '@element-plus/icons-vue';
 import {ElMessage, ElNotification} from "element-plus";
 import {UToast, createObjectURL} from 'undraw-ui';
 import Fingerprint2 from "fingerprintjs2";
@@ -612,11 +612,16 @@ useHead({
     >
       <div class="text-item">
         <h1 class="title">{{ data.blogData.title }}</h1>
-            <el-divider>
-    </el-divider>
+        <el-divider />
         <div class="info">
-          <span class="author">作者: {{ data.blogData.author }}</span>
-          <span class="date">发布时间：{{ data.blogData.created_at }}</span>
+          <span class="author">
+            <el-icon><User /></el-icon>
+            作者: {{ data.blogData.author }}
+          </span>
+          <span class="date">
+            <el-icon><Calendar /></el-icon>
+            发布时间：{{ data.blogData.created_at }}
+          </span>
         </div>
       </div>
     </el-card>
