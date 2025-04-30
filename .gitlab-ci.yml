@@ -41,8 +41,23 @@ Fastapi_swarm_deploy:
   script:
     - echo "Deploying to Docker Swarm..."
     - export Sql_URL="mysql://$DB_USERNAME:$DB_PASSWORD@$DB_HOSTNAME:$DB_PORT/$DB_NAME?charset=utf8mb4"
+    
+    # 确保所有节点都能访问 Harbor
+    - echo $HARBOR_PASSWORD | docker login $HARBOR_URL -u $HARBOR_USERNAME --password-stdin
+    
+    # 拉取最新镜像到所有节点
+    - docker pull $IMAGE_NAME:latest
+    
+    # 部署服务
     - docker stack deploy --with-registry-auth -c docker-compose.yml fastapi-stack
-    - echo "Waiting for database migration to complete..."
+    
+    # 等待服务启动
+    - echo "Waiting for services to start..."
     - sleep 30
+    
+    # 检查服务状态
     - docker service ls
     - docker service logs fastapi-stack_db-migration
+    
+    # 登出 Harbor
+    - docker logout $HARBOR_URL
