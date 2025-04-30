@@ -1,6 +1,6 @@
 #app .background-container h1 {
     font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
-    color: #eeeeee;
+    color: #ffffff;
     font-weight: 300;
 }
 
@@ -179,17 +179,21 @@
   transition: all 0.3s ease;
   height: 100%;
   background: var(--el-bg-color-overlay);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
 }
 
 .blog-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
 }
 
 .blog-card-content {
   display: flex;
   flex-direction: column;
   height: 100%;
+  position: relative;
 }
 
 .blog-image-container {
@@ -197,7 +201,6 @@
   width: 100%;
   padding-top: 56.25%; /* 16:9 宽高比 */
   overflow: hidden;
-  border-radius: 8px 8px 0 0;
 }
 
 .blog-image {
@@ -210,54 +213,84 @@
   transition: transform 0.3s ease;
 }
 
-.blog-card:hover .blog-image {
-  transform: scale(1.05);
-}
-
-.blog-info {
-  padding: 15px;
+.blog-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
+  padding: 40px 12px 12px;
 }
 
 .blog-title {
-  font-size: 1.25rem;
-  margin: 0 0 10px 0;
-  color: var(--el-text-color-primary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  color: #000000;
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.3;
+  margin: 0 0 8px 0;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 .blog-meta {
   display: flex;
-  gap: 15px;
-  margin-bottom: 10px;
-  color: var(--el-text-color-secondary);
-  font-size: 0.9rem;
+  gap: 12px;
+  color: rgba(0, 0, 0, 0.95);
+  font-size: 0.85rem;
 }
 
 .blog-meta span {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+}
+
+.blog-meta .el-icon {
+  color: rgba(255, 255, 255, 0.95);
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
+}
+
+.blog-info {
+  padding: 12px;
 }
 
 .blog-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
+  gap: 6px;
 }
 
 .tag-item {
-  margin-right: 5px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--el-text-color-primary);
+  border: none;
+}
+
+/* 暗色模式适配 */
+.dark .blog-overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 50%, transparent 100%);
+}
+
+.dark .tag-item {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /* 响应式调整 */
 @media (max-width: 1200px) {
   .masonry-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .blog-title {
+    font-size: 1rem;
+  }
+  
+  .blog-overlay {
+    padding: 30px 10px 10px;
   }
 }
 
@@ -267,7 +300,15 @@
   }
   
   .blog-title {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
+  }
+  
+  .blog-overlay {
+    padding: 25px 8px 8px;
+  }
+  
+  .blog-meta {
+    font-size: 0.8rem;
   }
 }
 
