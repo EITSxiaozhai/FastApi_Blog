@@ -155,9 +155,8 @@ const loadData = async (page = 0) => {
 
 const loadMoreCards = () => {
   // 只有当还有更多数据可加载时才增加页码
-  if (data.data.length >= loadedCards.value) {
+  if (data.data.length > 0) {
     currentPage++;
-    loadedCards.value = pageSize.value * currentPage;
     loadData(currentPage);
   }
 };
