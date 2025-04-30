@@ -158,21 +158,24 @@
 
 /* 瀑布流布局样式 */
 .masonry-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
-  padding: 20px;
-}
-
-.masonry-column {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  column-count: 3;
+  column-gap: 30px;
+  padding: 30px;
+  perspective: 1000px;
 }
 
 .masonry-item {
   break-inside: avoid;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+}
+
+.masonry-item:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .blog-card {
@@ -282,7 +285,13 @@
 /* 响应式调整 */
 @media (max-width: 1200px) {
   .masonry-grid {
-    grid-template-columns: repeat(2, 1fr);
+    column-count: 2;
+    column-gap: 25px;
+    padding: 25px;
+  }
+  
+  .masonry-item {
+    margin-bottom: 25px;
   }
   
   .blog-title {
@@ -296,7 +305,13 @@
 
 @media (max-width: 768px) {
   .masonry-grid {
-    grid-template-columns: 1fr;
+    column-count: 1;
+    column-gap: 20px;
+    padding: 20px;
+  }
+  
+  .masonry-item {
+    margin-bottom: 20px;
   }
   
   .blog-title {
