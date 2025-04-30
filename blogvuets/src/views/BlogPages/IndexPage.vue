@@ -90,7 +90,10 @@ const totalUV = ref(0);
 const totalPV = ref(0);
 const data = reactive({
   data: [],
-  loadedIds: new Set() // 用于跟踪已加载的博客ID
+  loadedIds: new Set(), // 用于跟踪已加载的博客ID
+  total: 0,
+  totalPages: 0,
+  currentPage: 1
 });
 
 
@@ -121,29 +124,28 @@ const getPageSize = () => {
 
 const pageSize = ref(getPageSize());
 let currentPage = 1;
-const loadedCards = ref(pageSize.value);
 const loading = ref(false);
 const error = ref(null);
 
-const loadData = async (page = 0) => {
+const loadData = async (page = 1) => {
   loading.value = true;
   error.value = null;
   try {
     const response = await fetchBlogIndex({page, pageSize: pageSize.value});
-    if (response.data && response.data.length > 0) {
+    if (response.data) {
+      // 更新分页信息
+      data.total = response.data.total;
+      data.totalPages = response.data.total_pages;
+      data.currentPage = response.data.current_page;
+      
       // 过滤掉已加载的博客
-      const newBlogs = response.data.filter(blog => !data.loadedIds.has(blog.BlogId));
+      const newBlogs = response.data.data.filter(blog => !data.loadedIds.has(blog.BlogId));
       
       // 将新博客添加到数据和已加载ID集合中
       newBlogs.forEach(blog => {
         data.data.push(blog);
         data.loadedIds.add(blog.BlogId);
       });
-
-      // 如果没有新数据，说明已经加载完所有数据
-      if (newBlogs.length === 0) {
-        loadedCards.value = data.data.length;
-      }
     }
   } catch (err) {
     error.value = '加载数据失败，请稍后重试';
@@ -155,7 +157,7 @@ const loadData = async (page = 0) => {
 
 const loadMoreCards = () => {
   // 只有当还有更多数据可加载时才增加页码
-  if (data.data.length > 0) {
+  if (data.currentPage < data.totalPages) {
     currentPage++;
     loadData(currentPage);
   }
@@ -165,8 +167,10 @@ const loadMoreCards = () => {
 const resetData = () => {
   data.data = [];
   data.loadedIds.clear();
+  data.total = 0;
+  data.totalPages = 0;
+  data.currentPage = 1;
   currentPage = 1;
-  loadedCards.value = pageSize.value;
 };
 
 // 监听窗口大小变化，动态调整页面大小
@@ -174,10 +178,9 @@ const handleResize = () => {
   const newPageSize = getPageSize();
   if (newPageSize !== pageSize.value) {
     pageSize.value = newPageSize;
-    // 如果当前加载的数量小于新的页面大小，则加载更多
-    if (loadedCards.value < pageSize.value) {
-      loadMoreCards();
-    }
+    // 重置数据并重新加载
+    resetData();
+    loadData(1);
   }
 };
 
@@ -670,7 +673,7 @@ const columnBlogs = computed(() => {
               </div>
               <div class="bt_container" style="display: flex; justify-content: center;">
                 <el-button
-                  v-if="data.data.length >= loadedCards.value && !loading && data.data.length > 0"
+                  v-if="data.currentPage < data.totalPages && !loading"
                   type="primary"
                   @click="loadMoreCards"
                 >

@@ -53,18 +53,45 @@ async def GetBlogTaginfo(blog_id: int):
 @BlogApp.get("/blog/BlogIndex")
 async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4, db: AsyncSession = Depends(get_db)):
     try:
+        # 参数验证
+        page = max(1, page)  # 确保页码不小于1
+        pageSize = max(1, min(pageSize, 20))  # 限制每页数量在1-20之间
+        
         columns = [Blog.BlogId, Blog.title, Blog.created_at, Blog.author, Blog.BlogIntroductionPicture]
+        
         # 查询数据库中发布状态为1的文章总数
         total_articles = await db.scalar(select(func.count()).select_from(Blog).where(Blog.PublishStatus == 1))
-        # 计算offset，确保合理的分页
-        offset = max((page - 1) * pageSize, 0)  # 保证offset不为负值
-        # 添加查询条件，仅查询发布状态为1的文章
-        stmt = select(*columns).where(Blog.PublishStatus == 1).offset(offset).limit(pageSize)
+        
+        # 计算总页数
+        total_pages = (total_articles + pageSize - 1) // pageSize
+        
+        # 如果请求的页码大于总页数，返回空数据
+        if page > total_pages:
+            return {
+                "data": [],
+                "total": total_articles,
+                "total_pages": total_pages,
+                "current_page": page
+            }
+        
+        # 计算offset
+        offset = (page - 1) * pageSize
+        
+        # 添加查询条件，仅查询发布状态为1的文章，并按创建时间倒序排序
+        stmt = (
+            select(*columns)
+            .where(Blog.PublishStatus == 1)
+            .order_by(Blog.created_at.desc())
+            .offset(offset)
+            .limit(pageSize)
+        )
+        
         results = await db.execute(stmt)
         data = results.fetchall()
         data_dicts = []
+        
         for row in data:
-            taglist = await GetBlogTaginfo(blog_id=row[0])  # 补充获取标签信息
+            taglist = await GetBlogTaginfo(blog_id=row[0])
 
             # 时间处理部分转换为当地时间
             utc_time = row[2]
@@ -72,7 +99,6 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4, 
             local_time = utc_time.astimezone(local_tz)
             formatted_time = local_time.strftime('%Y-%m-%d')
 
-            # 构造输出字典
             data_dict = {
                 "BlogId": row[0],
                 "title": row[1],
@@ -82,7 +108,13 @@ async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4, 
                 "tag": taglist,
             }
             data_dicts.append(data_dict)
-        return data_dicts
+            
+        return {
+            "data": data_dicts,
+            "total": total_articles,
+            "total_pages": total_pages,
+            "current_page": page
+        }
     except Exception as e:
         print("我们遇到了下面的问题")
         print(e)
