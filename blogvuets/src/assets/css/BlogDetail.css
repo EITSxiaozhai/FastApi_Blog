@@ -426,3 +426,43 @@ pre:hover .copy-button {
   background-color: var(--el-color-primary-light-9);
   color: var(--el-color-primary);
 }
+
+.theme-transition {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  background: transparent;
+}
+
+.el-container {
+  background: transparent;
+  position: relative;
+}
+
+.el-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dark .el-card {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.el-header {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(10px);
+}
+
+.dark .el-header {
+  background: rgba(0, 0, 0, 0.8) !important;
+}
+
+.el-menu {
+  background: transparent !important;
+}
+
+.dark .el-menu {
+  background: transparent !important;
+}
