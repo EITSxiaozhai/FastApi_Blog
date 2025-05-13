@@ -128,7 +128,6 @@ const loading = ref(false);
 const error = ref(null);
 
 const loadData = async (page = 1) => {
-  // 如果正在加载，直接返回
   if (loading.value) return;
   
   loading.value = true;
@@ -136,28 +135,26 @@ const loadData = async (page = 1) => {
   try {
     const response = await fetchBlogIndex({page, pageSize: pageSize.value});
     if (response.data) {
-      // 更新分页信息
       data.total = response.data.total;
       data.totalPages = response.data.total_pages;
       data.currentPage = response.data.current_page;
       
-      // 如果是第一页，清空现有数据
       if (page === 1) {
         data.data = [];
         data.loadedIds.clear();
       }
       
-      // 检查是否有新数据
       const newBlogs = response.data.data.filter(blog => !data.loadedIds.has(blog.BlogId));
       
       if (newBlogs.length > 0) {
-        // 只添加新数据
+        // 使用Vue的响应式API来更新数据
         newBlogs.forEach(blog => {
-          data.data.push(blog);
-          data.loadedIds.add(blog.BlogId);
+          if (!data.loadedIds.has(blog.BlogId)) {
+            data.data.push(blog);
+            data.loadedIds.add(blog.BlogId);
+          }
         });
       } else {
-        // 如果没有新数据，说明已经加载完所有数据
         data.currentPage = data.totalPages;
       }
     }
@@ -457,11 +454,10 @@ const columnBlogs = computed(() => {
   const cols = Array.from({ length: columns.value }, () => []);
   const itemsPerColumn = Math.ceil(data.data.length / columns.value);
   
+  // 使用更高效的方式分配数据到列
   data.data.forEach((blog, index) => {
-    const columnIndex = Math.floor(index / itemsPerColumn);
-    if (columnIndex < columns.value) {
-      cols[columnIndex].push(blog);
-    }
+    const columnIndex = index % columns.value;
+    cols[columnIndex].push(blog);
   });
   
   return cols;

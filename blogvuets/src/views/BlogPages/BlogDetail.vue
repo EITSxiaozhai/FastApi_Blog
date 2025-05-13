@@ -651,7 +651,7 @@ useHead({
       </el-main>
 
       <el-aside class="toc-aside" :class="{'toc-hidden': isTocHidden}">
-        <el-affix :offset="270">
+        <el-affix :offset="400">
           <el-card class="toc-card">
             <div class="toc-header">
               <span>目录</span>
