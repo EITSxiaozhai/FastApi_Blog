@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "serve": "vite",
-    "build": "vite build",
+    "build": "vite build && node build-fix.js",
+    "build:clean": "vite build",
     "test:unit": "vitest",
     "dev": "vite",
     "preview": "vite preview",
     "lint": "vue-cli-service lint",
-    "build:pages": "vite build",
-    "deploy": "npm run build:pages && npx wrangler deploy",
+    "build:pages": "npm run build",
+    "deploy": "npm run build && npx wrangler deploy",
     "publish": "vue-cli-service build && vue-cli-service build --mode test",
     "test": "vue-cli-service build --mode test && npm run  serve -s dist",
     "production": "vue-cli-service build --mode production && npm run serve -s dist"

@@ -43,17 +43,10 @@ export default defineConfig({
                 chunkFileNames: 'assets/[name].js',
                 assetFileNames: 'assets/[name].[ext]'
             },
-            external: (id) => {
-                // 不要将这些依赖标记为外部依赖，确保它们被正确打包
-                if (id === 'axios' || id === 'vue-router' || id === 'vuex') {
-                    return false
-                }
-                return false
-            }
         },
         // 确保关键依赖被正确处理
         commonjsOptions: {
-            include: [/axios/, /vue-router/, /vuex/]
+            include: [/axios/, /vue-router/, /vuex/, /node_modules/]
         }
     },
     optimizeDeps: {
@@ -61,7 +54,13 @@ export default defineConfig({
         include: ['axios', 'vue-router', 'vuex']
     },
     ssr: {
-        // 确保这些模块在 SSR 中可用
-        noExternal: ['axios', 'vue-router', 'vuex', 'element-plus']
+        // 确保这些模块在 SSR 中可用，不要标记为外部依赖
+        noExternal: ['axios', 'vue-router', 'vuex', 'element-plus', /^@element-plus/],
+        // 明确指定需要在服务端运行的模块
+        external: []
+    },
+    define: {
+        // 确保环境变量在构建时可用
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
     }
 })
