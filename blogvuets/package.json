@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vite",
-    "build": "npm run build:ssr && npm run build:client && node build-fix.js",
+    "build": "vite build && node build-fix.js",
     "build:ssr": "vite build",
     "build:client": "vite build --config vite.config.client.js --mode production",
     "build:clean": "vite build",

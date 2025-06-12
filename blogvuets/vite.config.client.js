@@ -25,7 +25,7 @@ export default defineConfig({
         outDir: 'dist',
         rollupOptions: {
             input: {
-                client: resolve(__dirname, 'src/entry-client.js')
+                'client-app': resolve(__dirname, 'src/entry-client.js')
             },
             output: {
                 entryFileNames: 'assets/[name].js',
