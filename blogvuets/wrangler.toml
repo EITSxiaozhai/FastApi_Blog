@@ -6,10 +6,6 @@ compatibility_date = "2024-01-01"
 # 主入口文件
 main = "_worker.js"
 
-# 资源限制
-[limits]
-cpu_ms = 50
-
 [build]
 # 构建命令
 command = "npm run build"
