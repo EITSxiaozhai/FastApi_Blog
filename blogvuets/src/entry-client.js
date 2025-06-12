@@ -14,6 +14,11 @@ app.use(store)
 app.use(ElementPlus)
 app.use(head)
 
+// 恢复服务端状态
+if (window.__INITIAL_STATE__) {
+  store.replaceState(window.__INITIAL_STATE__)
+}
+
 router.isReady().then(() => {
-  app.mount('#app')
+  app.mount('#app', true) // 启用水合模式
 }) 

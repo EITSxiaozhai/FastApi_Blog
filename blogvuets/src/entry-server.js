@@ -6,7 +6,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import { createHead } from '@unhead/vue'
 
-export async function createSSRApp() {
+export async function createApp() {
   const app = createVueApp(App)
   const head = createHead()
   

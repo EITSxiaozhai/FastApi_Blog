@@ -42,10 +42,26 @@ export default defineConfig({
                 entryFileNames: 'assets/[name].js',
                 chunkFileNames: 'assets/[name].js',
                 assetFileNames: 'assets/[name].[ext]'
+            },
+            external: (id) => {
+                // 不要将这些依赖标记为外部依赖，确保它们被正确打包
+                if (id === 'axios' || id === 'vue-router' || id === 'vuex') {
+                    return false
+                }
+                return false
             }
+        },
+        // 确保关键依赖被正确处理
+        commonjsOptions: {
+            include: [/axios/, /vue-router/, /vuex/]
         }
     },
     optimizeDeps: {
         exclude: ['@unhead/vue'],
+        include: ['axios', 'vue-router', 'vuex']
     },
+    ssr: {
+        // 确保这些模块在 SSR 中可用
+        noExternal: ['axios', 'vue-router', 'vuex', 'element-plus']
+    }
 })
