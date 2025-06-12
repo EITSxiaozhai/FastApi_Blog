@@ -1,4 +1,4 @@
-import { createSSRApp } from './src/entry-server.js'
+import { createSSRApp } from './dist/assets/server.js'
 
 export default {
   async fetch(request, env, ctx) {
