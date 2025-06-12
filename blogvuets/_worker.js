@@ -58,9 +58,11 @@ export default {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="FastAPI Blog - 技术分享与知识记录">
     <title>FastAPI Blog</title>
-    <link rel="stylesheet" href="/assets/main.css">
-    <link rel="stylesheet" href="/assets/server.css">
     <link rel="preload" href="/assets/client.js" as="script">
+    <style>
+        body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .loading { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    </style>
 </head>
 <body>
     <div id="app">${appHtml}</div>
@@ -90,8 +92,8 @@ export default {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FastAPI Blog</title>
-    <link rel="stylesheet" href="/assets/main.css">
     <style>
+        body { margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
         .error-fallback {
             display: flex;
             flex-direction: column;

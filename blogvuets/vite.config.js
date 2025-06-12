@@ -41,26 +41,26 @@ export default defineConfig({
             output: {
                 entryFileNames: 'assets/[name].js',
                 chunkFileNames: 'assets/[name].js',
-                assetFileNames: 'assets/[name].[ext]'
-            },
+                assetFileNames: 'assets/[name].[ext]',
+                format: 'es'
+            }
         },
-        // 确保关键依赖被正确处理
         commonjsOptions: {
             include: [/axios/, /vue-router/, /vuex/, /node_modules/]
-        }
+        },
+        sourcemap: false,
+        minify: 'terser'
     },
     optimizeDeps: {
         exclude: ['@unhead/vue'],
         include: ['axios', 'vue-router', 'vuex']
     },
     ssr: {
-        // 确保这些模块在 SSR 中可用，不要标记为外部依赖
         noExternal: ['axios', 'vue-router', 'vuex', 'element-plus', /^@element-plus/],
-        // 明确指定需要在服务端运行的模块
         external: []
     },
     define: {
-        // 确保环境变量在构建时可用
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+        'global': 'globalThis'
     }
 })

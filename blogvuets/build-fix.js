@@ -7,7 +7,8 @@ console.log('🔧 开始修复构建后的依赖导入问题...')
 const filesToFix = [
   'dist/assets/_Page.js',
   'dist/assets/_Page2.js', 
-  'dist/assets/server.js'
+  'dist/assets/server.js',
+  'dist/assets/client.js'
 ]
 
 // 修复函数
@@ -34,6 +35,20 @@ function fixImports(filePath) {
       modified = true
     }
   })
+
+  // 特别处理客户端文件的 Vue 导入
+  if (filePath.includes('client.js')) {
+    // 检查是否有裸模块导入
+    const vueImportRegex = /import\s*{\s*([^}]+)\s*}\s*from\s*["']vue["']/g
+    const matches = content.match(vueImportRegex)
+    
+    if (matches) {
+      console.log(`🔧 修复 ${filePath} 中的 Vue 模块导入`)
+      // 将 Vue 导入改为从 index.js 导入
+      content = content.replace(vueImportRegex, 'import { $1 } from "./index.js"')
+      modified = true
+    }
+  }
 
   // 如果文件被修改，写回文件
   if (modified) {
