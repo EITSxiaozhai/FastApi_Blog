@@ -30,18 +30,16 @@ export default defineConfig({
         host: '0.0.0.0'
     },
     build: {
-        // 将.env.production中的变量注入到构建中
+        ssr: true,
         envDir: process.cwd(),
         rollupOptions: {
             input: {
-                main: resolve(__dirname, 'index.html'),
-                server: resolve(__dirname, 'src/entry-server.js'),
-                client: resolve(__dirname, 'src/entry-client.js')
+                main: './src/main.js',
+                server: './src/entry-server.js',
+                client: './src/entry-client.js'
             },
             output: {
-                entryFileNames: 'assets/[name].js',
-                chunkFileNames: 'assets/[name].js',
-                assetFileNames: 'assets/[name].[ext]'
+                format: 'esm'
             }
         }
     },

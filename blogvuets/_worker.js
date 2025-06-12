@@ -1,5 +1,4 @@
-import { createSSRApp } from './dist/server/entry-server.js'
-import { renderToString } from 'vue/server-renderer'
+import { createSSRApp } from './src/entry-server.js'
 
 export default {
   async fetch(request, env, ctx) {
@@ -14,12 +13,12 @@ export default {
       // 创建应用实例
       const { app, router, store } = await createSSRApp()
       
-      // 等待路由就绪
-      await router.push(url.pathname)
+      // 设置路由
+      router.push(url.pathname)
       await router.isReady()
       
       // 渲染应用
-      const html = await renderToString(app)
+      const html = await app.render()
       
       // 返回完整的 HTML
       return new Response(
