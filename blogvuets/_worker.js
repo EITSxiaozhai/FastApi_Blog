@@ -1,5 +1,7 @@
-import { createServer } from 'vite'
 import { createApp } from './dist/server/entry-server.js'
+import { renderToString } from 'vue/server-renderer'
+import { createMemoryHistory, createRouter } from 'vue-router'
+import { createStore } from 'vuex'
 
 export default {
   async fetch(request, env, ctx) {
@@ -11,16 +13,53 @@ export default {
         return env.ASSETS.fetch(request)
       }
 
-      // 处理 SSR 请求
+      // 创建应用实例
       const app = await createApp()
-      const html = await app.renderToString()
       
-      return new Response(html, {
-        headers: {
-          'content-type': 'text/html;charset=UTF-8',
-        },
+      // 设置路由
+      const router = createRouter({
+        history: createMemoryHistory(),
+        routes: [] // 你的路由配置
       })
+      
+      // 设置 store
+      const store = createStore({
+        // 你的 store 配置
+      })
+      
+      app.use(router)
+      app.use(store)
+      
+      // 等待路由就绪
+      await router.push(url.pathname)
+      await router.isReady()
+      
+      // 渲染应用
+      const html = await renderToString(app)
+      
+      // 返回完整的 HTML
+      return new Response(
+        `<!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width,initial-scale=1">
+            <title>FastAPI Blog</title>
+            <link rel="stylesheet" href="/assets/index.css">
+          </head>
+          <body>
+            <div id="app">${html}</div>
+            <script type="module" src="/assets/entry-client.js"></script>
+          </body>
+        </html>`,
+        {
+          headers: {
+            'content-type': 'text/html;charset=UTF-8',
+          },
+        }
+      )
     } catch (e) {
+      console.error(e)
       return new Response('Internal Server Error', { status: 500 })
     }
   },
