@@ -1,0 +1,28 @@
+# 项目名称，可以自定义
+name = "fastapi-blog-ssr"
+# Cloudflare Workers 的兼容性日期
+compatibility_date = "2024-01-01"
+
+[site]
+# 构建输出目录
+bucket = "./dist"
+# 入口点目录
+entry-point = "."
+
+[build]
+# 构建命令
+command = "npm run build"
+# 上传格式为 service-worker
+upload.format = "service-worker"
+
+[env.production]
+# 生产环境配置
+workers_dev = false
+# 替换为你的域名，例如：blog.example.com/*
+route = "blog-ssr.exploit-db.xyz/*"
+# 从环境变量中获取 Zone ID
+zone_id = "${CLOUDFLARE_ZONE_ID}"
+
+[env.development]
+# 开发环境配置
+workers_dev = true 
