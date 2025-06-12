@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "lint": "vue-cli-service lint",
     "build:pages": "vite build",
-    "deploy": "npm run build:pages && npx wrangler deploy _worker.js --assets=./dist",
+    "deploy": "npm run build:pages && npx wrangler deploy",
     "publish": "vue-cli-service build && vue-cli-service build --mode test",
     "test": "vue-cli-service build --mode test && npm run  serve -s dist",
     "production": "vue-cli-service build --mode production && npm run serve -s dist"
