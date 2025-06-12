@@ -224,87 +224,137 @@ pre:hover .copy-button {
   margin-bottom: 16px;
 }
 
-/* 代码块样式
-.blog-content pre {
-  background-color: #0d1117;
-  padding: 16px;
-  overflow: auto;
-  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
-  font-size: 14px;
-  line-height: 1.45;
-  margin: 16px 0;
-  color: #c9d1d9;
-} */
-
-.blog-content code {
-  font-size: 85%;
-  margin: 0;
-  padding: 0.2em 0.4em;
-  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
-  color: #c9d1d9;
+/* 代码块基础样式 - Atom Dark主题 */
+.blog-body pre {
+  background-color: #1d1f21 !important;
+  border-radius: 8px !important;
+  padding: 16px !important;
+  overflow-x: auto !important;
+  margin: 20px 0 !important;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: #c5c8c6 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid #282a2e !important;
 }
 
-/* 代码高亮颜色 */
-.blog-content .hljs-keyword,
-.blog-content .hljs-selector-tag,
-.blog-content .hljs-subst {
-  color: #ff7b72;
+.blog-body pre code {
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  color: inherit !important;
+  white-space: pre !important;
+  word-wrap: normal !important;
+  display: block !important;
 }
 
-.blog-content .hljs-title,
-.blog-content .hljs-section,
-.blog-content .hljs-selector-id {
-  color: #d2a8ff;
+/* 行内代码样式 - Atom Dark主题 */
+.blog-body code:not(pre code) {
+  background-color: rgba(29, 31, 33, 0.8) !important;
+  color: #c5c8c6 !important;
+  padding: 0.2em 0.4em !important;
+  border-radius: 3px !important;
+  font-size: 85% !important;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+  border: 1px solid rgba(55, 59, 65, 0.5) !important;
 }
 
-.blog-content .hljs-string,
-.blog-content .hljs-doctag {
-  color: #a5d6ff;
+/* highlight.js 语法高亮颜色 - Atom Dark主题 */
+.blog-body .hljs-keyword,
+.blog-body .hljs-selector-tag,
+.blog-body .hljs-subst,
+.blog-body .hljs-built_in {
+  color: #b294bb !important;
+  font-weight: normal !important;
 }
 
-.blog-content .hljs-number,
-.blog-content .hljs-literal {
-  color: #79c0ff;
+.blog-body .hljs-title,
+.blog-body .hljs-section,
+.blog-body .hljs-selector-id,
+.blog-body .hljs-function .hljs-title {
+  color: #81a2be !important;
+  font-weight: normal !important;
 }
 
-.blog-content .hljs-comment,
-.blog-content .hljs-quote {
-  color: #8b949e;
+.blog-body .hljs-string,
+.blog-body .hljs-doctag,
+.blog-body .hljs-regexp {
+  color: #b5bd68 !important;
 }
 
-.blog-content .hljs-variable,
-.blog-content .hljs-template-variable {
-  color: #ffa657;
+.blog-body .hljs-number,
+.blog-body .hljs-literal {
+  color: #de935f !important;
 }
 
-.blog-content .hljs-type,
-.blog-content .hljs-class .hljs-title {
-  color: #ff7b72;
+.blog-body .hljs-comment,
+.blog-body .hljs-quote {
+  color: #969896 !important;
+  font-style: italic !important;
 }
 
-.blog-content .hljs-tag,
-.blog-content .hljs-name,
-.blog-content .hljs-attribute {
-  color: #7ee787;
+.blog-body .hljs-variable,
+.blog-body .hljs-template-variable,
+.blog-body .hljs-attr {
+  color: #f0c674 !important;
 }
 
-.blog-content .hljs-regexp,
-.blog-content .hljs-link {
-  color: #a5d6ff;
+.blog-body .hljs-type,
+.blog-body .hljs-class .hljs-title {
+  color: #f0c674 !important;
 }
 
-.blog-content .hljs-symbol,
-.blog-content .hljs-bullet {
-  color: #ff7b72;
+.blog-body .hljs-tag,
+.blog-body .hljs-name,
+.blog-body .hljs-attribute {
+  color: #cc6666 !important;
 }
 
-.blog-content .hljs-built_in,
-.blog-content .hljs-builtin-name {
-  color: #ffa657;
+.blog-body .hljs-link {
+  color: #81a2be !important;
+  text-decoration: underline !important;
 }
 
-.blog-content .hljs-meta {
-  color: #8b949e;
+.blog-body .hljs-symbol,
+.blog-body .hljs-bullet {
+  color: #8abeb7 !important;
+}
+
+.blog-body .hljs-builtin-name {
+  color: #8abeb7 !important;
+}
+
+.blog-body .hljs-meta {
+  color: #969896 !important;
+}
+
+.blog-body .hljs-params {
+  color: #c5c8c6 !important;
+}
+
+.blog-body .hljs-addition {
+  color: #b5bd68 !important;
+  background-color: rgba(181, 189, 104, 0.1) !important;
+}
+
+.blog-body .hljs-deletion {
+  color: #cc6666 !important;
+  background-color: rgba(204, 102, 102, 0.1) !important;
+}
+
+/* 暗色主题适配 - 保持Atom Dark样式 */
+.dark .blog-body pre {
+  background-color: #1d1f21 !important;
+  color: #c5c8c6 !important;
+  border: 1px solid #373b41 !important;
+}
+
+.dark .blog-body code:not(pre code) {
+  background-color: rgba(55, 59, 65, 0.4) !important;
+  color: #c5c8c6 !important;
 }
 
 /* 响应式布局 */

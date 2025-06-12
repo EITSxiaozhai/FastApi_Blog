@@ -4,7 +4,7 @@
     <div class="background-container">
       <div class="background-image" :style="backgroundStyle"></div>
       <div class="hero-content">
-        <h1 ref="titleElement" class="hero-title"></h1>
+        <h1 class="hero-title">{{ verse }}</h1>
         <div class="hero-subtitle">
           <p>探索技术 · 分享知识 · 记录成长</p>
         </div>
@@ -17,139 +17,256 @@
       </div>
     </div>
 
-    <!-- 主要内容区域 -->
+    <!-- 三栏布局主要内容区域 -->
     <div class="main-content">
-      <el-container>
-        <!-- 博客统计 -->
-        <div class="stats-section">
-          <el-row :gutter="20">
-            <el-col :span="8">
-              <el-statistic 
-                title="总访问量(PV)" 
-                :value="stats.pv"
-                suffix="次"
-                :precision="0">
-                <template #prefix>
-                  <el-icon style="vertical-align: -0.125em">
-                    <View />
-                  </el-icon>
-                </template>
-              </el-statistic>
-            </el-col>
-            <el-col :span="8">
-              <el-statistic 
-                title="独立访客(UV)" 
-                :value="stats.uv"
-                suffix="人"
-                :precision="0">
-                <template #prefix>
-                  <el-icon style="vertical-align: -0.125em">
-                    <User />
-                  </el-icon>
-                </template>
-              </el-statistic>
-            </el-col>
-            <el-col :span="8">
-              <el-statistic 
-                title="文章总数" 
-                :value="stats.articles"
-                suffix="篇"
-                :precision="0">
-                <template #prefix>
-                  <el-icon style="vertical-align: -0.125em">
-                    <Document />
-                  </el-icon>
-                </template>
-              </el-statistic>
-            </el-col>
-          </el-row>
-        </div>
-
-        <!-- 搜索栏 -->
-        <div class="search-section">
-          <el-autocomplete
-            v-model="searchQuery"
-            :fetch-suggestions="searchSuggestions"
-            placeholder="搜索文章..."
-            @select="handleSearch"
-            style="width: 100%; max-width: 500px;"
-            size="large">
-            <template #prefix>
-              <el-icon><Search /></el-icon>
-            </template>
-          </el-autocomplete>
-        </div>
-
-        <!-- 文章列表 -->
-        <div class="articles-section">
-          <h2>最新文章</h2>
-          
-          <div class="articles-grid">
-            <el-card 
-              v-for="article in articles" 
-              :key="article.id"
-              class="article-card"
-              @click="goToArticle(article.id)">
-              
-              <template #header>
-                <div class="article-header">
-                  <span class="article-title">{{ article.title }}</span>
-                  <div class="article-meta">
-                    <el-tag :type="getTagType(article.category)" size="small">
-                      {{ article.category }}
-                    </el-tag>
-                  </div>
-                </div>
-              </template>
-              
-              <div class="article-content">
-                <p class="article-excerpt">{{ article.excerpt }}</p>
-                
-                <div class="article-footer">
-                  <div class="article-stats">
-                    <span><el-icon><View /></el-icon> {{ article.views }}</span>
-                    <span><el-icon><Calendar /></el-icon> {{ formatDate(article.createdAt) }}</span>
-                  </div>
-                </div>
+      <div class="layout-container">
+        <!-- 左侧边栏 -->
+        <aside class="left-sidebar">
+          <!-- 搜索区域 -->
+          <el-card class="sidebar-card search-card">
+            <template #header>
+              <div class="card-header">
+                <el-icon><Search /></el-icon>
+                <span>文章搜索</span>
               </div>
-            </el-card>
-          </div>
-
-          <!-- 加载更多 -->
-          <div class="load-more-section" v-if="hasMore">
-            <el-button 
-              type="primary" 
-              @click="loadMore"
-              :loading="loading"
+            </template>
+            <el-autocomplete
+              v-model="searchQuery"
+              :fetch-suggestions="searchSuggestions"
+              placeholder="搜索文章..."
+              @select="handleSearch"
+              style="width: 100%;"
               size="large">
-              {{ loading ? '加载中...' : '加载更多' }}
-            </el-button>
-          </div>
-        </div>
+              <template #prefix>
+                <el-icon><Search /></el-icon>
+              </template>
+            </el-autocomplete>
+          </el-card>
 
-        <!-- 网站统计 -->
-        <div class="site-info">
-          <el-card>
-            <div class="site-stats">
-              <h3>网站运行状态</h3>
-              <p>🕒 运行时间: {{ siteRuntime.days }}天 {{ siteRuntime.hours }}小时 {{ siteRuntime.minutes }}分钟</p>
-              <p>📝 使用技术: Vue 3 + Vike + FastAPI + MySQL</p>
-              <p>🚀 服务器端渲染已启用</p>
+          <!-- 分类导航 -->
+          <el-card class="sidebar-card">
+            <template #header>
+              <div class="card-header">
+                <el-icon><Document /></el-icon>
+                <span>文章分类</span>
+              </div>
+            </template>
+            <div class="categories-list">
+              <div v-for="category in categories" :key="category.name" 
+                   class="category-item" @click="filterByCategory(category.name)">
+                <span class="category-name">{{ category.name }}</span>
+                <el-badge :value="category.count" class="category-badge" />
+              </div>
             </div>
           </el-card>
-        </div>
-      </el-container>
+
+          <!-- 标签云 -->
+          <el-card class="sidebar-card">
+            <template #header>
+              <div class="card-header">
+                <el-icon><Collection /></el-icon>
+                <span>热门标签</span>
+              </div>
+            </template>
+            <div class="tags-cloud">
+              <el-tag 
+                v-for="tag in popularTags" 
+                :key="tag.name"
+                :type="getTagType(tag.name)"
+                class="tag-item"
+                @click="filterByTag(tag.name)">
+                {{ tag.name }} ({{ tag.count }})
+              </el-tag>
+            </div>
+          </el-card>
+
+          <!-- 最新文章 -->
+          <el-card class="sidebar-card">
+            <template #header>
+              <div class="card-header">
+                <el-icon><Clock /></el-icon>
+                <span>最新文章</span>
+              </div>
+            </template>
+            <div class="recent-articles">
+              <div v-for="article in recentArticles" :key="article.id" 
+                   class="recent-item" @click="goToArticle(article.id)">
+                <div class="recent-title">{{ article.title }}</div>
+                <div class="recent-date">{{ formatDate(article.createdAt) }}</div>
+              </div>
+            </div>
+          </el-card>
+        </aside>
+
+        <!-- 中间主内容区域 -->
+        <main class="center-content">
+          <!-- 文章列表 -->
+          <div class="articles-section">
+            <div class="section-header">
+              <h2>{{ currentFilter === 'all' ? '最新文章' : `${currentFilter} 分类文章` }}</h2>
+              <div class="filter-info" v-if="currentFilter !== 'all'">
+                <el-tag type="info" closable @close="clearFilter">{{ currentFilter }}</el-tag>
+              </div>
+            </div>
+            
+            <div class="articles-grid">
+              <el-card 
+                v-for="article in filteredArticles" 
+                :key="article.id"
+                class="article-card"
+                @click="goToArticle(article.id)">
+                
+                <template #header>
+                  <div class="article-header">
+                    <span class="article-title">{{ article.title }}</span>
+                    <div class="article-meta">
+                      <el-tag :type="getTagType(article.category)" size="small">
+                        {{ article.category }}
+                      </el-tag>
+                    </div>
+                  </div>
+                </template>
+                
+                <div class="article-content">
+                  <p class="article-excerpt">{{ article.excerpt }}</p>
+                  
+                  <div class="article-footer">
+                    <div class="article-stats">
+                      <span><el-icon><View /></el-icon> {{ article.views }}</span>
+                      <span><el-icon><Calendar /></el-icon> {{ formatDate(article.createdAt) }}</span>
+                    </div>
+                  </div>
+                </div>
+              </el-card>
+            </div>
+
+            <!-- 分页组件 -->
+            <div class="pagination-section" v-if="currentFilter === 'all' && totalPages > 1">
+              <el-pagination
+                v-model:current-page="currentPage"
+                :page-size="pageSize"
+                :total="total"
+                :page-count="totalPages"
+                layout="prev, pager, next, total"
+                @current-change="handlePageChange"
+              />
+            </div>
+          </div>
+        </main>
+
+        <!-- 右侧边栏 -->
+        <aside class="right-sidebar">
+          <!-- 博客统计 -->
+          <el-card class="sidebar-card">
+            <template #header>
+              <div class="card-header">
+                <el-icon><DataAnalysis /></el-icon>
+                <span>网站统计</span>
+              </div>
+            </template>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <div class="stat-value">{{ stats.pv }}</div>
+                <div class="stat-label">总访问量(PV)</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">{{ stats.uv }}</div>
+                <div class="stat-label">独立访客(UV)</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-value">{{ stats.articles }}</div>
+                <div class="stat-label">文章总数</div>
+              </div>
+            </div>
+          </el-card>
+
+          <!-- 热门文章 -->
+          <el-card class="sidebar-card">
+            <template #header>
+              <div class="card-header">
+                <el-icon><TrendCharts /></el-icon>
+                <span>热门文章</span>
+              </div>
+            </template>
+            <div class="popular-articles">
+              <div v-for="(article, index) in popularArticles" :key="article.id" 
+                   class="popular-item" @click="goToArticle(article.id)">
+                <div class="popular-rank">{{ index + 1 }}</div>
+                <div class="popular-content">
+                  <div class="popular-title">{{ article.title }}</div>
+                  <div class="popular-views">{{ article.views }} 次阅读</div>
+                </div>
+              </div>
+            </div>
+          </el-card>
+
+          <!-- 网站信息 -->
+          <el-card class="sidebar-card">
+            <template #header>
+              <div class="card-header">
+                <el-icon><Monitor /></el-icon>
+                <span>运行状态</span>
+              </div>
+            </template>
+            <div class="site-stats">
+              <div class="runtime-info">
+                <p>🕒 运行时间</p>
+                <p class="runtime-value">{{ siteRuntime.days }}天 {{ siteRuntime.hours }}小时 {{ siteRuntime.minutes }}分钟</p>
+              </div>
+              <div class="tech-stack">
+                <p>🛠️ 技术栈</p>
+                <div class="tech-tags">
+                  <el-tag size="small">Vue 3</el-tag>
+                  <el-tag size="small" type="success">Vike SSR</el-tag>
+                  <el-tag size="small" type="warning">FastAPI</el-tag>
+                  <el-tag size="small" type="danger">MySQL</el-tag>
+                </div>
+              </div>
+            </div>
+          </el-card>
+
+          <!-- 个人信息卡片 -->
+          <el-card class="sidebar-card">
+            <template #header>
+              <div class="card-header">
+                <el-icon><Avatar /></el-icon>
+                <span>关于博主</span>
+              </div>
+            </template>
+            <div class="author-info">
+              <div class="author-avatar">
+                <el-avatar :size="80" src="/avatar.png">Exp1oit</el-avatar>
+              </div>
+              <div class="author-desc">
+                <h4>Exp1oit</h4>
+                <p>全栈开发者，热爱技术分享</p>
+                <div class="social-links">
+                  <el-button link type="primary">
+                    <el-icon><Message /></el-icon>
+                  </el-button>
+                  <el-button link type="success">
+                    <el-icon><ChatDotRound /></el-icon>
+                  </el-button>
+                  <el-button link type="warning">
+                    <el-icon><Star /></el-icon>
+                  </el-button>
+                </div>
+              </div>
+            </div>
+          </el-card>
+        </aside>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, computed, onBeforeUnmount } from 'vue'
+import { ref, reactive, onMounted, computed, onBeforeUnmount, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { 
-  ArrowDown, View, User, Document, Search, Calendar 
+  ArrowDown, View, User, Document, Search, Calendar, Collection, Clock,
+  DataAnalysis, TrendCharts, Monitor, Avatar, Message, ChatDotRound, Star
 } from '@element-plus/icons-vue'
-
 // 导入API函数
 import { fetchBlogList, searchBlogs as apiSearchBlogs } from '@/api/vikeBlogs'
 
@@ -167,6 +284,10 @@ const props = defineProps({
     type: String,
     default: null
   },
+  verse: {
+    type: String,
+    default: '探索技术 · 分享知识 · 记录成长'
+  },
   pagination: {
     type: Object,
     default: () => ({ page: 1, pageSize: 9, total: 0, totalPages: 0 })
@@ -183,7 +304,11 @@ const searchQuery = ref('')
 const loading = ref(false)
 const articles = ref([...props.articles])
 const hasMore = ref(props.pagination.page < props.pagination.totalPages)
-const currentPage = ref(props.pagination.page)
+const currentPage = ref(1)
+const currentFilter = ref('all')
+const pageSize = ref(9)
+const total = ref(0)
+const totalPages = ref(1)
 
 const stats = reactive({
   pv: props.stats.pv,
@@ -197,6 +322,54 @@ const siteRuntime = reactive({
   minutes: 0
 })
 
+// 分类数据
+const categories = computed(() => {
+  const categoryMap = new Map()
+  articles.value.forEach(article => {
+    const category = article.category || '未分类'
+    categoryMap.set(category, (categoryMap.get(category) || 0) + 1)
+  })
+  return Array.from(categoryMap.entries()).map(([name, count]) => ({ name, count }))
+})
+
+// 热门标签
+const popularTags = computed(() => {
+  const tagMap = new Map()
+  articles.value.forEach(article => {
+    if (article.tags && Array.isArray(article.tags)) {
+      article.tags.forEach(tag => {
+        tagMap.set(tag, (tagMap.get(tag) || 0) + 1)
+      })
+    }
+  })
+  return Array.from(tagMap.entries())
+    .map(([name, count]) => ({ name, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10)
+})
+
+// 最新文章
+const recentArticles = computed(() => {
+  return [...articles.value]
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    .slice(0, 5)
+})
+
+// 热门文章
+const popularArticles = computed(() => {
+  return [...articles.value]
+    .sort((a, b) => (b.views || 0) - (a.views || 0))
+    .slice(0, 8)
+})
+
+// 过滤后的文章
+const filteredArticles = computed(() => {
+  if (currentFilter.value === 'all') {
+    return articles.value
+  }
+  return articles.value.filter(article => article.category === currentFilter.value)
+})
+
 // 背景图片样式
 const backgroundStyle = computed(() => ({
   backgroundImage: props.wallpaper 
@@ -204,21 +377,23 @@ const backgroundStyle = computed(() => ({
     : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
 }))
 
-// 打字机效果
-const typewriter = (element, text, speed = 100) => {
-  if (!element) return
-  
-  let i = 0
-  element.textContent = ''
-  
-  const timer = setInterval(() => {
-    if (i < text.length) {
-      element.textContent += text.charAt(i)
-      i++
-    } else {
-      clearInterval(timer)
-    }
-  }, speed)
+// 过滤方法
+const filterByCategory = (category) => {
+  currentFilter.value = category
+}
+
+const filterByTag = (tag) => {
+  // 按标签过滤的逻辑
+  const tagArticles = articles.value.filter(article => 
+    article.tags && article.tags.includes(tag)
+  )
+  if (tagArticles.length > 0) {
+    ElMessage.info(`找到 ${tagArticles.length} 篇包含标签 "${tag}" 的文章`)
+  }
+}
+
+const clearFilter = () => {
+  currentFilter.value = 'all'
 }
 
 // 搜索建议
@@ -285,36 +460,31 @@ const formatDate = (dateString) => {
   return date.toLocaleDateString('zh-CN')
 }
 
-// 加载更多文章
-const loadMore = async () => {
-  if (!hasMore.value || loading.value) return
-  
-  loading.value = true
-  
-  try {
-    const nextPage = currentPage.value + 1
-    const result = await fetchBlogList({
-      page: nextPage,
-      pageSize: props.pagination.pageSize,
-      initialLoad: false
+// 监听分页数据变化
+watch(() => props.pagination, (newPagination) => {
+  console.log('📄 分页数据更新:', newPagination)
+  if (newPagination) {
+    currentPage.value = newPagination.page
+    pageSize.value = newPagination.pageSize
+    total.value = newPagination.total
+    totalPages.value = newPagination.totalPages
+    console.log('📄 分页状态更新后:', {
+      currentPage: currentPage.value,
+      pageSize: pageSize.value,
+      total: total.value,
+      totalPages: totalPages.value
     })
-    
-    if (result && result.data.length > 0) {
-      articles.value.push(...result.data)
-      currentPage.value = nextPage
-      hasMore.value = nextPage < result.pagination.totalPages
-      
-      ElMessage.success(`加载了 ${result.data.length} 篇文章`)
-    } else {
-      hasMore.value = false
-      ElMessage.info('没有更多文章了')
-    }
-    
-  } catch (error) {
-    console.error('加载更多失败:', error)
-    ElMessage.error('加载失败，请稍后重试')
-  } finally {
-    loading.value = false
+  }
+}, { immediate: true })
+
+// 处理页码变化
+const handlePageChange = (page) => {
+  if (page === 1) {
+    // 第一页不需要查询参数
+    window.location.href = '/'
+  } else {
+    // 其他页面添加page查询参数
+    window.location.href = `/?page=${page}`
   }
 }
 
@@ -379,11 +549,6 @@ onMounted(() => {
     firstArticleTitle: articles.value?.[0]?.title
   })
   
-  // 启动打字机效果
-  setTimeout(() => {
-    typewriter(titleElement.value, 'Exp1oit 的技术博客', 150)
-  }, 500)
-  
   // 更新运行时间
   updateSiteRuntime()
   runtimeTimer = setInterval(updateSiteRuntime, 60000) // 每分钟更新一次
@@ -442,11 +607,14 @@ onBeforeUnmount(() => {
 }
 
 .hero-title {
-  font-size: 3.5rem;
+  font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-  min-height: 80px;
+  line-height: 1.4;
+  padding: 0 20px;
+  text-align: center;
+  font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
 }
 
 .hero-subtitle {
@@ -487,17 +655,224 @@ onBeforeUnmount(() => {
   margin: 0 auto;
 }
 
-.stats-section {
-  margin-bottom: 50px;
-  padding: 30px;
-  background: white;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.layout-container {
+  display: flex;
+  gap: 20px;
 }
 
-.search-section {
-  margin-bottom: 50px;
+.left-sidebar {
+  flex: 1;
+}
+
+.center-content {
+  flex: 2;
+}
+
+.right-sidebar {
+  flex: 1;
+}
+
+.sidebar-card {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+}
+
+.sidebar-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.search-card {
+  margin-bottom: 20px;
+}
+
+.categories-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.category-item {
+  cursor: pointer;
+  padding: 8px 12px;
+  border: 1px solid #dcdfe6;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fafafa;
+}
+
+.category-item:hover {
+  background: #409eff;
+  color: white;
+  border-color: #409eff;
+}
+
+.category-name {
+  margin-right: 5px;
+}
+
+.category-badge {
+  background-color: #f0f0f0;
+  border-color: #dcdfe6;
+  border-radius: 10px;
+  padding: 0 5px;
+}
+
+.tags-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tag-item {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.tag-item:hover {
+  transform: scale(1.05);
+}
+
+.recent-articles {
+  margin-top: 10px;
+}
+
+.recent-item {
+  cursor: pointer;
+  padding: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  margin-bottom: 5px;
+}
+
+.recent-item:hover {
+  background: #f8f9fa;
+  transform: translateX(5px);
+}
+
+.recent-title {
+  font-weight: 500;
+  color: #2c3e50;
+  line-height: 1.4;
+  margin-bottom: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.recent-date {
+  color: #999;
+  font-size: 12px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.filter-info {
+  display: flex;
+  gap: 10px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.stat-item {
   text-align: center;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #409eff;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.popular-item {
+  cursor: pointer;
+  padding: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.popular-item:hover {
+  background: #f8f9fa;
+  transform: translateX(3px);
+}
+
+.popular-rank {
+  font-weight: bold;
+  color: #409eff;
+  background: #e3f2fd;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.popular-content {
+  flex: 1;
+}
+
+.popular-title {
+  font-weight: 500;
+  color: #2c3e50;
+  line-height: 1.4;
+  margin-bottom: 3px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.popular-views {
+  color: #999;
+  font-size: 12px;
+}
+
+.runtime-value {
+  font-weight: bold;
+  color: #409eff;
+  margin-top: 5px;
 }
 
 .articles-section {
@@ -595,6 +970,54 @@ onBeforeUnmount(() => {
   color: #666;
 }
 
+.site-stats {
+  margin-bottom: 20px;
+}
+
+.runtime-info {
+  margin-bottom: 10px;
+}
+
+.tech-stack {
+  margin-bottom: 10px;
+}
+
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.author-avatar {
+  flex: 0 0 auto;
+}
+
+.author-desc {
+  flex: 1;
+}
+
+.author-desc h4 {
+  margin-bottom: 5px;
+}
+
+.author-desc p {
+  margin: 0;
+}
+
+.social-links {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+/* 这些样式已经在上面定义过了，移除重复定义 */
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .hero-title {
@@ -610,8 +1033,12 @@ onBeforeUnmount(() => {
     padding: 40px 15px;
   }
   
-  .stats-section .el-col {
-    margin-bottom: 20px;
+  .layout-container {
+    flex-direction: column;
+  }
+  
+  .left-sidebar, .right-sidebar {
+    flex: 1;
   }
 }
 
@@ -623,5 +1050,12 @@ onBeforeUnmount(() => {
   .articles-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.pagination-section {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
 }
 </style> 

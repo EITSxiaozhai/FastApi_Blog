@@ -26,6 +26,7 @@
 <script setup>
 import { onMounted } from 'vue'
 
+
 const goHome = () => {
   window.location.href = '/'
 }

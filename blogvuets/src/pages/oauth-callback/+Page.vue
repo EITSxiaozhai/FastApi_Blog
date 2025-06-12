@@ -37,8 +37,9 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
 import { ElMessage } from 'element-plus'
+
 
 const loading = ref(false)
 const error = ref('')

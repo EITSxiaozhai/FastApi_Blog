@@ -7,10 +7,89 @@ import UndrawUi from 'undraw-ui'
 export { onRenderHtml }
 
 async function onRenderHtml(pageContext) {
-  const { Page, pageProps, data } = pageContext
+  const { Page, pageProps, data, routeParams, urlPathname } = pageContext
   
   console.log('🔧 服务器端渲染 - pageProps:', pageProps)
   console.log('🔧 服务器端渲染 - data:', data)
+  console.log('🔧 服务器端渲染 - routeParams:', routeParams)
+  console.log('🔧 服务器端渲染 - urlPathname:', urlPathname)
+  
+  // 根据路由动态生成页面title
+  const getPageTitle = () => {
+    // 博客详情页
+    if (urlPathname.startsWith('/blog/') && data?.blog?.title) {
+      return `${data.blog.title} | Exp1oit 的技术博客`
+    }
+    
+    // 首页
+    if (urlPathname === '/') {
+      const totalArticles = data?.stats?.articles || data?.articles?.length || 0
+      return `Exp1oit 的技术博客 | ${totalArticles}篇原创文章 | Vue + FastAPI 全栈开发`
+    }
+    
+    // 登录页
+    if (urlPathname === '/login') {
+      return '用户登录 | Exp1oit 的技术博客'
+    }
+    
+    // 注册页
+    if (urlPathname === '/reg') {
+      return '用户注册 | Exp1oit 的技术博客'
+    }
+    
+    // 关于我页面
+    if (urlPathname === '/about-me') {
+      return '关于我 | Exp1oit 的技术博客'
+    }
+    
+    // 错误页面
+    if (urlPathname === '/errorpage') {
+      return '页面错误 | Exp1oit 的技术博客'
+    }
+    
+    // OAuth回调页面
+    if (urlPathname === '/oauth-callback') {
+      return '登录中... | Exp1oit 的技术博客'
+    }
+    
+    // 默认title
+    return 'Exp1oit 的技术博客'
+  }
+  
+  // 根据路由动态生成页面描述
+  const getPageDescription = () => {
+    // 博客详情页
+    if (urlPathname.startsWith('/blog/') && data?.blog) {
+      return data.blog.summary || data.blog.excerpt || '来自 Exp1oit 的技术博客'
+    }
+    
+    // 首页
+    if (urlPathname === '/') {
+      const { pv = 0, uv = 0, articles = 0 } = data?.stats || {}
+      return `专注于Vue、FastAPI、全栈开发的技术博客，${articles}篇原创文章，${pv}次浏览，${uv}位访客。分享前端后端最佳实践、SSR渲染、API设计等技术经验。`
+    }
+    
+    // 登录页
+    if (urlPathname === '/login') {
+      return '登录 Exp1oit 的技术博客，获取更好的阅读体验'
+    }
+    
+    // 注册页
+    if (urlPathname === '/reg') {
+      return '注册 Exp1oit 的技术博客账户，加入技术交流社区'
+    }
+    
+    // 关于我页面
+    if (urlPathname === '/about-me') {
+      return '了解 Exp1oit，一个专注于全栈开发的技术博客作者，分享 Vue、FastAPI、TypeScript 等技术经验'
+    }
+    
+    // 默认描述
+    return 'Exp1oit 的技术博客，专注于全栈开发技术分享'
+  }
+  
+  const pageTitle = getPageTitle()
+  const pageDescription = getPageDescription()
   
   // 创建SSR应用，将data作为props传递
   const app = createSSRApp(Page, data || pageProps)
@@ -33,8 +112,8 @@ async function onRenderHtml(pageContext) {
       <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>关于我 - Exp1oit的Blog</title>
-        <meta name="description" content="Exp1oit的个人博客" />
+        <title>${pageTitle}</title>
+        <meta name="description" content="${pageDescription}" />
         
         <!-- Element Plus CSS -->
         <link rel="stylesheet" href="https://unpkg.com/element-plus/dist/index.css">

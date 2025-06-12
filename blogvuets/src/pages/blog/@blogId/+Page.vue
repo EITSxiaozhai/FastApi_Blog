@@ -1,5 +1,21 @@
 <template>
   <div class="blog-detail-page">
+    <!-- 阅读进度条 -->
+    <div class="reading-progress-bar" :style="{ width: readingProgress + '%' }"></div>
+    
+    <!-- 返回顶部按钮 -->
+    <el-backtop 
+      :right="20" 
+      :bottom="100"
+      :visibility-height="400">
+      <el-button 
+        type="primary" 
+        circle
+        class="back-to-top-btn">
+        <el-icon><ArrowUp /></el-icon>
+      </el-button>
+    </el-backtop>
+
     <!-- 错误状态 -->
     <div v-if="props.notFound" class="error-container">
       <el-result
@@ -99,6 +115,11 @@
               <el-button @click="scrollToComments">
                 <el-icon><ChatDotRound /></el-icon>
                 评论 ({{ commentsCount }})
+              </el-button>
+
+              <el-button type="success" @click="goHome">
+                <el-icon><HomeFilled /></el-icon>
+                返回主页
               </el-button>
             </div>
 
@@ -218,10 +239,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, watch, nextTick } from 'vue'
+import { ref, reactive, computed, onMounted, watch, nextTick, onUnmounted } from 'vue'
 import { ElMessage, ElNotification } from 'element-plus'
 import { 
-  Calendar, View, User, StarFilled, Share, ChatDotRound 
+  Calendar, View, User, StarFilled, Share, ChatDotRound, ArrowUp, HomeFilled 
 } from '@element-plus/icons-vue'
 // import { usePageContext } from 'vike-vue/usePageContext'
 import { fetchBlogDetail, fetchComments, submitComment as apiSubmitComment, likeBlog as likeBlogApi } from '../../../api/vikeBlogs'
@@ -315,38 +336,17 @@ const md = new MarkdownIt({
   html: true,
   linkify: true,
   typographer: true,
-})
-
-// 自定义代码块渲染器使用 highlight.js
-md.renderer.rules.fence = function(tokens, idx, options, env, renderer) {
-  const token = tokens[idx]
-  const info = token.info ? token.info.trim() : ''
-  const langName = info.split(/\s+/g)[0]
-  
-  let highlighted = ''
-  let lang = langName
-  
-  try {
-    if (langName && hljs.getLanguage(langName)) {
-      // 使用指定语言高亮
-      highlighted = hljs.highlight(token.content, { language: langName }).value
-      console.log(`🎨 使用 highlight.js 高亮代码块: ${langName}`)
-    } else {
-      // 自动检测语言
-      const result = hljs.highlightAuto(token.content)
-      highlighted = result.value
-      lang = result.language || 'text'
-      console.log(`🔧 自动检测语言: ${lang}`)
+  highlight: function (str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(str, { language: lang }).value
+      } catch (__) {
+        console.warn('代码高亮失败:', __)
+      }
     }
-  } catch (err) {
-    console.warn('⚠️ 代码高亮失败，使用原始内容:', err)
-    highlighted = md.utils.escapeHtml(token.content)
+    return '' // 让MarkdownIt使用默认处理
   }
-  
-  return `<pre class="hljs"><code class="hljs language-${lang}">${highlighted}</code></pre>`
-}
-
-console.log('✅ highlight.js 代码渲染器已配置')
+})
 
 // 渲染后的内容
 const renderedContent = computed(() => {
@@ -354,7 +354,6 @@ const renderedContent = computed(() => {
   
   try {
     console.log('🔄 开始渲染Markdown内容...')
-    console.log('📝 原始内容:', blog.value.content.substring(0, 200) + '...')
     
     // 如果内容已经是HTML格式，直接返回
     if (blog.value.content.includes('<p>') || blog.value.content.includes('<div>')) {
@@ -362,38 +361,9 @@ const renderedContent = computed(() => {
       return blog.value.content
     }
     
-    // 预处理Markdown内容 - 为代码块添加语言标识符
-    let processedContent = blog.value.content
-    
-    // 匹配没有语言标识符的代码块
-    processedContent = processedContent.replace(/```\n([\s\S]*?)\n```/g, (match, code) => {
-      // 根据代码内容推测语言
-      let lang = 'text'
-      if (code.includes('{') && code.includes('}') && (code.includes('"') || code.includes(':'))) {
-        lang = 'json'
-      } else if (code.includes('import ') || code.includes('export ') || code.includes('const ') || code.includes('function')) {
-        lang = 'javascript'
-      } else if (code.includes('<template>') || code.includes('<script>')) {
-        lang = 'vue'
-      } else if (code.includes('npm ') || code.includes('git ') || code.includes('cd ')) {
-        lang = 'bash'
-      }
-      
-      console.log(`🔧 自动为代码块添加语言标识符: ${lang}`)
-      return `\`\`\`${lang}\n${code}\n\`\`\``
-    })
-    
-    // 作为Markdown处理
-    const rendered = md.render(processedContent)
+    // 直接渲染Markdown，不做预处理
+    const rendered = md.render(blog.value.content)
     console.log('✅ Markdown渲染完成')
-    console.log('🎨 渲染后内容预览:', rendered.substring(0, 500) + '...')
-    
-    // 检查是否包含highlight.js类名
-    if (rendered.includes('hljs')) {
-      console.log('🌈 检测到 highlight.js 语法高亮')
-    } else {
-      console.warn('⚠️ 未检测到代码高亮')
-    }
     
     return rendered
   } catch (error) {
@@ -401,29 +371,6 @@ const renderedContent = computed(() => {
     return blog.value.content
   }
 })
-
-// 手动添加基础语法高亮的fallback函数
-const addBasicSyntaxHighlight = (html: string): string => {
-  console.log('🎨 添加手动语法高亮')
-  
-  return html.replace(/<pre><code>([\s\S]*?)<\/code><\/pre>/g, (match, code) => {
-    // 简单的语法高亮处理
-    let highlightedCode = code
-      // JavaScript关键字
-      .replace(/\b(function|const|let|var|import|export|class|if|else|for|while|return)\b/g, '<span style="color: #d73a49; font-weight: bold;">$1</span>')
-      // 字符串
-      .replace(/"([^"]*)"/g, '<span style="color: #032f62;">"$1"</span>')
-      .replace(/'([^']*)'/g, '<span style="color: #032f62;">\'$1\'</span>')
-      // 数字
-      .replace(/\b(\d+)\b/g, '<span style="color: #005cc5;">$1</span>')
-      // 注释
-      .replace(/\/\/(.*)/g, '<span style="color: #6a737d; font-style: italic;">//$1</span>')
-      // HTML标签
-      .replace(/&lt;(\/?[^&gt;]+)&gt;/g, '<span style="color: #22863a;">&lt;$1&gt;</span>')
-    
-    return `<pre class="manual-highlight"><code>${highlightedCode}</code></pre>`
-  })
-}
 
 // 方法
 const formatDate = (dateString: string | undefined): string => {
@@ -597,6 +544,29 @@ const loadMoreComments = async () => {
   }
 }
 
+// 阅读进度
+const readingProgress = ref(0)
+
+// 计算阅读进度
+const calculateReadingProgress = () => {
+  const blogContent = document.querySelector('.blog-body')
+  if (!blogContent) return
+
+  const scrollTop = window.scrollY
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight
+  const progress = (scrollTop / docHeight) * 100
+  readingProgress.value = Math.min(100, Math.max(0, progress))
+}
+
+// 监听滚动事件
+onMounted(() => {
+  window.addEventListener('scroll', calculateReadingProgress)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', calculateReadingProgress)
+})
+
 onMounted(async () => {
   console.log('🚀 博客详情页已加载，文章ID:', safeBlogId.value)
   currentUrl.value = window.location.href
@@ -621,19 +591,48 @@ onMounted(async () => {
     }
   })
   
-  // 检查DOM中的代码块
+  // 增强调试 - 检查DOM中的代码块
   setTimeout(() => {
-    const codeBlocks = document.querySelectorAll('.blog-body pre')
-    console.log(`🔍 页面中找到 ${codeBlocks.length} 个代码块`)
+    console.log('🔍 开始详细检查DOM结构...')
     
-    codeBlocks.forEach((block, index) => {
-      const hasShiki = block.classList.contains('shiki') || block.querySelector('.shiki')
-      console.log(`📦 代码块 ${index + 1}:`, {
-        hasShiki,
-        classes: Array.from(block.classList),
-        innerHTML: block.innerHTML.substring(0, 100) + '...'
+    // 检查所有可能的代码块选择器
+    const selectors = [
+      '.blog-body pre',
+      '.blog-content pre', 
+      'pre',
+      '.blog-body code',
+      'code'
+    ]
+    
+    selectors.forEach(selector => {
+      const elements = document.querySelectorAll(selector)
+      console.log(`🎯 选择器 "${selector}" 找到 ${elements.length} 个元素`)
+      
+      elements.forEach((element, index) => {
+        console.log(`📦 元素 ${index + 1}:`, {
+          tagName: element.tagName,
+          classList: Array.from(element.classList),
+          parentClasses: element.parentElement ? Array.from(element.parentElement.classList) : [],
+          innerHTML: element.innerHTML.substring(0, 100) + '...',
+          computedStyle: {
+            backgroundColor: window.getComputedStyle(element).backgroundColor,
+            color: window.getComputedStyle(element).color
+          }
+        })
       })
     })
+    
+    // 检查容器结构
+    const blogBody = document.querySelector('.blog-body')
+    if (blogBody) {
+      console.log('📋 .blog-body 容器信息:', {
+        classList: Array.from(blogBody.classList),
+        innerHTML: blogBody.innerHTML.substring(0, 200) + '...'
+      })
+    } else {
+      console.warn('⚠️ 未找到 .blog-body 容器')
+    }
+    
   }, 1000)
 })
 </script>
@@ -753,52 +752,7 @@ onMounted(async () => {
   border-radius: 4px;
 }
 
-.blog-body code {
-  background: #f1f2f6;
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-family: 'Consolas', 'Monaco', monospace;
-  color: #e96900;
-}
-
-.blog-body pre {
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
-  padding: 15px;
-  overflow-x: auto;
-  margin: 20px 0;
-  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.blog-body pre code {
-  background: transparent;
-  padding: 0;
-  color: inherit;
-  border-radius: 0;
-}
-
-/* highlight.js 代码高亮样式 - 保持原生暗色主题，只调整布局 */
-.blog-body .hljs {
-  border-radius: 8px !important;
-  padding: 15px !important;
-  overflow-x: auto !important;
-  margin: 20px 0 !important;
-  font-size: 14px !important;
-  line-height: 1.5 !important;
-  /* 让 highlight.js 的 github-dark 主题控制颜色 */
-}
-
-.blog-body .hljs code {
-  background: transparent !important;
-  padding: 0 !important;
-  border-radius: 0 !important;
-  font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
-  margin: 0 !important;
-  /* 让 highlight.js 控制颜色 */
-}
+/* 移除所有代码块样式，避免与外部CSS冲突 */
 
 .blog-footer {
   margin-top: 40px;
@@ -808,9 +762,19 @@ onMounted(async () => {
 
 .blog-actions {
   display: flex;
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 12px;
   flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.blog-actions .el-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.blog-actions .el-button .el-icon {
+  margin-right: 4px;
 }
 
 .blog-copyright {
@@ -999,4 +963,147 @@ onMounted(async () => {
     margin: 10px;
   }
 }
-</style> 
+
+/* 阅读进度条样式 */
+.reading-progress-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(to right, #409EFF, #67C23A);
+  z-index: 9999;
+  transition: width 0.1s ease;
+}
+
+/* 返回顶部按钮样式 */
+.back-to-top-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #409EFF, #67C23A);
+  border: none;
+  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.back-to-top-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+}
+</style>
+
+<!-- 全局样式 - 确保代码块Atom Dark主题能够应用 -->
+<style>
+/* 强制应用 Atom Dark 主题到所有代码块 */
+pre {
+  background-color: #1d1f21 !important;
+  border-radius: 8px !important;
+  padding: 16px !important;
+  overflow-x: auto !important;
+  margin: 20px 0 !important;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: #c5c8c6 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid #282a2e !important;
+}
+
+pre code {
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  color: inherit !important;
+  white-space: pre !important;
+  word-wrap: normal !important;
+  display: block !important;
+}
+
+/* Atom Dark 语法高亮 */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-subst,
+.hljs-built_in {
+  color: #b294bb !important;
+  font-weight: normal !important;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id,
+.hljs-function .hljs-title {
+  color: #81a2be !important;
+  font-weight: normal !important;
+}
+
+.hljs-string,
+.hljs-doctag,
+.hljs-regexp {
+  color: #b5bd68 !important;
+}
+
+.hljs-number,
+.hljs-literal {
+  color: #de935f !important;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #969896 !important;
+  font-style: italic !important;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-attr {
+  color: #f0c674 !important;
+}
+
+.hljs-type,
+.hljs-class .hljs-title {
+  color: #f0c674 !important;
+}
+
+.hljs-tag,
+.hljs-name,
+.hljs-attribute {
+  color: #cc6666 !important;
+}
+
+.hljs-link {
+  color: #81a2be !important;
+  text-decoration: underline !important;
+}
+
+.hljs-symbol,
+.hljs-bullet {
+  color: #8abeb7 !important;
+}
+
+.hljs-builtin-name {
+  color: #8abeb7 !important;
+}
+
+.hljs-meta {
+  color: #969896 !important;
+}
+
+.hljs-params {
+  color: #c5c8c6 !important;
+}
+
+/* 行内代码 */
+code:not(pre code) {
+  background-color: rgba(29, 31, 33, 0.8) !important;
+  color: #c5c8c6 !important;
+  padding: 0.2em 0.4em !important;
+  border-radius: 3px !important;
+  font-size: 85% !important;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+  border: 1px solid rgba(55, 59, 65, 0.5) !important;
+}
+</style>

@@ -62,14 +62,14 @@ interface BackendBlogListResponse {
 }
 
 // 数据转换函数
-const transformBlogList = (backendData: BackendBlogListResponse): BlogListResponse => {
+const transformBlogList = (backendData: BackendBlogListResponse, pageSize: number = 9): BlogListResponse => {
   console.log('🔄 开始转换后端博客数据:', backendData)
   
   if (!backendData || !backendData.data || !Array.isArray(backendData.data)) {
     console.error('❌ 后端数据格式错误:', backendData)
     return {
       data: [],
-      pagination: { page: 1, pageSize: 9, total: 0, totalPages: 0 }
+      pagination: { page: 1, pageSize: pageSize, total: 0, totalPages: 0 }
     }
   }
   
@@ -103,7 +103,7 @@ const transformBlogList = (backendData: BackendBlogListResponse): BlogListRespon
     }),
     pagination: {
       page: backendData.current_page,
-      pageSize: backendData.data.length,
+      pageSize: pageSize,
       total: backendData.total,
       totalPages: backendData.total_pages
     }
@@ -142,7 +142,7 @@ export const fetchBlogList = async (params: {
     )
     
     if (result) {
-      return transformBlogList(result)
+      return transformBlogList(result, pageSize)
     }
     return null
   } catch (error) {
@@ -257,9 +257,24 @@ export const fetchBlogDetail = async (blogId: string): Promise<BlogPost | null> 
 
 // 获取博客统计信息
 export const fetchBlogStats = async (): Promise<BlogStats | null> => {
-  return apiWrapper<BlogStats>(
-    vikeApi.get('/views/blogs/total_uvpv')
-  )
+  try {
+    const result = await apiWrapper<{ data: { UV: string, PV: string }, code: number }>(
+      vikeApi.get('/views/blogs/total_uvpv')
+    )
+    
+    if (result && result.data) {
+      console.log('✅ 获取博客统计数据成功:', result)
+      return {
+        pv: parseInt(result.data.PV) || 0,
+        uv: parseInt(result.data.UV) || 0,
+        articles: 0 // 这个值会在+data.js中更新
+      }
+    }
+    return null
+  } catch (error) {
+    console.error('获取博客统计数据失败:', error)
+    return null
+  }
 }
 
 // 搜索博客
@@ -271,6 +286,16 @@ export const searchBlogs = async (query: string): Promise<BlogPost[] | null> => 
   )
 }
 
+interface BingWallpaperResponse {
+  data: {
+    url: string
+    title?: string
+    copyright?: string
+    date?: string
+    fullUrl?: string
+  }
+}
+
 // 获取必应壁纸
 export const getBingWallpaper = async (isRandom = false): Promise<{
   url: string
@@ -279,11 +304,27 @@ export const getBingWallpaper = async (isRandom = false): Promise<{
   date: string
   fullUrl: string
 } | null> => {
-  return apiWrapper(
-    vikeApi.get('/views/blogs/bing-wallpaper', {
-      params: { is_random: isRandom }
-    })
-  )
+  try {
+    const result = await apiWrapper<BingWallpaperResponse>(
+      vikeApi.get('/views/blogs/bing-wallpaper', {
+        params: { is_random: isRandom }
+      })
+    )
+    
+    if (result && result.data) {
+      return {
+        url: result.data.url,
+        title: result.data.title || '',
+        copyright: result.data.copyright || '',
+        date: result.data.date || '',
+        fullUrl: result.data.fullUrl || result.data.url
+      }
+    }
+    return null
+  } catch (error) {
+    console.error('获取必应壁纸失败:', error)
+    return null
+  }
 }
 
 // 博客点赞
