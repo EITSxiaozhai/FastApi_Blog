@@ -9,6 +9,8 @@
     "dev": "vite",
     "preview": "vite preview",
     "lint": "vue-cli-service lint",
+    "build:pages": "vite build && wrangler pages deploy dist",
+    "deploy": "npm run build:pages",
     "publish": "vue-cli-service build && vue-cli-service build --mode test",
     "test": "vue-cli-service build --mode test && npm run  serve -s dist",
     "production": "vue-cli-service build --mode production && npm run serve -s dist"
@@ -48,7 +50,8 @@
     "vue3-recaptcha2": "^1.8.0",
     "vuex": "^4.0.0",
     "vuex-persistedstate": "^4.1.0",
-    "wow.js": "^1.2.2"
+    "wow.js": "^1.2.2",
+    "wrangler": "^4.19.2"
   },
   "devDependencies": {
     "@shikijs/markdown-it": "^3.2.1",
