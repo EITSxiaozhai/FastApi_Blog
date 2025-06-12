@@ -1,7 +1,5 @@
-import { createApp } from './dist/server/entry-server.js'
+import { createSSRApp } from './dist/server/entry-server.js'
 import { renderToString } from 'vue/server-renderer'
-import { createMemoryHistory, createRouter } from 'vue-router'
-import { createStore } from 'vuex'
 
 export default {
   async fetch(request, env, ctx) {
@@ -14,21 +12,7 @@ export default {
       }
 
       // 创建应用实例
-      const app = await createApp()
-      
-      // 设置路由
-      const router = createRouter({
-        history: createMemoryHistory(),
-        routes: [] // 你的路由配置
-      })
-      
-      // 设置 store
-      const store = createStore({
-        // 你的 store 配置
-      })
-      
-      app.use(router)
-      app.use(store)
+      const { app, router, store } = await createSSRApp()
       
       // 等待路由就绪
       await router.push(url.pathname)
