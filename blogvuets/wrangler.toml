@@ -15,6 +15,10 @@ command = "npm run build"
 # 上传格式为 service-worker
 upload.format = "service-worker"
 
+[assets]
+# 静态资源目录
+directory = "./dist"
+
 [env.production]
 # 生产环境配置
 workers_dev = false
