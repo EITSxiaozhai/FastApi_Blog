@@ -3,17 +3,16 @@ name = "fastapi-blog-ssr"
 # Cloudflare Workers 的兼容性日期
 compatibility_date = "2024-01-01"
 
+# 主入口文件
+main = "_worker.js"
+
 [site]
 # 构建输出目录
 bucket = "./dist"
-# 入口点目录
-entry-point = "."
 
 [build]
 # 构建命令
 command = "npm run build"
-# 上传格式为 service-worker
-upload.format = "service-worker"
 
 [assets]
 # 静态资源目录
