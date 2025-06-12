@@ -1,9 +1,9 @@
-import { createApp } from './main'
+import { createApp as createVueApp } from './main'
 import { createRouter } from './router'
 import { createStore } from './store'
 
 export async function createApp() {
-  const app = createApp()
+  const app = createVueApp()
   const router = createRouter()
   const store = createStore()
 
