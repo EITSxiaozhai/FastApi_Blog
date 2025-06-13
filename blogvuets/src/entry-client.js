@@ -5,6 +5,7 @@ import store from './store'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import { createHead } from '@unhead/vue'
+import './assets/css/css-vars.css'  // 导入基础 CSS 变量
 
 const app = createApp(App)
 const head = createHead()
