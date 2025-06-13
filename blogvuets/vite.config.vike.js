@@ -10,7 +10,7 @@ export default defineConfig({
     plugins: [
         vue(),
         vike({
-            prerender: false // 先关闭预渲染，快速体验
+            prerender: true // 启用预渲染以提高性能
         }),
         AutoImport({
             resolvers: [ElementPlusResolver()],
