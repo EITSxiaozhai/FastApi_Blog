@@ -10,3 +10,4 @@ google.json
 /logstash.yml
 logstash.yml
 alembic.ini
+*.pyc

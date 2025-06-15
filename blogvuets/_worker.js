@@ -103,8 +103,11 @@ export default {
       })
       
     } catch (error) {
-      console.error('SSR Error:', error)
-      console.error('Error stack:', error.stack)
+      // 只在开发环境下记录详细错误
+      if (process.env.NODE_ENV === 'development') {
+        console.error('SSR Error:', error)
+        console.error('Error stack:', error.stack)
+      }
       
       // 返回基础 HTML 作为降级方案
       const fallbackHtml = `<!DOCTYPE html>
@@ -134,8 +137,7 @@ export default {
     <div id="app">
         <div class="error-fallback">
             <h1>正在加载...</h1>
-            <p class="error-message">SSR 渲染失败，正在切换到客户端渲染模式</p>
-            <p class="error-message">错误信息: ${error.message}</p>
+            <p class="error-message">页面加载中，请稍候...</p>
         </div>
     </div>
     <script type="module" src="/assets/client.js"></script>
