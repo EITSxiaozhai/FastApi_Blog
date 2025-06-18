@@ -42,8 +42,6 @@ services:
         limits:
           cpus: "0.5"
           memory: 512M
-      labels:
-        - "cleanup.policy=task"
 
   # fastapi 服务：业务服务，由 Traefik 根据标签进行路由
   fastapi:
@@ -94,8 +92,6 @@ services:
         delay: 10s
         order: start-first
         failure_action: rollback
-      placement:
-        max_replicas_per_node: 1
       restart_policy:
         condition: on-failure
         delay: 5s
