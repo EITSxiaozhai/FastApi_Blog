@@ -9,11 +9,6 @@ export { onRenderHtml }
 async function onRenderHtml(pageContext) {
   const { Page, pageProps, data, routeParams, urlPathname } = pageContext
   
-  console.log('🔧 服务器端渲染 - pageProps:', pageProps)
-  console.log('🔧 服务器端渲染 - data:', data)
-  console.log('🔧 服务器端渲染 - routeParams:', routeParams)
-  console.log('🔧 服务器端渲染 - urlPathname:', urlPathname)
-  
   // 根据路由动态生成页面title
   const getPageTitle = () => {
     // 博客详情页

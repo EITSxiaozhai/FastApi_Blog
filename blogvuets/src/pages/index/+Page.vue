@@ -462,18 +462,11 @@ const formatDate = (dateString) => {
 
 // 监听分页数据变化
 watch(() => props.pagination, (newPagination) => {
-  console.log('📄 分页数据更新:', newPagination)
   if (newPagination) {
     currentPage.value = newPagination.page
     pageSize.value = newPagination.pageSize
     total.value = newPagination.total
     totalPages.value = newPagination.totalPages
-    console.log('📄 分页状态更新后:', {
-      currentPage: currentPage.value,
-      pageSize: pageSize.value,
-      total: total.value,
-      totalPages: totalPages.value
-    })
   }
 }, { immediate: true })
 
@@ -505,12 +498,6 @@ const updateSiteRuntime = () => {
 
 // 初始化模拟文章数据（仅在API完全失败时使用）
 const initMockData = () => {
-  console.log('🔍 检查首页数据状态:', { 
-    articlesLength: articles.value?.length, 
-    propsArticlesLength: props.articles?.length,
-    hasError: !!props.error 
-  })
-  
   // 只有在没有服务器端数据且存在错误时才使用模拟数据
   if ((!articles.value || articles.value.length === 0) && (!props.articles || props.articles.length === 0)) {
     console.warn('⚠️ API数据获取失败，使用fallback模拟数据')
@@ -522,32 +509,14 @@ const initMockData = () => {
       views: Math.floor(Math.random() * 1000) + 100,
       createdAt: new Date(Date.now() - index * 24 * 60 * 60 * 1000).toISOString()
     }))
-  } else {
-    console.log('✅ 使用真实API数据，文章数量:', articles.value?.length)
   }
 }
 
 let runtimeTimer = null
 
 onMounted(() => {
-  console.log('🎉 首页已加载 - Vike SSR版本!')
-  console.log('📊 Props数据详情:', {
-    propsArticles: props.articles,
-    propsArticlesLength: props.articles?.length,
-    articleRefs: articles.value,
-    articleRefsLength: articles.value?.length,
-    stats: props.stats,
-    error: props.error
-  })
-  
   // 初始化数据
   initMockData()
-  
-  console.log('📋 数据初始化后:', {
-    finalArticles: articles.value,
-    finalArticlesLength: articles.value?.length,
-    firstArticleTitle: articles.value?.[0]?.title
-  })
   
   // 更新运行时间
   updateSiteRuntime()

@@ -34,19 +34,11 @@ const getRandomVerse = async (retries = 3) => {
 
 export async function data(pageContext) {
   try {
-    console.log('🔧 服务器端渲染 - pageContext:', pageContext)
-    console.log('🔧 服务器端渲染 - pageProps:', pageContext.pageProps)
-    console.log('🔧 服务器端渲染 - data:', pageContext.data)
-    console.log('🔧 服务器端渲染 - routeParams:', pageContext.routeParams)
-    console.log('🔧 服务器端渲染 - urlPathname:', pageContext.urlPathname)
-    
     // 从URL查询参数获取页码
     const urlParsed = pageContext.urlParsed
     const searchParams = new URLSearchParams(urlParsed.search)
     const page = parseInt(searchParams.get('page')) || 1
     const pageSize = 9
-    
-    console.log('📄 请求页码:', page)
     
     // 并行获取所有数据
     const [blogResponse, wallpaperData, verse, statsData] = await Promise.all([
@@ -56,24 +48,12 @@ export async function data(pageContext) {
       fetchBlogStats()
     ])
     
-    console.log('✅ 获取博客统计数据成功:', statsData)
-    console.log('📄 博客API完整响应:', JSON.stringify(blogResponse, null, 2))
-    console.log('📄 分页信息详细:', {
-      current: blogResponse?.current_page,
-      total: blogResponse?.total,
-      pages: blogResponse?.total_pages,
-      dataLength: blogResponse?.data?.length,
-      原始分页对象: blogResponse?.pagination
-    })
-    
     // 更新统计数据
     const stats = {
       pv: statsData?.pv || 0,
       uv: statsData?.uv || 0,
       articles: blogResponse?.total || blogResponse?.pagination?.total || 0  // 尝试多个字段
     }
-    
-    console.log('📊 最终统计数据:', stats)
     
     // 构建分页信息，尝试多种数据源
     const paginationInfo = {
@@ -82,8 +62,6 @@ export async function data(pageContext) {
       total: blogResponse?.total || blogResponse?.pagination?.total || 0,
       totalPages: blogResponse?.total_pages || blogResponse?.pagination?.totalPages || 1
     }
-    
-    console.log('📄 构建的分页信息:', paginationInfo)
     
     return {
       articles: blogResponse?.data || [],

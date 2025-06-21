@@ -353,17 +353,13 @@ const renderedContent = computed(() => {
   if (!blog.value?.content) return ''
   
   try {
-    console.log('🔄 开始渲染Markdown内容...')
-    
     // 如果内容已经是HTML格式，直接返回
     if (blog.value.content.includes('<p>') || blog.value.content.includes('<div>')) {
-      console.log('✅ 检测到HTML格式，直接返回')
       return blog.value.content
     }
     
     // 直接渲染Markdown，不做预处理
     const rendered = md.render(blog.value.content)
-    console.log('✅ Markdown渲染完成')
     
     return rendered
   } catch (error) {
@@ -568,7 +564,6 @@ onUnmounted(() => {
 })
 
 onMounted(async () => {
-  console.log('🚀 博客详情页已加载，文章ID:', safeBlogId.value)
   currentUrl.value = window.location.href
   
   // 模拟增加阅读量
@@ -577,63 +572,6 @@ onMounted(async () => {
       blog.value.views = (blog.value.views || 0) + 1
     }
   }, 2000)
-
-  // highlight.js 已经在初始化时配置好了
-  console.log('🎨 highlight.js 代码高亮已就绪')
-  
-  // 强制重新渲染一次内容（触发computed）
-  nextTick(() => {
-    console.log('🔄 强制触发内容重新渲染')
-    if (blog.value) {
-      // 触发renderedContent重新计算
-      const content = renderedContent.value
-      console.log('📊 当前渲染内容长度:', content.length)
-    }
-  })
-  
-  // 增强调试 - 检查DOM中的代码块
-  setTimeout(() => {
-    console.log('🔍 开始详细检查DOM结构...')
-    
-    // 检查所有可能的代码块选择器
-    const selectors = [
-      '.blog-body pre',
-      '.blog-content pre', 
-      'pre',
-      '.blog-body code',
-      'code'
-    ]
-    
-    selectors.forEach(selector => {
-      const elements = document.querySelectorAll(selector)
-      console.log(`🎯 选择器 "${selector}" 找到 ${elements.length} 个元素`)
-      
-      elements.forEach((element, index) => {
-        console.log(`📦 元素 ${index + 1}:`, {
-          tagName: element.tagName,
-          classList: Array.from(element.classList),
-          parentClasses: element.parentElement ? Array.from(element.parentElement.classList) : [],
-          innerHTML: element.innerHTML.substring(0, 100) + '...',
-          computedStyle: {
-            backgroundColor: window.getComputedStyle(element).backgroundColor,
-            color: window.getComputedStyle(element).color
-          }
-        })
-      })
-    })
-    
-    // 检查容器结构
-    const blogBody = document.querySelector('.blog-body')
-    if (blogBody) {
-      console.log('📋 .blog-body 容器信息:', {
-        classList: Array.from(blogBody.classList),
-        innerHTML: blogBody.innerHTML.substring(0, 200) + '...'
-      })
-    } else {
-      console.warn('⚠️ 未找到 .blog-body 容器')
-    }
-    
-  }, 1000)
 })
 </script>
 

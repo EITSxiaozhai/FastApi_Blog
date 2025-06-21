@@ -10,11 +10,6 @@ async function onRenderClient(pageContext) {
   // 优先使用服务器端传递的数据
   const clientData = window.__VIKE_PAGE_PROPS__ || data || pageProps
   
-  console.log('🔧 客户端渲染 - pageContext:', pageContext)
-  console.log('🔧 客户端渲染 - pageProps:', pageProps)
-  console.log('🔧 客户端渲染 - data:', data)
-  console.log('🔧 客户端渲染 - clientData:', clientData)
-  
   // 创建客户端应用，使用正确的数据
   const app = createApp(Page, clientData)
   
