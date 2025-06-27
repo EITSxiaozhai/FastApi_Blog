@@ -150,6 +150,31 @@ async function onRenderHtml(pageContext) {
           // 将服务器端数据传递给客户端
           window.__VIKE_PAGE_PROPS__ = ${dangerouslySkipEscape(JSON.stringify(data || pageProps))}
         </script>
+        
+        <!-- Microsoft Clarity -->
+        <script defer type="text/javascript">
+          (function (c, l, a, r, i, t, y) {
+            c[a] = c[a] || function () {
+              (c[a].q = c[a].q || []).push(arguments)
+            };
+            t = l.createElement(r);
+            t.defer = 1;
+            t.src = "https://www.clarity.ms/tag/" + i;
+            y = l.getElementsByTagName(r)[0];
+            y.parentNode.insertBefore(t, y);
+          })(window, document, "clarity", "script", "n9qa2nj1v7");
+        </script>
+
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-K23FDRDRWS"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-K23FDRDRWS');
+        </script>
       </body>
     </html>`
 
