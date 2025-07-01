@@ -9,10 +9,13 @@ export { onRenderHtml }
 async function onRenderHtml(pageContext) {
   const { Page, pageProps, data, routeParams, urlPathname } = pageContext
   
-  console.log('🔧 服务器端渲染 - pageProps:', pageProps)
-  console.log('🔧 服务器端渲染 - data:', data)
-  console.log('🔧 服务器端渲染 - routeParams:', routeParams)
-  console.log('🔧 服务器端渲染 - urlPathname:', urlPathname)
+  // 只在开发环境中显示调试日志
+  if (import.meta.env.DEV) {
+    console.log('🔧 服务器端渲染 - pageProps:', pageProps)
+    console.log('🔧 服务器端渲染 - data:', data)
+    console.log('🔧 服务器端渲染 - routeParams:', routeParams)
+    console.log('🔧 服务器端渲染 - urlPathname:', urlPathname)
+  }
   
   // 根据路由动态生成页面title
   const getPageTitle = () => {
@@ -165,6 +168,9 @@ async function onRenderHtml(pageContext) {
           })(window, document, "clarity", "script", "n9qa2nj1v7");
         </script>
 
+        <!-- Google reCAPTCHA -->
+        <script src="https://www.google.com/recaptcha/api.js?render=explicit&hl=zh-CN" async defer></script>
+        
         <!-- Google tag (gtag.js) -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-K23FDRDRWS"></script>
         <script>

@@ -27,7 +27,10 @@ export default async function handler(req, res) {
       res.status(404).send('Page not found')
     }
   } catch (error) {
-    console.error('SSR Error:', error)
+    // 生产环境中只记录错误，不在控制台显示详细信息
+    if (process.env.NODE_ENV === 'development') {
+      console.error('SSR Error:', error)
+    }
     res.status(500).json({ 
       error: 'Internal Server Error',
       message: error.message
