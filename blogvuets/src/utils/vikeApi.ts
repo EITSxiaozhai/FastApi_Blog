@@ -55,16 +55,23 @@ vikeApi.interceptors.response.use(
   error => {
     if (error.response) {
       const status = error.response.status
-      console.error(`API Error ${status}:`, error.response.data)
+      // 在开发环境下才打印详细错误
+      if (process.env.NODE_ENV === 'development') {
+        console.error(`API Error ${status}:`, error.response.data)
+      }
       
       // 在客户端环境处理错误重定向
       if (typeof window !== 'undefined') {
         if (status === 404 || status === 500) {
+          // 使用更友好的错误页面
           window.location.href = '/errorpage'
         }
       }
     } else {
-      console.error('Network/Request Error:', error.message)
+      // 只在开发环境下打印网络错误
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Network/Request Error:', error.message)
+      }
     }
     return Promise.reject(error)
   }

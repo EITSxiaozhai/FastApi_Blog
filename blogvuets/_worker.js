@@ -32,8 +32,29 @@ export default {
         globalThis.fetch = fetch
       }
 
-      // 动态导入服务端入口
-      const { createApp } = await import('./assets/server.js')
+      let createApp
+      try {
+        // 尝试导入服务端入口
+        const serverModule = await import('./assets/server.js')
+        createApp = serverModule.createApp
+        console.log('✅ 成功导入 server.js')
+      } catch (serverError) {
+        console.error('❌ 无法导入 server.js:', serverError)
+        
+        // 尝试其他可能的入口文件
+        try {
+          const indexModule = await import('./assets/index.js')
+          createApp = indexModule.createApp
+          console.log('✅ 从 index.js 导入成功')
+        } catch (indexError) {
+          console.error('❌ 无法导入 index.js:', indexError)
+          throw new Error('无法找到有效的服务端入口模块')
+        }
+      }
+
+      if (!createApp) {
+        throw new Error('createApp 函数未找到')
+      }
       
       // 创建应用实例
       const { app, router, store } = await createApp()
@@ -82,6 +103,7 @@ export default {
       })
       
     } catch (error) {
+
           // 只在开发环境中显示详细错误信息
     if (process.env.NODE_ENV === 'development') {
       console.error('SSR Error:', error)
@@ -116,7 +138,7 @@ export default {
     <div id="app">
         <div class="error-fallback">
             <h1>正在加载...</h1>
-            <p class="error-message">如果页面长时间未加载，请刷新重试</p>
+            <p class="error-message">页面加载中，请稍候...</p>
         </div>
     </div>
     <script type="module" src="/assets/client.js"></script>
