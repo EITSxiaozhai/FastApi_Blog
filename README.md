@@ -351,22 +351,27 @@ deploy:
 
 ## 📄 许可证
 
-本项目基于 MIT 许可证开源，详见 [LICENSE](LICENSE) 文件。
+本项目基于 Apache License 2.0 开源许可证，详见 [LICENSE](LICENSE) 文件。
+
+```
+Copyright 2023 GitLab Instance
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
 
 ## 🙏 致谢
 
 - [FastAPI](https://fastapi.tiangolo.com/) - 现代化的 Python Web 框架
-- [Vue.js](https://vuejs.org/) - 渐进式 JavaScript 框架
+- [Vue.js](https://vuejs.org/) - 渐进式 JavaScript 框架  
 - [Element UI](https://element.eleme.io/) - 基于 Vue 2.0 的桌面端组件库
 - [SQLAlchemy](https://www.sqlalchemy.org/) - Python SQL 工具包
-
-## 📞 联系方式
-
-如有问题或建议，请通过以下方式联系：
-
-- 项目 Issues: [GitHub Issues](link-to-issues)
-- 邮箱: your-email@example.com
-
----
-
-⭐ 如果这个项目对您有帮助，请给个 Star 支持一下！
