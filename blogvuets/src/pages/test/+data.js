@@ -1,7 +1,9 @@
 export { data }
 
 async function data(pageContext) {
-  console.log('服务器端数据获取开始...')
+  if (import.meta.env?.DEV) {
+    console.log('服务器端数据获取开始...')
+  }
   
   // 模拟从API获取数据
   try {
@@ -18,7 +20,9 @@ async function data(pageContext) {
       isSSR: typeof window === 'undefined'
     }
     
-    console.log('服务器端数据获取完成:', mockData)
+    if (import.meta.env?.DEV) {
+      console.log('服务器端数据获取完成:', mockData)
+    }
     
     return {
       // 这些数据会被传递到页面组件
@@ -27,7 +31,9 @@ async function data(pageContext) {
       }
     }
   } catch (error) {
-    console.error('数据获取失败:', error)
+    if (import.meta.env?.DEV) {
+      console.error('数据获取失败:', error)
+    }
     
     return {
       props: {

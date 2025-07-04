@@ -103,11 +103,12 @@ export default {
       })
       
     } catch (error) {
-      // 只在开发环境下记录详细错误
-      if (process.env.NODE_ENV === 'development') {
-        console.error('SSR Error:', error)
-        console.error('Error stack:', error.stack)
-      }
+
+          // 只在开发环境中显示详细错误信息
+    if (process.env.NODE_ENV === 'development') {
+      console.error('SSR Error:', error)
+      console.error('Error stack:', error.stack)
+    }
       
       // 返回基础 HTML 作为降级方案
       const fallbackHtml = `<!DOCTYPE html>
