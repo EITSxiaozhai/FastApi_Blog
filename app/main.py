@@ -69,7 +69,13 @@ async def configure_logging():
 
     logstash_handler.setFormatter(formatter)
     logger.addHandler(logstash_handler)
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.WARNING)
+
+    # 彻底静默 logstash_async 的日志
+    logstash_logger = logging.getLogger("logstash_async")
+    logstash_logger.setLevel(logging.CRITICAL)
+    logstash_logger.propagate = False
+    logstash_logger.handlers.clear()
 
 
 @app.middleware("http")
