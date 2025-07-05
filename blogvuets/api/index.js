@@ -59,10 +59,16 @@ export default async function handler(req, res) {
       `)
     }
   } catch (error) {
-    // 只在开发环境下记录详细错误
+
+    // 生产环境中只记录错误，不在控制台显示详细信息
     if (process.env.NODE_ENV === 'development') {
       console.error('SSR Error:', error)
     }
+    res.status(500).json({ 
+      error: 'Internal Server Error',
+      message: error.message
+    })
+
     
     // 返回友好的错误页面
     res.status(500).send(`
