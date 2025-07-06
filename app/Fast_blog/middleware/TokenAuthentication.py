@@ -28,6 +28,7 @@ SKIP_PATHS: Set[str] = {
     "/api/blogs/search",
     "/api/views/blogs/bing-wallpaper",
     "/api/views/blogs/bing-wallpaper/random=true",
+    "/health"
 }
 
 
