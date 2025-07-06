@@ -21,7 +21,7 @@ const getBaseURL = () => {
 // 创建axios实例
 const vikeApi = axios.create({
   baseURL: getBaseURL(),
-  timeout: 10000
+  timeout: 30000 // 30秒
 })
 
 // 请求拦截器
