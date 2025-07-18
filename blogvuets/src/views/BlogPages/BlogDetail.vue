@@ -20,6 +20,7 @@ import {
   postCommentSave,
   getAverageRatingRequest
 } from '@/api/Blog/blogapig';
+import IntersectingLines from '@/components/IntersectingLines.vue';
 
 // 响应式状态
 const isDark = ref(false);
@@ -565,6 +566,7 @@ useHead({
 
 <template>
   <el-container class="theme-transition">
+    <IntersectingLines />
     <el-header id="top-mains" :class="{'hidden': scrollDirection === 'down'}">
       <el-menu
           class="el-menu-demo"
@@ -651,7 +653,7 @@ useHead({
       </el-main>
 
       <el-aside class="toc-aside" :class="{'toc-hidden': isTocHidden}">
-        <el-affix :offset="270">
+        <el-affix :offset="400">
           <el-card class="toc-card">
             <div class="toc-header">
               <span>目录</span>

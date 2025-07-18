@@ -18,9 +18,6 @@ services:
       - "--api.dashboard=true"
     ports:
       - "20000:80"
-      - "8080:8080"  # Traefik 管理面板端口
-      # 如果需要 HTTPS则取消下面注释
-      # - "443:443"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     deploy:
@@ -32,7 +29,7 @@ services:
 
   # db-migration 服务：执行数据库迁移（alembic upgrade head）
   db-migration:
-    image: sggc.exploit-db.xyz:10000/fastapi_blog/fastapi:latest
+    image: harbor.exploit-db.xyz/detvron-img/fastapi-blog:latest
     command: ["alembic", "upgrade", "head"]
     environment:
       - DB_USERNAME=${DB_USERNAME}
@@ -52,7 +49,7 @@ services:
 
   # fastapi 服务：业务服务，由 Traefik 根据标签进行路由
   fastapi:
-    image: sggc.exploit-db.xyz:10000/fastapi_blog/fastapi:latest
+    image: harbor.exploit-db.xyz/detvron-img/fastapi-blog:latest
     # 不直接发布端口，由 Traefik 做入口负载均衡
     environment:
       - ADMIN_RECAPTCHA_SECRET_KEY=${ADMIN_RECAPTCHA_SECRET_KEY}

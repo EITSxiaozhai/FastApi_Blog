@@ -27,7 +27,6 @@
 .title {
     font-size: clamp(20px, 5vw, 32px);
     margin-bottom: 20px;
-    color: var(--text-color);
     transition: color 0.3s ease;
     word-break: break-word;
     line-height: 1.4;
@@ -103,16 +102,15 @@ pre {
 /* 复制按钮样式 */
 .copy-button {
   position: absolute;
-  right: 5px;
-  top: 5px;
-  padding: 3px 8px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  color: #fff;
+  right: 8px;
+  top: 8px;
+  padding: 4px 8px;
+  background: rgba(110, 118, 129, 0.4);
+  color: #c9d1d9;
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.3s;
+  font-size: 12px;
 }
 
 pre:hover .copy-button {
@@ -120,7 +118,7 @@ pre:hover .copy-button {
 }
 
 .copy-button:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(110, 118, 129, 0.6);
 }
 
 .main-container {
@@ -129,13 +127,19 @@ pre:hover .copy-button {
   display: flex;
   width: 100%;
   overflow-x: hidden;
+  gap: 20px;
+  padding: 0 20px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .content-main {
   padding: 20px;
   transition: all 0.3s;
   flex: 1;
-  min-width: 0; /* 防止内容溢出 */
+  min-width: 0;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .content-main-expanded {
@@ -145,8 +149,10 @@ pre:hover .copy-button {
 .toc-aside {
   width: 300px;
   transition: all 0.3s;
-  position: relative;
-  flex-shrink: 0; /* 防止目录被压缩 */
+  position: sticky;
+  top: 80px;
+  height: fit-content;
+  flex-shrink: 0;
 }
 
 .toc-hidden {
@@ -159,6 +165,9 @@ pre:hover .copy-button {
 .toc-card {
   margin-bottom: 20px;
   width: 100%;
+  background: var(--el-bg-color);
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .toc-header {
@@ -166,7 +175,10 @@ pre:hover .copy-button {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-  padding: 0 10px;
+  padding: 10px 15px;
+  border-bottom: 1px solid var(--el-border-color-light);
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .rating-card {
@@ -174,7 +186,183 @@ pre:hover .copy-button {
   width: 100%;
 }
 
+/* 文章内容样式 */
+.blog-content {
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.blog-content h1,
+.blog-content h2,
+.blog-content h3,
+.blog-content h4,
+.blog-content h5,
+.blog-content h6 {
+  margin-top: 24px;
+  margin-bottom: 16px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #24292e;
+}
+
+.blog-content h1 {
+  font-size: 2em;
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: 0.3em;
+}
+
+.blog-content h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid #eaecef;
+  padding-bottom: 0.3em;
+}
+
+.blog-content p {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+/* 代码块基础样式 - Atom Dark主题 */
+.blog-body pre {
+  background-color: #1d1f21 !important;
+  border-radius: 8px !important;
+  padding: 16px !important;
+  overflow-x: auto !important;
+  margin: 20px 0 !important;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  color: #c5c8c6 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid #282a2e !important;
+}
+
+.blog-body pre code {
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  color: inherit !important;
+  white-space: pre !important;
+  word-wrap: normal !important;
+  display: block !important;
+}
+
+/* 行内代码样式 - Atom Dark主题 */
+.blog-body code:not(pre code) {
+  background-color: rgba(29, 31, 33, 0.8) !important;
+  color: #c5c8c6 !important;
+  padding: 0.2em 0.4em !important;
+  border-radius: 3px !important;
+  font-size: 85% !important;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace !important;
+  border: 1px solid rgba(55, 59, 65, 0.5) !important;
+}
+
+/* highlight.js 语法高亮颜色 - Atom Dark主题 */
+.blog-body .hljs-keyword,
+.blog-body .hljs-selector-tag,
+.blog-body .hljs-subst,
+.blog-body .hljs-built_in {
+  color: #b294bb !important;
+  font-weight: normal !important;
+}
+
+.blog-body .hljs-title,
+.blog-body .hljs-section,
+.blog-body .hljs-selector-id,
+.blog-body .hljs-function .hljs-title {
+  color: #81a2be !important;
+  font-weight: normal !important;
+}
+
+.blog-body .hljs-string,
+.blog-body .hljs-doctag,
+.blog-body .hljs-regexp {
+  color: #b5bd68 !important;
+}
+
+.blog-body .hljs-number,
+.blog-body .hljs-literal {
+  color: #de935f !important;
+}
+
+.blog-body .hljs-comment,
+.blog-body .hljs-quote {
+  color: #969896 !important;
+  font-style: italic !important;
+}
+
+.blog-body .hljs-variable,
+.blog-body .hljs-template-variable,
+.blog-body .hljs-attr {
+  color: #f0c674 !important;
+}
+
+.blog-body .hljs-type,
+.blog-body .hljs-class .hljs-title {
+  color: #f0c674 !important;
+}
+
+.blog-body .hljs-tag,
+.blog-body .hljs-name,
+.blog-body .hljs-attribute {
+  color: #cc6666 !important;
+}
+
+.blog-body .hljs-link {
+  color: #81a2be !important;
+  text-decoration: underline !important;
+}
+
+.blog-body .hljs-symbol,
+.blog-body .hljs-bullet {
+  color: #8abeb7 !important;
+}
+
+.blog-body .hljs-builtin-name {
+  color: #8abeb7 !important;
+}
+
+.blog-body .hljs-meta {
+  color: #969896 !important;
+}
+
+.blog-body .hljs-params {
+  color: #c5c8c6 !important;
+}
+
+.blog-body .hljs-addition {
+  color: #b5bd68 !important;
+  background-color: rgba(181, 189, 104, 0.1) !important;
+}
+
+.blog-body .hljs-deletion {
+  color: #cc6666 !important;
+  background-color: rgba(204, 102, 102, 0.1) !important;
+}
+
+/* 暗色主题适配 - 保持Atom Dark样式 */
+.dark .blog-body pre {
+  background-color: #1d1f21 !important;
+  color: #c5c8c6 !important;
+  border: 1px solid #373b41 !important;
+}
+
+.dark .blog-body code:not(pre code) {
+  background-color: rgba(55, 59, 65, 0.4) !important;
+  color: #c5c8c6 !important;
+}
+
+/* 响应式布局 */
 @media screen and (max-width: 768px) {
+  .main-container {
+    padding: 0 10px;
+  }
+
   .toc-aside {
     position: fixed;
     right: 0;
@@ -183,7 +371,8 @@ pre:hover .copy-button {
     z-index: 1000;
     background: var(--el-bg-color);
     box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 280px;
+    transform: translateX(100%);
   }
 
   .toc-hidden {
@@ -192,6 +381,7 @@ pre:hover .copy-button {
 
   .content-main {
     margin-right: 0;
+    padding: 15px;
   }
 
   .toc-toggle-button {
@@ -220,16 +410,32 @@ pre:hover .copy-button {
 
 @media screen and (min-width: 769px) {
   .toc-aside {
-    position: relative;
-    height: fit-content;
-    width: 300px;
-  }
-
-  .toc-aside :deep(.el-affix) {
-    position: fixed;
+    position: sticky;
     top: 80px;
-    width: 300px;
+    height: fit-content;
   }
+}
+
+/* 暗色主题适配 */
+.dark .blog-content {
+  color: #e6e6e6;
+}
+
+.dark .blog-content h1,
+.dark .blog-content h2,
+.dark .blog-content h3,
+.dark .blog-content h4,
+.dark .blog-content h5,
+.dark .blog-content h6 {
+  color: #e6e6e6;
+}
+
+.dark .toc-card {
+  background: var(--el-bg-color-overlay);
+}
+
+.dark .toc-header {
+  border-bottom-color: var(--el-border-color-darker);
 }
 
 .highlight {
@@ -256,13 +462,57 @@ pre:hover .copy-button {
 }
 
 .toc-card :deep(.el-tree) {
+  padding: 10px;
   background-color: transparent;
 }
 
 .toc-card :deep(.el-tree-node__content) {
+  height: 32px;
+  line-height: 32px;
   background-color: transparent;
 }
 
 .toc-card :deep(.el-tree-node.is-current > .el-tree-node__content) {
   background-color: var(--el-color-primary-light-9);
+  color: var(--el-color-primary);
+}
+
+.theme-transition {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  background: transparent;
+}
+
+.el-container {
+  background: transparent;
+  position: relative;
+}
+
+.el-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dark .el-card {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.el-header {
+  background: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(10px);
+}
+
+.dark .el-header {
+  background: rgba(0, 0, 0, 0.8) !important;
+}
+
+.el-menu {
+  background: transparent !important;
+}
+
+.dark .el-menu {
+  background: transparent !important;
 }

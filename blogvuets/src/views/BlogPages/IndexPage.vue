@@ -10,6 +10,7 @@ import '@/assets/css/IndexPage.css';
 import {GoogleUVPV, fetchBlogIndex, searchBlogs, getBingWallpaper} from "@/api/Blog/blogapig"
 import {debounce} from "lodash";
 import {Moon, Sunny, ArrowDownBold, User, Calendar} from "@element-plus/icons-vue";
+import IntersectingLines from '@/components/IntersectingLines.vue';
 
 // 响应式状态
 const isDark = ref(false)
@@ -128,7 +129,6 @@ const loading = ref(false);
 const error = ref(null);
 
 const loadData = async (page = 1) => {
-  // 如果正在加载，直接返回
   if (loading.value) return;
   
   loading.value = true;
@@ -136,28 +136,26 @@ const loadData = async (page = 1) => {
   try {
     const response = await fetchBlogIndex({page, pageSize: pageSize.value});
     if (response.data) {
-      // 更新分页信息
       data.total = response.data.total;
       data.totalPages = response.data.total_pages;
       data.currentPage = response.data.current_page;
       
-      // 如果是第一页，清空现有数据
       if (page === 1) {
         data.data = [];
         data.loadedIds.clear();
       }
       
-      // 检查是否有新数据
       const newBlogs = response.data.data.filter(blog => !data.loadedIds.has(blog.BlogId));
       
       if (newBlogs.length > 0) {
-        // 只添加新数据
+        // 使用Vue的响应式API来更新数据
         newBlogs.forEach(blog => {
-          data.data.push(blog);
-          data.loadedIds.add(blog.BlogId);
+          if (!data.loadedIds.has(blog.BlogId)) {
+            data.data.push(blog);
+            data.loadedIds.add(blog.BlogId);
+          }
         });
       } else {
-        // 如果没有新数据，说明已经加载完所有数据
         data.currentPage = data.totalPages;
       }
     }
@@ -457,11 +455,10 @@ const columnBlogs = computed(() => {
   const cols = Array.from({ length: columns.value }, () => []);
   const itemsPerColumn = Math.ceil(data.data.length / columns.value);
   
+  // 使用更高效的方式分配数据到列
   data.data.forEach((blog, index) => {
-    const columnIndex = Math.floor(index / itemsPerColumn);
-    if (columnIndex < columns.value) {
-      cols[columnIndex].push(blog);
-    }
+    const columnIndex = index % columns.value;
+    cols[columnIndex].push(blog);
   });
   
   return cols;
@@ -486,306 +483,306 @@ watch(() => data.data, () => {
 
 <template>
   <div class="theme-transition">
-  <div :style="{ transform: `translateY(-${scrollY}px)` }" class="background-container" style="z-index: 3">
-    <h1 ref="text" class="msg" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></h1>
-    <div class="background-image"></div>
-    <h1>
-      <el-icon
-          class="arrow-down animate-arrow"
-          style="position: absolute; top: 80%; left: 50%; transform: translate(-50%, -50%); font-size: 4rem; color: white"
-      >
-        <ArrowDownBold/>
-      </el-icon>
-    </h1>
-  </div>
+    <div :style="{ transform: `translateY(-${scrollY}px)` }" class="background-container" style="z-index: 3">
+      <h1 ref="text" class="msg" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);"></h1>
+      <div class="background-image"></div>
+      <h1>
+        <el-icon
+            class="arrow-down animate-arrow"
+            style="position: absolute; top: 80%; left: 50%; transform: translate(-50%, -50%); font-size: 4rem; color: white"
+        >
+          <ArrowDownBold/>
+        </el-icon>
+      </h1>
+    </div>
 
 
-  <el-container id="left-my" style="margin-top: 3%;">
+    <el-container id="left-my" style="margin-top: 3%;">
 
-    <el-header id="top-mains" :class="{ 'hidden': isHeaderHidden }"
+      <el-header id="top-mains" :class="{ 'hidden': isHeaderHidden }"
 
-               :style="{ 'background-color': headerBackgroundColor }" style="padding-right: 0;padding-left: 0">
-      <transition name="fade">
-        <el-menu
-            class="el-menu-demo"
-            mode="horizontal">
-
-
-          <h1 style="display: flex; justify-content: center; align-items: center; margin: 0;">
-            <router-link style="text-decoration: none;" to="/">Exp1oit Blog</router-link>
-          </h1>
+                 :style="{ 'background-color': headerBackgroundColor }" style="padding-right: 0;padding-left: 0">
+        <transition name="fade">
+          <el-menu
+              class="el-menu-demo"
+              mode="horizontal">
 
 
-          <!-- Autocomplete Centered -->
-          <el-autocomplete v-model="state"
-                           :fetch-suggestions="querySearchAsync"
-                           placeholder="搜索你感兴趣的"
-                           style="margin-right: auto;margin-left: auto;margin-top: auto;margin-bottom: auto;"
-                           @select="handleSelect"
-          />
+            <h1 style="display: flex; justify-content: center; align-items: center; margin: 0;">
+              <router-link style="text-decoration: none;" to="/">Exp1oit Blog</router-link>
+            </h1>
 
-          <el-switch
-              v-model="isDark"
-              inline-prompt
-              :active-icon="Moon"
-              :inactive-icon="Sunny"
-              @change="toggleDarkMode"
-          />
 
-          <el-menu-item index="3">
-            <router-link style="text-decoration: none;" to="/about-me">关于我</router-link>
-          </el-menu-item>
+            <!-- Autocomplete Centered -->
+            <el-autocomplete v-model="state"
+                             :fetch-suggestions="querySearchAsync"
+                             placeholder="搜索你感兴趣的"
+                             style="margin-right: auto;margin-left: auto;margin-top: auto;margin-bottom: auto;"
+                             @select="handleSelect"
+            />
 
-          <el-sub-menu index="5">
-            <template #title>共享API接口</template>
-            <el-menu-item index="5-1">
-              <router-link style="text-decoration: none;" to="/api/bing-wallpaper">API壁纸</router-link>
+            <el-switch
+                v-model="isDark"
+                inline-prompt
+                :active-icon="Moon"
+                :inactive-icon="Sunny"
+                @change="toggleDarkMode"
+            />
+
+            <el-menu-item index="3">
+              <router-link style="text-decoration: none;" to="/about-me">关于我</router-link>
             </el-menu-item>
-          </el-sub-menu>
 
-          <el-sub-menu index="4">
-            <template #title>
-              {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
-            </template>
-            <router-link style="text-decoration:none" to="/user-profile">
-              <el-menu-item v-if="isLoggedIn" index="2-4-2">
-                个人资料
+            <el-sub-menu index="5">
+              <template #title>共享API接口</template>
+              <el-menu-item index="5-1">
+                <router-link style="text-decoration: none;" to="/api/bing-wallpaper">API壁纸</router-link>
               </el-menu-item>
-            </router-link>
-            <router-link style="text-decoration:none" to="/reg">
-              <el-menu-item index="2-4-1">
-                注册
-              </el-menu-item>
-            </router-link>
-            <router-link style="text-decoration:none" to="/login">
-              <el-menu-item index="2-4-1">登录
-              </el-menu-item>
-            </router-link>
-          </el-sub-menu>
+            </el-sub-menu>
 
-        </el-menu>
-      </transition>
-    </el-header>
+            <el-sub-menu index="4">
+              <template #title>
+                {{ isLoggedIn ? `你好：${usernames}` : '你还未登录' }}
+              </template>
+              <router-link style="text-decoration:none" to="/user-profile">
+                <el-menu-item v-if="isLoggedIn" index="2-4-2">
+                  个人资料
+                </el-menu-item>
+              </router-link>
+              <router-link style="text-decoration:none" to="/reg">
+                <el-menu-item index="2-4-1">
+                  注册
+                </el-menu-item>
+              </router-link>
+              <router-link style="text-decoration:none" to="/login">
+                <el-menu-item index="2-4-1">登录
+                </el-menu-item>
+              </router-link>
+            </el-sub-menu>
 
-    <!--个人介绍卡片-->
-    <!--    文章介绍卡片-->
+          </el-menu>
+        </transition>
+      </el-header>
+      <IntersectingLines />
+      <!--个人介绍卡片-->
+      <!--    文章介绍卡片-->
 
-    <el-row :gutter="10" style=" justify-content: center; max-width: 100% ">
-      <el-col :lg="4" :md="6" :sm="24" :xl="3" class="hidden-lg-and-down;" xs="24">
-        <el-card class="wow animate__bounce bounceInLeft box-card" data-wow-duration="2s">
-          <div style="padding: 14px">
-            <h1>Exp1oit</h1>
-            <h1></h1>
-          </div>
-          <el-divider/>
-          <h4>联系我</h4>
-          <el-container id="svg-icon">
-            <a href="https://github.com/Eitsxiaozhai" rel="noopener noreferrer" target="_blank">
-              <svg class="bi bi-github" fill="currentColor" height="30" viewBox="0 0 16 16"
+      <el-row :gutter="10" style=" justify-content: center; max-width: 100% ">
+        <el-col :lg="4" :md="6" :sm="24" :xl="3" class="hidden-lg-and-down;" xs="24">
+          <el-card class="wow animate__bounce bounceInLeft box-card" data-wow-duration="2s">
+            <div style="padding: 14px">
+              <h1>Exp1oit</h1>
+              <h1></h1>
+            </div>
+            <el-divider/>
+            <h4>联系我</h4>
+            <el-container id="svg-icon">
+              <a href="https://github.com/Eitsxiaozhai" rel="noopener noreferrer" target="_blank">
+                <svg class="bi bi-github" fill="currentColor" height="30" viewBox="0 0 16 16"
+                     width="30" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                      d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                </svg>
+              </a>
+              <svg class="bi bi-envelope" fill="currentColor" height="30" viewBox="0 0 16 16" width="30"
+                   xmlns="http://www.w3.org/2000/svg" @click="sendEmail">
+                <path
+                    d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+              </svg>
+              <svg class="bi bi-wechat" fill="currentColor" height="30" viewBox="0 0 16 16"
                    width="30" xmlns="http://www.w3.org/2000/svg">
                 <path
-                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+                    d="M11.176 14.429c-2.665 0-4.826-1.8-4.826-4.018 0-2.22 2.159-4.02 4.824-4.02S16 8.191 16 10.411c0 1.21-.65 2.301-1.666 3.036a.324.324 0 0 0-.12.366l.218.81a.616.616 0 0 1 .029.117.166.166 0 0 1-.162.162.177.177 0 0 1-.092-.03l-1.057-.61a.519.519 0 0 0-.256-.074.509.509 0 0 0-.142.021 5.668 5.668 0 0 1-1.576.22ZM9.064 9.542a.647.647 0 1 0 .557-1 .645.645 0 0 0-.646.647.615.615 0 0 0 .09.353Zm3.232.001a.646.646 0 1 0 .546-1 .645.645 0 0 0-.644.644.627.627 0 0 0 .098.356Z"/>
+                <path
+                    d="M0 6.826c0 1.455.781 2.765 2.001 3.656a.385.385 0 0 1 .143.439l-.161.6-.1.373a.499.499 0 0 0-.032.14.192.192 0 0 0 .193.193c.039 0 .077-.01.111-.029l1.268-.733a.622.622 0 0 1 .308-.088c.058 0 .116.009.171.025a6.83 6.83 0 0 0 1.625.26 4.45 4.45 0 0 1-.177-1.251c0-2.936 2.785-5.02 5.824-5.02.05 0 .1 0 .15.002C10.587 3.429 8.392 2 5.796 2 2.596 2 0 4.16 0 6.826Zm4.632-1.555a.77.77 0 1 1-1.54 0 .77.77 0 0 1 1.54 0Zm3.875 0a.77.77 0 1 1-1.54 0 .77.77 0 0 1 1.54 0Z"/>
               </svg>
-            </a>
-            <svg class="bi bi-envelope" fill="currentColor" height="30" viewBox="0 0 16 16" width="30"
-                 xmlns="http://www.w3.org/2000/svg" @click="sendEmail">
-              <path
-                  d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
-            </svg>
-            <svg class="bi bi-wechat" fill="currentColor" height="30" viewBox="0 0 16 16"
-                 width="30" xmlns="http://www.w3.org/2000/svg">
-              <path
-                  d="M11.176 14.429c-2.665 0-4.826-1.8-4.826-4.018 0-2.22 2.159-4.02 4.824-4.02S16 8.191 16 10.411c0 1.21-.65 2.301-1.666 3.036a.324.324 0 0 0-.12.366l.218.81a.616.616 0 0 1 .029.117.166.166 0 0 1-.162.162.177.177 0 0 1-.092-.03l-1.057-.61a.519.519 0 0 0-.256-.074.509.509 0 0 0-.142.021 5.668 5.668 0 0 1-1.576.22ZM9.064 9.542a.647.647 0 1 0 .557-1 .645.645 0 0 0-.646.647.615.615 0 0 0 .09.353Zm3.232.001a.646.646 0 1 0 .546-1 .645.645 0 0 0-.644.644.627.627 0 0 0 .098.356Z"/>
-              <path
-                  d="M0 6.826c0 1.455.781 2.765 2.001 3.656a.385.385 0 0 1 .143.439l-.161.6-.1.373a.499.499 0 0 0-.032.14.192.192 0 0 0 .193.193c.039 0 .077-.01.111-.029l1.268-.733a.622.622 0 0 1 .308-.088c.058 0 .116.009.171.025a6.83 6.83 0 0 0 1.625.26 4.45 4.45 0 0 1-.177-1.251c0-2.936 2.785-5.02 5.824-5.02.05 0 .1 0 .15.002C10.587 3.429 8.392 2 5.796 2 2.596 2 0 4.16 0 6.826Zm4.632-1.555a.77.77 0 1 1-1.54 0 .77.77 0 0 1 1.54 0Zm3.875 0a.77.77 0 1 1-1.54 0 .77.77 0 0 1 1.54 0Z"/>
-            </svg>
-          </el-container>
+            </el-container>
 
-          <el-divider/>
-          <h4>本站技术以及框架</h4>
-          <el-timeline>
-            <el-timeline-item>
-              Fastapi
-            </el-timeline-item>
-            <el-timeline-item>
-              Celery
-            </el-timeline-item>
-            <el-timeline-item>
-              Vue3+Vue2
-            </el-timeline-item>
-          </el-timeline>
-          <el-divider/>
-        </el-card>
+            <el-divider/>
+            <h4>本站技术以及框架</h4>
+            <el-timeline>
+              <el-timeline-item>
+                Fastapi
+              </el-timeline-item>
+              <el-timeline-item>
+                Celery
+              </el-timeline-item>
+              <el-timeline-item>
+                Vue3+Vue2
+              </el-timeline-item>
+            </el-timeline>
+            <el-divider/>
+          </el-card>
 
-        <el-card style="margin-top: 20px; position: sticky; top: 62px;">
-          <el-space direction="vertical">
-            <template #header>
-              <div class="card-header">
-                <span>最多阅读文章</span>
-              </div>
-            </template>
-            <div v-for="o in 4" :key="o" class="text item">{{ '这个文章的测试标题为hahahahha ' + o }}</div>
-          </el-space>
-          <el-divider/>
-          <el-carousel iindicator-position="none">
-            <el-carousel-item v-for="blog in data.data" :key="blog.BlogId">
-              <h3 justify="center" text="2xl"></h3>
-              <img id="blog-img" :src="blog.BlogIntroductionPicture" alt="">
-            </el-carousel-item>
-          </el-carousel>
-        </el-card>
-      </el-col>
-
-      <transition name="el-fade-in-fast">
-
-        <el-col :lg="12" :md="12" :sm="24" :xl="10" :xs="24" class="maincaretest">
-          <div class="content-container">
-            <el-main id="maincare">
-              <div class="masonry-grid" ref="blogGrid">
-                <div 
-                  v-for="(column, columnIndex) in columnBlogs" 
-                  :key="columnIndex" 
-                  class="masonry-column"
-                >
-                  <div 
-                    v-for="blog in column" 
-                    :key="blog.BlogId" 
-                    class="masonry-item"
-                  >
-                    <router-link :to="`/blog/${blog.BlogId}`" style="text-decoration: none" target="_blank">
-                      <el-card 
-                        class="blog-card wow animate__bounce bounceInDown" 
-                        data-wow-duration="2s" 
-                        shadow="hover"
-                      >
-                        <div class="blog-card-content">
-                          <div class="blog-image-container">
-                            <img 
-                              class="blog-image" 
-                              :src="blog.BlogIntroductionPicture" 
-                              alt="图像描述"
-                            >
-                          </div>
-                          <div class="blog-info">
-                            <h2 class="blog-title">{{ blog.title }}</h2>
-                            <div class="blog-meta">
-                              <span class="author">
-                                <el-icon><User /></el-icon>
-                                {{ blog.author }}
-                              </span>
-                              <span class="date">
-                                <el-icon><Calendar /></el-icon>
-                                {{ blog.created_at }}
-                              </span>
-                            </div>
-                            <div class="blog-tags">
-                              <el-tag 
-                                v-for="(tag, index) in blog.tag"
-                                :key="index" 
-                                :type="getTagType(index)"
-                                class="tag-item"
-                              >
-                                {{ tag }}
-                              </el-tag>
-                            </div>
-                          </div>
-                        </div>
-                      </el-card>
-                    </router-link>
-                  </div>
+          <el-card style="margin-top: 20px; position: sticky; top: 62px;">
+            <el-space direction="vertical">
+              <template #header>
+                <div class="card-header">
+                  <span>最多阅读文章</span>
                 </div>
-              </div>
-              <div class="bt_container" style="display: flex; justify-content: center;">
-                <el-button
-                  v-if="data.currentPage < data.totalPages && !loading"
-                  type="primary"
-                  @click="loadMoreCards"
-                >
-                  加载更多
-                </el-button>
-                <el-button
-                  v-else-if="loading"
-                  type="primary"
-                  :loading="true"
-                >
-                  加载中...
-                </el-button>
-                <p v-else-if="data.data.length === 0">暂无文章</p>
-                <p v-else>没有更多文章了</p>
-              </div>
-            </el-main>
-          </div>
+              </template>
+              <div v-for="o in 4" :key="o" class="text item">{{ '这个文章的测试标题为hahahahha ' + o }}</div>
+            </el-space>
+            <el-divider/>
+            <el-carousel iindicator-position="none">
+              <el-carousel-item v-for="blog in data.data" :key="blog.BlogId">
+                <h3 justify="center" text="2xl"></h3>
+                <img id="blog-img" :src="blog.BlogIntroductionPicture" alt="">
+              </el-carousel-item>
+            </el-carousel>
+          </el-card>
         </el-col>
 
-      </transition>
+        <transition name="el-fade-in-fast">
 
-
-      <el-col id="left2" :lg="5" :md="6" :sm="24" :xl="3" :xs="24">
-        <div style="position: sticky; top: 62px;">
-
-          <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
-            文章分类
-
-          </el-card>
-
-          <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
-            资源链接
-          </el-card>
-
-          <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
-            文章标签
-            <div class="flex gap-5">
-              <el-tag type="primary">Tag 1</el-tag>
-              <el-tag type="success">Tag 2</el-tag>
-              <el-tag type="info">Tag 3</el-tag>
-              <el-tag type="warning">Tag 4</el-tag>
-              <el-tag type="danger">Tag 5</el-tag>
+          <el-col :lg="12" :md="12" :sm="24" :xl="10" :xs="24" class="maincaretest">
+            <div class="content-container">
+              <el-main id="maincare">
+                <div class="masonry-grid" ref="blogGrid">
+                  <div 
+                    v-for="(column, columnIndex) in columnBlogs" 
+                    :key="columnIndex" 
+                    class="masonry-column"
+                  >
+                    <div 
+                      v-for="blog in column" 
+                      :key="blog.BlogId" 
+                      class="masonry-item"
+                    >
+                      <router-link :to="`/blog/${blog.BlogId}`" style="text-decoration: none" target="_blank">
+                        <el-card 
+                          class="blog-card wow animate__bounce bounceInDown" 
+                          data-wow-duration="2s" 
+                          shadow="hover"
+                        >
+                          <div class="blog-card-content">
+                            <div class="blog-image-container">
+                              <img 
+                                class="blog-image" 
+                                :src="blog.BlogIntroductionPicture" 
+                                alt="图像描述"
+                              >
+                            </div>
+                            <div class="blog-info">
+                              <h2 class="blog-title">{{ blog.title }}</h2>
+                              <div class="blog-meta">
+                                <span class="author">
+                                  <el-icon><User /></el-icon>
+                                  {{ blog.author }}
+                                </span>
+                                <span class="date">
+                                  <el-icon><Calendar /></el-icon>
+                                  {{ blog.created_at }}
+                                </span>
+                              </div>
+                              <div class="blog-tags">
+                                <el-tag 
+                                  v-for="(tag, index) in blog.tag"
+                                  :key="index" 
+                                  :type="getTagType(index)"
+                                  class="tag-item"
+                                >
+                                  {{ tag }}
+                                </el-tag>
+                              </div>
+                            </div>
+                          </div>
+                        </el-card>
+                      </router-link>
+                    </div>
+                  </div>
+                </div>
+                <div class="bt_container" style="display: flex; justify-content: center;">
+                  <el-button
+                    v-if="data.currentPage < data.totalPages && !loading"
+                    type="primary"
+                    @click="loadMoreCards"
+                  >
+                    加载更多
+                  </el-button>
+                  <el-button
+                    v-else-if="loading"
+                    type="primary"
+                    :loading="true"
+                  >
+                    加载中...
+                  </el-button>
+                  <p v-else-if="data.data.length === 0">暂无文章</p>
+                  <p v-else>没有更多文章了</p>
+                </div>
+              </el-main>
             </div>
-          </el-card>
+          </el-col>
 
-          <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
+        </transition>
 
-            <el-row>
-              <el-col :span="12">
-                <el-statistic :value="totalUV" title="独立访客数"/>
-              </el-col>
-              <el-col :span="12">
-                <el-statistic :value="totalPV" title="页面浏览量"/>
-              </el-col>
-            </el-row>
-          </el-card>
+
+        <el-col id="left2" :lg="5" :md="6" :sm="24" :xl="3" :xs="24">
+          <div style="position: sticky; top: 62px;">
+
+            <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
+              文章分类
+
+            </el-card>
+
+            <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
+              资源链接
+            </el-card>
+
+            <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
+              文章标签
+              <div class="flex gap-5">
+                <el-tag type="primary">Tag 1</el-tag>
+                <el-tag type="success">Tag 2</el-tag>
+                <el-tag type="info">Tag 3</el-tag>
+                <el-tag type="warning">Tag 4</el-tag>
+                <el-tag type="danger">Tag 5</el-tag>
+              </div>
+            </el-card>
+
+            <el-card class="wow animate__bounce animate__rollIn box-card" data-wow-duration="2s" style="margin-top: 20px">
+
+              <el-row>
+                <el-col :span="12">
+                  <el-statistic :value="totalUV" title="独立访客数"/>
+                </el-col>
+                <el-col :span="12">
+                  <el-statistic :value="totalPV" title="页面浏览量"/>
+                </el-col>
+              </el-row>
+            </el-card>
+          </div>
+        </el-col>
+        <!--    文章介绍卡片-->
+      </el-row>
+
+      <el-footer style="margin-top: 10%;">
+        <div id="footer">
+          <el-row class="footer-content">
+            <el-col :span="6">
+              <h4>联系我</h4>
+              <p>Email: watch.dog@qq.com</p>
+            </el-col>
+          </el-row>
+          <el-row class="footer-bottom">
+            <el-col :span="12">
+              <p>&copy; 2023 My Blog. All Rights Reserved.</p>
+            </el-col>
+            <el-col :span="12">
+              <p>
+                建站时间:
+                {{ timeElapsed.years }}年
+                {{ timeElapsed.months }}月
+                {{ timeElapsed.days }}天
+                {{ timeElapsed.hours }}小时
+                {{ timeElapsed.minutes }}分钟
+                {{ timeElapsed.seconds }}秒
+              </p>
+            </el-col>
+          </el-row>
         </div>
-      </el-col>
-      <!--    文章介绍卡片-->
-    </el-row>
-
-    <el-footer style="margin-top: 10%;">
-      <div id="footer">
-        <el-row class="footer-content">
-          <el-col :span="6">
-            <h4>联系我</h4>
-            <p>Email: watch.dog@qq.com</p>
-          </el-col>
-        </el-row>
-        <el-row class="footer-bottom">
-          <el-col :span="12">
-            <p>&copy; 2023 My Blog. All Rights Reserved.</p>
-          </el-col>
-          <el-col :span="12">
-            <p>
-              建站时间:
-              {{ timeElapsed.years }}年
-              {{ timeElapsed.months }}月
-              {{ timeElapsed.days }}天
-              {{ timeElapsed.hours }}小时
-              {{ timeElapsed.minutes }}分钟
-              {{ timeElapsed.seconds }}秒
-            </p>
-          </el-col>
-        </el-row>
-      </div>
-    </el-footer>
-  </el-container>
+      </el-footer>
+    </el-container>
   </div>
 </template>
 

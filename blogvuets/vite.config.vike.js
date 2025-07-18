@@ -6,11 +6,12 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 
-// https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
         vue(),
-        vike(),
+        vike({
+            prerender: true // 启用预渲染以提高性能
+        }),
         AutoImport({
             resolvers: [ElementPlusResolver()],
         }),
@@ -26,11 +27,8 @@ export default defineConfig({
     server: {
         host: '0.0.0.0'
     },
+    // Vike特定配置
     ssr: {
-        noExternal: ['axios', 'vue-router', 'vuex', 'element-plus', /^@element-plus/]
-    },
-    define: {
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
-        'global': 'globalThis'
+        noExternal: ['element-plus', 'undraw-ui']
     }
-})
+}) 
