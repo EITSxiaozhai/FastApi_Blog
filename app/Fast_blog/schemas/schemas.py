@@ -130,10 +130,11 @@ class CommentDTO(BaseModel):
 class BlogCreate(BaseModel):
     title: str
     content: str
+    description: Optional[str] = None  # 添加可选的 description 字段
     BlogIntroductionPicture: str
     author: str
+    admin_id: int
+    tags: List[str]
     PublishStatus: bool = False
     NumberViews: int = 0
     NumberLikes: int = 0
-    admin_id: int
-    tags: List[str] = []
