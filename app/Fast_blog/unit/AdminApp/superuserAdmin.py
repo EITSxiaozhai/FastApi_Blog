@@ -25,6 +25,7 @@ from Fast_blog.schemas.schemas import AdminUserModel
 from Fast_blog.schemas.schemas import BlogCreate, BlogTagModel
 from Fast_blog.schemas.schemas import UserCredentials
 from Fast_blog.unit.Blog_app.BlogApi import uploadoss
+from Fast_blog.unit.tools.gemini_tools import generate_blog_description
 
 AdminApi = APIRouter()
 
@@ -772,6 +773,12 @@ async def AdminBlogCreate(blog_create: BlogCreate):
             
             if not admin_exists:
                 return {"code": 40001, "message": "管理员ID不存在"}
+                
+            # 使用 Gemini API 生成文章描述
+            content_str = content.decode('utf-8')
+            description = await generate_blog_description(content_str)
+            if description:
+                blog_create.description = description
                 
             # 提取标签信息
             tags = blog_create.tags
