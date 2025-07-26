@@ -11,3 +11,6 @@ google.json
 logstash.yml
 alembic.ini
 *.pyc
+.idea
+.vscode
+.DS_Store
