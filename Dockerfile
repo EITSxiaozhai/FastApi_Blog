@@ -1,4 +1,4 @@
-FROM tiangolo/uvicorn-gunicorn-fastapi:python3.11
+FROM docker.1ms.run/tiangolo/uvicorn-gunicorn-fastapi:python3.11
 COPY /requirements.txt /
 ARG Sql_URL
 RUN python -m pip install --upgrade pip

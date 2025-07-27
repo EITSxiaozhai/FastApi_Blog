@@ -10,10 +10,14 @@ services:
       - "--entrypoints.web.address=:80"
       # 若需要 HTTPS，可添加 HTTPS 入口配置，例如：
       # - "--entrypoints.websecure.address=:443"
+      # 启用详细日志配置
+      - "--log.level=DEBUG"
+      - "--accesslog=true"
+      - "--accesslog.format=json"
+      - "--log.format=json"
+      - "--api.dashboard=true"
     ports:
       - "20000:80"
-      # 如果需要 HTTPS则取消下面注释
-      # - "443:443"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     deploy:
@@ -25,7 +29,7 @@ services:
 
   # db-migration 服务：执行数据库迁移（alembic upgrade head）
   db-migration:
-    image: sggc.exploit-db.xyz:10000/fastapi_blog/fastapi:latest
+    image: harbor.exploit-db.xyz/detvron-img/fastapi-blog:latest
     command: ["alembic", "upgrade", "head"]
     environment:
       - DB_USERNAME=${DB_USERNAME}
@@ -45,7 +49,7 @@ services:
 
   # fastapi 服务：业务服务，由 Traefik 根据标签进行路由
   fastapi:
-    image: sggc.exploit-db.xyz:10000/fastapi_blog/fastapi:latest
+    image: harbor.exploit-db.xyz/detvron-img/fastapi-blog:latest
     # 不直接发布端口，由 Traefik 做入口负载均衡
     environment:
       - ADMIN_RECAPTCHA_SECRET_KEY=${ADMIN_RECAPTCHA_SECRET_KEY}
