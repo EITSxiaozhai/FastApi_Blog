@@ -14,3 +14,4 @@ alembic.ini
 .idea
 .vscode
 .DS_Store
+/alembic
