@@ -1,5 +1,6 @@
 from logging.config import fileConfig
 from urllib import parse
+import os
 
 import sqlalchemy_utils
 from sqlalchemy import engine_from_config
@@ -14,6 +15,28 @@ from os.path import abspath, dirname
 
 sys.path.append(dirname(dirname(abspath(__file__))))
 config = context.config
+
+# 优先从环境变量注入 sqlalchemy.url，避免在镜像中硬编码
+# 支持两种方式：
+# 1) 直接提供 DATABASE_URL（推荐用于迁移，使用同步驱动）
+# 2) 提供 DB_USERNAME/DB_PASSWORD/DB_HOSTNAME/DB_PORT/DB_NAME 组合（MySQL示例）
+database_url = os.getenv("DATABASE_URL")
+if not database_url:
+    db_username = os.getenv("DB_USERNAME")
+    db_password = os.getenv("DB_PASSWORD")
+    db_hostname = os.getenv("DB_HOSTNAME")
+    db_port = os.getenv("DB_PORT")
+    db_name = os.getenv("DB_NAME")
+
+    if all([db_username, db_password, db_hostname, db_port, db_name]):
+        # Alembic 迁移应使用同步驱动，这里使用已安装的 mysqlclient (mysqldb)
+        safe_password = parse.quote(db_password.encode('utf-8'))
+        database_url = (
+            f"mysql+mysqldb://{db_username}:{safe_password}@{db_hostname}:{db_port}/{db_name}?charset=utf8mb4"
+        )
+
+if database_url:
+    config.set_main_option("sqlalchemy.url", database_url)
 
 
 # Interpret the config file for Python logging.
