@@ -116,12 +116,14 @@
                 class="article-card"
                 @click="goToArticle(article.id)">
                 
-                <!-- 文章封面图片 -->
-                <div class="article-image-container" v-if="article.BlogIntroductionPicture">
+                <!-- 文章封面图片（带兜底） -->
+                <div class="article-image-container">
                   <img 
-                    :src="article.BlogIntroductionPicture" 
+                    :src="getArticleCover(article)" 
                     :alt="article.title"
                     class="article-image"
+                    loading="lazy"
+                    decoding="async"
                     @error="handleImageError"
                   />
                 </div>
@@ -275,7 +277,7 @@
             </template>
             <div class="author-info">
               <div class="author-avatar">
-                <el-avatar :size="80" src="/avatar.png">Exp1oit</el-avatar>
+                <el-avatar :size="80" src="/static/img/normal.webp">Exp1oit</el-avatar>
               </div>
               <div class="author-desc">
                 <h4>Exp1oit</h4>
@@ -493,11 +495,21 @@ const goToWallpaperAPI = () => {
   window.location.href = '/api/bing-wallpaper'
 }
 
-// 处理图片加载错误
+// 文章封面兜底图（使用本地静态资源，避免外链不可用）
+const defaultCover = '/static/img/blindfold.webp'
+
+// 获取文章封面（优先后端字段，缺失则返回兜底图）
+const getArticleCover = (article) => {
+  return article?.BlogIntroductionPicture || defaultCover
+}
+
+// 处理图片加载错误：替换为兜底图，避免布局塌陷
 const handleImageError = (event) => {
-  // 设置默认图片或隐藏图片容器
-  event.target.style.display = 'none'
-  event.target.parentElement.style.display = 'none'
+  const img = event?.target
+  if (!img) return
+  if (img.dataset && img.dataset.fallbackApplied === 'true') return
+  img.dataset.fallbackApplied = 'true'
+  img.src = defaultCover
 }
 
 // 获取标签类型
@@ -793,6 +805,7 @@ onBeforeUnmount(() => {
   line-height: 1.4;
   margin-bottom: 5px;
   display: -webkit-box;
+  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -882,6 +895,7 @@ onBeforeUnmount(() => {
   line-height: 1.4;
   margin-bottom: 3px;
   display: -webkit-box;
+  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -983,6 +997,7 @@ onBeforeUnmount(() => {
   line-height: 1.6;
   margin-bottom: 15px;
   display: -webkit-box;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -1075,17 +1090,16 @@ onBeforeUnmount(() => {
 .api-card {
   cursor: pointer;
   transition: all 0.3s ease;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
 }
 
 .api-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 .api-card .card-header {
-  color: white;
+  /* 继承默认文本色，保持与其他侧边栏卡片一致 */
+  color: inherit;
 }
 
 .api-info {
@@ -1102,7 +1116,7 @@ onBeforeUnmount(() => {
   justify-content: center;
   width: 60px;
   height: 60px;
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--hover-bg);
   border-radius: 50%;
 }
 
@@ -1111,13 +1125,11 @@ onBeforeUnmount(() => {
 }
 
 .api-desc h4 {
-  color: white;
   margin-bottom: 8px;
   font-size: 1.1rem;
 }
 
 .api-desc p {
-  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 12px;
   font-size: 0.9rem;
   line-height: 1.4;
@@ -1130,27 +1142,14 @@ onBeforeUnmount(() => {
   margin-bottom: 12px;
 }
 
-.api-features .el-tag {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-}
+/* 保持 Element Plus 默认 Tag 样式，无需额外覆盖 */
 
 .api-link {
   display: flex;
   justify-content: flex-end;
 }
 
-.api-link .el-button {
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-}
 
-.api-link .el-button:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
-}
 
 /* 这些样式已经在上面定义过了，移除重复定义 */
 
