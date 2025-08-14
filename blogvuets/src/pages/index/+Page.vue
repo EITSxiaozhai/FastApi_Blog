@@ -3,7 +3,7 @@
     <!-- 背景容器 -->
     <div class="background-container">
       <div class="background-image" :style="backgroundStyle"></div>
-      <div class="hero-content">
+      <div class="hero-content" :style="heroStyle">
         <h1 class="hero-title">{{ verse }}</h1>
         <div class="hero-subtitle">
           <p>探索技术 · 分享知识 · 记录成长</p>
@@ -299,6 +299,23 @@
         </aside>
       </div>
     </div>
+
+    <!-- 页脚（SSR 友好，不写入 App.vue） -->
+    <el-footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-left">
+          <span>© 2023–{{ currentYear }} Exp1oit</span>
+        </div>
+        <div class="footer-right">
+          <span>Powered by Vue 3 · Vike SSR · Element Plus · FastAPI</span>
+        </div>
+      </div>
+    </el-footer>
+
+    <!-- 固定在底部的滚动进度条（不跟随页脚移动） -->
+    <div class="scroll-progress-fixed" aria-hidden="true">
+      <div class="scroll-progress-bar-fixed" :style="progressStyle"></div>
+    </div>
   </div>
 </template>
 
@@ -365,6 +382,55 @@ const siteRuntime = reactive({
   minutes: 0
 })
 
+// 年份（SSR/CSR 通用）
+const currentYear = new Date().getFullYear()
+
+// 滚动过渡相关状态
+const scrollY = ref(0)
+const viewportHeight = ref(0)
+const documentHeight = ref(0)
+let scrollRafId = null
+
+const handleResize = () => {
+  viewportHeight.value = (typeof window !== 'undefined')
+    ? (window.innerHeight || document.documentElement.clientHeight || 1)
+    : 1
+  documentHeight.value = (typeof document !== 'undefined')
+    ? (document.documentElement.scrollHeight || (document.body && document.body.scrollHeight) || 0)
+    : 0
+}
+
+const handleScroll = () => {
+  const y = (typeof window !== 'undefined')
+    ? (window.scrollY || window.pageYOffset || 0)
+    : 0
+  if (scrollRafId) cancelAnimationFrame(scrollRafId)
+  scrollRafId = requestAnimationFrame(() => {
+    scrollY.value = y
+  })
+}
+
+const scrollProgress = computed(() => {
+  const vh = viewportHeight.value || 1
+  const p = scrollY.value / vh
+  return Math.max(0, Math.min(1, p))
+})
+
+// 页面整体滚动百分比（用于底部进度条）
+const pageScrollPercent = computed(() => {
+  const dh = documentHeight.value || 1
+  const vh = viewportHeight.value || 1
+  const maxScroll = Math.max(1, dh - vh)
+  const p = scrollY.value / maxScroll
+  return Math.max(0, Math.min(1, p))
+})
+
+const progressStyle = computed(() => ({
+  width: `${Math.round(pageScrollPercent.value * 100)}%`
+}))
+
+// 保持阅读进度条始终显示（不再根据接近底部隐藏）
+
 // 分类数据
 const categories = computed(() => {
   const categoryMap = new Map()
@@ -413,12 +479,34 @@ const filteredArticles = computed(() => {
   return articles.value.filter(article => article.category === currentFilter.value)
 })
 
-// 背景图片样式
-const backgroundStyle = computed(() => ({
-  backgroundImage: props.wallpaper 
-    ? `url(${props.wallpaper})` 
+// 背景图片样式（随滚动过渡）
+const backgroundStyle = computed(() => {
+  const image = props.wallpaper
+    ? `url(${props.wallpaper})`
     : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-}))
+
+  const p = scrollProgress.value
+  const scale = 1 + p * 0.05
+  const translateY = p * 40 // 轻微视差
+  const opacity = 1 - p * 0.2
+  const blur = p * 2
+
+  return {
+    backgroundImage: image,
+    transform: `translateY(${translateY}px) scale(${scale})`,
+    filter: `blur(${blur}px)`,
+    opacity
+  }
+})
+
+// 标题区域随滚动渐隐/上移
+const heroStyle = computed(() => {
+  const p = scrollProgress.value
+  return {
+    transform: `translateY(${-p * 20}px)`,
+    opacity: String(1 - p * 0.5)
+  }
+})
 
 // 过滤方法
 const filterByCategory = (category) => {
@@ -587,12 +675,25 @@ onMounted(() => {
   // 更新运行时间
   updateSiteRuntime()
   runtimeTimer = setInterval(updateSiteRuntime, 60000) // 每分钟更新一次
+
+  // 初始化滚动与尺寸监听
+  handleResize()
+  handleScroll()
+  if (typeof window !== 'undefined') {
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleResize)
+  }
 })
 
 onBeforeUnmount(() => {
   if (runtimeTimer) {
     clearInterval(runtimeTimer)
   }
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('scroll', handleScroll)
+    window.removeEventListener('resize', handleResize)
+  }
+  if (scrollRafId) cancelAnimationFrame(scrollRafId)
 })
 </script>
 
@@ -600,6 +701,8 @@ onBeforeUnmount(() => {
 .home-page {
   width: 100%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .background-container {
@@ -688,6 +791,7 @@ onBeforeUnmount(() => {
   padding: 60px 20px;
   max-width: 1200px;
   margin: 0 auto;
+  flex: 1 0 auto;
 }
 
 .layout-container {
@@ -1197,4 +1301,64 @@ onBeforeUnmount(() => {
   justify-content: center;
   padding: 1rem 0;
 }
+
+/* 页脚样式 */
+.site-footer {
+  border-top: 1px solid #ebeef5;
+  background: #fff;
+  color: #606266;
+  padding: 20px;
+  height: 96px; /* 高度足够 */
+  display: flex;
+  align-items: center;
+  margin-top: auto; /* 让页脚贴住页面底部（内容不足时） */
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footer-left, .footer-right {
+  font-size: 13px;
+}
+
+/* 固定在底部的滚动进度条（不影响布局） */
+.scroll-progress-fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: transparent;
+  overflow: hidden;
+  z-index: 900; /* 低于可能的弹窗/抽屉 */
+}
+
+.scroll-progress-bar-fixed {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #409eff 0%, #67c23a 100%);
+  box-shadow: 0 0 6px rgba(64, 158, 255, 0.5);
+  transition: width 0.1s linear;
+}
 </style> 
+
+<style>
+/* 全局基础重置，确保顶部/底部无缝隙（SSR/CSR 通用） */
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* 确保页脚自然贴底且无额外外边距影响 */
+body {
+  background: #fff;
+}
+</style>
