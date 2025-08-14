@@ -1,10 +1,51 @@
 import { renderPage } from 'vike/server'
+import fs from 'node:fs'
+import path from 'node:path'
 
 export default async function handler(req, res) {
   const { url } = req
   const userAgent = req.headers['user-agent'] || ''
   
   try {
+    // 静态资源直出（在函数内兜底提供），避免静态路由未命中导致 404/500
+    if (
+      url.startsWith('/assets/') ||
+      url.startsWith('/entries/') ||
+      url.startsWith('/static/') ||
+      url === '/favicon.ico'
+    ) {
+      const filePathCandidates = [
+        path.join(process.cwd(), 'dist', 'client', url),
+        path.join(process.cwd(), 'dist', 'client', url.replace(/^\/+/, '')),
+        // 某些构建会把资源放到 dist/client/client 下
+        path.join(process.cwd(), 'dist', 'client', 'client', url.replace(/^\/+/, ''))
+      ]
+      let foundPath = null
+      for (const p of filePathCandidates) {
+        if (fs.existsSync(p) && fs.statSync(p).isFile()) {
+          foundPath = p
+          break
+        }
+      }
+      if (foundPath) {
+        const ext = path.extname(foundPath).toLowerCase()
+        const contentType =
+          ext === '.js' ? 'application/javascript; charset=utf-8' :
+          ext === '.css' ? 'text/css; charset=utf-8' :
+          ext === '.png' ? 'image/png' :
+          ext === '.webp' ? 'image/webp' :
+          ext === '.ico' ? 'image/x-icon' :
+          ext === '.gif' ? 'image/gif' :
+          ext === '.svg' ? 'image/svg+xml' :
+          'application/octet-stream'
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
+        res.setHeader('Content-Type', contentType)
+        fs.createReadStream(foundPath).pipe(res)
+        return
+      }
+      // 找不到时继续交给 SSR（以便返回 404 页）
+    }
+
     const pageContextInit = {
       urlOriginal: url,
       userAgent
