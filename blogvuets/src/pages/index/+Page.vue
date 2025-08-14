@@ -109,11 +109,11 @@
               </div>
             </div>
             
-            <div class="articles-grid">
+            <div class="articles-grid" ref="articlesGridRef">
               <el-card 
-                v-for="article in filteredArticles" 
+                v-for="(article, index) in filteredArticles" 
                 :key="article.id"
-                class="article-card"
+                :class="['article-card', { featured: index === 0 && hasThreeCols }]"
                 @click="goToArticle(article.id)">
                 
                 <!-- 文章封面图片（带兜底） -->
@@ -126,16 +126,17 @@
                     decoding="async"
                     @error="handleImageError"
                   />
+                  <div class="image-overlay">
+                    <el-tag :type="getTagType(article.category)" size="small" effect="dark">
+                      {{ article.category }}
+                    </el-tag>
+                  </div>
                 </div>
                 
                 <template #header>
                   <div class="article-header">
                     <span class="article-title">{{ article.title }}</span>
-                    <div class="article-meta">
-                      <el-tag :type="getTagType(article.category)" size="small">
-                        {{ article.category }}
-                      </el-tag>
-                    </div>
+                    <div class="article-meta"></div>
                   </div>
                 </template>
                 
@@ -281,7 +282,7 @@
               </div>
               <div class="author-desc">
                 <h4>Exp1oit</h4>
-                <p>全栈开发者，热爱技术分享</p>
+                <p>运维开发工程师</p>
                 <div class="social-links">
                   <el-button link type="primary">
                     <el-icon><Message /></el-icon>
@@ -390,6 +391,8 @@ const scrollY = ref(0)
 const viewportHeight = ref(0)
 const documentHeight = ref(0)
 let scrollRafId = null
+const hasThreeCols = ref(false)
+const articlesGridRef = ref(null)
 
 const handleResize = () => {
   viewportHeight.value = (typeof window !== 'undefined')
@@ -398,6 +401,17 @@ const handleResize = () => {
   documentHeight.value = (typeof document !== 'undefined')
     ? (document.documentElement.scrollHeight || (document.body && document.body.scrollHeight) || 0)
     : 0
+  // 检测当前栅格列数（当为3列时才让首卡跨两列，避免把右侧单列挤窄）
+  if (articlesGridRef.value) {
+    try {
+      const computedStyle = window.getComputedStyle(articlesGridRef.value)
+      const template = computedStyle.getPropertyValue('grid-template-columns') || ''
+      const colCount = template.split(' ').filter(Boolean).length
+      hasThreeCols.value = colCount >= 3
+    } catch (e) {
+      hasThreeCols.value = false
+    }
+  }
 }
 
 const handleScroll = () => {
@@ -683,6 +697,8 @@ onMounted(() => {
     window.addEventListener('scroll', handleScroll, { passive: true })
     window.addEventListener('resize', handleResize)
   }
+  // 初始计算一次列数
+  handleResize()
 })
 
 onBeforeUnmount(() => {
@@ -789,7 +805,7 @@ onBeforeUnmount(() => {
 
 .main-content {
   padding: 60px 20px;
-  max-width: 1200px;
+  max-width: 1440px;
   margin: 0 auto;
   flex: 1 0 auto;
 }
@@ -797,18 +813,29 @@ onBeforeUnmount(() => {
 .layout-container {
   display: flex;
   gap: 20px;
+  align-items: flex-start;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .left-sidebar {
-  flex: 1;
+  flex: 1.1;
+  position: sticky;
+  top: 90px;
+  align-self: flex-start;
+  height: max-content;
 }
 
 .center-content {
-  flex: 2;
+  flex: 3;
 }
 
 .right-sidebar {
-  flex: 1;
+  flex: 1.1;
+  position: sticky;
+  top: 90px;
+  align-self: flex-start;
+  height: max-content;
 }
 
 .sidebar-card {
@@ -1039,12 +1066,16 @@ onBeforeUnmount(() => {
   transition: all 0.3s ease;
   border-radius: 12px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .article-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
+
+.article-card.featured { grid-column: span 2; }
 
 /* 文章图片样式 */
 .article-image-container {
@@ -1057,6 +1088,7 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .article-image {
@@ -1069,6 +1101,10 @@ onBeforeUnmount(() => {
 
 .article-card:hover .article-image {
   transform: scale(1.05);
+}
+
+.article-card.featured .article-image-container {
+  height: 300px;
 }
 
 /* 图片加载失败时的样式 */
@@ -1092,8 +1128,15 @@ onBeforeUnmount(() => {
   flex: 1;
 }
 
+.article-card.featured .article-title {
+  font-size: 1.15rem;
+}
+
 .article-content {
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .article-excerpt {
@@ -1110,6 +1153,7 @@ onBeforeUnmount(() => {
 .article-footer {
   border-top: 1px solid #f0f0f0;
   padding-top: 15px;
+  margin-top: auto;
 }
 
 .article-stats {
@@ -1257,6 +1301,13 @@ onBeforeUnmount(() => {
 
 /* 这些样式已经在上面定义过了，移除重复定义 */
 
+/* 封面图叠加信息 */
+.image-overlay {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+}
+
 /* 响应式设计 */
 @media (max-width: 768px) {
   .hero-title {
@@ -1278,10 +1329,23 @@ onBeforeUnmount(() => {
   
   .left-sidebar, .right-sidebar {
     flex: 1;
+    position: static;
+    height: auto;
   }
   
   .article-image-container {
     height: 150px;
+  }
+  
+  .article-card.featured {
+    grid-column: auto;
+  }
+}
+
+/* 桌面端强制两列布局 */
+@media (min-width: 1024px) {
+  .articles-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
