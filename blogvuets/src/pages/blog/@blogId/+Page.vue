@@ -1034,6 +1034,14 @@ pre code {
   color: #c5c8c6 !important;
 }
 
+  /* 文章内容图片适配容器，避免溢出 */
+  .blog-body img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+    margin: 10px auto !important;
+  }
+
 /* 行内代码 */
 code:not(pre code) {
   background-color: rgba(29, 31, 33, 0.8) !important;
