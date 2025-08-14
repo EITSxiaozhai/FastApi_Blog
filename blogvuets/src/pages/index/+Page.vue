@@ -116,6 +116,16 @@
                 class="article-card"
                 @click="goToArticle(article.id)">
                 
+                <!-- 文章封面图片 -->
+                <div class="article-image-container" v-if="article.BlogIntroductionPicture">
+                  <img 
+                    :src="article.BlogIntroductionPicture" 
+                    :alt="article.title"
+                    class="article-image"
+                    @error="handleImageError"
+                  />
+                </div>
+                
                 <template #header>
                   <div class="article-header">
                     <span class="article-title">{{ article.title }}</span>
@@ -225,6 +235,36 @@
             </div>
           </el-card>
 
+          <!-- API服务卡片 -->
+          <el-card class="sidebar-card api-card" @click="goToWallpaperAPI">
+            <template #header>
+              <div class="card-header">
+                <el-icon><Picture /></el-icon>
+                <span>壁纸API服务</span>
+              </div>
+            </template>
+            <div class="api-info">
+              <div class="api-icon">
+                <el-icon size="40" color="#409eff"><Picture /></el-icon>
+              </div>
+              <div class="api-desc">
+                <h4>Bing壁纸API</h4>
+                <p>获取必应每日精美壁纸，支持随机获取</p>
+                <div class="api-features">
+                  <el-tag size="small" type="success">免费使用</el-tag>
+                  <el-tag size="small" type="warning">每日更新</el-tag>
+                  <el-tag size="small" type="info">高清壁纸</el-tag>
+                </div>
+                <div class="api-link">
+                  <el-button type="primary" size="small" @click.stop="goToWallpaperAPI">
+                    <el-icon><Link /></el-icon>
+                    查看API文档
+                  </el-button>
+                </div>
+              </div>
+            </div>
+          </el-card>
+
           <!-- 个人信息卡片 -->
           <el-card class="sidebar-card">
             <template #header>
@@ -265,7 +305,8 @@ import { ref, reactive, onMounted, computed, onBeforeUnmount, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { 
   ArrowDown, View, User, Document, Search, Calendar, Collection, Clock,
-  DataAnalysis, TrendCharts, Monitor, Avatar, Message, ChatDotRound, Star
+  DataAnalysis, TrendCharts, Monitor, Avatar, Message, ChatDotRound, Star,
+  Picture, Link
 } from '@element-plus/icons-vue'
 // 导入API函数
 import { fetchBlogList, searchBlogs as apiSearchBlogs } from '@/api/vikeBlogs'
@@ -447,6 +488,18 @@ const goToArticle = (id) => {
   window.location.href = `/blog/${id}`
 }
 
+// 跳转到壁纸API页面
+const goToWallpaperAPI = () => {
+  window.location.href = '/api/bing-wallpaper'
+}
+
+// 处理图片加载错误
+const handleImageError = (event) => {
+  // 设置默认图片或隐藏图片容器
+  event.target.style.display = 'none'
+  event.target.parentElement.style.display = 'none'
+}
+
 // 获取标签类型
 const getTagType = (category) => {
   const types = ['primary', 'success', 'warning', 'danger', 'info']
@@ -507,7 +560,8 @@ const initMockData = () => {
       excerpt: '⚠️ 这是模拟数据，表示后端API连接失败。请检查FastAPI服务是否正常运行，以及API路径是否正确。',
       category: ['技术', 'Vue', 'SSR', 'Vike'][index % 4],
       views: Math.floor(Math.random() * 1000) + 100,
-      createdAt: new Date(Date.now() - index * 24 * 60 * 60 * 1000).toISOString()
+      createdAt: new Date(Date.now() - index * 24 * 60 * 60 * 1000).toISOString(),
+      BlogIntroductionPicture: `https://picsum.photos/400/200?random=${index + 1}` // 使用随机图片作为模拟数据
     }))
   }
 }
@@ -874,6 +928,38 @@ onBeforeUnmount(() => {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
+/* 文章图片样式 */
+.article-image-container {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 15px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.article-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  background: #f5f5f5;
+}
+
+.article-card:hover .article-image {
+  transform: scale(1.05);
+}
+
+/* 图片加载失败时的样式 */
+.article-image-container:empty::before {
+  content: '📷';
+  font-size: 2rem;
+  color: #ccc;
+}
+
 .article-header {
   display: flex;
   justify-content: space-between;
@@ -985,6 +1071,87 @@ onBeforeUnmount(() => {
   gap: 10px;
 }
 
+/* API卡片样式 */
+.api-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.api-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.api-card .card-header {
+  color: white;
+}
+
+.api-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 0;
+}
+
+.api-icon {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+}
+
+.api-desc {
+  flex: 1;
+}
+
+.api-desc h4 {
+  color: white;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+
+.api-desc p {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.api-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.api-features .el-tag {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.api-link {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.api-link .el-button {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+}
+
+.api-link .el-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
 /* 这些样式已经在上面定义过了，移除重复定义 */
 
 /* 响应式设计 */
@@ -1008,6 +1175,10 @@ onBeforeUnmount(() => {
   
   .left-sidebar, .right-sidebar {
     flex: 1;
+  }
+  
+  .article-image-container {
+    height: 150px;
   }
 }
 

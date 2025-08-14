@@ -13,6 +13,7 @@ export interface BlogPost {
   updatedAt: string
   views: number
   likes: number
+  BlogIntroductionPicture?: string // 博客封面图片
 }
 
 export interface BlogListResponse {
@@ -93,7 +94,8 @@ const transformBlogList = (backendData: BackendBlogListResponse, pageSize: numbe
         createdAt: item.created_at,
         updatedAt: item.created_at,
         views: generateViews(item.BlogId), // 根据BlogId生成模拟浏览量
-        likes: Math.floor(Math.random() * 20) + 5 // 生成随机点赞数
+        likes: Math.floor(Math.random() * 20) + 5, // 生成随机点赞数
+        BlogIntroductionPicture: item.BlogIntroductionPicture // 添加博客封面图片
       }
       console.log(`✅ 转换博客项目 ${item.BlogId}:`, {
         原始: { BlogId: item.BlogId, title: item.title, tag: item.tag },

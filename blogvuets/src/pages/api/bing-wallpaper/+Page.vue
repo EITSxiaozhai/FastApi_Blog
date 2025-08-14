@@ -26,7 +26,7 @@
       <h2>🎲 随机获取壁纸</h2>
       <div class="endpoint">
         <span class="method">GET</span>
-        <code>https://blogapi-traefik.exploit-db.xyz/api/views/blogs/bing-wallpaper/random=true</code>
+        <code>https://blogapi-traefik.exploit-db.xyz/api/views/blogs/bing-wallpaper?is_random=true</code>
       </div>
       <h3>说明</h3>
       <p>随机返回最近7天内的任意一张壁纸</p>
@@ -58,7 +58,7 @@ fetch('https://blogapi-traefik.exploit-db.xyz/api/views/blogs/bing-wallpaper')
   .catch(error => console.error('Error:', error));
 
 // 随机获取壁纸
-fetch('https://blogapi-traefik.exploit-db.xyz/api/views/blogs/bing-wallpaper/random=true')
+fetch('https://blogapi-traefik.exploit-db.xyz/api/views/blogs/bing-wallpaper?is_random=true')
   .then(response => response.json())
   .then(data => {
     console.log('随机壁纸:', data);
@@ -87,7 +87,7 @@ def get_daily_wallpaper():
 
 # 随机获取壁纸
 def get_random_wallpaper():
-    url = 'https://blogapi-traefik.exploit-db.xyz/api/views/blogs/bing-wallpaper/random=true'
+    url = 'https://blogapi-traefik.exploit-db.xyz/api/views/blogs/bing-wallpaper?is_random=true'
     response = requests.get(url)
     return response.json() if response.status_code == 200 else None
 
@@ -104,7 +104,7 @@ curl -X GET "https://blogapi-traefik.exploit-db.xyz/api/views/blogs/bing-wallpap
      -H "Accept: application/json"
 
 # 随机获取壁纸
-curl -X GET "https://blogapi-traefik.exploit-db.xyz/api/views/blogs/bing-wallpaper/random=true" \
+curl -X GET "https://blogapi-traefik.exploit-db.xyz/api/views/blogs/bing-wallpaper?is_random=true" \
      -H "Accept: application/json"
 
 # 保存壁纸到本地
