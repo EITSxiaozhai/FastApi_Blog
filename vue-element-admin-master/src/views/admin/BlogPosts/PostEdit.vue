@@ -27,7 +27,7 @@
             />
           </el-select>
           <h3>是否发布</h3>
-          <el-select v-model="post.PublishStatus" allow-create default-first-option filterable placeholder="是否发布？">
+          <el-select v-model="post.PublishStatus" filterable placeholder="是否发布？">
             <el-option v-for="item in publishOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
           <el-row :gutter="10" style="margin-top: 20px">
@@ -129,17 +129,7 @@ export default {
       dialogVisible: false,
       disabled: false,
       fileList: [],
-      options: [
-        {
-          value: 'HTML',
-          label: 'HTML'
-        }, {
-          value: 'CSS',
-          label: 'CSS'
-        }, {
-          value: 'JavaScript',
-          label: 'JavaScript'
-        }],
+      options: [],
       value: [],
       // 发布状态选择器的选项与选中值
       publishOptions: [
@@ -201,6 +191,10 @@ export default {
       try {
         const response = await BlogDetails(blog_id)
         this.post = response.data[0]
+        // 规范 PublishStatus 为字符串 'True' | 'False'，便于下拉框显示
+        if (typeof this.post.PublishStatus === 'boolean') {
+          this.post.PublishStatus = this.post.PublishStatus ? 'True' : 'False'
+        }
         // 将 created_at 转换为 JavaScript Date 对象并设置为 value1
         this.value1 = new Date(this.post.created_at)
         console.log(this.post)
@@ -231,18 +225,14 @@ export default {
     },
     async savePost() {
       // Prepare the data to be sent to the API
-      // const postData = {
-      //   blog_id: this.post.BlogId,
-      //   title: this.post.title,
-      //   content: this.post.content,
-      //   author: 'test',
-      //   tags = ''
-      //   // ... include other fields you want to send
-      // }
       this.post.tags = this.value
       try {
         // Send the data to the API using Axios or any other HTTP library
-        const response = await BlogDetailsedit(this.post.BlogId, this.post)
+        const payload = {
+          ...this.post,
+          PublishStatus: this.post.PublishStatus === 'True'
+        }
+        const response = await BlogDetailsedit(this.post.BlogId, payload)
         // Handle the response, update state or perform any other actions
         console.log('API response:', response.data)
 

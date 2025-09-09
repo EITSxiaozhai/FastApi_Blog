@@ -157,6 +157,11 @@ export default {
     beforeUpload(file) {
       this.uploadLoading = true
       const blogId = this.$route.query.blog_id
+      if (!blogId) {
+        this.$message.error('缺少 blog_id，无法上传封面')
+        this.uploadLoading = false
+        return false
+      }
       const formData = new FormData()
       formData.append('file', file)
       formData.append('blog_id', blogId)
@@ -216,15 +221,15 @@ export default {
         }
 
         const response = await CreateContent(postData)
-        if (response.code === 20000) {
+        if (response && response.code === 20000) {
           this.$message.success('创建文章成功')
           this.$router.push('/admin/blogpost/blogpost')
         } else {
-          throw new Error(response.message || '创建文章失败')
+          throw new Error((response && response.message) || '创建文章失败')
         }
       } catch (error) {
         console.error('创建文章失败:', error)
-        this.$message.error(error.message || '创建文章失败')
+        this.$message.error((error && error.message) || '创建文章失败')
       } finally {
         this.loading = false
       }
