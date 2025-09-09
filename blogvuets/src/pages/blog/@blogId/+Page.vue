@@ -85,6 +85,37 @@
 
       <!-- 文章内容 -->
       <div class="blog-content">
+        <!-- 目录侧边栏 -->
+        <div class="toc-sidebar" v-if="tocItems.length > 0">
+          <div class="toc-container">
+            <div class="toc-header">
+              <h4>目录</h4>
+              <el-button 
+                text 
+                size="small" 
+                @click="toggleToc"
+                class="toc-toggle">
+                {{ tocVisible ? '收起' : '展开' }}
+              </el-button>
+            </div>
+            <div class="toc-content" v-show="tocVisible">
+              <ul class="toc-list">
+                <li 
+                  v-for="item in tocItems" 
+                  :key="item.id"
+                  :class="['toc-item', `toc-level-${item.level}`, { active: item.active }]">
+                  <a 
+                    :href="`#${item.id}`" 
+                    @click.prevent="scrollToHeading(item.id)"
+                    class="toc-link">
+                    {{ item.text }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
         <el-card class="content-card">
           <!-- 文章摘要 -->
           <div class="blog-excerpt" v-if="blog.excerpt">
@@ -97,7 +128,7 @@
           </div>
 
           <!-- 文章正文 -->
-          <div class="blog-body" v-html="renderedContent"></div>
+          <div class="blog-body" v-html="renderedContent" ref="blogBody"></div>
 
           <!-- 文章底部 -->
           <div class="blog-footer">
@@ -182,30 +213,30 @@
         <div class="comments-list">
           <el-card 
             v-for="comment in comments" 
-            :key="comment.id"
+            :key="(comment as any).id"
             class="comment-item">
             
             <div class="comment-header">
               <div class="comment-user">
-                <el-avatar :size="32">{{ getCommentUserName(comment)?.[0] || '?' }}</el-avatar>
+                <el-avatar :size="32">{{ getCommentUserName(comment as any)?.[0] || '?' }}</el-avatar>
                 <div class="user-info">
-                  <span class="user-name">{{ getCommentUserName(comment) }}</span>
-                  <span class="comment-date">{{ formatDate(comment.createdAt || comment.created_at) }}</span>
+                  <span class="user-name">{{ getCommentUserName(comment as any) }}</span>
+                  <span class="comment-date">{{ formatDate((comment as any).createdAt || (comment as any).created_at) }}</span>
                 </div>
               </div>
             </div>
             
             <div class="comment-content">
-              {{ comment.content }}
+              {{ (comment as any).content }}
             </div>
             
             <div class="comment-actions-bottom">
-              <el-button text size="small" @click="replyComment(comment.id)">
+              <el-button text size="small" @click="replyComment((comment as any).id)">
                 回复
               </el-button>
-              <el-button text size="small" @click="likeComment(comment.id)">
+              <el-button text size="small" @click="likeComment((comment as any).id)">
                 <el-icon><StarFilled /></el-icon>
-                {{ comment.likes || 0 }}
+                {{ (comment as any).likes || 0 }}
               </el-button>
             </div>
           </el-card>
@@ -290,6 +321,19 @@ const loadingComments = ref(false)
 const hasMoreComments = ref(true)
 const currentUrl = ref('')
 
+// 目录项类型定义
+interface TocItem {
+  id: string
+  text: string
+  level: number
+  active: boolean
+}
+
+// 目录相关数据
+const tocItems = ref<TocItem[]>([])
+const tocVisible = ref(true)
+const blogBody = ref<HTMLElement | null>(null)
+
 const commentForm = reactive({
   content: '',
   name: '',
@@ -332,11 +376,11 @@ const blog = computed(() => {
 })
 
 // Markdown renderer setup
-const md = new MarkdownIt({
+const md = new (MarkdownIt as any)({
   html: true,
   linkify: true,
   typographer: true,
-  highlight: function (str, lang) {
+  highlight: function (str: string, lang: string) {
     if (lang && hljs.getLanguage(lang)) {
       try {
         return hljs.highlight(str, { language: lang }).value
@@ -501,12 +545,12 @@ const submitComment = async () => {
   }
 }
 
-const replyComment = (commentId) => {
+const replyComment = (commentId: any) => {
   ElMessage.info(`回复功能开发中... (评论ID: ${commentId})`)
 }
 
-const likeComment = async (commentId) => {
-  const comment = comments.value.find(c => c.id === commentId)
+const likeComment = async (commentId: any) => {
+  const comment = comments.value.find((c: any) => c.id === commentId) as any
   if (comment) {
     comment.likes = (comment.likes || 0) + 1
     ElMessage.success('点赞成功！')
@@ -540,6 +584,74 @@ const loadMoreComments = async () => {
   }
 }
 
+// 目录相关方法
+const generateToc = () => {
+  if (!blogBody.value) return
+  
+  const headings = blogBody.value.querySelectorAll('h1, h2, h3, h4, h5, h6')
+  const toc: TocItem[] = []
+  
+  headings.forEach((heading: Element, index: number) => {
+    const level = parseInt(heading.tagName.charAt(1))
+    const text = heading.textContent?.trim() || ''
+    const id = `heading-${index}-${Date.now()}`
+    
+    // 为标题添加ID
+    heading.id = id
+    
+    toc.push({
+      id,
+      text,
+      level,
+      active: false
+    })
+  })
+  
+  tocItems.value = toc
+}
+
+const toggleToc = () => {
+  tocVisible.value = !tocVisible.value
+}
+
+const scrollToHeading = (headingId: string) => {
+  const element = document.getElementById(headingId)
+  if (element) {
+    element.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    })
+  }
+}
+
+const updateActiveTocItem = () => {
+  if (tocItems.value.length === 0) return
+  
+  const scrollTop = window.scrollY
+  const windowHeight = window.innerHeight
+  const center = scrollTop + windowHeight / 2
+  
+  let activeIndex = -1
+  
+  tocItems.value.forEach((item: TocItem, index: number) => {
+    const element = document.getElementById(item.id)
+    if (element) {
+      const rect = element.getBoundingClientRect()
+      const elementTop = rect.top + scrollTop
+      const elementBottom = elementTop + rect.height
+      
+      if (center >= elementTop && center <= elementBottom) {
+        activeIndex = index
+      }
+    }
+  })
+  
+  // 更新激活状态
+  tocItems.value.forEach((item: TocItem, index: number) => {
+    item.active = index === activeIndex
+  })
+}
+
 // 阅读进度
 const readingProgress = ref(0)
 
@@ -557,10 +669,12 @@ const calculateReadingProgress = () => {
 // 监听滚动事件
 onMounted(() => {
   window.addEventListener('scroll', calculateReadingProgress)
+  window.addEventListener('scroll', updateActiveTocItem)
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', calculateReadingProgress)
+  window.removeEventListener('scroll', updateActiveTocItem)
 })
 
 onMounted(async () => {
@@ -573,6 +687,13 @@ onMounted(async () => {
     }
   }, 2000)
 })
+
+// 监听博客内容变化，生成目录
+watch(() => renderedContent.value, () => {
+  nextTick(() => {
+    generateToc()
+  })
+}, { immediate: true })
 </script>
 
 <style scoped>
@@ -638,6 +759,7 @@ onMounted(async () => {
 
 .blog-content {
   margin-bottom: 40px;
+  position: relative;
 }
 
 .content-card {
@@ -900,6 +1022,52 @@ onMounted(async () => {
     padding: 20px;
     margin: 10px;
   }
+  
+  /* 移动端目录样式调整 */
+  .toc-sidebar {
+    position: fixed;
+    top: auto;
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+    transform: none;
+    width: auto;
+    max-height: 50vh;
+    z-index: 1001;
+  }
+  
+  .toc-content {
+    max-height: 40vh;
+  }
+  
+  .toc-link {
+    padding: 6px 16px;
+    font-size: 13px;
+  }
+  
+  .toc-level-1 .toc-link {
+    padding-left: 16px;
+  }
+  
+  .toc-level-2 .toc-link {
+    padding-left: 24px;
+  }
+  
+  .toc-level-3 .toc-link {
+    padding-left: 32px;
+  }
+  
+  .toc-level-4 .toc-link {
+    padding-left: 40px;
+  }
+  
+  .toc-level-5 .toc-link {
+    padding-left: 48px;
+  }
+  
+  .toc-level-6 .toc-link {
+    padding-left: 56px;
+  }
 }
 
 /* 阅读进度条样式 */
@@ -929,6 +1097,139 @@ onMounted(async () => {
 .back-to-top-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* 目录样式 */
+.toc-sidebar {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  width: 280px;
+  max-height: 70vh;
+  z-index: 1000;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e4e7ed;
+  overflow: hidden;
+}
+
+.toc-container {
+  padding: 0;
+}
+
+.toc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e4e7ed;
+}
+
+.toc-header h4 {
+  margin: 0;
+  color: #2c3e50;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.toc-toggle {
+  color: #409eff;
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
+.toc-content {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 12px 0;
+}
+
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc-item {
+  margin: 0;
+  padding: 0;
+}
+
+.toc-link {
+  display: block;
+  padding: 8px 20px;
+  color: #606266;
+  text-decoration: none;
+  font-size: 14px;
+  line-height: 1.4;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+  position: relative;
+}
+
+.toc-link:hover {
+  color: #409eff;
+  background: #f0f9ff;
+  border-left-color: #409eff;
+}
+
+.toc-item.active .toc-link {
+  color: #409eff;
+  background: #f0f9ff;
+  border-left-color: #409eff;
+  font-weight: 500;
+}
+
+/* 不同级别的缩进 */
+.toc-level-1 .toc-link {
+  padding-left: 20px;
+  font-weight: 600;
+}
+
+.toc-level-2 .toc-link {
+  padding-left: 30px;
+}
+
+.toc-level-3 .toc-link {
+  padding-left: 40px;
+  font-size: 13px;
+}
+
+.toc-level-4 .toc-link {
+  padding-left: 50px;
+  font-size: 13px;
+}
+
+.toc-level-5 .toc-link {
+  padding-left: 60px;
+  font-size: 12px;
+}
+
+.toc-level-6 .toc-link {
+  padding-left: 70px;
+  font-size: 12px;
+}
+
+/* 滚动条样式 */
+.toc-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.toc-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.toc-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
+}
+
+.toc-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }
 </style>
 
