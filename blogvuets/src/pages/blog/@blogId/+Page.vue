@@ -42,9 +42,11 @@
     </div>
 
     <!-- 正常内容 -->
-    <div v-else-if="blog" class="blog-container">
-      <!-- 文章头部 -->
-      <div class="blog-header">
+    <div v-else-if="blog" class="blog-container" :class="{ 'with-toc': tocItems.length > 0 }">
+      <!-- 左侧主内容区域 -->
+      <div class="main-content">
+        <!-- 文章头部 -->
+        <div class="blog-header">
         <div class="breadcrumb">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item @click="goHome">首页</el-breadcrumb-item>
@@ -85,37 +87,6 @@
 
       <!-- 文章内容 -->
       <div class="blog-content">
-        <!-- 目录侧边栏 -->
-        <div class="toc-sidebar" v-if="tocItems.length > 0">
-          <div class="toc-container">
-            <div class="toc-header">
-              <h4>目录</h4>
-              <el-button 
-                text 
-                size="small" 
-                @click="toggleToc"
-                class="toc-toggle">
-                {{ tocVisible ? '收起' : '展开' }}
-              </el-button>
-            </div>
-            <div class="toc-content" v-show="tocVisible">
-              <ul class="toc-list">
-                <li 
-                  v-for="item in tocItems" 
-                  :key="item.id"
-                  :class="['toc-item', `toc-level-${item.level}`, { active: item.active }]">
-                  <a 
-                    :href="`#${item.id}`" 
-                    @click.prevent="scrollToHeading(item.id)"
-                    class="toc-link">
-                    {{ item.text }}
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
         <el-card class="content-card">
           <!-- 文章摘要 -->
           <div class="blog-excerpt" v-if="blog.excerpt">
@@ -160,6 +131,22 @@
             </div>
           </div>
         </el-card>
+      </div>
+
+      <!-- 相关文章推荐 -->
+      <div class="related-articles">
+        <h3>相关文章</h3>
+        <el-row :gutter="20">
+          <el-col :span="8" v-for="article in relatedArticles" :key="article.id">
+            <el-card class="related-article-card" @click="goToArticle(article.id)">
+              <div class="related-article-title">{{ article.title }}</div>
+              <div class="related-article-meta">
+                <span>{{ formatDate(article.createdAt) }}</span>
+                <span>{{ article.views }} 阅读</span>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
       </div>
 
       <!-- 评论区域 -->
@@ -249,22 +236,40 @@
           </div>
         </div>
       </div>
-
-      <!-- 相关文章推荐 -->
-      <div class="related-articles">
-        <h3>相关文章</h3>
-        <el-row :gutter="20">
-          <el-col :span="8" v-for="article in relatedArticles" :key="article.id">
-            <el-card class="related-article-card" @click="goToArticle(article.id)">
-              <div class="related-article-title">{{ article.title }}</div>
-              <div class="related-article-meta">
-                <span>{{ formatDate(article.createdAt) }}</span>
-                <span>{{ article.views }} 阅读</span>
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
       </div>
+
+      <!-- 右侧目录分栏 -->
+      <div class="toc-sidebar" v-if="tocItems.length > 0">
+        <div class="toc-container">
+          <div class="toc-header">
+            <h4>目录</h4>
+            <el-button 
+              text 
+              size="small" 
+              @click="toggleToc"
+              class="toc-toggle">
+              {{ tocVisible ? '收起' : '展开' }}
+            </el-button>
+          </div>
+          <div class="toc-content" v-show="tocVisible">
+            <ul class="toc-list">
+              <li 
+                v-for="item in tocItems" 
+                :key="item.id"
+                :class="['toc-item', `toc-level-${item.level}`, { active: item.active }]">
+                <a 
+                  :href="`#${item.id}`" 
+                  @click.prevent="scrollToHeading(item.id)"
+                  class="toc-link">
+                  {{ item.text }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+
     </div>
   </div>
 </template>
@@ -704,9 +709,22 @@ watch(() => renderedContent.value, () => {
 }
 
 .blog-container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+}
+
+/* 当有目录时，扩展容器宽度并采用两栏布局 */
+.blog-container.with-toc {
+  max-width: 1600px;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 40px;
+  align-items: start;
+}
+
+.main-content {
+  grid-column: 1;
 }
 
 .blog-header {
@@ -1023,17 +1041,17 @@ watch(() => renderedContent.value, () => {
     margin: 10px;
   }
   
-  /* 移动端目录样式调整 */
+  /* 移动端隐藏目录 */
   .toc-sidebar {
-    position: fixed;
-    top: auto;
-    bottom: 20px;
-    right: 20px;
-    left: 20px;
-    transform: none;
-    width: auto;
-    max-height: 50vh;
-    z-index: 1001;
+    display: none;
+  }
+  
+  /* 移动端移除两栏布局 */
+  .blog-container.with-toc {
+    max-width: 1200px;
+    display: block;
+    grid-template-columns: none;
+    gap: 0;
   }
   
   .toc-content {
@@ -1099,15 +1117,12 @@ watch(() => renderedContent.value, () => {
   box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
-/* 目录样式 */
+/* 目录样式 - 作为独立分栏 */
 .toc-sidebar {
-  position: fixed;
-  top: 50%;
-  right: 20px;
-  transform: translateY(-50%);
+  position: sticky;
+  top: 300px;
   width: 280px;
-  max-height: 70vh;
-  z-index: 1000;
+  max-height: 80vh;
   background: white;
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
