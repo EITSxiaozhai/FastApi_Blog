@@ -249,12 +249,12 @@ async def rate_blog(blog_id: str, rating: int, device_id: str, db: AsyncSession 
     if not (1 <= rating <= 5):
         raise HTTPException(status_code=400, detail="评分必须在1到5之间")
 
-    # 异步查询博客文章
-    blog = await db.execute(select(Blog).where(Blog.BlogId == blog_id))
+    # 异步查询博客文章，只允许对已发布的博客评分
+    blog = await db.execute(select(Blog).where(Blog.BlogId == blog_id, Blog.PublishStatus == True))
     blog_entry = blog.scalar_one()  # 使用 scalar_one 获取一行
 
     if blog_entry is None:
-        raise HTTPException(status_code=404, detail="博客文章不存在")
+        raise HTTPException(status_code=404, detail="博客文章不存在或未发布")
 
     # 在这里将 rating 转换为整数
     rating = int(rating)
@@ -288,9 +288,9 @@ async def rate_blog(blog_id: str, rating: int, device_id: str, db: AsyncSession 
 ##数据库平均值取出
 @BlogApp.get("/blogs/{blog_id}/average-rating/", response_model=Union[float, int])
 async def get_average_rating(blog_id: int, db: AsyncSession = Depends(get_db)):
-    blog = await db.execute(select(Blog).where(Blog.BlogId == blog_id))
+    blog = await db.execute(select(Blog).where(Blog.BlogId == blog_id, Blog.PublishStatus == True))
     if blog.scalar() is None:
-        return 0  # 返回默认值 0，表示从未评分过
+        return 0  # 返回默认值 0，表示博客不存在或未发布
     average_rating = await db.execute(
         select(func.avg(BlogRating.rating)).filter(BlogRating.blog_id == blog_id)
     )
@@ -303,6 +303,14 @@ async def get_average_rating(blog_id: int, db: AsyncSession = Depends(get_db)):
 
 @BlogApp.post("/blogs/{blog_id}/submitcomments/")
 async def SubmitComments(blog_id: int, comment: dict, db: AsyncSession = Depends(get_db)):
+    # 首先检查博客是否存在且已发布
+    blog_stmt = select(Blog).where(Blog.BlogId == blog_id, Blog.PublishStatus == True)
+    blog_result = await db.execute(blog_stmt)
+    blog = blog_result.scalar()
+    
+    if blog is None:
+        raise HTTPException(status_code=404, detail="博客文章不存在或未发布")
+    
     # 使用 select() 创建选择语句
     stmt = select(User).filter(User.UserId == comment['uid'])
     result = await db.execute(stmt)
@@ -374,8 +382,11 @@ async def get_total_uvpv():
 
 @BlogApp.get("/blogs/search")
 async def get_blogs(q: str, db: AsyncSession = Depends(get_db)):
-    # 使用过滤条件和排序
-    sql = select(Blog).filter(Blog.title.ilike(f"%{q}%")).order_by(Blog.title.asc())
+    # 使用过滤条件和排序，只搜索已发布的博客
+    sql = select(Blog).filter(
+        Blog.title.ilike(f"%{q}%"),
+        Blog.PublishStatus == True  # 只返回已发布的博客
+    ).order_by(Blog.title.asc())
     result = await db.execute(sql)
     blogs = result.scalars().all()
     # 将每个 Blog 对象转换为字典
