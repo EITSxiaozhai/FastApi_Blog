@@ -172,7 +172,7 @@ export const fetchBlogDetail = async (blogId: string): Promise<BlogPost | null> 
         id: result.BlogId || parseInt(blogId),
         title: result.title || `博客 ${blogId}`,
         content: result.content ? (typeof result.content === 'string' ? result.content : new TextDecoder().decode(result.content)) : '',
-        excerpt: generateExcerpt(result.title || '', result.tags || []),
+        excerpt: result.description || generateExcerpt(result.title || '', result.tags || []),
         author: result.author || 'Exp1oit',
         category: result.tags?.[0] || '未分类',
         tags: result.tags || [],
