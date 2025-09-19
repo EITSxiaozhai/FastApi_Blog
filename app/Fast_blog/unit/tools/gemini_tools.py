@@ -10,7 +10,7 @@ load_dotenv()
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
 genai.configure(api_key=GOOGLE_API_KEY)
 
-async def generate_blog_description(content: str, max_length: int = 160) -> Optional[str]:
+def generate_blog_description(content: str, max_length: int = 160) -> Optional[str]:
     """
     使用 Gemini API 生成博客文章的描述
     
@@ -22,8 +22,8 @@ async def generate_blog_description(content: str, max_length: int = 160) -> Opti
         str: 生成的描述文本，如果生成失败则返回None
     """
     try:
-        # 初始化 Gemini Pro 模型
-        model = genai.GenerativeModel('gemini-pro')
+        # 初始化 Gemini 2.0 Flash 模型（最新版本）
+        model = genai.GenerativeModel('gemini-2.0-flash-exp')
         
         # 构建提示词
         prompt = f"""请为以下博客文章生成一个简洁的SEO描述，描述应该：
@@ -37,8 +37,8 @@ async def generate_blog_description(content: str, max_length: int = 160) -> Opti
 
 请直接返回描述文本，不要包含任何其他内容。"""
 
-        # 生成描述
-        response = await model.generate_content(prompt)
+        # 生成描述（同步调用）
+        response = model.generate_content(prompt)
         
         # 获取生成的文本
         description = response.text.strip()
