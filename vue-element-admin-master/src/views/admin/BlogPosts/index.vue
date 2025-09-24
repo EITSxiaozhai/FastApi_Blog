@@ -24,18 +24,13 @@
     <el-main>
       <el-card class="box-card">
         <div>
-          <el-table :data="adminData" style="width: 100%">
+          <el-table v-loading="listLoading" :data="adminData" :row-key="row => row.BlogId" :empty-text="'暂无数据'" style="width: 100%">
             <el-table-column label="文章id" prop="BlogId" />
             <el-table-column label="标题" prop="title" />
             <el-table-column label="作者" prop="author" />
-            <el-table-column label="创建时间" prop="created_at" />
-            <el-table-column label="阅读量" prop="xxx" />
-            <el-table-column label="评分值" prop="xxx">
-              <template>
-                <!-- 在这里自定义列内容 -->
-                <el-rate v-model="testrate" disabled>测试</el-rate>
-              </template>
-            </el-table-column>
+            <el-table-column label="创建时间" prop="created_at" :formatter="formatDate" />
+            <el-table-column label="阅读量" prop="NumberViews" />
+            <el-table-column label="点赞" prop="NumberLikes" />
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <el-button type="text" @click="editItem(scope.row)">编辑</el-button>
@@ -55,7 +50,7 @@
 </template>
 
 <script>
-import { Postlist, DeletePost, Updatehomepageimage } from '@/api/admin/BlogPosts/BlogPosts'
+import { Postlist, DeletePost } from '@/api/admin/BlogPosts/BlogPosts'
 import { Crawlersubmitbutton } from '@/api/admin/CrawlerSubmission'
 import { MessageBox } from 'element-ui'
 import PostEdit from '@/views/admin/BlogPosts/PostEdit.vue'
@@ -71,7 +66,7 @@ export default {
       adminData: [],
       state: '',
       timeout: null,
-      testrate: 2
+      listLoading: false
     }
   },
   created() {
@@ -79,23 +74,20 @@ export default {
   },
   methods: {
     querySearchAsync(queryString, cb) {
-      const articles = this.adminData // 使用你的文章数据数组 adminData
+      const articles = this.adminData
       const results = queryString
-        ? articles.filter(this.createArticleFilter(queryString)).map((article) => ({
-          value: article.title, // 将文章标题作为显示文本
-          data: article // 保留原始文章数据
-        }))
+        ? articles
+          .filter(this.createArticleFilter(queryString))
+          .map(article => ({ value: article.title, data: article }))
         : []
-      console.log('Search results:', results) // 添加这行代码进行调试
       clearTimeout(this.timeout)
       this.timeout = setTimeout(() => {
         cb(results)
-      }, 1) // 这里可以根据需要调整延迟时间
+      }, 200)
     },
     createArticleFilter(queryString) {
       return (article) => {
-        // 确保文章标题存在，并且进行模糊匹配
-        return article.title && article.title.toLowerCase().indexOf(queryString.toLowerCase()) === 0
+        return article.title && article.title.toLowerCase().includes(queryString.toLowerCase())
       }
     },
     handleSelect(item) {
@@ -113,42 +105,15 @@ export default {
     },
     async fetchAdminData() {
       try {
+        this.listLoading = true
         const response = await Postlist()
-        this.adminData = response.data
+        this.adminData = Array.isArray(response.data) ? response.data : []
       } catch (error) {
         console.error('API error:', error)
+        this.$message.error('获取文章列表失败')
+      } finally {
+        this.listLoading = false
       }
-    },
-    beforeUpload(file) {
-      const blogId = this.$route.query.blog_id
-      const formData = new FormData()
-      formData.append('file', file)
-      formData.append('blog_id', blogId)
-
-      Updatehomepageimage(blogId, formData)
-        .then((response) => {
-          // 处理后端响应
-          file.url = response.data.msg
-          this.dialogImageUrl = file.url
-
-          // 添加上传的文件到 fileList 数组中
-          this.fileList.push(file)
-
-          this.$message({
-            message: '博客首页图片上传成功',
-            type: 'success'
-          })
-        })
-        .catch((error) => {
-          // 处理请求错误
-          console.error('API error:', error)
-          this.$message({
-            message: '博客首页图片上传失败',
-            type: 'warning'
-          })
-        })
-
-      return true
     },
     async tokenforcedrefresh() {
       try {
@@ -159,18 +124,11 @@ export default {
     },
     async createItem() {
       try {
-        // 获取所有文章列表
-        const response = await Postlist()
-        const posts = response.data
-        // 找到最大的文章id
-        let maxId = 0
-        for (const post of posts) {
-          if (post.BlogId > maxId) {
-            maxId = post.BlogId
-          }
-        }
-
-        // 将最大文章id加1作为新文章的id
+        const posts = Array.isArray(this.adminData) ? this.adminData : []
+        const ids = posts
+          .map(p => Number(p.BlogId))
+          .filter(id => Number.isFinite(id))
+        const maxId = ids.length ? Math.max(...ids) : 0
         const newId = maxId + 1
 
         // 构建路由链接，将新文章的id作为参数传递到创建文章页面
@@ -185,10 +143,12 @@ export default {
         const response = await Crawlersubmitbutton()
         // 处理成功响应
         console.log('请求成功:', response)
+        this.$message.success('爬虫提交成功')
         // 在这里可以根据后端返回的数据进行相应的处理
       } catch (error) {
         // 处理请求失败
         console.error('请求失败:', error)
+        this.$message.error('爬虫提交失败')
         // 在这里可以根据错误信息进行相应的处理
       }
     },
@@ -214,6 +174,18 @@ export default {
           type: 'error'
         })
       }
+    },
+    formatDate(row, column, cellValue) {
+      const value = cellValue || row[column.property]
+      if (!value) return ''
+      const date = new Date(value)
+      if (Number.isNaN(date.getTime())) return String(value)
+      const y = date.getFullYear()
+      const m = `${date.getMonth() + 1}`.padStart(2, '0')
+      const d = `${date.getDate()}`.padStart(2, '0')
+      const hh = `${date.getHours()}`.padStart(2, '0')
+      const mm = `${date.getMinutes()}`.padStart(2, '0')
+      return `${y}-${m}-${d} ${hh}:${mm}`
     }
   }
 }

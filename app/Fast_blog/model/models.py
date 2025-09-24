@@ -150,8 +150,10 @@ class Blog(Base):
     BlogId: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
     title: Mapped[str] = mapped_column(String(255))
     content: Mapped[bytes] = mapped_column(LargeBinary)
+    description: Mapped[str] = mapped_column(Text, nullable=True)  # 新增 description 字段
     BlogIntroductionPicture: Mapped[str] = mapped_column(String(255))
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.datetime.now)  # 移除 strftime
+    
     # 修改后定义（添加 nullable=False 和 default）
     NumberLikes: Mapped[int] = mapped_column(
         Integer,
@@ -186,6 +188,7 @@ class Blog(Base):
             "BlogId": self.BlogId,
             "title": self.title,
             "content": self.content.decode('utf-8') if self.content else None,  # 二进制转字符串示例
+            "description": self.description,  # 添加 description 到返回字典
             "BlogIntroductionPicture": self.BlogIntroductionPicture,
             "created_at": self.created_at.isoformat(),
             "NumberLikes": self.NumberLikes,

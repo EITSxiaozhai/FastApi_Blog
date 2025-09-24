@@ -3,7 +3,7 @@
     <!-- 背景容器 -->
     <div class="background-container">
       <div class="background-image" :style="backgroundStyle"></div>
-      <div class="hero-content">
+      <div class="hero-content" :style="heroStyle">
         <h1 class="hero-title">{{ verse }}</h1>
         <div class="hero-subtitle">
           <p>探索技术 · 分享知识 · 记录成长</p>
@@ -109,21 +109,34 @@
               </div>
             </div>
             
-            <div class="articles-grid">
+            <div class="articles-grid" ref="articlesGridRef">
               <el-card 
-                v-for="article in filteredArticles" 
+                v-for="(article, index) in filteredArticles" 
                 :key="article.id"
-                class="article-card"
+                :class="['article-card', { featured: index === 0 && hasThreeCols }]"
                 @click="goToArticle(article.id)">
+                
+                <!-- 文章封面图片（带兜底） -->
+                <div class="article-image-container">
+                  <img 
+                    :src="getArticleCover(article)" 
+                    :alt="article.title"
+                    class="article-image"
+                    loading="lazy"
+                    decoding="async"
+                    @error="handleImageError"
+                  />
+                  <div class="image-overlay">
+                    <el-tag :type="getTagType(article.category)" size="small" effect="dark">
+                      {{ article.category }}
+                    </el-tag>
+                  </div>
+                </div>
                 
                 <template #header>
                   <div class="article-header">
                     <span class="article-title">{{ article.title }}</span>
-                    <div class="article-meta">
-                      <el-tag :type="getTagType(article.category)" size="small">
-                        {{ article.category }}
-                      </el-tag>
-                    </div>
+                    <div class="article-meta"></div>
                   </div>
                 </template>
                 
@@ -225,6 +238,36 @@
             </div>
           </el-card>
 
+          <!-- API服务卡片 -->
+          <el-card class="sidebar-card api-card" @click="goToWallpaperAPI">
+            <template #header>
+              <div class="card-header">
+                <el-icon><Picture /></el-icon>
+                <span>壁纸API服务</span>
+              </div>
+            </template>
+            <div class="api-info">
+              <div class="api-icon">
+                <el-icon size="40" color="#409eff"><Picture /></el-icon>
+              </div>
+              <div class="api-desc">
+                <h4>Bing壁纸API</h4>
+                <p>获取必应每日精美壁纸，支持随机获取</p>
+                <div class="api-features">
+                  <el-tag size="small" type="success">免费使用</el-tag>
+                  <el-tag size="small" type="warning">每日更新</el-tag>
+                  <el-tag size="small" type="info">高清壁纸</el-tag>
+                </div>
+                <div class="api-link">
+                  <el-button type="primary" size="small" @click.stop="goToWallpaperAPI">
+                    <el-icon><Link /></el-icon>
+                    查看API文档
+                  </el-button>
+                </div>
+              </div>
+            </div>
+          </el-card>
+
           <!-- 个人信息卡片 -->
           <el-card class="sidebar-card">
             <template #header>
@@ -235,11 +278,11 @@
             </template>
             <div class="author-info">
               <div class="author-avatar">
-                <el-avatar :size="80" src="/avatar.png">Exp1oit</el-avatar>
+                <el-avatar :size="80" src="/static/img/normal.webp">Exp1oit</el-avatar>
               </div>
               <div class="author-desc">
                 <h4>Exp1oit</h4>
-                <p>全栈开发者，热爱技术分享</p>
+                <p>运维开发工程师</p>
                 <div class="social-links">
                   <el-button link type="primary">
                     <el-icon><Message /></el-icon>
@@ -257,6 +300,23 @@
         </aside>
       </div>
     </div>
+
+    <!-- 页脚（SSR 友好，不写入 App.vue） -->
+    <el-footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-left">
+          <span>© 2023–{{ currentYear }} Exp1oit</span>
+        </div>
+        <div class="footer-right">
+          <span>Powered by Vue 3 · Vike SSR · Element Plus · FastAPI</span>
+        </div>
+      </div>
+    </el-footer>
+
+    <!-- 固定在底部的滚动进度条（不跟随页脚移动） -->
+    <div class="scroll-progress-fixed" aria-hidden="true">
+      <div class="scroll-progress-bar-fixed" :style="progressStyle"></div>
+    </div>
   </div>
 </template>
 
@@ -265,7 +325,8 @@ import { ref, reactive, onMounted, computed, onBeforeUnmount, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { 
   ArrowDown, View, User, Document, Search, Calendar, Collection, Clock,
-  DataAnalysis, TrendCharts, Monitor, Avatar, Message, ChatDotRound, Star
+  DataAnalysis, TrendCharts, Monitor, Avatar, Message, ChatDotRound, Star,
+  Picture, Link
 } from '@element-plus/icons-vue'
 // 导入API函数
 import { fetchBlogList, searchBlogs as apiSearchBlogs } from '@/api/vikeBlogs'
@@ -322,6 +383,68 @@ const siteRuntime = reactive({
   minutes: 0
 })
 
+// 年份（SSR/CSR 通用）
+const currentYear = new Date().getFullYear()
+
+// 滚动过渡相关状态
+const scrollY = ref(0)
+const viewportHeight = ref(0)
+const documentHeight = ref(0)
+let scrollRafId = null
+const hasThreeCols = ref(false)
+const articlesGridRef = ref(null)
+
+const handleResize = () => {
+  viewportHeight.value = (typeof window !== 'undefined')
+    ? (window.innerHeight || document.documentElement.clientHeight || 1)
+    : 1
+  documentHeight.value = (typeof document !== 'undefined')
+    ? (document.documentElement.scrollHeight || (document.body && document.body.scrollHeight) || 0)
+    : 0
+  // 检测当前栅格列数（当为3列时才让首卡跨两列，避免把右侧单列挤窄）
+  if (articlesGridRef.value) {
+    try {
+      const computedStyle = window.getComputedStyle(articlesGridRef.value)
+      const template = computedStyle.getPropertyValue('grid-template-columns') || ''
+      const colCount = template.split(' ').filter(Boolean).length
+      hasThreeCols.value = colCount >= 3
+    } catch (e) {
+      hasThreeCols.value = false
+    }
+  }
+}
+
+const handleScroll = () => {
+  const y = (typeof window !== 'undefined')
+    ? (window.scrollY || window.pageYOffset || 0)
+    : 0
+  if (scrollRafId) cancelAnimationFrame(scrollRafId)
+  scrollRafId = requestAnimationFrame(() => {
+    scrollY.value = y
+  })
+}
+
+const scrollProgress = computed(() => {
+  const vh = viewportHeight.value || 1
+  const p = scrollY.value / vh
+  return Math.max(0, Math.min(1, p))
+})
+
+// 页面整体滚动百分比（用于底部进度条）
+const pageScrollPercent = computed(() => {
+  const dh = documentHeight.value || 1
+  const vh = viewportHeight.value || 1
+  const maxScroll = Math.max(1, dh - vh)
+  const p = scrollY.value / maxScroll
+  return Math.max(0, Math.min(1, p))
+})
+
+const progressStyle = computed(() => ({
+  width: `${Math.round(pageScrollPercent.value * 100)}%`
+}))
+
+// 保持阅读进度条始终显示（不再根据接近底部隐藏）
+
 // 分类数据
 const categories = computed(() => {
   const categoryMap = new Map()
@@ -370,12 +493,34 @@ const filteredArticles = computed(() => {
   return articles.value.filter(article => article.category === currentFilter.value)
 })
 
-// 背景图片样式
-const backgroundStyle = computed(() => ({
-  backgroundImage: props.wallpaper 
-    ? `url(${props.wallpaper})` 
+// 背景图片样式（随滚动过渡）
+const backgroundStyle = computed(() => {
+  const image = props.wallpaper
+    ? `url(${props.wallpaper})`
     : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-}))
+
+  const p = scrollProgress.value
+  const scale = 1 + p * 0.05
+  const translateY = p * 40 // 轻微视差
+  const opacity = 1 - p * 0.2
+  const blur = p * 2
+
+  return {
+    backgroundImage: image,
+    transform: `translateY(${translateY}px) scale(${scale})`,
+    filter: `blur(${blur}px)`,
+    opacity
+  }
+})
+
+// 标题区域随滚动渐隐/上移
+const heroStyle = computed(() => {
+  const p = scrollProgress.value
+  return {
+    transform: `translateY(${-p * 20}px)`,
+    opacity: String(1 - p * 0.5)
+  }
+})
 
 // 过滤方法
 const filterByCategory = (category) => {
@@ -447,6 +592,28 @@ const goToArticle = (id) => {
   window.location.href = `/blog/${id}`
 }
 
+// 跳转到壁纸API页面
+const goToWallpaperAPI = () => {
+  window.location.href = '/api/bing-wallpaper'
+}
+
+// 文章封面兜底图（使用本地静态资源，避免外链不可用）
+const defaultCover = '/static/img/blindfold.webp'
+
+// 获取文章封面（优先后端字段，缺失则返回兜底图）
+const getArticleCover = (article) => {
+  return article?.BlogIntroductionPicture || defaultCover
+}
+
+// 处理图片加载错误：替换为兜底图，避免布局塌陷
+const handleImageError = (event) => {
+  const img = event?.target
+  if (!img) return
+  if (img.dataset && img.dataset.fallbackApplied === 'true') return
+  img.dataset.fallbackApplied = 'true'
+  img.src = defaultCover
+}
+
 // 获取标签类型
 const getTagType = (category) => {
   const types = ['primary', 'success', 'warning', 'danger', 'info']
@@ -507,7 +674,8 @@ const initMockData = () => {
       excerpt: '⚠️ 这是模拟数据，表示后端API连接失败。请检查FastAPI服务是否正常运行，以及API路径是否正确。',
       category: ['技术', 'Vue', 'SSR', 'Vike'][index % 4],
       views: Math.floor(Math.random() * 1000) + 100,
-      createdAt: new Date(Date.now() - index * 24 * 60 * 60 * 1000).toISOString()
+      createdAt: new Date(Date.now() - index * 24 * 60 * 60 * 1000).toISOString(),
+      BlogIntroductionPicture: `https://picsum.photos/400/200?random=${index + 1}` // 使用随机图片作为模拟数据
     }))
   }
 }
@@ -521,12 +689,27 @@ onMounted(() => {
   // 更新运行时间
   updateSiteRuntime()
   runtimeTimer = setInterval(updateSiteRuntime, 60000) // 每分钟更新一次
+
+  // 初始化滚动与尺寸监听
+  handleResize()
+  handleScroll()
+  if (typeof window !== 'undefined') {
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleResize)
+  }
+  // 初始计算一次列数
+  handleResize()
 })
 
 onBeforeUnmount(() => {
   if (runtimeTimer) {
     clearInterval(runtimeTimer)
   }
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('scroll', handleScroll)
+    window.removeEventListener('resize', handleResize)
+  }
+  if (scrollRafId) cancelAnimationFrame(scrollRafId)
 })
 </script>
 
@@ -534,6 +717,8 @@ onBeforeUnmount(() => {
 .home-page {
   width: 100%;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .background-container {
@@ -620,25 +805,37 @@ onBeforeUnmount(() => {
 
 .main-content {
   padding: 60px 20px;
-  max-width: 1200px;
+  max-width: 1440px;
   margin: 0 auto;
+  flex: 1 0 auto;
 }
 
 .layout-container {
   display: flex;
   gap: 20px;
+  align-items: flex-start;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .left-sidebar {
-  flex: 1;
+  flex: 1.1;
+  position: sticky;
+  top: 90px;
+  align-self: flex-start;
+  height: max-content;
 }
 
 .center-content {
-  flex: 2;
+  flex: 3;
 }
 
 .right-sidebar {
-  flex: 1;
+  flex: 1.1;
+  position: sticky;
+  top: 90px;
+  align-self: flex-start;
+  height: max-content;
 }
 
 .sidebar-card {
@@ -739,6 +936,7 @@ onBeforeUnmount(() => {
   line-height: 1.4;
   margin-bottom: 5px;
   display: -webkit-box;
+  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -828,6 +1026,7 @@ onBeforeUnmount(() => {
   line-height: 1.4;
   margin-bottom: 3px;
   display: -webkit-box;
+  line-clamp: 2;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -867,11 +1066,52 @@ onBeforeUnmount(() => {
   transition: all 0.3s ease;
   border-radius: 12px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .article-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.article-card.featured { grid-column: span 2; }
+
+/* 文章图片样式 */
+.article-image-container {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 15px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.article-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  background: #f5f5f5;
+}
+
+.article-card:hover .article-image {
+  transform: scale(1.05);
+}
+
+.article-card.featured .article-image-container {
+  height: 300px;
+}
+
+/* 图片加载失败时的样式 */
+.article-image-container:empty::before {
+  content: '📷';
+  font-size: 2rem;
+  color: #ccc;
 }
 
 .article-header {
@@ -888,8 +1128,15 @@ onBeforeUnmount(() => {
   flex: 1;
 }
 
+.article-card.featured .article-title {
+  font-size: 1.15rem;
+}
+
 .article-content {
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .article-excerpt {
@@ -897,6 +1144,7 @@ onBeforeUnmount(() => {
   line-height: 1.6;
   margin-bottom: 15px;
   display: -webkit-box;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -905,6 +1153,7 @@ onBeforeUnmount(() => {
 .article-footer {
   border-top: 1px solid #f0f0f0;
   padding-top: 15px;
+  margin-top: auto;
 }
 
 .article-stats {
@@ -985,7 +1234,79 @@ onBeforeUnmount(() => {
   gap: 10px;
 }
 
+/* API卡片样式 */
+.api-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.api-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.api-card .card-header {
+  /* 继承默认文本色，保持与其他侧边栏卡片一致 */
+  color: inherit;
+}
+
+.api-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 0;
+}
+
+.api-icon {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: var(--hover-bg);
+  border-radius: 50%;
+}
+
+.api-desc {
+  flex: 1;
+}
+
+.api-desc h4 {
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+
+.api-desc p {
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.api-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+/* 保持 Element Plus 默认 Tag 样式，无需额外覆盖 */
+
+.api-link {
+  display: flex;
+  justify-content: flex-end;
+}
+
+
+
 /* 这些样式已经在上面定义过了，移除重复定义 */
+
+/* 封面图叠加信息 */
+.image-overlay {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+}
 
 /* 响应式设计 */
 @media (max-width: 768px) {
@@ -1008,6 +1329,23 @@ onBeforeUnmount(() => {
   
   .left-sidebar, .right-sidebar {
     flex: 1;
+    position: static;
+    height: auto;
+  }
+  
+  .article-image-container {
+    height: 150px;
+  }
+  
+  .article-card.featured {
+    grid-column: auto;
+  }
+}
+
+/* 桌面端强制两列布局 */
+@media (min-width: 1024px) {
+  .articles-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -1027,4 +1365,64 @@ onBeforeUnmount(() => {
   justify-content: center;
   padding: 1rem 0;
 }
+
+/* 页脚样式 */
+.site-footer {
+  border-top: 1px solid #ebeef5;
+  background: #fff;
+  color: #606266;
+  padding: 20px;
+  height: 96px; /* 高度足够 */
+  display: flex;
+  align-items: center;
+  margin-top: auto; /* 让页脚贴住页面底部（内容不足时） */
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.footer-left, .footer-right {
+  font-size: 13px;
+}
+
+/* 固定在底部的滚动进度条（不影响布局） */
+.scroll-progress-fixed {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: transparent;
+  overflow: hidden;
+  z-index: 900; /* 低于可能的弹窗/抽屉 */
+}
+
+.scroll-progress-bar-fixed {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #409eff 0%, #67c23a 100%);
+  box-shadow: 0 0 6px rgba(64, 158, 255, 0.5);
+  transition: width 0.1s linear;
+}
 </style> 
+
+<style>
+/* 全局基础重置，确保顶部/底部无缝隙（SSR/CSR 通用） */
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* 确保页脚自然贴底且无额外外边距影响 */
+body {
+  background: #fff;
+}
+</style>

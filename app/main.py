@@ -94,17 +94,59 @@ async def log_requests(request: Request, call_next):
     request_path = request.url.path
     status_code = response.status_code
 
-    # 记录日志
+    # 使用简单的print输出，避免与uvicorn的格式化器冲突
+    process_time_ms = process_time * 1000
+    
+    # 构建标准的uvicorn访问日志格式，并添加时间信息
+    log_message = f'{client_host} - "{request_method} {request_path} HTTP/1.1" {status_code} - 耗时: {process_time_ms:.3f}ms'
+    
+    # 根据处理时间选择日志级别
+    if process_time > 5.0:
+        print(f"WARNING: {log_message}")
+    else:
+        print(f"INFO: {log_message}")
+    
+    # 同时记录到Logstash
     logger = logging.getLogger("uvicorn")
-
+    
+    # 获取更多请求信息
+    user_agent = request.headers.get("user-agent", "Unknown")
+    content_length = request.headers.get("content-length", "0")
+    try:
+        request_size = int(content_length)
+    except ValueError:
+        request_size = 0
+    
+    # 格式化时间显示
+    formatted_duration = f"{process_time_ms:.3f}ms"
+    
+    # 性能分类
+    if process_time < 0.1:
+        performance_category = "very_fast"
+    elif process_time < 1.0:
+        performance_category = "fast"
+    elif process_time < 5.0:
+        performance_category = "normal"
+    else:
+        performance_category = "slow"
+    
     logger.info(
-        f"Request processed in {process_time}s",
+        f"Request processed: {request_method} {request_path}",
         extra={
             "response_code": status_code,
             "request_method": request_method,
             "request_path": request_path,
             "request_ip": client_host,
-            "request_time": process_time,
+            "request_time_seconds": process_time,
+            "request_time_ms": process_time_ms,
+            "request_time_formatted": formatted_duration,
+            "user_agent": user_agent,
+            "request_size": request_size,
+            "start_time": start_time.isoformat(),
+            "end_time": datetime.utcnow().isoformat(),
+            "is_slow_request": process_time > 5.0,
+            "performance_category": performance_category,
+            "duration_category": "very_fast" if process_time < 0.1 else "fast" if process_time < 1.0 else "normal" if process_time < 5.0 else "slow"
         }
     )
 
