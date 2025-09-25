@@ -346,6 +346,17 @@ async def AnonymousCommentSave(vueblogid: int, request: Request, db: AsyncSessio
         # 获取请求数据
         x = await request.json()
         
+        # 验证reCAPTCHA
+        recaptcha_token = x.get('recaptcha', '')
+        if not recaptcha_token:
+            return {"data": "评论添加失败", "reason": "缺少reCAPTCHA验证", "code": 400}
+        
+        # 调用reCAPTCHA验证
+        recaptcha_response = await verify_recaptcha(UserreCAPTCHA=recaptcha_token, SecretKeyTypology="user")
+        
+        if not recaptcha_response["message"]["success"]:
+            return {"data": "评论添加失败", "reason": "reCAPTCHA验证失败", "code": 400}
+        
         # 检查博客是否存在且已发布
         blog_stmt = select(Blog).where(Blog.BlogId == vueblogid, Blog.PublishStatus == True)
         blog_result = await db.execute(blog_stmt)
