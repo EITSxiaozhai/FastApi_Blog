@@ -23,7 +23,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from Fast_blog.database.databaseconnection import db_session, get_db
 from Fast_blog.middleware.backtasks import AliOssPrivateDocument
 from Fast_blog.middleware.backtasks import BlogCache, AliOssUpload
-from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag
+from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag, AnonymousComment
+from Fast_blog.schemas.schemas import AnonymousCommentCreate, AnonymousCommentModel
 import aiohttp
 from datetime import datetime
 import random
@@ -430,3 +431,129 @@ async def get_bing_wallpaper(is_random: bool = False):
                     return {"code": 50000, "message": "获取图片失败"}
     except Exception as e:
         return {"code": 50000, "message": f"服务器错误: {str(e)}"}
+
+
+# 匿名评论相关API接口
+
+@BlogApp.post("/blogs/{blog_id}/anonymous-comments/")
+async def create_anonymous_comment(blog_id: int, comment_data: AnonymousCommentCreate, db: AsyncSession = Depends(get_db)):
+    """创建匿名评论"""
+    try:
+        # 检查博客是否存在且已发布
+        blog_stmt = select(Blog).where(Blog.BlogId == blog_id, Blog.PublishStatus == True)
+        blog_result = await db.execute(blog_stmt)
+        blog = blog_result.scalar()
+        
+        if blog is None:
+            raise HTTPException(status_code=404, detail="博客文章不存在或未发布")
+        
+        # 创建匿名评论
+        new_comment = AnonymousComment(
+            blog_id=blog_id,
+            nickname=comment_data.nickname,
+            email=comment_data.email,
+            content=comment_data.content,
+            parentId=comment_data.parentId,
+            contentImg=comment_data.contentImg,
+            address=comment_data.address
+        )
+        
+        db.add(new_comment)
+        await db.commit()
+        await db.refresh(new_comment)
+        
+        return {"message": "匿名评论提交成功!", "comment_id": new_comment.id}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"创建匿名评论失败: {str(e)}")
+        raise HTTPException(status_code=500, detail="服务器内部错误")
+
+
+@BlogApp.get("/blogs/{blog_id}/anonymous-comments/")
+async def get_anonymous_comments(blog_id: int, db: AsyncSession = Depends(get_db)):
+    """获取博客的匿名评论列表"""
+    try:
+        # 检查博客是否存在
+        blog_stmt = select(Blog).where(Blog.BlogId == blog_id, Blog.PublishStatus == True)
+        blog_result = await db.execute(blog_stmt)
+        blog = blog_result.scalar()
+        
+        if blog is None:
+            raise HTTPException(status_code=404, detail="博客文章不存在或未发布")
+        
+        # 获取顶级评论（没有父评论的评论）
+        comments_stmt = select(AnonymousComment).where(
+            AnonymousComment.blog_id == blog_id,
+            AnonymousComment.parentId.is_(None)
+        ).order_by(AnonymousComment.createTime.desc())
+        
+        result = await db.execute(comments_stmt)
+        top_level_comments = result.scalars().all()
+        
+        # 构建评论树结构
+        comments_with_replies = []
+        for comment in top_level_comments:
+            comment_dict = comment.to_dict()
+            # 获取回复
+            replies_stmt = select(AnonymousComment).where(
+                AnonymousComment.parentId == comment.id
+            ).order_by(AnonymousComment.createTime.asc())
+            
+            replies_result = await db.execute(replies_stmt)
+            replies = replies_result.scalars().all()
+            comment_dict['replies'] = [reply.to_dict() for reply in replies]
+            comments_with_replies.append(comment_dict)
+        
+        return {
+            "comments": comments_with_replies,
+            "total": len(comments_with_replies)
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"获取匿名评论失败: {str(e)}")
+        raise HTTPException(status_code=500, detail="服务器内部错误")
+
+
+@BlogApp.post("/anonymous-comments/{comment_id}/like/")
+async def like_anonymous_comment(comment_id: int, db: AsyncSession = Depends(get_db)):
+    """为匿名评论点赞"""
+    try:
+        # 查找评论
+        comment_stmt = select(AnonymousComment).where(AnonymousComment.id == comment_id)
+        comment_result = await db.execute(comment_stmt)
+        comment = comment_result.scalar()
+        
+        if comment is None:
+            raise HTTPException(status_code=404, detail="评论不存在")
+        
+        # 增加点赞数
+        comment.likes += 1
+        await db.commit()
+        
+        return {"message": "点赞成功!", "likes": comment.likes}
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"点赞失败: {str(e)}")
+        raise HTTPException(status_code=500, detail="服务器内部错误")
+
+
+@BlogApp.get("/anonymous-comments/{comment_id}/")
+async def get_anonymous_comment(comment_id: int, db: AsyncSession = Depends(get_db)):
+    """获取单个匿名评论详情"""
+    try:
+        comment_stmt = select(AnonymousComment).where(AnonymousComment.id == comment_id)
+        comment_result = await db.execute(comment_stmt)
+        comment = comment_result.scalar()
+        
+        if comment is None:
+            raise HTTPException(status_code=404, detail="评论不存在")
+        
+        return comment.to_dict()
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"获取评论详情失败: {str(e)}")
+        raise HTTPException(status_code=500, detail="服务器内部错误")
