@@ -16,6 +16,16 @@
       </el-button>
     </el-backtop>
 
+    <!-- 移动端目录切换按钮 -->
+    <el-button 
+      v-if="tocItems.length > 0"
+      class="mobile-toc-toggle"
+      type="primary"
+      circle
+      @click="toggleMobileToc">
+      <el-icon><List /></el-icon>
+    </el-button>
+
     <!-- 错误状态 -->
     <div v-if="props.notFound" class="error-container">
       <el-result
@@ -239,35 +249,43 @@
       </div>
 
       <!-- 右侧目录分栏 -->
-      <div class="toc-sidebar" v-if="tocItems.length > 0">
-        <div class="toc-container">
-          <div class="toc-header">
-            <h4>目录</h4>
-            <el-button 
-              text 
-              size="small" 
-              @click="toggleToc"
-              class="toc-toggle">
-              {{ tocVisible ? '收起' : '展开' }}
-            </el-button>
-          </div>
-          <div class="toc-content" v-show="tocVisible">
-            <ul class="toc-list">
-              <li 
-                v-for="item in tocItems" 
-                :key="item.id"
-                :class="['toc-item', `toc-level-${item.level}`, { active: item.active }]">
-                <a 
-                  :href="`#${item.id}`" 
-                  @click.prevent="scrollToHeading(item.id)"
-                  class="toc-link">
-                  {{ item.text }}
-                </a>
-              </li>
-            </ul>
+      <el-affix 
+        v-if="tocItems.length > 0" 
+        ref="tocAffixRef"
+        :offset="120"
+        class="toc-affix"
+        :class="{ 'mobile-visible': mobileTocVisible }"
+        @change="onAffixChange">
+        <div class="toc-sidebar">
+          <div class="toc-container">
+            <div class="toc-header">
+              <h4>目录</h4>
+              <el-button 
+                text 
+                size="small" 
+                @click="toggleToc"
+                class="toc-toggle">
+                {{ tocVisible ? '收起' : '展开' }}
+              </el-button>
+            </div>
+            <div class="toc-content" v-show="tocVisible">
+              <ul class="toc-list">
+                <li 
+                  v-for="item in tocItems" 
+                  :key="item.id"
+                  :class="['toc-item', `toc-level-${item.level}`, { active: item.active }]">
+                  <a 
+                    :href="`#${item.id}`" 
+                    @click.prevent="scrollToHeading(item.id)"
+                    class="toc-link">
+                    {{ item.text }}
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
+      </el-affix>
 
 
     </div>
@@ -278,7 +296,7 @@
 import { ref, reactive, computed, onMounted, watch, nextTick, onUnmounted } from 'vue'
 import { ElMessage, ElNotification } from 'element-plus'
 import { 
-  Calendar, View, User, StarFilled, Share, ChatDotRound, ArrowUp, HomeFilled 
+  Calendar, View, User, StarFilled, Share, ChatDotRound, ArrowUp, HomeFilled, List 
 } from '@element-plus/icons-vue'
 // import { usePageContext } from 'vike-vue/usePageContext'
 import { fetchBlogDetail, fetchComments, submitComment as apiSubmitComment, likeBlog as likeBlogApi } from '../../../api/vikeBlogs'
@@ -337,7 +355,9 @@ interface TocItem {
 // 目录相关数据
 const tocItems = ref<TocItem[]>([])
 const tocVisible = ref(true)
+const mobileTocVisible = ref(false)
 const blogBody = ref<HTMLElement | null>(null)
+const tocAffixRef = ref<any>(null)
 
 const commentForm = reactive({
   content: '',
@@ -619,6 +639,26 @@ const toggleToc = () => {
   tocVisible.value = !tocVisible.value
 }
 
+const toggleMobileToc = () => {
+  mobileTocVisible.value = !mobileTocVisible.value
+}
+
+// 刷新固钉组件
+const refreshAffix = () => {
+  if (tocAffixRef.value) {
+    // 使用 nextTick 确保 DOM 更新完成
+    nextTick(() => {
+      // 触发固钉组件重新计算位置
+      tocAffixRef.value?.updatePosition?.()
+    })
+  }
+}
+
+// 固钉状态变化处理
+const onAffixChange = (fixed: boolean) => {
+  console.log('固钉状态变化:', fixed)
+}
+
 const scrollToHeading = (headingId: string) => {
   const element = document.getElementById(headingId)
   if (element) {
@@ -675,11 +715,27 @@ const calculateReadingProgress = () => {
 onMounted(() => {
   window.addEventListener('scroll', calculateReadingProgress)
   window.addEventListener('scroll', updateActiveTocItem)
+  window.addEventListener('resize', refreshAffix)
+  
+  // 添加一个强制激活固钉的滚动监听
+  const forceActivateAffix = () => {
+    if (tocAffixRef.value && tocItems.value.length > 0) {
+      refreshAffix()
+    }
+  }
+  
+  window.addEventListener('scroll', forceActivateAffix)
+  
+  // 清理函数
+  onUnmounted(() => {
+    window.removeEventListener('scroll', forceActivateAffix)
+  })
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', calculateReadingProgress)
   window.removeEventListener('scroll', updateActiveTocItem)
+  window.removeEventListener('resize', refreshAffix)
 })
 
 onMounted(async () => {
@@ -691,12 +747,30 @@ onMounted(async () => {
       blog.value.views = (blog.value.views || 0) + 1
     }
   }, 2000)
+  
+  // 延迟刷新固钉组件，确保页面完全加载
+  setTimeout(() => {
+    refreshAffix()
+  }, 100)
+  
+  // 多次尝试刷新固钉组件
+  setTimeout(() => {
+    refreshAffix()
+  }, 500)
+  
+  setTimeout(() => {
+    refreshAffix()
+  }, 1000)
 })
 
 // 监听博客内容变化，生成目录
 watch(() => renderedContent.value, () => {
   nextTick(() => {
     generateToc()
+    // 目录生成后刷新固钉组件
+    setTimeout(() => {
+      refreshAffix()
+    }, 50)
   })
 }, { immediate: true })
 </script>
@@ -706,25 +780,33 @@ watch(() => renderedContent.value, () => {
   min-height: 100vh;
   background: #f5f7fa;
   padding: 20px 0;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .blog-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* 当有目录时，扩展容器宽度并采用两栏布局 */
 .blog-container.with-toc {
-  max-width: 1600px;
+  max-width: 1400px;
   display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 40px;
+  grid-template-columns: 1fr 280px;
+  gap: 30px;
   align-items: start;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .main-content {
   grid-column: 1;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .blog-header {
@@ -793,6 +875,10 @@ watch(() => renderedContent.value, () => {
   line-height: 1.8;
   color: #333;
   font-size: 16px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .blog-body h2 {
@@ -830,7 +916,20 @@ watch(() => renderedContent.value, () => {
   border-radius: 4px;
 }
 
-/* 移除所有代码块样式，避免与外部CSS冲突 */
+/* 代码块样式 - 防止横向溢出 */
+.blog-body pre {
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  word-wrap: break-word !important;
+  white-space: pre-wrap !important;
+  box-sizing: border-box !important;
+}
+
+.blog-body code {
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  max-width: 100% !important;
+}
 
 .blog-footer {
   margin-top: 40px;
@@ -1003,6 +1102,35 @@ watch(() => renderedContent.value, () => {
 }
 
 /* 响应式设计 */
+@media (max-width: 1200px) {
+  /* 中等屏幕下调整网格布局 */
+  .blog-container.with-toc {
+    max-width: 100%;
+    display: block;
+    grid-template-columns: none;
+    gap: 0;
+    padding: 0 15px;
+  }
+  
+  .toc-affix {
+    position: fixed !important;
+    top: 20px;
+    right: 20px;
+    width: 260px;
+    max-width: 260px;
+    min-width: 260px;
+    z-index: 1000;
+  }
+  
+  .toc-sidebar {
+    width: 260px;
+    max-width: 260px;
+    min-width: 260px;
+    max-height: calc(100vh - 40px);
+    margin-top: 100px;
+  }
+}
+
 @media (max-width: 768px) {
   .blog-container {
     padding: 0 15px;
@@ -1041,14 +1169,38 @@ watch(() => renderedContent.value, () => {
     margin: 10px;
   }
   
-  /* 移动端隐藏目录 */
+  /* 移动端目录样式 */
+  .toc-affix {
+    position: fixed !important;
+    top: 20px;
+    right: 20px;
+    width: 280px;
+    max-width: 280px;
+    min-width: 280px;
+    z-index: 1000;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .toc-affix.mobile-visible {
+    transform: translateX(0);
+  }
+  
   .toc-sidebar {
-    display: none;
+    width: 280px;
+    max-width: 280px;
+    min-width: 280px;
+    max-height: calc(100vh - 40px);
+  }
+  
+  /* 移动端显示目录切换按钮 */
+  .mobile-toc-toggle {
+    display: flex !important;
   }
   
   /* 移动端移除两栏布局 */
   .blog-container.with-toc {
-    max-width: 1200px;
+    max-width: 100%;
     display: block;
     grid-template-columns: none;
     gap: 0;
@@ -1117,17 +1269,46 @@ watch(() => renderedContent.value, () => {
   box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
 }
 
+/* 移动端目录切换按钮 */
+.mobile-toc-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  z-index: 1001;
+  display: none;
+  background: linear-gradient(135deg, #409EFF, #67C23A);
+  border: none;
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.mobile-toc-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* 目录固钉容器 */
+.toc-affix {
+  width: 280px;
+  max-width: 280px;
+  min-width: 280px;
+}
+
 /* 目录样式 - 作为独立分栏 */
 .toc-sidebar {
-  position: sticky;
-  top: 300px;
   width: 280px;
-  max-height: 80vh;
+  max-width: 280px;
+  min-width: 280px;
+  max-height: calc(100vh - 40px);
   background: white;
   border-radius: 12px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   border: 1px solid #e4e7ed;
   overflow: hidden;
+  box-sizing: border-box;
+  z-index: 100;
 }
 
 .toc-container {
@@ -1250,6 +1431,24 @@ watch(() => renderedContent.value, () => {
 
 <!-- 全局样式 - 确保代码块Atom Dark主题能够应用 -->
 <style>
+/* 防止横向滚动的全局样式 */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* 确保所有容器都不会溢出 */
+.blog-detail-page,
+.blog-container,
+.main-content,
+.blog-body,
+.content-card {
+  max-width: 100%;
+  overflow-x: hidden;
+}
 /* 强制应用 Atom Dark 主题到所有代码块 */
 pre {
   background-color: #1d1f21 !important;
