@@ -182,6 +182,11 @@ class Blog(Base):
         "Comment",
         back_populates="blog"
     )
+    
+    anonymous_comments: Mapped[List["AnonymousComment"]] = relationship(
+        "AnonymousComment",
+        back_populates="blog"
+    )
 
     def to_dict(self):
         return {
@@ -275,3 +280,45 @@ class ReptileInclusion(Base):
     def to_dict(self):
         return dict(id=self.id, blog_id=self.blog_id, GoogleSubmissionStatus=self.GoogleSubmissionStatus,
                     BingSubmissionStatus=self.BingSubmissionStatus, Submissiontime=self.Submissiontime)
+
+
+@dataclass
+class AnonymousComment(Base):
+    """匿名用户评论表"""
+    __tablename__ = "anonymous_comments"
+    __table_args__ = {'extend_existing': True}
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    parentId: int = Column(Integer, ForeignKey('anonymous_comments.id'), nullable=True)
+    blog_id: Mapped[int] = mapped_column(Integer, ForeignKey('blogtable.BlogId'))
+    blog: Mapped["Blog"] = relationship("Blog", back_populates="anonymous_comments")
+    nickname: str = Column(String(100), nullable=False)  # 匿名用户昵称
+    email: str = Column(String(255), nullable=True)  # 可选邮箱
+    content: str = Column(Text, nullable=False)  # 评论内容
+    likes: int = Column(Integer, default=0)  # 点赞数
+    createTime: datetime.datetime = Column(DateTime, default=datetime.datetime.now)
+    contentImg: str = Column(String(500), nullable=True)  # 评论图片
+    address: str = Column(String(255), nullable=True)  # 用户地址
+    is_anonymous: bool = Column(Boolean, default=True)  # 标识为匿名评论
+    
+    # 自引用关系，支持回复功能
+    replies: Mapped[List["AnonymousComment"]] = relationship(
+        "AnonymousComment",
+        backref="parent_comment",
+        remote_side=[id]
+    )
+
+    def to_dict(self):
+        return dict(
+            id=self.id, 
+            parentId=self.parentId, 
+            blog_id=self.blog_id,
+            nickname=self.nickname,
+            email=self.email,
+            content=self.content, 
+            likes=self.likes,
+            createTime=self.createTime, 
+            contentImg=self.contentImg,
+            address=self.address,
+            is_anonymous=self.is_anonymous
+        )
