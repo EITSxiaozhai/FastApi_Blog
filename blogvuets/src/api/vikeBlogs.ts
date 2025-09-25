@@ -347,16 +347,37 @@ export const fetchComments = async (blogId: string): Promise<Comment[] | null> =
 export const submitComment = async (
   blogId: string, 
   content: string, 
+  name?: string,
+  email?: string,
   token?: string
 ): Promise<Comment | null> => {
-  const headers = token ? { Authorization: `Bearer ${token}` } : {}
-  
-  return apiWrapper<Comment>(
-    vikeApi.post(`/generaluser/commentsave/vueblogid=${blogId}`, 
-      { content }, 
-      { headers }
-    )
-  )
+  try {
+    if (token) {
+      // 已登录用户评论
+      const headers = { Authorization: `Bearer ${token}` }
+      return apiWrapper<Comment>(
+        vikeApi.post(`/generaluser/commentsave/vueblogid=${blogId}`, 
+          { content: { content } }, 
+          { headers }
+        )
+      )
+    } else {
+      // 匿名用户评论
+      return apiWrapper<Comment>(
+        vikeApi.post(`/generaluser/commentsave/anonymous/vueblogid=${blogId}`, 
+          { 
+            content,
+            name: name || '匿名用户',
+            email: email || '',
+            address: ''
+          }
+        )
+      )
+    }
+  } catch (error) {
+    console.error('评论提交失败:', error)
+    return null
+  }
 }
 
 // 记录用户访问 (注意：此API与fetchBlogDetail使用相同端点，通常无需单独调用)
@@ -377,5 +398,12 @@ export const recordUserVisit = async (blogId: string): Promise<void> => {
 export const fetchBlogRating = async (blogId: string): Promise<{ rating: number } | null> => {
   return apiWrapper(
     vikeApi.get(`/views/blogs/${blogId}/average-rating/`)
+  )
+}
+
+// 评论点赞
+export const likeComment = async (commentId: string): Promise<{ likes: number } | null> => {
+  return apiWrapper(
+    vikeApi.post(`/generaluser/comments/${commentId}/like`)
   )
 } 
