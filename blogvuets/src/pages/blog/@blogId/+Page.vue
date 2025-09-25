@@ -172,32 +172,46 @@
                   v-model="commentForm.content"
                   type="textarea"
                   :rows="4"
-                  placeholder="写下你的评论..."
+                  placeholder="写下你的评论... *"
                   maxlength="500"
-                  show-word-limit>
+                  show-word-limit
+                  required>
                 </el-input>
               </el-form-item>
               
               <el-form-item>
-                <div class="comment-actions">
-                  <div class="comment-info">
-                    <el-input 
-                      v-model="commentForm.name" 
-                      placeholder="昵称"
-                      style="width: 120px; margin-right: 10px;">
-                    </el-input>
+                <div class="comment-info">
+                  <el-input 
+                    v-model="commentForm.name" 
+                    placeholder="昵称 *"
+                    style="width: 120px; margin-right: 10px;"
+                    required>
+                  </el-input>
                     <el-input 
                       v-model="commentForm.email" 
-                      placeholder="邮箱 (可选)"
-                      style="width: 150px;">
+                      placeholder="邮箱 *"
+                      style="width: 150px;"
+                      required>
                     </el-input>
-                  </div>
-                  
+                </div>
+                <div class="form-tips">
+                  <span style="color: #909399; font-size: 12px;">* 为必填项</span>
+                </div>
+              </el-form-item>
+              
+              <el-form-item>
+                <div class="recaptcha-container">
+                  <div id="recaptcha" ref="recaptchaRef"></div>
+                </div>
+              </el-form-item>
+              
+              <el-form-item>
+                <div class="comment-actions">
                   <el-button 
                     type="primary" 
                     @click="submitComment"
                     :loading="submittingComment"
-                    :disabled="!commentForm.content || !commentForm.name">
+                    :disabled="!commentForm.content || !commentForm.name || !commentForm.email || !recaptchaVerified">
                     发表评论
                   </el-button>
                 </div>
@@ -293,6 +307,13 @@
 </template>
 
 <script setup lang="ts">
+// 声明全局类型
+declare global {
+  interface Window {
+    grecaptcha: any
+  }
+}
+
 import { ref, reactive, computed, onMounted, watch, nextTick, onUnmounted } from 'vue'
 import { ElMessage, ElNotification } from 'element-plus'
 import { 
@@ -343,6 +364,8 @@ const submittingComment = ref(false)
 const loadingComments = ref(false)
 const hasMoreComments = ref(true)
 const currentUrl = ref('')
+const recaptchaVerified = ref(false)
+const recaptchaRef = ref<HTMLElement | null>(null)
 
 // 目录项类型定义
 interface TocItem {
@@ -362,7 +385,8 @@ const tocAffixRef = ref<any>(null)
 const commentForm = reactive({
   content: '',
   name: '',
-  email: ''
+  email: '',
+  recaptcha: ''
 })
 
 // 初始化评论数据
@@ -525,8 +549,13 @@ const scrollToComments = () => {
 }
 
 const submitComment = async () => {
-  if (!commentForm.content || !commentForm.name) {
-    ElMessage.warning('请填写昵称和评论内容')
+  if (!commentForm.content || !commentForm.name || !commentForm.email) {
+    ElMessage.warning('请填写昵称、邮箱和评论内容')
+    return
+  }
+
+  if (!recaptchaVerified.value) {
+    ElMessage.warning('请完成人机验证')
     return
   }
 
@@ -536,7 +565,14 @@ const submitComment = async () => {
     // 获取用户token（如果已登录）
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
     
-    const result = await apiSubmitComment(String(safeBlogId.value), commentForm.content, token || undefined)
+    const result = await apiSubmitComment(
+      String(safeBlogId.value), 
+      commentForm.content, 
+      commentForm.name,
+      commentForm.email,
+      token || undefined,
+      commentForm.recaptcha
+    )
     
     if (result) {
       // 使用API返回的评论数据
@@ -552,6 +588,13 @@ const submitComment = async () => {
       commentForm.content = ''
       commentForm.name = ''
       commentForm.email = ''
+      commentForm.recaptcha = ''
+      
+      // 重置reCAPTCHA
+      recaptchaVerified.value = false
+      if (window.grecaptcha) {
+        window.grecaptcha.reset()
+      }
       
       ElNotification({
         title: '评论成功',
@@ -711,6 +754,43 @@ const calculateReadingProgress = () => {
   readingProgress.value = Math.min(100, Math.max(0, progress))
 }
 
+// reCAPTCHA 回调函数
+const onRecaptchaSuccess = (token: string) => {
+  recaptchaVerified.value = true
+  commentForm.recaptcha = token
+  console.log('reCAPTCHA验证成功:', token)
+}
+
+const onRecaptchaExpired = () => {
+  recaptchaVerified.value = false
+  commentForm.recaptcha = ''
+  console.log('reCAPTCHA验证已过期')
+}
+
+const onRecaptchaError = () => {
+  recaptchaVerified.value = false
+  commentForm.recaptcha = ''
+  console.log('reCAPTCHA验证出错')
+}
+
+// 初始化reCAPTCHA
+const initRecaptcha = () => {
+  if (typeof window !== 'undefined' && window.grecaptcha && recaptchaRef.value) {
+    try {
+      window.grecaptcha.render(recaptchaRef.value, {
+        sitekey: '6Lfj3kkoAAAAAJzLmNVWXTAzRoHzCobDCs-Odmjq', // 请替换为您的实际site key
+        callback: onRecaptchaSuccess,
+        'expired-callback': onRecaptchaExpired,
+        'error-callback': onRecaptchaError,
+        theme: 'light',
+        size: 'normal'
+      })
+    } catch (error) {
+      console.error('reCAPTCHA初始化失败:', error)
+    }
+  }
+}
+
 // 监听滚动事件
 onMounted(() => {
   window.addEventListener('scroll', calculateReadingProgress)
@@ -725,6 +805,11 @@ onMounted(() => {
   }
   
   window.addEventListener('scroll', forceActivateAffix)
+  
+  // 初始化reCAPTCHA
+  nextTick(() => {
+    initRecaptcha()
+  })
   
   // 清理函数
   onUnmounted(() => {
@@ -1426,6 +1511,25 @@ watch(() => renderedContent.value, () => {
 
 .toc-content::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+/* reCAPTCHA 样式 */
+.recaptcha-container {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.comment-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.form-tips {
+  margin-top: 5px;
+  text-align: left;
 }
 </style>
 

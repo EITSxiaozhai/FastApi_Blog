@@ -349,7 +349,8 @@ export const submitComment = async (
   content: string, 
   name?: string,
   email?: string,
-  token?: string
+  token?: string,
+  recaptcha?: string
 ): Promise<Comment | null> => {
   try {
     if (token) {
@@ -369,7 +370,8 @@ export const submitComment = async (
             content,
             name: name || '匿名用户',
             email: email || '',
-            address: ''
+            address: '',
+            recaptcha: recaptcha || ''
           }
         )
       )
