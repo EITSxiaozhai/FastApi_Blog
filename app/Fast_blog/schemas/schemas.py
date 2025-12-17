@@ -138,3 +138,30 @@ class BlogCreate(BaseModel):
     PublishStatus: bool = False
     NumberViews: int = 0
     NumberLikes: int = 0
+
+
+class AnonymousCommentModel(BaseModel):
+    """匿名评论的Pydantic模型"""
+    id: int
+    parentId: Optional[int]
+    blog_id: int
+    nickname: str
+    email: Optional[str] = None
+    content: str
+    likes: int
+    createTime: datetime
+    contentImg: Optional[str] = None
+    address: Optional[str] = None
+    is_anonymous: bool = True
+    replies: List[Optional["AnonymousCommentModel"]] = []
+
+
+class AnonymousCommentCreate(BaseModel):
+    """创建匿名评论的请求模型"""
+    blog_id: int
+    nickname: str
+    email: Optional[str] = None
+    content: str
+    parentId: Optional[int] = None
+    contentImg: Optional[str] = None
+    address: Optional[str] = None

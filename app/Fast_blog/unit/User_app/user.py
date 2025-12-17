@@ -19,7 +19,7 @@ from Fast_blog.database.databaseconnection import engine, get_db
 from Fast_blog.middleware.backtasks import AsyncTokenManager, Useroauth2_scheme, verify_recaptcha, \
     AliOssUpload, celery_app, SessionStorage, BlogCache
 from Fast_blog.model import models
-from Fast_blog.model.models import User, Comment, Blog
+from Fast_blog.model.models import User, Comment, Blog, AnonymousComment
 from Fast_blog.schemas.schemas import UserCredentials, UserRegCredentials
 import base64
 import qrcode
@@ -200,21 +200,31 @@ async def CommentListUserNameGet(user, db: AsyncSession = Depends(get_db)):
 @UserApp.post("/{vueblogid}/commentlist")
 async def CommentList(vueblogid: int, db: AsyncSession = Depends(get_db)):
     try:
-        # 使用 select_from 显式指定查询起点
+        # 获取注册用户评论
         comments_query = (
             select(Comment, User)
             .select_from(Comment)
-            .join(Blog, Comment.blog_id == Blog.BlogId)  # 明确连接条件
-            .join(User, Comment.uid == User.UserId)  # 明确连接条件
+            .join(Blog, Comment.blog_id == Blog.BlogId)
+            .join(User, Comment.uid == User.UserId)
             .options(joinedload(Comment.user))
-            .where(Blog.BlogId == vueblogid)  # 添加过滤条件
+            .where(Blog.BlogId == vueblogid)
         )
 
         result = await db.execute(comments_query)
-        comments = result.scalars().all()
+        user_comments = result.scalars().all()
+
+        # 获取匿名评论
+        anonymous_comments_query = select(AnonymousComment).where(
+            AnonymousComment.blog_id == vueblogid
+        ).order_by(AnonymousComment.createTime.desc())
+
+        anonymous_result = await db.execute(anonymous_comments_query)
+        anonymous_comments = anonymous_result.scalars().all()
 
         comment_dict = {}
-        for comment in comments:
+        
+        # 处理注册用户评论
+        for comment in user_comments:
             comment_data = {
                 'id': comment.id,
                 'parentId': comment.parentId,
@@ -227,13 +237,41 @@ async def CommentList(vueblogid: int, db: AsyncSession = Depends(get_db)):
                     "username": comment.user.username if comment.user else 'Unknown',
                     'avatar': "https://api.vvhan.com/api/avatar"
                 },
-                'reply': {'total': 0, 'list': []}
+                'reply': {'total': 0, 'list': []},
+                'is_anonymous': False
             }
 
             if comment.parentId is None:
                 comment_dict[comment.id] = comment_data
             else:
                 parent_id = comment.parentId
+                if parent_id in comment_dict:
+                    comment_dict[parent_id]['reply']['list'].append(comment_data)
+                    comment_dict[parent_id]['reply']['total'] += 1
+
+        # 处理匿名评论
+        for comment in anonymous_comments:
+            comment_data = {
+                'id': f"anon_{comment.id}",  # 添加前缀避免ID冲突
+                'parentId': f"anon_{comment.parentId}" if comment.parentId else None,
+                'uid': None,
+                'content': comment.content,
+                'likes': comment.likes or 0,
+                'address': comment.address or '',
+                "user": {
+                    "homeLink": '1',
+                    "username": comment.nickname,
+                    'avatar': "https://api.vvhan.com/api/avatar"
+                },
+                'reply': {'total': 0, 'list': []},
+                'is_anonymous': True,
+                'email': comment.email
+            }
+
+            if comment.parentId is None:
+                comment_dict[f"anon_{comment.id}"] = comment_data
+            else:
+                parent_id = f"anon_{comment.parentId}"
                 if parent_id in comment_dict:
                     comment_dict[parent_id]['reply']['list'].append(comment_data)
                     comment_dict[parent_id]['reply']['total'] += 1
@@ -299,6 +337,58 @@ async def CommentSave(vueblogid: int, request: Request, token: str = Depends(Use
         return {"code": 40002, "message": "Token已过期"}
     except jwt.InvalidTokenError:
         return {"code": 40003, "message": "无效的Token"}
+
+
+@UserApp.post("/commentsave/anonymous/vueblogid={vueblogid}")
+async def AnonymousCommentSave(vueblogid: int, request: Request, db: AsyncSession = Depends(get_db)):
+    """匿名用户评论接口"""
+    try:
+        # 获取请求数据
+        x = await request.json()
+        
+        # 验证reCAPTCHA
+        recaptcha_token = x.get('recaptcha', '')
+        if not recaptcha_token:
+            return {"data": "评论添加失败", "reason": "缺少reCAPTCHA验证", "code": 400}
+        
+        # 调用reCAPTCHA验证
+        recaptcha_response = await verify_recaptcha(UserreCAPTCHA=recaptcha_token, SecretKeyTypology="user")
+        
+        if not recaptcha_response["message"]["success"]:
+            return {"data": "评论添加失败", "reason": "reCAPTCHA验证失败", "code": 400}
+        
+        # 检查博客是否存在且已发布
+        blog_stmt = select(Blog).where(Blog.BlogId == vueblogid, Blog.PublishStatus == True)
+        blog_result = await db.execute(blog_stmt)
+        blog = blog_result.scalar()
+        
+        if blog is None:
+            return {"data": "评论添加失败", "reason": "博客不存在或未发布", "code": 404}
+        
+        # 创建匿名评论
+        anonymous_comment = AnonymousComment(
+            blog_id=vueblogid,
+            nickname=x.get('name', '匿名用户'),
+            email=x.get('email', ''),
+            content=x.get('content', ''),
+            parentId=x.get('parentId'),
+            contentImg=x.get('contentImg', ''),
+            address=x.get('address', '')
+        )
+        
+        db.add(anonymous_comment)
+        await db.commit()
+        await db.refresh(anonymous_comment)
+        
+        return {
+            "data": "匿名评论添加成功",
+            "comment_id": anonymous_comment.id,
+            "code": 200
+        }
+        
+    except Exception as e:
+        print(f"匿名评论添加失败: {str(e)}")
+        return {"data": "评论添加失败", "reason": str(e), "code": 500}
 
 
 login_sessions = {}  # 核心存储结构

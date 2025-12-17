@@ -562,7 +562,12 @@ const searchSuggestions = async (queryString, callback) => {
     if (localSuggestions.length < 3) {
       const searchResults = await apiSearchBlogs(queryString)
       if (searchResults) {
+        // 获取本地已存在的文章ID集合，用于去重
+        const localIds = new Set(localSuggestions.map(item => item.id))
+        
+        // 过滤掉本地已存在的文章，避免重复
         const apiSuggestions = searchResults
+          .filter(article => !localIds.has(article.id)) // 去重：排除本地已存在的文章
           .slice(0, 5 - localSuggestions.length)
           .map(article => ({
             value: article.title,
