@@ -22,7 +22,7 @@ from Fast_blog.middleware.backtasks import Adminoauth2_scheme, verify_recaptcha,
 from Fast_blog.model import models
 from Fast_blog.model.models import AdminUser, UserPrivileges, Blog, ReptileInclusion, BlogTag
 from Fast_blog.schemas.schemas import AdminUserModel
-from Fast_blog.schemas.schemas import BlogCreate, BlogTagModel
+from Fast_blog.schemas.schemas import BlogCreate, BlogTagModel, BlogEdit
 from Fast_blog.schemas.schemas import UserCredentials
 from Fast_blog.unit.Blog_app.BlogApi import uploadoss
 from Fast_blog.unit.tools.gemini_tools import generate_blog_description
@@ -681,18 +681,20 @@ async def AdminBlogidADDimg(blog_id: int, file: UploadFile = File(...), ):
 
 @AdminApi.post("/blog/Blogedit")
 ##博客对应ID编辑
-async def AdminBlogidedit(blog_id: int, blog_edit: BlogCreate):
+async def AdminBlogidedit(blog_id: int, blog_edit: BlogEdit):
     async with db_session() as session:
         try:
             # 提取标签信息
-            tags = blog_edit.tags
+            tags = blog_edit.tags or []
 
             # 根据 BlogId 查询相应的博客
             result = await session.execute(select(Blog).filter(Blog.BlogId == blog_id))
             blog_entry = result.scalar_one()
 
             # 更新博客内容
-            for key, value in blog_edit.dict().items():
+            for key, value in blog_edit.model_dump(exclude_unset=True, exclude={'tags'}).items():
+                if value is None:
+                    continue
                 if key == 'content':
                     # 编码字符串为二进制
                     setattr(blog_entry, key, bytes(value, encoding='utf-8'))

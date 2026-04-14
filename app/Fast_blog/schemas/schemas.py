@@ -140,6 +140,19 @@ class BlogCreate(BaseModel):
     NumberLikes: int = 0
 
 
+class BlogEdit(BaseModel):
+    title: Optional[str] = None
+    content: Optional[str] = None
+    description: Optional[str] = None
+    BlogIntroductionPicture: Optional[str] = None
+    author: Optional[str] = None
+    admin_id: Optional[int] = None
+    tags: Optional[List[str]] = None
+    PublishStatus: Optional[bool] = None
+    NumberViews: Optional[int] = None
+    NumberLikes: Optional[int] = None
+
+
 class AnonymousCommentModel(BaseModel):
     """匿名评论的Pydantic模型"""
     id: int
