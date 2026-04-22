@@ -1174,7 +1174,8 @@ onBeforeUnmount(() => {
   padding: 0;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
 }
 
 .article-excerpt {
