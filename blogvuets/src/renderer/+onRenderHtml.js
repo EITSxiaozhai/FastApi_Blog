@@ -134,7 +134,7 @@ async function onRenderHtml(pageContext) {
           }
           #app {
             min-height: 100vh;
-            padding: 20px 0;
+            padding: 0;
           }
           
           /* 暗色主题支持 */
