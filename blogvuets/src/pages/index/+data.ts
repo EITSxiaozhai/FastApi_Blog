@@ -1,13 +1,34 @@
 import { fetchBlogList, fetchBlogStats, getBingWallpaper } from '../../api/vikeBlogs'
 
+const DEFAULT_STATS = { pv: 1565, uv: 940, articles: 0 }
+const STATS_TIMEOUT_MS = 800
+
+const withTimeout = async <T>(promise: Promise<T>, timeoutMs: number, fallback: T): Promise<T> => {
+  let timer: ReturnType<typeof setTimeout> | null = null
+
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<T>((resolve) => {
+        timer = setTimeout(() => resolve(fallback), timeoutMs)
+      })
+    ])
+  } finally {
+    if (timer) clearTimeout(timer)
+  }
+}
+
 export async function data(pageContext: any) {
   console.log('🔄 正在服务器端获取首页数据...')
   
   try {
+    // 统计接口慢时快速降级，避免阻塞SSR首屏
+    const statsPromise = withTimeout(fetchBlogStats(), STATS_TIMEOUT_MS, null)
+
     // 并行获取数据
     const [blogListResult, statsResult, wallpaperResult] = await Promise.allSettled([
       fetchBlogList({ page: 1, pageSize: 9, initialLoad: true }),
-      fetchBlogStats(),
+      statsPromise,
       getBingWallpaper(false) // 获取今日壁纸
     ])
 
@@ -21,25 +42,27 @@ export async function data(pageContext: any) {
     }
 
     // 处理统计数据
-    let stats: any = { pv: 0, uv: 0, articles: 0 }
+    let stats: any = { ...DEFAULT_STATS, articles: blogList.data.length }
     if (statsResult.status === 'fulfilled' && statsResult.value) {
       console.log('✅ 统计数据API调用成功:', statsResult.value)
       const rawStats: any = statsResult.value
-      if (rawStats && rawStats.data) {
+      // 兼容两种结构：{ pv, uv } 或 { data: { PV, UV } }
+      if (rawStats?.pv !== undefined || rawStats?.uv !== undefined) {
         stats = {
-          pv: parseInt(rawStats.data.PV) || 0,
-          uv: parseInt(rawStats.data.UV) || 0,
+          pv: Number(rawStats.pv) || DEFAULT_STATS.pv,
+          uv: Number(rawStats.uv) || DEFAULT_STATS.uv,
+          articles: blogList.data.length
+        }
+      } else if (rawStats?.data) {
+        stats = {
+          pv: parseInt(rawStats.data.PV) || DEFAULT_STATS.pv,
+          uv: parseInt(rawStats.data.UV) || DEFAULT_STATS.uv,
           articles: blogList.data.length
         }
       }
     } else {
       console.warn('⚠️ 统计数据API调用失败:', statsResult.status === 'rejected' ? statsResult.reason : '未知错误')
-      // 提供基本统计信息
-      stats = {
-        pv: 1565,  // 默认值
-        uv: 940,   // 默认值
-        articles: blogList.data.length
-      }
+      stats.articles = blogList.data.length
     }
 
     // 处理壁纸数据
@@ -72,7 +95,7 @@ export async function data(pageContext: any) {
     return {
       articles: [],
       pagination: { page: 1, pageSize: 9, total: 0, totalPages: 0 },
-      stats: { pv: 1565, uv: 940, articles: 0 },
+      stats: { ...DEFAULT_STATS },
       wallpaper: null,
       wallpaperInfo: null,
       error: '数据获取失败，请稍后重试'

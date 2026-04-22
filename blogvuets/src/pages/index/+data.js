@@ -1,5 +1,22 @@
 import { fetchBlogList, getBingWallpaper, fetchBlogStats } from '@/api/vikeBlogs'
 
+const DEFAULT_STATS = { pv: 1565, uv: 940, articles: 0 }
+const STATS_TIMEOUT_MS = 800
+
+const withTimeout = async (promise, timeoutMs, fallback) => {
+  let timer = null
+  try {
+    return await Promise.race([
+      promise,
+      new Promise((resolve) => {
+        timer = setTimeout(() => resolve(fallback), timeoutMs)
+      })
+    ])
+  } finally {
+    if (timer) clearTimeout(timer)
+  }
+}
+
 // 获取随机诗句
 const getRandomVerse = async (retries = 3) => {
   for (let i = 0; i < retries; i++) {
@@ -55,13 +72,21 @@ export async function data(pageContext) {
       console.log('📄 请求页码:', page)
     }
     
+    // 统计接口慢时快速降级，避免阻塞SSR首屏
+    const statsPromise = withTimeout(fetchBlogStats(), STATS_TIMEOUT_MS, null)
+
     // 并行获取所有数据
-    const [blogResponse, wallpaperData, verse, statsData] = await Promise.all([
+    const [blogResult, wallpaperResult, verseResult, statsResult] = await Promise.allSettled([
       fetchBlogList({ page: page, pageSize: pageSize }),
       getBingWallpaper(),
       getRandomVerse(),
-      fetchBlogStats()
+      statsPromise
     ])
+
+    const blogResponse = blogResult.status === 'fulfilled' ? blogResult.value : null
+    const wallpaperData = wallpaperResult.status === 'fulfilled' ? wallpaperResult.value : null
+    const verse = verseResult.status === 'fulfilled' ? verseResult.value : '探索技术 · 分享知识 · 记录成长'
+    const statsData = statsResult.status === 'fulfilled' ? statsResult.value : null
     
     if (import.meta.env?.DEV) {
       console.log('✅ 获取博客统计数据成功:', statsData)
@@ -77,8 +102,8 @@ export async function data(pageContext) {
     
     // 更新统计数据
     const stats = {
-      pv: statsData?.pv || 0,
-      uv: statsData?.uv || 0,
+      pv: statsData?.pv || DEFAULT_STATS.pv,
+      uv: statsData?.uv || DEFAULT_STATS.uv,
       articles: blogResponse?.total || blogResponse?.pagination?.total || 0  // 尝试多个字段
     }
     
@@ -111,7 +136,7 @@ export async function data(pageContext) {
     }
     return {
       articles: [],
-      stats: { pv: 0, uv: 0, articles: 0 },
+      stats: { ...DEFAULT_STATS },
       wallpaper: null,
       verse: '出现错误，请稍后重试',
       pagination: { page: 1, pageSize: 9, total: 0, totalPages: 1 }

@@ -329,7 +329,7 @@ import {
   Picture, Link
 } from '@element-plus/icons-vue'
 // 导入API函数
-import { fetchBlogList, searchBlogs as apiSearchBlogs } from '@/api/vikeBlogs'
+import { fetchBlogStats, searchBlogs as apiSearchBlogs } from '@/api/vikeBlogs'
 
 // 接收Vike服务器端数据
 const props = defineProps({
@@ -376,6 +376,8 @@ const stats = reactive({
   uv: props.stats.uv,
   articles: props.stats.articles
 })
+
+const STATS_REFRESH_TIMEOUT_MS = 5000
 
 const siteRuntime = reactive({
   days: 0,
@@ -642,6 +644,34 @@ watch(() => props.pagination, (newPagination) => {
   }
 }, { immediate: true })
 
+const withTimeout = async (promise, timeoutMs, fallback = null) => {
+  let timer = null
+  try {
+    return await Promise.race([
+      promise,
+      new Promise((resolve) => {
+        timer = setTimeout(() => resolve(fallback), timeoutMs)
+      })
+    ])
+  } finally {
+    if (timer) clearTimeout(timer)
+  }
+}
+
+// 客户端挂载后异步刷新统计，避免SSR首屏等待慢接口
+const refreshStatsInBackground = async () => {
+  try {
+    const latestStats = await withTimeout(fetchBlogStats(), STATS_REFRESH_TIMEOUT_MS, null)
+    if (!latestStats) return
+    stats.pv = Number(latestStats.pv) || stats.pv
+    stats.uv = Number(latestStats.uv) || stats.uv
+    // 文章总数优先保持当前页面已知值
+    stats.articles = stats.articles || articles.value.length
+  } catch (error) {
+    console.warn('后台刷新统计数据失败:', error)
+  }
+}
+
 // 处理页码变化
 const handlePageChange = (page) => {
   if (page === 1) {
@@ -704,6 +734,9 @@ onMounted(() => {
   }
   // 初始计算一次列数
   handleResize()
+
+  // 不阻塞首屏，后台刷新统计数据
+  refreshStatsInBackground()
 })
 
 onBeforeUnmount(() => {
