@@ -184,15 +184,12 @@ async def _run_update_redis_cache():
 
     db = db_session()
     try:
-        result = await db.execute(select(Blog))
+        result = await db.execute(select(Blog).where(Blog.PublishStatus == 1))
         blogs = result.scalars().all()
 
         async with blog_cache.redis_client.pipeline() as pipe:
             for blog in blogs:
-                data = {
-                    "BlogId": blog.BlogId,
-                    "title": blog.title,
-                }
+                data = blog.to_dict()
                 redis_key = f"blog:{blog.BlogId}"
                 pipe.set(redis_key, json.dumps(data))
                 pipe.expire(redis_key, 86400)
