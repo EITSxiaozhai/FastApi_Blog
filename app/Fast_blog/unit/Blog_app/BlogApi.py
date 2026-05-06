@@ -53,7 +53,12 @@ async def GetBlogTaginfo(blog_id: int):
 
 @BlogApp.get("/blog/BlogIndex")
 async def BlogIndex(initialLoad: bool = True, page: int = 1, pageSize: int = 4, db: AsyncSession = Depends(get_db)):
+    own_session = db is None
+    if own_session:
+        db = db_session()
     try:
+        if not blog_cache.is_ready():
+            await blog_cache.initialize()
         # 参数验证
         page = max(1, page)  # 确保页码不小于1
         pageSize = max(1, min(pageSize, 20))  # 限制每页数量在1-20之间
@@ -173,7 +178,7 @@ async def async_cache_update(redis_key: str, blog: Blog):
 
 
 # 增强版缓存同步任务
-async def update_redis_cache(db: AsyncSession = Depends(get_db)):
+async def update_redis_cache(db: AsyncSession = None):
     print("启动全量缓存同步")
     try:
         result = await db.execute(select(Blog))

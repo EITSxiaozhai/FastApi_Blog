@@ -46,10 +46,16 @@ celery_app = Celery('task', broker=f'amqp://{mq_username}:{mq_password}@{mq_host
 
 
 @celery_app.task(name="update_redis_cache")
-async def update_redis_cache_task():
-    from Fast_blog.unit.Blog_app.BlogApi import update_redis_cache
-    await update_redis_cache()
-    return 0
+def update_redis_cache_task():
+    return asyncio.run(_run_update_redis_cache())
+
+
+celery_app.conf.beat_schedule = {
+    'update-redis-cache-every-24-hours': {
+        'task': 'update_redis_cache',
+        'schedule': timedelta(hours=24),
+    },
+}
 
 
 class AsyncTokenManager:
@@ -165,6 +171,41 @@ class BlogCache:
 
     def is_ready(self):
         return self.redis_client is not None
+
+
+async def _run_update_redis_cache():
+    from sqlalchemy import select
+
+    from Fast_blog.database.databaseconnection import db_session
+    from Fast_blog.model.models import Blog
+
+    blog_cache = BlogCache()
+    await blog_cache.initialize()
+
+    db = db_session()
+    try:
+        result = await db.execute(select(Blog))
+        blogs = result.scalars().all()
+
+        async with blog_cache.redis_client.pipeline() as pipe:
+            for blog in blogs:
+                data = {
+                    "BlogId": blog.BlogId,
+                    "title": blog.title,
+                }
+                redis_key = f"blog:{blog.BlogId}"
+                pipe.set(redis_key, json.dumps(data))
+                pipe.expire(redis_key, 86400)
+            await pipe.execute()
+
+        return {"status": f"sync complete, processed {len(blogs)} records"}
+    except Exception as exc:
+        print(f"Full sync failed: {exc}")
+        raise
+    finally:
+        await db.close()
+        if blog_cache.redis_client is not None:
+            await blog_cache.redis_client.close()
 
 class SessionStorage:
     def __init__(self, redis_client: Redis):  # 直接接收 Redis 客户端
