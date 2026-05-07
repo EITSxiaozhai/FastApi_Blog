@@ -21,7 +21,11 @@ db_password = parse.quote(db_password.encode('utf-8'))
 Sql_URL = f"mysql+asyncmy://{db_username}:{db_password}@{db_hostname}:{db_port}/{db_name}?charset=utf8mb4"
 
 # 创建异步连接
-engine = create_async_engine(Sql_URL, pool_pre_ping=True, )
+engine = create_async_engine(
+    Sql_URL,
+    pool_pre_ping=True,
+    pool_recycle=1800,
+)
 
 # 创建ORM模型操作方法
 Base = declarative_base()
@@ -50,8 +54,8 @@ db_session = async_scoped_session(SessionLocal, scopefunc=current_task)
 #         await session.close()
 
 async def get_db():
+    db = SessionLocal()
     try:
-        db = db_session()
         yield db
     finally:
         await db.close()
