@@ -143,22 +143,6 @@
         </el-card>
       </div>
 
-      <!-- 相关文章推荐 -->
-      <div class="related-articles">
-        <h3>相关文章</h3>
-        <el-row :gutter="20">
-          <el-col :span="8" v-for="article in relatedArticles" :key="article.id">
-            <el-card class="related-article-card" @click="goToArticle(article.id)">
-              <div class="related-article-title">{{ article.title }}</div>
-              <div class="related-article-meta">
-                <span>{{ formatDate(article.createdAt) }}</span>
-                <span>{{ article.views }} 阅读</span>
-              </div>
-            </el-card>
-          </el-col>
-        </el-row>
-      </div>
-
       <!-- 评论区域 -->
       <div class="comments-section" id="comments">
         <h3>评论区</h3>
@@ -392,27 +376,6 @@ const commentForm = reactive({
 // 初始化评论数据
 const comments = ref([...props.comments])
 
-const relatedArticles = ref([
-  {
-    id: 2,
-    title: 'Vue 3 Composition API 深入解析',
-    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-    views: 1234
-  },
-  {
-    id: 3,
-    title: 'FastAPI 快速入门指南',
-    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    views: 890
-  },
-  {
-    id: 4,
-    title: 'TypeScript 最佳实践',
-    createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-    views: 756
-  }
-])
-
 // 计算属性
 const commentsCount = computed(() => comments.value.length)
 
@@ -442,6 +405,22 @@ const md = new (MarkdownIt as any)({
 })
 
 // 渲染后的内容
+const defaultTableOpen = md.renderer.rules.table_open || ((tokens: any, idx: number, options: any, env: any, self: any) => {
+  return self.renderToken(tokens, idx, options)
+})
+
+const defaultTableClose = md.renderer.rules.table_close || ((tokens: any, idx: number, options: any, env: any, self: any) => {
+  return self.renderToken(tokens, idx, options)
+})
+
+md.renderer.rules.table_open = (tokens: any, idx: number, options: any, env: any, self: any) => {
+  return `<div class="markdown-table-wrapper">${defaultTableOpen(tokens, idx, options, env, self)}`
+}
+
+md.renderer.rules.table_close = (tokens: any, idx: number, options: any, env: any, self: any) => {
+  return `${defaultTableClose(tokens, idx, options, env, self)}</div>`
+}
+
 const renderedContent = computed(() => {
   if (!blog.value?.content) return ''
   
@@ -1132,42 +1111,6 @@ watch(() => renderedContent.value, () => {
   margin-top: 20px;
 }
 
-.related-articles {
-  margin-bottom: 40px;
-}
-
-.related-articles h3 {
-  color: #2c3e50;
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-}
-
-.related-article-card {
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 12px;
-  height: 100%;
-}
-
-.related-article-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-}
-
-.related-article-title {
-  font-weight: bold;
-  color: #2c3e50;
-  margin-bottom: 10px;
-  line-height: 1.4;
-}
-
-.related-article-meta {
-  color: #999;
-  font-size: 12px;
-  display: flex;
-  justify-content: space-between;
-}
-
 /* 错误容器样式 */
 .error-container {
   min-height: 60vh;
@@ -1243,10 +1186,6 @@ watch(() => renderedContent.value, () => {
   
   .comment-info {
     flex-direction: column;
-  }
-  
-  .related-articles .el-col {
-    margin-bottom: 15px;
   }
   
   .error-container .el-result {
@@ -1662,6 +1601,56 @@ pre code {
   }
 
 /* 行内代码 */
+.blog-body .markdown-table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  margin: 24px 0;
+  overflow-x: auto;
+  border: 1px solid #dcdfe6;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.blog-body table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 0;
+  color: #303133;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.blog-body > table {
+  display: block;
+  max-width: 100%;
+  min-width: 100%;
+  overflow-x: auto;
+  margin: 24px 0;
+  border: 1px solid #dcdfe6;
+  border-radius: 8px;
+}
+
+.blog-body th,
+.blog-body td {
+  padding: 10px 14px;
+  border: 1px solid #e4e7ed;
+  text-align: left;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.blog-body th {
+  background: #f5f7fa;
+  color: #1f2d3d;
+  font-weight: 600;
+}
+
+.blog-body tr:nth-child(even) td {
+  background: #fafafa;
+}
+
 code:not(pre code) {
   background-color: rgba(29, 31, 33, 0.8) !important;
   color: #c5c8c6 !important;
