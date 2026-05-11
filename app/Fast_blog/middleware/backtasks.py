@@ -9,8 +9,12 @@ import httpx
 import jwt
 import oss2
 from celery import Celery
+from celery.schedules import crontab
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer
+from google.analytics.data_v1beta import BetaAnalyticsDataClient
+from google.analytics.data_v1beta.types import RunReportRequest
+from google.oauth2 import service_account
 from redis.asyncio import Redis
 
 load_dotenv()
@@ -40,6 +44,7 @@ SMTPPORT = os.getenv("SMTPPORT")
 SMTPUSER = os.getenv("SMTPUSER")
 SMTPPASSWORD = os.getenv("SMTPPASSWORD")
 ALGORITHM = "HS256"
+TOTAL_UVPV_CACHE_KEY = "blog:total_uvpv"
 
 celery_app = Celery('task', broker=f'amqp://{mq_username}:{mq_password}@{mq_host}:{mq_port}/{mq_dbname}',
                     backend=f'redis://:{db_password}@{redis_host}:{redis_port}/{redis_db}')
@@ -50,12 +55,22 @@ def update_redis_cache_task():
     return asyncio.run(_run_update_redis_cache())
 
 
+@celery_app.task(name="update_total_uvpv_cache")
+def update_total_uvpv_cache_task():
+    return asyncio.run(refresh_total_uvpv_cache())
+
+
 celery_app.conf.beat_schedule = {
     'update-redis-cache-every-24-hours': {
         'task': 'update_redis_cache',
         'schedule': timedelta(hours=24),
     },
+    'update-total-uvpv-cache-every-midnight': {
+        'task': 'update_total_uvpv_cache',
+        'schedule': crontab(hour=0, minute=0),
+    },
 }
+celery_app.conf.timezone = 'Asia/Shanghai'
 
 
 class AsyncTokenManager:
@@ -171,6 +186,76 @@ class BlogCache:
 
     def is_ready(self):
         return self.redis_client is not None
+
+
+def fetch_total_uvpv_from_google_analytics():
+    jsonkey = AliOssPrivateDocument()
+    json_key_file = jsonkey.GoogleAnalytics()
+    json_key_file_dict = json.loads(json_key_file.decode('utf-8'))
+
+    credentials = service_account.Credentials.from_service_account_info(json_key_file_dict)
+    scoped_credentials = credentials.with_scopes(
+        ['https://www.googleapis.com/auth/analytics.readonly']
+    )
+
+    client = BetaAnalyticsDataClient(credentials=scoped_credentials)
+    request = RunReportRequest(
+        property='properties/457560039',
+        dimensions=[],
+        metrics=[{'name': 'activeUsers'}, {'name': 'screenPageViews'}],
+        date_ranges=[{'start_date': '2024-08-01', 'end_date': 'today'}]
+    )
+    response = client.run_report(request=request)
+
+    total_uv = 0
+    total_pv = 0
+    for row in response.rows:
+        total_uv = row.metric_values[0].value
+        total_pv = row.metric_values[1].value
+
+    return {
+        "UV": total_uv,
+        "PV": total_pv
+    }
+
+
+async def get_cached_total_uvpv(redis_client: Optional[Redis] = None):
+    should_close = False
+    if redis_client is None:
+        cache = BlogCache()
+        await cache.initialize()
+        redis_client = cache.redis_client
+        should_close = True
+
+    try:
+        cached_data = await redis_client.get(TOTAL_UVPV_CACHE_KEY)
+        if not cached_data:
+            return None
+        return json.loads(cached_data)
+    finally:
+        if should_close and redis_client is not None:
+            await redis_client.close()
+
+
+async def set_cached_total_uvpv(data: dict, redis_client: Optional[Redis] = None):
+    should_close = False
+    if redis_client is None:
+        cache = BlogCache()
+        await cache.initialize()
+        redis_client = cache.redis_client
+        should_close = True
+
+    try:
+        await redis_client.set(TOTAL_UVPV_CACHE_KEY, json.dumps(data))
+    finally:
+        if should_close and redis_client is not None:
+            await redis_client.close()
+
+
+async def refresh_total_uvpv_cache(redis_client: Optional[Redis] = None):
+    data = await asyncio.to_thread(fetch_total_uvpv_from_google_analytics)
+    await set_cached_total_uvpv(data, redis_client)
+    return {"status": "sync complete", "data": data}
 
 
 async def _run_update_redis_cache():

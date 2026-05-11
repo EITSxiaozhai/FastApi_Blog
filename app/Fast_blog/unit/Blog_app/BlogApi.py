@@ -9,12 +9,7 @@ import pytz
 import redis
 from fastapi import APIRouter, Depends
 from fastapi import HTTPException
-from google.analytics.data_v1beta import BetaAnalyticsDataClient
-from google.analytics.data_v1beta.types import (
-    RunReportRequest,
-)
 from google.auth.exceptions import GoogleAuthError
-from google.oauth2 import service_account
 from sqlalchemy import event
 from sqlalchemy import func
 from sqlalchemy import select
@@ -23,6 +18,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from Fast_blog.database.databaseconnection import db_session, get_db
 from Fast_blog.middleware.backtasks import AliOssPrivateDocument
 from Fast_blog.middleware.backtasks import BlogCache, AliOssUpload
+from Fast_blog.middleware.backtasks import get_cached_total_uvpv, refresh_total_uvpv_cache
 from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag, AnonymousComment
 from Fast_blog.schemas.schemas import AnonymousCommentCreate, AnonymousCommentModel
 import aiohttp
@@ -338,46 +334,16 @@ async def SubmitComments(blog_id: int, comment: dict, db: AsyncSession = Depends
 @BlogApp.get("/blogs/total_uvpv")
 async def get_total_uvpv():
     try:
-        # 从阿里云 OSS 获取 Google Analytics 密钥
-        jsonkey = AliOssPrivateDocument()
-        JSON_KEY_FILE = jsonkey.GoogleAnalytics()
-        JSON_KEY_FILE_dict = json.loads(JSON_KEY_FILE.decode('utf-8'))
+        if not blog_cache.is_ready():
+            await blog_cache.initialize()
 
-        credentials = service_account.Credentials.from_service_account_info(JSON_KEY_FILE_dict)
-        scoped_credentials = credentials.with_scopes(
-            ['https://www.googleapis.com/auth/analytics.readonly']
-        )
+        uvpv_data = await get_cached_total_uvpv(blog_cache.redis_client)
+        if uvpv_data is None:
+            refresh_result = await refresh_total_uvpv_cache(blog_cache.redis_client)
+            uvpv_data = refresh_result["data"]
 
-        property_id = "457560039"  # GA4 属性 ID
-
-        # 使用传递的凭据创建客户端
-        client = BetaAnalyticsDataClient(credentials=scoped_credentials)
-
-        # 构造查询请求：获取全站数据
-        request = RunReportRequest(
-            property=f'properties/{property_id}',  # 替换为你的 GA4 属性 ID
-            dimensions=[],  # 不需要按维度拆分数据，获取整体数据
-            metrics=[{'name': 'activeUsers'}, {'name': 'screenPageViews'}],  # UV 和 PV 指标
-            date_ranges=[{'start_date': '2024-08-01', 'end_date': 'today'}]  # 建站日期到今天
-        )
-
-        response = client.run_report(request=request)
-
-        # 初始化 UV 和 PV 数据
-        total_uv = 0
-        total_pv = 0
-
-        # 提取 UV 和 PV 数据
-        for row in response.rows:
-            total_uv = row.metric_values[0].value
-            total_pv = row.metric_values[1].value
-
-        # 返回总 UV 和 PV
         return {
-            "data": {
-                "UV": total_uv,
-                "PV": total_pv
-            },
+            "data": uvpv_data,
             "code": 20000
         }
     except GoogleAuthError as auth_error:
