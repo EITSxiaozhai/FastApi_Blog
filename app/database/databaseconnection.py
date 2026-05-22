@@ -24,7 +24,7 @@ Sql_URL = f"mysql+asyncmy://{db_username}:{db_password}@{db_hostname}:{db_port}/
 engine = create_async_engine(
     Sql_URL,
     pool_pre_ping=True,
-    pool_recycle=1800,
+    pool_recycle=300,
 )
 
 # 创建ORM模型操作方法

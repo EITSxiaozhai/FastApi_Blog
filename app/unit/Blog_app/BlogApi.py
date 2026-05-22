@@ -15,12 +15,12 @@ from sqlalchemy import func
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from Fast_blog.database.databaseconnection import db_session, get_db
-from Fast_blog.middleware.backtasks import AliOssPrivateDocument
-from Fast_blog.middleware.backtasks import BlogCache, AliOssUpload
-from Fast_blog.middleware.backtasks import get_cached_total_uvpv, refresh_total_uvpv_cache
-from Fast_blog.model.models import Blog, BlogRating, Vote, Comment, User, BlogTag, AnonymousComment
-from Fast_blog.schemas.schemas import AnonymousCommentCreate, AnonymousCommentModel
+from database.databaseconnection import db_session, get_db
+from middleware.backtasks import AliOssPrivateDocument
+from middleware.backtasks import BlogCache, AliOssUpload
+from middleware.backtasks import get_cached_total_uvpv, refresh_total_uvpv_cache
+from model.models import Blog, BlogRating, Vote, Comment, User, BlogTag, AnonymousComment
+from schemas.schemas import AnonymousCommentCreate, AnonymousCommentModel
 import aiohttp
 from datetime import datetime
 import random

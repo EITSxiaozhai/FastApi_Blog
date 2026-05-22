@@ -9,10 +9,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from logstash_async.handler import AsynchronousLogstashHandler
 from sqlalchemy.orm import sessionmaker
 
-from Fast_blog.database.databaseconnection import engine
-from Fast_blog.middleware.LogDecode import JSONLogFormatter
-from Fast_blog.middleware.TokenAuthentication import AccessTokenMiddleware
-from Fast_blog.unit import AdminApp, Blog_app, Power_Crawl, SystemMonitoring, User_app
+from database.databaseconnection import engine
+from middleware.LogDecode import JSONLogFormatter
+from middleware.TokenAuthentication import AccessTokenMiddleware
+from unit import AdminApp, Blog_app, Power_Crawl, SystemMonitoring, User_app
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()

@@ -8,7 +8,7 @@ from jwt import PyJWTError
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 
-from Fast_blog.middleware.backtasks import Adminoauth2_scheme
+from middleware.backtasks import Adminoauth2_scheme
 
 # 环境变量
 SECRET_KEY = os.getenv("SECRET_KEY")

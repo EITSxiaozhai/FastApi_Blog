@@ -8,17 +8,46 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="注释无用css">
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="uv pv 缓存优化">
+      <change beforePath="$PROJECT_DIR$/.idea/fast-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fast-api.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/assets/css/BlogDetail.css" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/assets/css/BlogDetail.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/router/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/router/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/IndexPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/blogvuets/src/views/BlogPages/IndexPage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/app/database/.gitkeep" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/database/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/.gitkeep" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/database/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/database/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/database/databaseconnection.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/database/databaseconnection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/LogDecode.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/middleware/LogDecode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/TokenAuthentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/middleware/TokenAuthentication.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/middleware/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/backtasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/middleware/backtasks.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/exception.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/middleware/exception.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/timing_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/middleware/timing_utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/.gitkeep" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/.gitkeep" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/AdminApp/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/AdminApp/superuserAdmin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/Blog_app/BlogApi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/Blog_app/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Power_Crawl/PowerGraphing.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/Power_Crawl/PowerGraphing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Power_Crawl/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/Power_Crawl/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/SystemMonitoring/Monitoring.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/SystemMonitoring/Monitoring.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/SystemMonitoring/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/SystemMonitoring/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/User_app/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/User_app/user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/tools/gemini_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/tools/gemini_tools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/alembic/env.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/alembic/env.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="687" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -140,8 +169,8 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/.env" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/app/Fast_blog/database/databaseconnection.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/app/Fast_blog/middleware/backtasks.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/blogvuets/src/views/BlogPages/BlogDetail.vue" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="LogFilters">
@@ -153,6 +182,10 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
@@ -169,41 +202,46 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "FastAPI.Fastapi_blog.executor": "Debug",
-    "FastAPI.Unnamed.executor": "Run",
-    "FastAPI.未命名.executor": "Run",
-    "Python.1.executor": "Run",
-    "Python.backlist (1).executor": "Debug",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SONARLINT_PRECOMMIT_ANALYSIS": "true",
-    "TODO_SCOPE": "All Places",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/dreame/PycharmProjects/mr-fastapi-backend",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.standard": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.standard": "",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "C:\\Users\\dreame\\PycharmProjects\\FastApi_Blog\\blogvuets\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;FastAPI.Fastapi_blog.executor&quot;: &quot;Debug&quot;,
+    &quot;FastAPI.Unnamed.executor&quot;: &quot;Run&quot;,
+    &quot;FastAPI.未命名.executor&quot;: &quot;Run&quot;,
+    &quot;Python.1.executor&quot;: &quot;Run&quot;,
+    &quot;Python.backlist (1).executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SONARLINT_PRECOMMIT_ANALYSIS&quot;: &quot;true&quot;,
+    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/FastApi_Blog&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.stylelint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.stylelint&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;D:\\PyCharm 2025.3.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "vue.recent.templates": [
-      "Vue Options API Component",
-      "Vue Composition API Component"
+  &quot;keyToStringList&quot;: {
+    &quot;vue.recent.templates&quot;: [
+      &quot;Vue Options API Component&quot;,
+      &quot;Vue Composition API Component&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog" />
@@ -213,11 +251,11 @@
       <recent name="D:\FastApi_Blog\blogvuets\src\views\pages" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\FastApi_Blog\app" />
       <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog\blogvuets\src\assets\css" />
       <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog\blogvuets\public" />
       <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog\app\Fast_blog" />
       <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog\app" />
-      <recent name="C:\Users\dreame\PycharmProjects\FastApi_Blog" />
     </key>
   </component>
   <component name="RunManager">
@@ -228,12 +266,12 @@
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="$PROJECT_DIR$/venv/Scripts/python.exe" />
-      <option name="SDK_NAME" value="Python 3.11 (FastApi_Blog)" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/app" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="RUN_TOOL" value="" />
       <option name="launchJavascriptDebuger" value="false" />
       <method v="2" />
     </configuration>
@@ -241,8 +279,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-PY-243.25659.43" />
-        <option value="bundled-python-sdk-181015f7ab06-4df51de95216-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-243.25659.43" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.31033.139" />
+        <option value="bundled-python-sdk-2653e85de345-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.31033.139" />
       </set>
     </attachedChunks>
   </component>
@@ -642,6 +680,14 @@
       <workItem from="1742456361856" duration="2856000" />
       <workItem from="1742785113119" duration="42654000" />
       <workItem from="1743054913778" duration="10962000" />
+      <workItem from="1776823460783" duration="1230000" />
+      <workItem from="1776837785419" duration="15000" />
+      <workItem from="1778046898133" duration="9771000" />
+      <workItem from="1778118593365" duration="784000" />
+      <workItem from="1778132182937" duration="8084000" />
+      <workItem from="1778464250624" duration="4554000" />
+      <workItem from="1779271906284" duration="1065000" />
+      <workItem from="1779431700088" duration="512000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -986,7 +1032,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="685" />
+    <option name="localTasksCounter" value="690" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1042,11 +1088,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="更新数据库" />
-    <MESSAGE value="title修改" />
-    <MESSAGE value="增加新页面" />
-    <MESSAGE value="修改运行参数" />
-    <MESSAGE value="增加包版本" />
     <MESSAGE value="自动获取新二维码" />
     <MESSAGE value="增加代码行数包" />
     <MESSAGE value="修改为异步redis链接" />
@@ -1067,7 +1108,12 @@
     <MESSAGE value="添加暗色css" />
     <MESSAGE value="增加暗色切换按钮，增加箭头滚动提示" />
     <MESSAGE value="注释无用css" />
-    <option name="LAST_COMMIT_MESSAGE" value="注释无用css" />
+    <MESSAGE value="自动缓存数据库数据" />
+    <MESSAGE value="去除文件" />
+    <MESSAGE value="复用连接池修复" />
+    <MESSAGE value="优化前端表格显示-去除填充测试模块" />
+    <MESSAGE value="uv pv 缓存优化" />
+    <option name="LAST_COMMIT_MESSAGE" value="uv pv 缓存优化" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

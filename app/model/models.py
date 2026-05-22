@@ -7,7 +7,7 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinar
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy_utils import EmailType, ChoiceType, PasswordType
 
-from Fast_blog.database.databaseconnection import Base
+from database.databaseconnection import Base
 
 
 @dataclass

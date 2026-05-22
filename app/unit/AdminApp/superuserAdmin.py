@@ -15,17 +15,17 @@ from sqlalchemy.exc import NoResultFound, IntegrityError
 from sqlalchemy.orm import joinedload
 from starlette.background import BackgroundTasks
 
-from Fast_blog.database.databaseconnection import db_session
-from Fast_blog.middleware.TokenAuthentication import validate_refresh_token, error_response
-from Fast_blog.middleware.backtasks import Adminoauth2_scheme, verify_recaptcha, \
+from database.databaseconnection import db_session
+from middleware.TokenAuthentication import validate_refresh_token, error_response
+from middleware.backtasks import Adminoauth2_scheme, verify_recaptcha, \
     AliOssBlogMarkdownImg, AliOssPrivateDocument
-from Fast_blog.model import models
-from Fast_blog.model.models import AdminUser, UserPrivileges, Blog, ReptileInclusion, BlogTag
-from Fast_blog.schemas.schemas import AdminUserModel
-from Fast_blog.schemas.schemas import BlogCreate, BlogTagModel, BlogEdit
-from Fast_blog.schemas.schemas import UserCredentials
-from Fast_blog.unit.Blog_app.BlogApi import uploadoss
-from Fast_blog.unit.tools.gemini_tools import generate_blog_description
+from model import models
+from model.models import AdminUser, UserPrivileges, Blog, ReptileInclusion, BlogTag
+from schemas.schemas import AdminUserModel
+from schemas.schemas import BlogCreate, BlogTagModel, BlogEdit
+from schemas.schemas import UserCredentials
+from unit.Blog_app.BlogApi import uploadoss
+from unit.tools.gemini_tools import generate_blog_description
 
 AdminApi = APIRouter()
 

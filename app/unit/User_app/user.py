@@ -15,12 +15,12 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import sessionmaker, joinedload
 
-from Fast_blog.database.databaseconnection import engine, get_db
-from Fast_blog.middleware.backtasks import AsyncTokenManager, Useroauth2_scheme, verify_recaptcha, \
+from database.databaseconnection import engine, get_db
+from middleware.backtasks import AsyncTokenManager, Useroauth2_scheme, verify_recaptcha, \
     AliOssUpload, celery_app, SessionStorage, BlogCache
-from Fast_blog.model import models
-from Fast_blog.model.models import User, Comment, Blog, AnonymousComment
-from Fast_blog.schemas.schemas import UserCredentials, UserRegCredentials
+from model import models
+from model.models import User, Comment, Blog, AnonymousComment
+from schemas.schemas import UserCredentials, UserRegCredentials
 import base64
 import qrcode
 from fastapi.responses import RedirectResponse

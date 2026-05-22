@@ -8,11 +8,11 @@ from fastapi import APIRouter
 from sqlalchemy import select, func, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from Fast_blog.database.databaseconnection import db_session
-from Fast_blog.database.databaseconnection import engine
-from Fast_blog.middleware import celery_app
-from Fast_blog.model import models
-from Fast_blog.model.models import PowerMeters
+from database.databaseconnection import db_session
+from database.databaseconnection import engine
+from middleware import celery_app
+from model import models
+from model.models import PowerMeters
 
 PowerApp = APIRouter()
 
