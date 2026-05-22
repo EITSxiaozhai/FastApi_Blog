@@ -1,9 +1,7 @@
-FROM ghcr.io/astral-sh/uv:latest AS uv
-
 FROM docker.1ms.run/tiangolo/uvicorn-gunicorn-fastapi:python3.11
-COPY --from=uv /uv /uvx /bin/
 COPY pyproject.toml uv.lock /tmp/fastapi-blog/
 WORKDIR /tmp/fastapi-blog
+RUN python -m pip install --no-cache-dir --upgrade uv
 RUN uv sync --frozen --system --no-cache --no-dev --no-install-project
 COPY ./app  /app
 WORKDIR /app
