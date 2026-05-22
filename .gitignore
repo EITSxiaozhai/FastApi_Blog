@@ -3,7 +3,6 @@ app/.env
 .env
 app/google.json
 .png
-*.json
 google.json
 .jpg
 *.yml
@@ -16,3 +15,4 @@ alembic.ini
 .venv
 .DS_Store
 /alembic
+blog-fed/.vercel/project.json
