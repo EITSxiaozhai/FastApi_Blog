@@ -614,6 +614,19 @@ wheels = [
 ]
 
 [[package]]
+name = "email-validator"
+version = "2.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "dnspython" },
+    { name = "idna" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/f5/22/900cb125c76b7aaa450ce02fd727f452243f2e91a61af068b40adba60ea9/email_validator-2.3.0.tar.gz", hash = "sha256:9fc05c37f2f6cf439ff414f8fc46d917929974a82244c20eb10231ba60c54426", size = 51238, upload-time = "2025-08-26T13:09:06.831Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/de/15/545e2b6cf2e3be84bc1ed85613edd75b8aea69807a71c26f4ca6a9258e82/email_validator-2.3.0-py3-none-any.whl", hash = "sha256:80f13f623413e6b197ae73bb10bf4eb0908faf509ad8362c5edeb0be7fd450b4", size = 35604, upload-time = "2025-08-26T13:09:05.858Z" },
+]
+
+[[package]]
 name = "eventlet"
 version = "0.33.3"
 source = { registry = "https://pypi.org/simple" }
@@ -673,7 +686,7 @@ dependencies = [
     { name = "pillow" },
     { name = "protobuf" },
     { name = "psutil" },
-    { name = "pydantic" },
+    { name = "pydantic", extra = ["email"] },
     { name = "pyjwt" },
     { name = "python-dotenv" },
     { name = "python-logstash-async" },
@@ -716,7 +729,7 @@ requires-dist = [
     { name = "pillow", specifier = "~=10.3.0" },
     { name = "protobuf", specifier = "~=5.29.3" },
     { name = "psutil", specifier = "~=5.9.5" },
-    { name = "pydantic", specifier = "~=2.7.1" },
+    { name = "pydantic", extras = ["email"], specifier = "~=2.7.1" },
     { name = "pyjwt", specifier = "~=2.8.0" },
     { name = "python-dotenv", specifier = ">=0.19.0" },
     { name = "python-logstash-async", specifier = "~=3.0.0" },
@@ -1750,6 +1763,11 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/0d/fc/ccd0e8910bc780f1a4e1ab15e97accbb1f214932e796cff3131f9a943967/pydantic-2.7.4.tar.gz", hash = "sha256:0c84efd9548d545f63ac0060c1e4d39bb9b14db8b3c0652338aecc07b5adec52", size = 714127, upload-time = "2024-06-12T14:11:57.601Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/17/ba/1b65c9cbc49e0c7cd1be086c63209e9ad883c2a409be4746c21db4263f41/pydantic-2.7.4-py3-none-any.whl", hash = "sha256:ee8538d41ccb9c0a9ad3e0e5f07bf15ed8015b481ced539a1759d8cc89ae90d0", size = 409017, upload-time = "2024-06-12T14:11:54.176Z" },
+]
+
+[package.optional-dependencies]
+email = [
+    { name = "email-validator" },
 ]
 
 [[package]]
