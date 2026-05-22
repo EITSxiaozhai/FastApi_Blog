@@ -62,6 +62,25 @@ interface BackendBlogListResponse {
   current_page: number
 }
 
+const transformBlogItem = (item: Partial<BackendBlogItem> & Partial<BlogPost> & Record<string, any>): BlogPost => {
+  const blogId = Number(item.id ?? item.BlogId)
+
+  return {
+    id: blogId,
+    title: item.title || `博客 ${blogId}`,
+    content: item.content || '',
+    excerpt: item.excerpt || generateExcerpt(item.title || '', item.tag || item.tags || []),
+    author: item.author || 'Exp1oit',
+    category: item.category || item.tag?.[0] || item.tags?.[0] || '未分类',
+    tags: item.tags || item.tag || [],
+    createdAt: item.createdAt || item.created_at || new Date().toISOString(),
+    updatedAt: item.updatedAt || item.created_at || new Date().toISOString(),
+    views: item.views || item.NumberViews || generateViews(blogId),
+    likes: item.likes || 0,
+    BlogIntroductionPicture: item.BlogIntroductionPicture
+  }
+}
+
 // 数据转换函数
 const transformBlogList = (backendData: BackendBlogListResponse, pageSize: number = 9): BlogListResponse => {
   console.log('🔄 开始转换后端博客数据:', backendData)
@@ -281,11 +300,20 @@ export const fetchBlogStats = async (): Promise<BlogStats | null> => {
 
 // 搜索博客
 export const searchBlogs = async (query: string): Promise<BlogPost[] | null> => {
-  return apiWrapper<BlogPost[]>(
+  const result = await apiWrapper<BlogPost[] | { data: BlogPost[] }>(
     vikeApi.get('/views/blogs/search', {
       params: { q: query }
     })
   )
+
+  const list = Array.isArray(result) ? result : result?.data
+  if (!Array.isArray(list)) {
+    return null
+  }
+
+  return list
+    .map(item => transformBlogItem(item as any))
+    .filter(item => Number.isFinite(item.id))
 }
 
 interface BingWallpaperResponse {

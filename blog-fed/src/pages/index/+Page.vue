@@ -591,11 +591,15 @@ const searchSuggestions = async (queryString, callback) => {
 
 // 处理搜索
 const handleSearch = (item) => {
-  goToArticle(item.id)
+  goToArticle(item.id ?? item.BlogId ?? item.blogId)
 }
 
 // 跳转到文章
 const goToArticle = (id) => {
+  if (id === undefined || id === null || id === '') {
+    ElMessage.warning('未找到文章ID，无法跳转')
+    return
+  }
   window.location.href = `/blog/${id}`
 }
 
