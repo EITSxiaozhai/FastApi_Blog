@@ -690,6 +690,7 @@ dependencies = [
     { name = "pyjwt" },
     { name = "python-dotenv" },
     { name = "python-logstash-async" },
+    { name = "python-multipart" },
     { name = "pytz" },
     { name = "qrcode" },
     { name = "redis" },
@@ -733,6 +734,7 @@ requires-dist = [
     { name = "pyjwt", specifier = "~=2.8.0" },
     { name = "python-dotenv", specifier = ">=0.19.0" },
     { name = "python-logstash-async", specifier = "~=3.0.0" },
+    { name = "python-multipart", specifier = ">=0.0.29" },
     { name = "pytz", specifier = "~=2024.2" },
     { name = "qrcode", specifier = "~=8.0" },
     { name = "redis", specifier = "~=5.0.0" },
@@ -1867,6 +1869,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/49/de/268a0c18ea8422254e4a6ebd767430b30899dcdc38a20fcbf0400b553755/python-logstash-async-3.0.0.tar.gz", hash = "sha256:acbbac8355d556d12cd7d89fd05da6ea7c1d548bff1f9ebda8721e4b3a751379", size = 36947, upload-time = "2024-02-12T22:27:02.798Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/0d/f5/c09c6571208869e1864f85a7fec0b0a6e52194d3bd6fc80af49304cfb2b2/python_logstash_async-3.0.0-py2.py3-none-any.whl", hash = "sha256:4cfeadda50aa35d785dbddec3b9f904f9d3f40ac6f63a06bf81846b52f18b1c7", size = 24668, upload-time = "2024-02-12T22:26:56.549Z" },
+]
+
+[[package]]
+name = "python-multipart"
+version = "0.0.29"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/4e/fe/70bd71a6738b09a0bdf6480ca6436b167469ca4578b2a0efbe390b4b0e70/python_multipart-0.0.29.tar.gz", hash = "sha256:643e93849196645e2dbdd81a0f8829a23123ad7f797a84a364c6fb3563f18904", size = 45678, upload-time = "2026-05-17T17:29:47.654Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/8f/cb/769cfc37177252872a45a71f3fbdde9d51b471a3f3c14bfe95dde3407386/python_multipart-0.0.29-py3-none-any.whl", hash = "sha256:2ddcc971cef266225f54f552d8fa10bcfbb1f14446caec199060daac59ff2d69", size = 29640, upload-time = "2026-05-17T17:29:45.69Z" },
 ]
 
 [[package]]

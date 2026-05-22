@@ -8,10 +8,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="添加gunicorn">
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uv.lock" beforeDir="false" afterPath="$PROJECT_DIR$/uv.lock" afterDir="false" />
-    </list>
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="增加新包" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -659,7 +656,7 @@
       <workItem from="1778464250624" duration="4554000" />
       <workItem from="1779271906284" duration="1065000" />
       <workItem from="1779431700088" duration="1530000" />
-      <workItem from="1779433284884" duration="4912000" />
+      <workItem from="1779433284884" duration="5551000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -1004,7 +1001,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="703" />
+    <option name="localTasksCounter" value="704" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1060,7 +1057,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="优化返回参数" />
     <MESSAGE value="设置异步日志传输" />
     <MESSAGE value="添加运行变量" />
     <MESSAGE value="修改exp创建" />
@@ -1085,7 +1081,8 @@
     <MESSAGE value="镜像拉取问题" />
     <MESSAGE value="uv环境修改" />
     <MESSAGE value="添加gunicorn" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加gunicorn" />
+    <MESSAGE value="增加新包" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加新包" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
