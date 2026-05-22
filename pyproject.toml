@@ -44,7 +44,7 @@ dependencies = [
     "sqlalchemy~=2.0.5.post1",
     "sqlalchemy-utils~=0.40.0",
     "starlette~=0.36.0",
-    "uvicorn~=0.18.3",
+    "uvicorn[standard]~=0.18.3",
 ]
 
 [tool.uv]
