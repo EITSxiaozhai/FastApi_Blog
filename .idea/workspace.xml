@@ -8,38 +8,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="uv pv 缓存优化">
-      <change beforePath="$PROJECT_DIR$/.idea/fast-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/fast-api.iml" afterDir="false" />
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="多余路径重构">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/app/database/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/database/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/database/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/database/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/database/databaseconnection.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/database/databaseconnection.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/LogDecode.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/middleware/LogDecode.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/TokenAuthentication.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/middleware/TokenAuthentication.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/middleware/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/backtasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/middleware/backtasks.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/exception.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/middleware/exception.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/middleware/timing_utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/middleware/timing_utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/.gitkeep" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/.gitkeep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/model/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/.gitkeep" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/schemas/schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/schemas.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/AdminApp/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/AdminApp/superuserAdmin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/AdminApp/superuserAdmin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/BlogApi.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/Blog_app/BlogApi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Blog_app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/Blog_app/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Power_Crawl/PowerGraphing.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/Power_Crawl/PowerGraphing.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/Power_Crawl/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/Power_Crawl/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/SystemMonitoring/Monitoring.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/SystemMonitoring/Monitoring.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/SystemMonitoring/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/SystemMonitoring/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/User_app/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/User_app/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/User_app/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Fast_blog/unit/tools/gemini_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/unit/tools/gemini_tools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/alembic/env.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/alembic/env.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/middleware/backtasks.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/middleware/backtasks.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -687,7 +658,7 @@
       <workItem from="1778132182937" duration="8084000" />
       <workItem from="1778464250624" duration="4554000" />
       <workItem from="1779271906284" duration="1065000" />
-      <workItem from="1779431700088" duration="512000" />
+      <workItem from="1779431700088" duration="576000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -1032,7 +1003,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="690" />
+    <option name="localTasksCounter" value="691" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1088,7 +1059,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="自动获取新二维码" />
     <MESSAGE value="增加代码行数包" />
     <MESSAGE value="修改为异步redis链接" />
     <MESSAGE value="增加代码行数css" />
@@ -1113,7 +1083,8 @@
     <MESSAGE value="复用连接池修复" />
     <MESSAGE value="优化前端表格显示-去除填充测试模块" />
     <MESSAGE value="uv pv 缓存优化" />
-    <option name="LAST_COMMIT_MESSAGE" value="uv pv 缓存优化" />
+    <MESSAGE value="多余路径重构" />
+    <option name="LAST_COMMIT_MESSAGE" value="多余路径重构" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />

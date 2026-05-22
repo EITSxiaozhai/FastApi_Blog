@@ -261,8 +261,8 @@ async def refresh_total_uvpv_cache(redis_client: Optional[Redis] = None):
 async def _run_update_redis_cache():
     from sqlalchemy import select
 
-    from Fast_blog.database.databaseconnection import db_session
-    from Fast_blog.model.models import Blog
+    from database.databaseconnection import db_session
+    from model.models import Blog
 
     blog_cache = BlogCache()
     await blog_cache.initialize()
