@@ -210,7 +210,7 @@ celery -A Fast_blog.middleware.backtasks:celery_app beat --loglevel=info
 #### 前端部署
 ```bash
 # 用户前端
-cd blogvuets
+cd blog-fed
 npm install
 npm run dev  # 开发模式
 npm run build  # 生产构建
