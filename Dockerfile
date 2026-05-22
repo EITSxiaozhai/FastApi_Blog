@@ -1,4 +1,4 @@
-FROM docker.1ms.run/tiangolo/uvicorn-gunicorn-fastapi:python3.11
+FROM  tiangolo/uvicorn-gunicorn-fastapi:python3.11
 COPY pyproject.toml uv.lock /tmp/fastapi-blog/
 WORKDIR /tmp/fastapi-blog
 RUN python -m pip install --no-cache-dir --upgrade uv

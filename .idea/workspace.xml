@@ -8,9 +8,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="重写打包镜像为uv">
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-    </list>
+    <list default="true" id="98cf5d19-a2fa-42cc-b29f-6479fc62f17d" name="Changes" comment="镜像拉取问题" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -658,7 +656,7 @@
       <workItem from="1778464250624" duration="4554000" />
       <workItem from="1779271906284" duration="1065000" />
       <workItem from="1779431700088" duration="1530000" />
-      <workItem from="1779433284884" duration="1571000" />
+      <workItem from="1779433284884" duration="1950000" />
     </task>
     <task id="LOCAL-00005" summary="增加用户查询">
       <created>1679116379790</created>
@@ -1003,7 +1001,7 @@
       <option name="project" value="LOCAL" />
       <updated>1688987026083</updated>
     </task>
-    <option name="localTasksCounter" value="699" />
+    <option name="localTasksCounter" value="700" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1059,7 +1057,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="修改后端读取参数" />
     <MESSAGE value="增加单击复制代码" />
     <MESSAGE value="设置前端验证二维码" />
     <MESSAGE value="优化返回参数" />
@@ -1084,7 +1081,8 @@
     <MESSAGE value="blog前端重命名" />
     <MESSAGE value="切换uv包管理" />
     <MESSAGE value="重写打包镜像为uv" />
-    <option name="LAST_COMMIT_MESSAGE" value="重写打包镜像为uv" />
+    <MESSAGE value="镜像拉取问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="镜像拉取问题" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/fast_api$main.coverage" NAME="main Coverage Results" MODIFIED="1691061121037" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/app" />
