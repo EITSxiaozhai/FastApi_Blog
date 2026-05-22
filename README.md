@@ -216,7 +216,7 @@ npm run dev  # 开发模式
 npm run build  # 生产构建
 
 # 管理后台
-cd vue-element-admin-master
+cd admin-fed
 npm install
 npm run dev  # 开发模式
 npm run build:prod  # 生产构建
