@@ -13,5 +13,6 @@ alembic.ini
 *.pyc
 .idea
 .vscode
+.venv
 .DS_Store
 /alembic
