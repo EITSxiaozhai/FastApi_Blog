@@ -110,7 +110,8 @@ FastApi_Blog/
 ## 🚀 快速开始
 
 ### 环境要求
-- Python 3.8+
+- Python 3.11+
+- uv
 - Node.js 16+
 - MySQL 8.0+
 - Redis 6.0+
@@ -192,19 +193,19 @@ docker-compose ps
 cd app
 
 # 安装依赖
-pip install -r requirements.txt
+uv sync
 
 # 数据库迁移
-alembic upgrade head
+uv run alembic upgrade head
 
 # 启动后端服务
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+uv run uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
 # 启动 Celery Worker (新终端)
-celery -A Fast_blog.middleware.backtasks:celery_app worker --loglevel=info -P eventlet
+uv run celery -A Fast_blog.middleware.backtasks:celery_app worker --loglevel=info -P eventlet
 
 # 启动 Celery Beat (新终端)
-celery -A Fast_blog.middleware.backtasks:celery_app beat --loglevel=info
+uv run celery -A Fast_blog.middleware.backtasks:celery_app beat --loglevel=info
 ```
 
 #### 前端部署

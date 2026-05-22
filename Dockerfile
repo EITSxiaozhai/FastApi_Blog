@@ -1,7 +1,10 @@
+FROM ghcr.io/astral-sh/uv:latest AS uv
+
 FROM docker.1ms.run/tiangolo/uvicorn-gunicorn-fastapi:python3.11
-COPY /requirements.txt /
-RUN python -m pip install --upgrade pip
-RUN pip install --no-cache-dir --upgrade -r /requirements.txt
+COPY --from=uv /uv /uvx /bin/
+COPY pyproject.toml uv.lock /tmp/fastapi-blog/
+WORKDIR /tmp/fastapi-blog
+RUN uv sync --frozen --system --no-cache --no-dev --no-install-project
 COPY ./app  /app
 WORKDIR /app
 # 不在构建期写入数据库 URL，运行时通过环境变量注入（见 app/alembic/env.py）
