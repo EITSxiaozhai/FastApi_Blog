@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vike dev",
-    "build": "vike build",
+    "generate:sitemap": "node scripts/generate-sitemap.mjs",
+    "build": "npm run generate:sitemap && vike build",
     "preview": "vike preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/"

@@ -12,7 +12,9 @@ export default async function handler(req, res) {
       url.startsWith('/assets/') ||
       url.startsWith('/entries/') ||
       url.startsWith('/static/') ||
-      url === '/favicon.ico'
+      url === '/favicon.ico' ||
+      url === '/sitemap.xml' ||
+      url === '/robots.txt'
     ) {
       const filePathCandidates = [
         path.join(process.cwd(), 'dist', 'client', url),
@@ -35,6 +37,8 @@ export default async function handler(req, res) {
           ext === '.png' ? 'image/png' :
           ext === '.webp' ? 'image/webp' :
           ext === '.ico' ? 'image/x-icon' :
+          ext === '.xml' ? 'application/xml; charset=utf-8' :
+          ext === '.txt' ? 'text/plain; charset=utf-8' :
           ext === '.gif' ? 'image/gif' :
           ext === '.svg' ? 'image/svg+xml' :
           'application/octet-stream'
