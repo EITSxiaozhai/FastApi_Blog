@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
@@ -37,7 +38,6 @@ function formatLastmod(value) {
 async function fetchJson(url) {
   const headers = {
     accept: 'application/json',
-    'user-agent': 'blog-sitemap-generator/1.0'
   }
 
   if (API_SECRET_HEADER_NAME && API_SECRET_HEADER_VALUE) {
