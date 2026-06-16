@@ -4,6 +4,8 @@ import path from 'node:path'
 const SITE_URL = normalizeBaseUrl(process.env.BLOG_SITE_URL || 'https://blog.exploit-db.xyz')
 const API_BASE_URL = normalizeBaseUrl(process.env.BLOG_API_BASE_URL || 'https://blogapi-traefik.exploit-db.xyz/api')
 const PAGE_SIZE = Number(process.env.SITEMAP_PAGE_SIZE || 20)
+const API_SECRET_HEADER_NAME = process.env.SITEMAP_API_SECRET_HEADER_NAME
+const API_SECRET_HEADER_VALUE = process.env.SITEMAP_API_SECRET_HEADER_VALUE
 
 const staticPages = [
   { path: '/', changefreq: 'daily', priority: '1.0' },
@@ -33,11 +35,17 @@ function formatLastmod(value) {
 }
 
 async function fetchJson(url) {
+  const headers = {
+    accept: 'application/json',
+    'user-agent': 'blog-sitemap-generator/1.0'
+  }
+
+  if (API_SECRET_HEADER_NAME && API_SECRET_HEADER_VALUE) {
+    headers[API_SECRET_HEADER_NAME] = API_SECRET_HEADER_VALUE
+  }
+
   const response = await fetch(url, {
-    headers: {
-      accept: 'application/json',
-      'user-agent': 'blog-sitemap-generator/1.0'
-    }
+    headers
   })
 
   if (!response.ok) {
