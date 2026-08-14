@@ -367,7 +367,7 @@ const articles = ref([...props.articles])
 const hasMore = ref(props.pagination.page < props.pagination.totalPages)
 const currentPage = ref(1)
 const currentFilter = ref('all')
-const pageSize = ref(9)
+const pageSize = ref(8)
 const total = ref(0)
 const totalPages = ref(1)
 

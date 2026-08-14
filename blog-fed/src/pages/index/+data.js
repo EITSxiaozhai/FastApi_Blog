@@ -66,7 +66,7 @@ export async function data(pageContext) {
     const urlParsed = pageContext.urlParsed
     const searchParams = new URLSearchParams(urlParsed.search)
     const page = parseInt(searchParams.get('page')) || 1
-    const pageSize = 9
+    const pageSize = 8
     
     if (import.meta.env?.DEV) {
       console.log('📄 请求页码:', page)
