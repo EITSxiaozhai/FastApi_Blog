@@ -8,6 +8,21 @@ const PAGE_SIZE = Number(process.env.SITEMAP_PAGE_SIZE || 20)
 const API_SECRET_HEADER_NAME = process.env.SITEMAP_API_SECRET_HEADER_NAME
 const API_SECRET_HEADER_VALUE = process.env.SITEMAP_API_SECRET_HEADER_VALUE
 
+
+console.log(
+  'API_SECRET_HEADER_NAME:',
+  API_SECRET_HEADER_NAME
+    ? `${API_SECRET_HEADER_NAME.slice(0, 6)}...`
+    : '(undefined)'
+)
+
+console.log(
+  'API_SECRET_HEADER_VALUE:',
+  API_SECRET_HEADER_VALUE
+    ? `${API_SECRET_HEADER_VALUE.slice(0, 6)}...`
+    : '(undefined)'
+)
+
 const staticPages = [
   { path: '/', changefreq: 'daily', priority: '1.0' },
   { path: '/about-me', changefreq: 'monthly', priority: '0.7' },
