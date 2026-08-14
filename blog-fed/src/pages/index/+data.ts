@@ -27,7 +27,7 @@ export async function data(pageContext: any) {
 
     // 并行获取数据
     const [blogListResult, statsResult, wallpaperResult] = await Promise.allSettled([
-      fetchBlogList({ page: 1, pageSize: 9, initialLoad: true }),
+      fetchBlogList({ page: 1, pageSize: 8, initialLoad: true }),
       statsPromise,
       getBingWallpaper(false) // 获取今日壁纸
     ])
