@@ -552,3 +552,34 @@ pre:hover .copy-button {
 .dark .el-menu {
   background: transparent !important;
 }
+
+.mermaid-diagram {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+  overflow-x: auto;
+}
+
+.mermaid-diagram .mermaid {
+  width: 100%;
+  text-align: center;
+}
+
+.mermaid-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mermaid-error {
+  color: #c0392b;
+  background: #fdecea;
+  padding: 12px 16px;
+  border-radius: 6px;
+  white-space: pre-wrap;
+  text-align: left;
+}
+
+.dark .mermaid-error {
+  color: #ffb4a9;
+  background: rgba(192, 57, 43, 0.2);
+}

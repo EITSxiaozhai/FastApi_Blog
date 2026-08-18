@@ -308,6 +308,8 @@ import { fetchBlogDetail, fetchComments, submitComment as apiSubmitComment, like
 import MarkdownIt from 'markdown-it'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github-dark.css' // GitHub 暗色主题
+import { applyMermaidFence } from '../../../utils/markdownMermaid'
+import { renderMermaidDiagrams } from '../../../utils/mermaid'
 
 // 接收Vike服务器端数据
 const props = defineProps({
@@ -393,6 +395,9 @@ const md = new (MarkdownIt as any)({
   linkify: true,
   typographer: true,
   highlight: function (str: string, lang: string) {
+    if (lang === 'mermaid') {
+      return ''
+    }
     if (lang && hljs.getLanguage(lang)) {
       try {
         return hljs.highlight(str, { language: lang }).value
@@ -403,6 +408,7 @@ const md = new (MarkdownIt as any)({
     return '' // 让MarkdownIt使用默认处理
   }
 })
+applyMermaidFence(md)
 
 // 渲染后的内容
 const defaultTableOpen = md.renderer.rules.table_open || ((tokens: any, idx: number, options: any, env: any, self: any) => {
@@ -804,6 +810,8 @@ onUnmounted(() => {
 
 onMounted(async () => {
   currentUrl.value = window.location.href
+  await nextTick()
+  await renderMermaidDiagrams(blogBody.value)
   
   // 模拟增加阅读量
   setTimeout(() => {
@@ -829,7 +837,8 @@ onMounted(async () => {
 
 // 监听博客内容变化，生成目录
 watch(() => renderedContent.value, () => {
-  nextTick(() => {
+  nextTick(async () => {
+    await renderMermaidDiagrams(blogBody.value)
     generateToc()
     // 目录生成后刷新固钉组件
     setTimeout(() => {
@@ -993,6 +1002,32 @@ watch(() => renderedContent.value, () => {
   word-wrap: break-word !important;
   overflow-wrap: break-word !important;
   max-width: 100% !important;
+}
+
+:deep(.mermaid-diagram) {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+  overflow-x: auto;
+}
+
+:deep(.mermaid-diagram .mermaid) {
+  width: 100%;
+  text-align: center;
+}
+
+:deep(.mermaid-diagram svg) {
+  max-width: 100%;
+  height: auto;
+}
+
+:deep(.mermaid-error) {
+  color: #c0392b;
+  background: #fdecea;
+  padding: 12px 16px;
+  border-radius: 6px;
+  white-space: pre-wrap;
+  text-align: left;
 }
 
 .blog-footer {

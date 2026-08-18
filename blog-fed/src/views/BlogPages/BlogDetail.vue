@@ -6,6 +6,8 @@ import {useHead} from '@unhead/vue';
 import MarkdownIt from 'markdown-it';
 import {plantuml} from "@mdit/plugin-plantuml";
 import hljs from 'highlight.js';
+import { applyMermaidFence } from '@/utils/markdownMermaid';
+import { renderMermaidDiagrams } from '@/utils/mermaid';
 import 'highlight.js/styles/atom-one-dark.css';
 import {ChatDotRound, ChatLineRound, ChatRound, Sunny, Moon, List, User, Calendar} from '@element-plus/icons-vue';
 import {ElMessage, ElNotification} from "element-plus";
@@ -39,6 +41,7 @@ const fingerprint = ref(null);
 const commentx = ref();
 const myPage = ref({description: ''});
 const isTocHidden = ref(false);
+const renderedHtml = ref('');
 
 // 常量定义
 const icons = [ChatRound, ChatLineRound, ChatDotRound];
@@ -86,6 +89,9 @@ const md = new MarkdownIt({
   linkify: true,
   typographer: true,
   highlight: function (str, lang) {
+    if (lang === 'mermaid') {
+      return '';
+    }
     if (lang && hljs.getLanguage(lang)) {
       try {
         return hljs.highlight(str, {language: lang}).value;
@@ -96,6 +102,7 @@ const md = new MarkdownIt({
     return '';
   }
 }).use(plantuml);
+applyMermaidFence(md);
 
 // 工具函数
 const stringToHex = str => [...str].map(char => char.charCodeAt(0).toString(16)).join('');
@@ -154,7 +161,7 @@ const convertMarkdown = (markdownText) => {
       const lang = langMatch ? langMatch[1] : null;
       const codeMatch = codeBlock.match(/<code class="lang-.*?">([\s\S]*?)<\/code>/);
       const code = codeMatch ? codeMatch[1] : null;
-      if (lang && code) {
+      if (lang && lang !== 'mermaid' && code) {
         const highlightedCode = hljs.highlight(lang, code).value;
         renderedContent = renderedContent.replace(
           codeBlock,
@@ -315,12 +322,17 @@ const getData = async () => {
 
     const content = data.blogData.content ? String(data.blogData.content) : '';
     const htmlContent = convertMarkdown(content);
+    renderedHtml.value = htmlContent;
 
     generateTableOfContents(htmlContent);
     myPage.value.description = content;
 
     nextTick(() => {
+      renderMermaidDiagrams(document.querySelector('.blog-content'));
       document.querySelectorAll('pre code').forEach((block) => {
+        if (block.classList.contains('language-mermaid') || block.classList.contains('lang-mermaid')) {
+          return;
+        }
         hljs.highlightElement(block);
       });
       addCopyButtons();
@@ -636,8 +648,8 @@ useHead({
     <el-container class="main-container">
       <el-main class="content-main" :class="{'content-main-expanded': isTocHidden}">
         <el-card v-if="!isLoading" style="padding-bottom: 10%">
-          <div class="blog-content">
-            <div v-html="convertMarkdown(data.blogData.content)"/>
+            <div class="blog-content">
+            <div class="blog-body" v-html="renderedHtml"/>
           </div>
         </el-card>
 

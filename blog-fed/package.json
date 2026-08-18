@@ -19,6 +19,7 @@
     "element-plus": "^2.4.3",
     "highlight.js": "^11.11.1",
     "markdown-it": "^14.1.0",
+    "mermaid": "^10.9.4",
     "undraw-ui": "^1.2.7",
     "vike": "^0.4.196",
     "vite-plugin-vercel": "^9.0.7",
