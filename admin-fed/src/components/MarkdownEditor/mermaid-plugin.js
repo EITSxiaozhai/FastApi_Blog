@@ -37,6 +37,29 @@ function uniqueId() {
   return 'toast-mermaid-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8)
 }
 
+function isMermaidLang(info) {
+  return String(info || '').trim().split(/\s+/)[0].toLowerCase() === 'mermaid'
+}
+
+function createMermaidTokens(source) {
+  return [
+    {
+      type: 'openTag',
+      tagName: 'div',
+      outerNewLine: true,
+      classNames: ['toastui-mermaid'],
+      attributes: {
+        'data-mermaid': encodeSource(source || '')
+      }
+    },
+    {
+      type: 'html',
+      content: '<textarea hidden class="mermaid-source">' + escapeHtml(source || '') + '</textarea><div class="mermaid-placeholder">Mermaid 渲染中...</div>'
+    },
+    { type: 'closeTag', tagName: 'div', outerNewLine: true }
+  ]
+}
+
 function applySvg(element, svg) {
   element.innerHTML = svg
   element.setAttribute('data-processed', 'true')
@@ -49,30 +72,79 @@ function applyError(element, error, source) {
   element.innerHTML = '<pre>' + escapeHtml(message) + '\n' + escapeHtml(source) + '</pre>'
 }
 
+function wrapMermaidCodeBlocks(root) {
+  const blocks = root.querySelectorAll(
+    'pre code.language-mermaid, pre.lang-mermaid code, pre code[data-language="mermaid"]'
+  )
+  Array.prototype.forEach.call(blocks, function(code) {
+    const pre = code.closest ? code.closest('pre') : code.parentElement
+    if (!pre || (pre.parentElement && pre.parentElement.classList.contains('toastui-mermaid'))) {
+      return
+    }
+    const source = (code.textContent || '').trim()
+    const wrapper = document.createElement('div')
+    wrapper.className = 'toastui-mermaid'
+    wrapper.setAttribute('data-mermaid', encodeSource(source))
+    const textarea = document.createElement('textarea')
+    textarea.hidden = true
+    textarea.className = 'mermaid-source'
+    textarea.value = source
+    wrapper.appendChild(textarea)
+    const placeholder = document.createElement('div')
+    placeholder.className = 'mermaid-placeholder'
+    placeholder.textContent = 'Mermaid 渲染中...'
+    wrapper.appendChild(placeholder)
+    pre.parentNode.replaceChild(wrapper, pre)
+  })
+}
+
+function renderOne(element) {
+  const encoded = element.getAttribute('data-mermaid')
+  const textarea = element.querySelector('.mermaid-source')
+  const source = (encoded ? decodeSource(encoded) : (textarea && textarea.value) || '').trim()
+  if (!source) {
+    element.setAttribute('data-processed', 'true')
+    return
+  }
+
+  const id = uniqueId()
+  try {
+    const result = mermaid.render(id, source, function(svgCode) {
+      applySvg(element, svgCode)
+    })
+    if (result && typeof result.then === 'function') {
+      result.then(function(output) {
+        const svg = typeof output === 'string' ? output : (output && output.svg)
+        if (svg) {
+          applySvg(element, svg)
+        }
+      }).catch(function(error) {
+        applyError(element, error, source)
+      })
+    } else if (typeof result === 'string') {
+      applySvg(element, result)
+    }
+  } catch (error) {
+    applyError(element, error, source)
+  }
+}
+
 /**
- * Toast UI Editor plugin: map ```mermaid fenced blocks to preview HTML.
+ * Toast UI plugin:
+ * - $$mermaid custom blocks
+ * - ```mermaid fenced code blocks (standard Mermaid / GitHub syntax)
  */
 export function mermaidPlugin() {
   return {
     toHTMLRenderers: {
-      mermaid(node) {
-        const source = node.literal || ''
-        return [
-          {
-            type: 'openTag',
-            tagName: 'div',
-            outerNewLine: true,
-            classNames: ['toastui-mermaid'],
-            attributes: {
-              'data-mermaid': encodeSource(source)
-            }
-          },
-          {
-            type: 'html',
-            content: '<textarea hidden class="mermaid-source">' + escapeHtml(source) + '</textarea><div class="mermaid-placeholder">Mermaid 流程图</div>'
-          },
-          { type: 'closeTag', tagName: 'div', outerNewLine: true }
-        ]
+      mermaid: function(node) {
+        return createMermaidTokens(node.literal)
+      },
+      codeBlock: function(node, context) {
+        if (isMermaidLang(node.info)) {
+          return createMermaidTokens(node.literal)
+        }
+        return context.origin()
       }
     }
   }
@@ -81,35 +153,8 @@ export function mermaidPlugin() {
 export function renderMermaidPreview(root) {
   if (!root) return
 
-  const nodes = root.querySelectorAll('.toastui-mermaid:not([data-processed])')
-  Array.prototype.forEach.call(nodes, function(element) {
-    const encoded = element.getAttribute('data-mermaid')
-    const textarea = element.querySelector('.mermaid-source')
-    const source = (encoded ? decodeSource(encoded) : (textarea && textarea.value) || '').trim()
-    if (!source) {
-      element.setAttribute('data-processed', 'true')
-      return
-    }
+  wrapMermaidCodeBlocks(root)
 
-    const id = uniqueId()
-    try {
-      const result = mermaid.render(id, source, function(svgCode) {
-        applySvg(element, svgCode)
-      })
-      if (result && typeof result.then === 'function') {
-        result.then(function(output) {
-          const svg = typeof output === 'string' ? output : (output && output.svg)
-          if (svg) {
-            applySvg(element, svg)
-          }
-        }).catch(function(error) {
-          applyError(element, error, source)
-        })
-      } else if (typeof result === 'string') {
-        applySvg(element, result)
-      }
-    } catch (error) {
-      applyError(element, error, source)
-    }
-  })
+  const nodes = root.querySelectorAll('.toastui-mermaid:not([data-processed])')
+  Array.prototype.forEach.call(nodes, renderOne)
 }

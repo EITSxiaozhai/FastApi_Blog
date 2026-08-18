@@ -91,8 +91,8 @@ export default {
     initEditor() {
       this.editor = new Editor({
         el: document.getElementById(this.id),
-        plugins: [uml, chart, mermaidPlugin],
-        ...this.editorOptions
+        ...this.editorOptions,
+        plugins: [uml, chart, mermaidPlugin]
       })
       if (this.value) {
         this.editor.setMarkdown(this.value)
@@ -123,7 +123,7 @@ export default {
       }
       this.mermaidTimer = setTimeout(() => {
         this.renderMermaidPreview()
-      }, 200)
+      }, 120)
     },
     renderMermaidPreview() {
       const root = this.$el || document.getElementById(this.id)
