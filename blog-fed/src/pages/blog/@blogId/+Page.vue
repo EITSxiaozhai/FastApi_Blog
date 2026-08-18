@@ -429,17 +429,17 @@ md.renderer.rules.table_close = (tokens: any, idx: number, options: any, env: an
 
 const renderedContent = computed(() => {
   if (!blog.value?.content) return ''
-  
+
   try {
-    // 如果内容已经是HTML格式，直接返回
-    if (blog.value.content.includes('<p>') || blog.value.content.includes('<div>')) {
-      return blog.value.content
+    const content = blog.value.content
+    const hasMarkdownFence = /```/.test(content)
+    const looksLikeHtml = /<(p|div|h[1-6])[\s>]/i.test(content) && !hasMarkdownFence
+
+    if (looksLikeHtml) {
+      return content
     }
-    
-    // 直接渲染Markdown，不做预处理
-    const rendered = md.render(blog.value.content)
-    
-    return rendered
+
+    return md.render(content)
   } catch (error) {
     console.error('❌ Markdown渲染错误:', error)
     return blog.value.content
